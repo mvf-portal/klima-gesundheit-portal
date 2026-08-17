@@ -179,7 +179,9 @@ sonst nichts Brauchbares vorliegt - die Temperaturschwellen und die
 Anpassungsfähigkeit der Bevölkerung sind dort nicht mit Deutschland vergleichbar.
 
 Fuer jede Studie:
-- journal: Journalname (Originalsprache)
+- journal: Journalname genau so, wie er in der Kopfzeile des Abstracts steht -
+  Abkuerzung nicht aufloesen, nichts ergaenzen. (Wird ohnehin durch die Angabe
+  aus PubMed ersetzt; rate hier nichts.)
 - year: Erscheinungsjahr, z. B. "2026"
 - pmid: die PubMed-ID
 - title: praegnanter deutscher Titel
@@ -322,9 +324,18 @@ def _sortschluessel(e: dict) -> str:
 
 
 def fetch_meta(pmids: list[str]) -> dict[str, dict]:
-    """Autor und Publikationsdatum ueber esummary holen.
+    """Journal, Jahr, Autor und Publikationsdatum ueber esummary holen.
 
     Bewusst nicht vom Sprachmodell erraten lassen: Das sind harte Fakten.
+
+    **Das Journal gehoert unbedingt hierher, nicht in die Modellantwort.** Im
+    Schwesterportal ki.m-vf.de stand am 17.08.2026 ueber einer Studie aus
+    NPJ Prim Care Respir Med der Name Nat Commun, und aus Qual Life Res wurde
+    das ausgeschriebene Quality of Life Research. Beides plausibel, beides
+    falsch: Der Abstract-Block nennt das Journal nur in der Kopfzeile, und ein
+    Sprachmodell ergaenzt dort bereitwillig, was haeufig vorkommt. Eine falsche
+    Quellenangabe ist in einem Rechercheportal der teuerste aller kleinen
+    Fehler - sie macht die Studie unauffindbar.
     sortpubdate wird ignoriert - PubMed setzt dort bei reinen Monatsangaben
     den 1. ein, was einen Tag vortaeuschen wuerde. Genommen wird die
     genaueste ECHTE Angabe aus pubdate und epubdate.
@@ -354,8 +365,17 @@ def fetch_meta(pmids: list[str]) -> dict[str, dict]:
                 if len(d) == 3:
                     aufnahme = f"{d[2]}.{d[1]}.{d[0]}"
                 break
-        aus[pmid] = {"author": autor, "pubdate": datum,
-                     "added": aufnahme, "_sort": _sortschluessel(e)}
+        eintrag = {"author": autor, "pubdate": datum,
+                   "added": aufnahme, "_sort": _sortschluessel(e)}
+        # source ist die von PubMed gefuehrte Journal-Abkuerzung. Nur setzen,
+        # wenn sie wirklich da ist - eine ungefaehre Angabe ist immer noch
+        # besser als eine leere.
+        if e.get("source"):
+            eintrag["journal"] = e["source"]
+        jahr = (datum or "")[-4:]
+        if jahr.isdigit():
+            eintrag["year"] = jahr
+        aus[pmid] = eintrag
     print(f"Metadaten zu {len(aus)}/{len(pmids)} PMIDs geladen.")
     return aus
 
