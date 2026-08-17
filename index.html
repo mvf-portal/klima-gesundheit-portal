@@ -999,71 +999,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "17. Aug. 2026, 11:10 Uhr";
+const SNAP_DATE = "17. Aug. 2026, 13:31 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
     journal:"Nat Commun", year:"2026", pmid:"42575902",
     author:"Tomkins MD et al.", pubdate:"10.08.2026",
     added:"10.08.2026",
-    title:"Kanäle als Kühlinfrastruktur in britischen und irischen Städten – Effekte auf städtische Wärmebelastung",
-    sum:"Energiebilanzmodell quantifiziert thermische Wirkung von Kanalnetzwerken auf Urban Heat Island-Effekt in Großbritannien und Irland.",
-    result:"Kanäle zeigen durchschnittlichen jährlichen Tageskühleffekt von ca. 0,8 °C (0,7–1,0 °C) in unmittelbarer Umgebung; während Hitzewellen 1,5–2,3 °C Kühlung; stärkste Effekte in Frühjahr/Frühsommer (1,2–1,4 °C). Bluespacen reduzieren Hitzerisiko und verbessern thermischen Komfort.",
-    transfer:"Großbritannien/Irland - gemäßigte Klimazone, ähnliche Urbanisierungsmuster wie Mitteleuropa"
+    title:"Kühleffekt von Kanälen auf städtische Temperaturen in Großbritannien und Irland",
+    sum:"Modellierungsstudie zum Einfluss von Wasserkanälen auf die lokale Temperatur im urbanen Raum: Kanäle zeigen eine mittlere jährliche Kühlwirkung von etwa 0,8 °C, besonders ausgeprägt während Hitzewellen.",
+    result:"Kanäle bieten durchschnittlich 0,8 °C (95%-KI: 0,7–1,0 °C) Kühleffekt in unmittelbarer Nähe, mit stärkerer Wirkung im Frühjahr/Frühsommer (1,2–1,4 °C) und während Hitzewellen (1,5–2,3 °C). Bluespace-Infrastruktur kann Hitzerisiko senken und Wärmekumfort verbessern.",
+    transfer:"Großbritannien – gemäßigte Klimazone, urbane Planungspraxis übertragbar"
   },
   {
-    journal:"Global Change Biology", year:"2026", pmid:"42572830",
+    journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
     author:"Radici A et al.", pubdate:"Aug. 2026",
     added:"10.08.2026",
-    title:"Aedes albopictus und Dengue-Transmissionsrisiko in Frankreich im 21. Jahrhundert – Klimaszenarien bis 2085",
-    sum:"Mechanistisches Modell zu zukünftiger Verbreitung der Asiatischen Tigermücke und Dengue-Übertragungsrisiko in Frankreich unter verschiedenen Emissionsszenarien.",
-    result:"Bis 2085: im High-Pressure-Szenario 89–96 % Frankreichs klimatisch für Ae. albopictus geeignet (außer Bergregionen); autochthone Dengue-Transmission in 71–95 % des Landes theoretisch möglich. Im Median-Szenario 49–89 % Eignung und 31–82 % Transmissionsrisiko. Ganzjährige Vektoraktivität an Mittelmeer- und Biskaya-Küsten ohne Eidiapause möglich.",
-    transfer:"Frankreich, südliches Europa - Übertragbarkeit mit Einschränkung; höhere Temperaturschwellen als Mitteleuropa"
+    title:"Dengueübertragung durch Aedes albopictus in Frankreich im 21. Jahrhundert",
+    sum:"Klimamodellierungsstudie zur Ausbreitung des Tigermoskitos und des Denguerisikos in Frankreich bis 2085 unter verschiedenen Emissionsszenarien.",
+    result:"Bis 2085: Unter Hochdruck-Szenario werden 89–96% Frankreichs klimatisch für Aedes albopictus geeignet, autochthone Dengueübertragung in 71–95% der kolonisierten Flächen möglich. Unter Mitteldruck-Szenario 49–89% bzw. 31–82%. Mittelmeer- und Baskische Küsten könnten Ganzjahresaktivität ermöglichen.",
+    transfer:"Frankreich – direkt übertragbar auf Deutschland, regionale Klimazone vergleichbar"
   },
   {
     journal:"Euro Surveill", year:"2026", pmid:"42565263",
     author:"Rise N et al.", pubdate:"Aug. 2026",
     added:"07.08.2026",
-    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa – Rapid Review 2018–2025",
-    sum:"Rapid Review (14 von 897 Publikationen) zu Assoziationen zwischen Hochwasserereignissen und Infektionskrankheiten in Europa.",
-    result:"Campylobacteriose und Leptospirose nach Hochwasserereignissen mehrfach dokumentiert. Public-Health-Kommunikation zu Hygienepraxen am häufigsten als Reaktionsmaßnahme berichtet; strukturelle Maßnahmen (Sanitärinfrastruktur, One Health Surveillance) als wirksam empfohlen. Trotz breiter Suchkriterien wenige europäische Studien – Forschungslücke identifiziert.",
-    transfer:"Europa, Deutschland – direkt auf europäische Wassersicherheit übertragbar"
+    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa",
+    sum:"Rapid Review zu Zusammenhängen zwischen extremen Niederschlagsereignissen und Infektionskrankheiten-Ausbrüchen in Europa 2018–2025.",
+    result:"Von 897 Treffern 14 Arbeiten eingeschlossen: Ausbrüche von Campylobacteriose und Leptospirose nach Hochwasserereignissen dokumentiert. Häufigste Prävention: Hygiene-Kommunikation. Strukturelle Maßnahmen (Sanitärinfrastruktur, One Health-Surveillance) empfohlen, aber in den meisten europäischen Ländern unterrepräsentiert.",
+    transfer:"Europa – direkter Bezug zu deutsche Hochwasserrisiken und Infrastruktur"
   },
   {
     journal:"Lancet Planet Health", year:"2026", pmid:"42486136",
     author:"Leal Filho W et al.", pubdate:"22.07.2026",
     added:"22.07.2026",
-    title:"Dengue-Übertragungsrisiko durch Klimawandel und Städtebau in Ländern mit niedrigem und mittlerem Einkommen",
-    sum:"Rapid Review zu Auswirkungen von Temperaturanstieg und Urbanisierung auf Dengue-Transmission: 65 % der Studien zeigten positive Assoziation zwischen Temperaturanstieg und Dengue-Übertragung, Urbanisierung war in 35 % der Studien untersucht, fragmentierte Surveillance und fehlende Integration von Klimadaten in Public Health-Planung.",
-    result:"65 % der Studien berichten positive Assoziation zwischen Temperaturanstieg und erhöhter Dengue-Transmission; Urbanisierung in 35 % der Studien als Risikofaktor dokumentiert; nur 29 % der Studien zeigen dokumentierte staatliche Reaktionen. Unzureichende Surveillance und Cross-Sector-Koordination als Haupthindernisse identifiziert.",
-    transfer:"Tropische/subtropische Länder - Methodik zur Überwachung von Vektorkrankheiten übertragbar"
+    title:"Malaria und Klimawandel in Westafrika: Strategien und Politikintegration",
+    sum:"Qualitative Analyse nationaler Malaria-Strategiepläne aus 11 west- und zentralafrikanischen Ländern (2015–2025) zur Integration von Klimainformationen in Malaria-Überwachung und Bekämpfung.",
+    result:"Mehrheit der Länder erkennt Klimaeinfluss auf Malaria an; explizite Klimadaten-Integration in Planung aber selten. Ghana und Nigeria nutzen fortgeschrittene datengesteuerte Ansätze (prädiktive Modellierung, subnationaler Stratifizierung). Die meisten Pläne bleiben reaktiv statt prädiktiv wegen Daten-, Technik- und Koordinierungslücken.",
+    transfer:"Westafrika – konzeptionell relevant (One Health, prädiktive Überwachung), aber Temperaturschwellen nicht übertragbar"
   },
   {
     journal:"Environ Int", year:"2026", pmid:"42492428",
     author:"Boser M et al.", pubdate:"18.07.2026",
     added:"23.07.2026",
-    title:"Pollenexposition und asthmabedingte Notfallbehandlungen in Bayern – Echtzeitpollen-Überwachung",
-    sum:"Multicenter-Zeitreihenanalyse von asthmaassoziierten Notfallbehandlungen und Pollenkonzentrationen in drei bayerischen Städten mit DLNM und automatisiertem Pollenmonitoring.",
-    result:"Hohe Betula-Konzentrationen assoziiert mit RR 1,64 (95%-KI 1,41–1,90) für Asthmabehandlungen; Poaceae signifikant bei mittlerer (RR 1,19; 95%-KI 1,03–1,38) und hoher Exposition (RR 1,41; 95%-KI 1,17–1,70). Attributable Fraktion für Betula 10,24–17,75 %, für Poaceae 14,25–18,84 % während Pollensaison.",
-    transfer:"Bayern, Deutschland - direkt auf deutsche Verhältnisse übertragbar"
+    title:"Pollenexposition und Asthma-Notfallbehandlungen in Bayern",
+    sum:"Zeitreihenanalyse zum Zusammenhang zwischen täglichen Pollenkonzentrationen (Betula, Poaceae u. a.) und akuten Asthmabehandlungen in drei bayerischen Städten mit automatisierter Pollenüberwachung.",
+    result:"Hohe Birkenpollenkonzentration: RR 1,64 (95%-KI 1,41–1,90). Gräserpolleneffekt bei mittleren (RR 1,19; 95%-KI 1,03–1,38) und hohen (RR 1,41; 95%-KI 1,17–1,70) Konzentrationen, Effekt am stärksten Tag 2 nach Exposition. Attributable Fraktionen für Birke: 10,2–17,8% der saisonalen Asthmanotfälle.",
+    transfer:"Deutschland/Bayern – heimische Pollendaten, regionale Klimazone, direkt anwendbar"
   },
   {
-    journal:"Current Problems in Cardiology", year:"2026", pmid:"42471098",
+    journal:"Curr Probl Cardiol", year:"2026", pmid:"42471098",
     author:"Moscucci F et al.", pubdate:"18.07.2026",
     added:"18.07.2026",
-    title:"Hitzewellen und kardiovaskuläre Sterblichkeit in Europa – Pathophysiologie und autonome Überwachung",
-    sum:"Narrative Review zu hitzewellenbedingter kardiovaskulärer Mortalität in Europa, Mechanismen, Umwelt-Ko-Faktoren und HRV-basierte Risikoüberwachung mittels tragbarer Geräte.",
-    result:"Europäische hitzeassoziierte Übersterblichkeit 2003: ca. 70.000 Todesfälle, 2022: 61.672, 2025 (10 Wochen): geschätzt 24.400. PM2,5 und Ozon wirken synergistisch (Interaktionsindex 1,51) bei kardiovaskulärer Mortalität. Reduzierte HRV (SDNN, RMSSD) verstärkt Risiko bei Älteren und Herzerkrankten. Wearable-gestützte HRV-Überwachung ermöglicht Bevölkerungs-Screening.",
-    transfer:"Europa, Deutschland - direkt relevant für gemäßigte Klimazone und bestehende Versorgungsstrukturen"
-  },
-  {
-    journal:"Int J Epidemiol", year:"2026", pmid:"42470137",
-    author:"Sieber S et al.", pubdate:"24.06.2026",
-    added:"18.07.2026",
-    title:"Luftverschmutzung und niedriges Geburtsgewicht in Spanien 2010–2018 – Gesundheitsungleichheiten und Luftqualitätsziele",
-    sum:"Epidemiologische Auswertung von 1,4 Mio. Geburten in Spanien zur Assoziation von PM2,5/NO2-Exposition mit Niedriggeburtsgewicht, stratifiziert nach Mutterbildung.",
-    result:"PM2,5-Anstieg um 10 µg/m³ mit 6 % erhöhtem Niedriges-Geburtsgewicht-Risiko (95%-KI 0–11 %); NO2 um 1 % (95%-KI 0–3 %). Erreichung der EU-Ziele von 10 µg/m³ PM2,5 hätte 662–2032 Fälle verhindert; 20 µg/m³ NO2-Ziel 432–938 Fälle. Primäre mütterliche Schulbildung zeigte höchste relative Risikoreduktion unter Luftqualitätsinterventionen.",
-    transfer:"Südeuropa, Spanien - höhere Grundbelastung als Deutschland, aber Methodik und Inequity-Fokus relevant"
+    title:"Hitzewellen und kardiovaskuläre Mortalität in Europa: Pathophysiologie und autonome Überwachung",
+    sum:"Narrative Review zur Epidemiologie und Mechanistik hitzewellenbezogener kardiovaskulärer Todesfälle in Europa und zur Rolle von Herzratenvariabilität als Vulnerabilitätsmarker.",
+    result:"Europäische hitzebedingte Exzesstodesfälle: ~70.000 (2003) bis 61.672 (2022); geschätzt 24.400 nur in 10 Wochen 2025. Synergistische Effekte: Hitze+PM2.5+Ozon (Synergieindex SI 1,51 für kardiovaskuläre Mortalität). Reduzierte Herzratenvariabilität (SDNN, RMSSD) markiert erhöhtes Risiko, besonders bei älteren Menschen und Herzpatienten.",
+    transfer:"Europa – deutsche Hitzemorbiditätsraten, Temperaturmuster und Bevölkerungsstruktur übertragbar"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
