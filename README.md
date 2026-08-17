@@ -59,7 +59,8 @@ deshalb einen eigenen Hinweis über den Kacheln.
 3. Die Datei `CNAME` im Wurzelverzeichnis setzt die Domain `klima.m-vf.de`; beim DNS-Anbieter
    einen CNAME-Eintrag `klima` → `mvf-portal.github.io` anlegen.
 4. **Settings → Secrets → Actions**: `KLIMAHUB` hinterlegen (Claude-API für die Studienauswahl),
-   optional `KNOWLEDGEHUB` für den Mailchimp-Entwurf.
+   optional `KLIMAHUBMC` für den Mailchimp-Entwurf. Die beiden Namen unterscheiden sich nur
+   durch das Kürzel `MC` — nicht verwechseln.
 5. In `scripts/mailchimp_entwurf.py` die `TAG_ID` des Tags „Studien-Newsletter Klima" eintragen
    und in `newsletter.html` dieselbe Nummer bei `tagStudien`. Ohne sie läuft der Versand über
    die Gruppe `group[16136][1024]` — das genügt, ist aber weniger fein steuerbar.

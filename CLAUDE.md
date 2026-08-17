@@ -97,10 +97,19 @@ Einrichtung und Kampagnenvorlage: `NEWSLETTER-MAILCHIMP.md` und `newsletter/mail
 
 | Secret | Wofuer | Fehlt es? |
 |---|---|---|
-| `KLIMAHUB` | Claude-API fuer die Studienauswahl | Der taegliche Lauf bricht ab, `index.html` bleibt unveraendert |
-| `KNOWLEDGEHUB` | Mailchimp-API fuer den Kampagnen-Entwurf | Nur dieser Schritt entfaellt (`continue-on-error`) |
+| `KLIMAHUB` | **Claude-API** fuer die Studienauswahl | Der taegliche Lauf bricht ab, `index.html` bleibt unveraendert |
+| `KLIMAHUBMC` | **Mailchimp-API** fuer den Kampagnen-Entwurf (MC = Mailchimp) | Nur dieser Schritt entfaellt (`continue-on-error`) |
 
-Der Workflow liest den Claude-Schluessel als `${{ secrets.KLIMAHUB || secrets.ANTHROPIC_API_KEY }}` — der zweite Name ist ein Rueckfallweg, falls das Geheimnis spaeter sprechender benannt wird. **Beim Anlegen eines weiteren Portals daran denken:** Der Name des Geheimnisses und der Name im Workflow muessen zusammenpassen; ein Tippfehler faellt erst beim naechtlichen Lauf auf.
+**Die beiden Namen unterscheiden sich um zwei Buchstaben.** Wer sie verwechselt, bekommt keine Fehlermeldung, die das sagt — sondern eine Authentifizierung, die beim jeweils anderen Dienst scheitert.
+
+Der Workflow liest beide mit Rueckfallwegen:
+
+```yaml
+ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB   || secrets.ANTHROPIC_API_KEY }}
+MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC || secrets.KNOWLEDGEHUB || secrets.MAILCHIMP_API_KEY }}
+```
+
+**Beim Anlegen eines weiteren Portals daran denken:** Der Name des Geheimnisses und der Name im Workflow muessen zusammenpassen; ein Tippfehler faellt erst beim naechtlichen Lauf auf.
 
 ## Newsletter-Anmeldung (`newsletter.html`)
 
