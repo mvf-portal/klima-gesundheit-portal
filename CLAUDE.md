@@ -111,6 +111,17 @@ MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC || secrets.KNOWLEDGEHUB || secrets.MAI
 
 **Beim Anlegen eines weiteren Portals daran denken:** Der Name des Geheimnisses und der Name im Workflow muessen zusammenpassen; ein Tippfehler faellt erst beim naechtlichen Lauf auf.
 
+### Beide Portale schreiben in dasselbe Mailchimp-Konto
+
+Das ist die Fehlerquelle, die beim Aufsetzen zugeschlagen hat. `mailchimp_entwurf.py` erkennt seine eigenen Kampagnen **am Titel-Praefix** — Mailchimp fuehrt darueber kein Buch, seit die RSS-Automation weg ist.
+
+| Portal | `PRAEFIX` |
+|---|---|
+| wissen.m-vf.de | `MVF Studien-Newsletter` |
+| klima.m-vf.de | `MVF Klima-Newsletter` |
+
+Mit dem geerbten Praefix meldete der erste Lauf hier „Entwurf besteht bereits" und legte gar keinen an — er hatte den Entwurf des Schwesterportals fuer seinen eigenen gehalten. Ein Zusatz reicht als Abhilfe **nicht**: `datum_aus_titel()` prueft mit `startswith()`, ein „MVF Studien-Newsletter Klima …" waere drueben als eigene Kampagne durchgegangen. Der Praefix muss vollstaendig eigen sein.
+
 ## Newsletter-Anmeldung (`newsletter.html`)
 
 Zwei Newsletter, eine Seite: Studien-Newsletter (taeglich, aus dem Hub) und MVF-Newsletter

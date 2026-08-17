@@ -64,7 +64,18 @@ FREIGABE_MAIL = "stegmaier@m-vf.de"
 # Titel aller von hier erzeugten Kampagnen. Daran erkennt das Skript spaeter,
 # was schon versendet wurde und was noch aussteht - Mailchimp fuehrt darueber
 # selbst kein Buch, seit die RSS-Kampagne weg ist.
-PRAEFIX = "MVF Studien-Newsletter"
+#
+# **Der Praefix MUSS sich vom Schwesterportal unterscheiden.** Beide Portale
+# schreiben in dasselbe Mailchimp-Konto. Am 17.08.2026 lief dieses Skript mit
+# dem geerbten Praefix "MVF Studien-Newsletter" und meldete: "Entwurf besteht
+# bereits" - es hatte den Entwurf des Versorgungsforschungs-Portals fuer seinen
+# eigenen gehalten und legte gar keinen an.
+#
+# Und er darf mit dem anderen auch nicht *anfangen*: datum_aus_titel() prueft
+# mit startswith(), also wuerde "MVF Studien-Newsletter Klima ..." drueben als
+# eigene Kampagne durchgehen. Deshalb ein voellig eigener Name. Ein drittes
+# Portal braucht wieder einen, der mit keinem der beiden beginnt.
+PRAEFIX = "MVF Klima-Newsletter"
 # Obergrenze, falls laenger nicht freigegeben wurde. Eine Ausgabe mit 80
 # Studien liest niemand; der Rest bleibt im Archiv und im Hub sichtbar.
 MAX_STUDIEN = 25
