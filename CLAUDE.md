@@ -93,6 +93,15 @@ Einrichtung und Kampagnenvorlage: `NEWSLETTER-MAILCHIMP.md` und `newsletter/mail
 
 `scripts/update-studies.ps1` und `scripts/Studien-aktualisieren.cmd` sind eine ältere lokale PowerShell-Variante und werden von der Automatik nicht verwendet.
 
+## Geheimnisse im Repository
+
+| Secret | Wofuer | Fehlt es? |
+|---|---|---|
+| `KLIMAHUB` | Claude-API fuer die Studienauswahl | Der taegliche Lauf bricht ab, `index.html` bleibt unveraendert |
+| `KNOWLEDGEHUB` | Mailchimp-API fuer den Kampagnen-Entwurf | Nur dieser Schritt entfaellt (`continue-on-error`) |
+
+Der Workflow liest den Claude-Schluessel als `${{ secrets.KLIMAHUB || secrets.ANTHROPIC_API_KEY }}` — der zweite Name ist ein Rueckfallweg, falls das Geheimnis spaeter sprechender benannt wird. **Beim Anlegen eines weiteren Portals daran denken:** Der Name des Geheimnisses und der Name im Workflow muessen zusammenpassen; ein Tippfehler faellt erst beim naechtlichen Lauf auf.
+
 ## Newsletter-Anmeldung (`newsletter.html`)
 
 Zwei Newsletter, eine Seite: Studien-Newsletter (taeglich, aus dem Hub) und MVF-Newsletter

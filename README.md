@@ -58,7 +58,7 @@ deshalb einen eigenen Hinweis über den Kacheln.
 2. **Settings → Pages** → Source: `main`, Ordner `/`.
 3. Die Datei `CNAME` im Wurzelverzeichnis setzt die Domain `klima.m-vf.de`; beim DNS-Anbieter
    einen CNAME-Eintrag `klima` → `mvf-portal.github.io` anlegen.
-4. **Settings → Secrets → Actions**: `ANTHROPIC_API_KEY` hinterlegen (für die Studienauswahl),
+4. **Settings → Secrets → Actions**: `KLIMAHUB` hinterlegen (Claude-API für die Studienauswahl),
    optional `KNOWLEDGEHUB` für den Mailchimp-Entwurf.
 5. In `scripts/mailchimp_entwurf.py` die `TAG_ID` des Tags „Studien-Newsletter Klima" eintragen
    und in `newsletter.html` dieselbe Nummer bei `tagStudien`. Ohne sie läuft der Versand über

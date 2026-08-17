@@ -34,7 +34,10 @@ jobs:
 
       - name: Studienliste aktualisieren
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Das Geheimnis heisst in diesem Repository KLIMAHUB. Der Zweitname
+          # bleibt stehen, falls es spaeter sprechender benannt wird - genau wie
+          # beim Mailchimp-Schluessel weiter unten.
+          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB || secrets.ANTHROPIC_API_KEY }}
           MODEL: claude-haiku-4-5          # günstiges Modell; z. B. claude-sonnet-5 für mehr Qualität
           # SEARCH_TERM: '...'   # optional: Standardabfrage ueberschreiben (siehe update_studies.py)
         run: python scripts/update_studies.py
