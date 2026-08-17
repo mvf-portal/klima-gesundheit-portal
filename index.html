@@ -999,62 +999,71 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "17. Aug. 2026, 13:35 Uhr";
+const SNAP_DATE = "17. Aug. 2026, 14:28 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
     journal:"Nat Commun", year:"2026", pmid:"42575902",
     author:"Tomkins MD et al.", pubdate:"10.08.2026",
     added:"10.08.2026",
-    title:"Kanäle als urbane Kühlungsinfrastruktur in Großbritannien und Irland: Thermische Effekte auf Hitzewellen",
-    sum:"Eine Energiebilanzmodellierung zeigt, dass Kanäle an heißen Tagen durchschnittlich eine Kühlungswirkung von etwa 0,8 °C bieten, während Hitzewellen eine stärkere Wirkung von 1,5–2,3 °C aufweisen.",
-    result:"Kanäle in Großbritannien und Irland zeigen eine durchschnittliche daytime-Kühlungswirkung von 0,8 °C (Spanne 0,7–1,0 °C) in der unmittelbaren Umgebung; während Hitzewellen reicht die Wirkung bis 1,5–2,3 °C. Dies kann die Hitzebelastung in städtischen Gebieten messbar reduzieren und Gesundheitsrisiken senken.",
-    transfer:"Großbritannien, gemäßigte Klimazone, Modellierung auf Basis realer Topographie übertragbar"
+    title:"Kanäle als urbane Kühlungsinfrastruktur – Thermische Effekte in Großbritannien und Irland",
+    sum:"Energiebilanzmodellierung zur Abschätzung der Kühlungseffekte von Kanalnetzwerken auf urbane Temperaturen.",
+    result:"Kanäle bieten mittags durchschnittlich 0,8 °C Kühlung (0,7–1,0 °C) in unmittelbarer Nähe, stärker in Frühsommer (1,2–1,4 °C) und bei Hitzewellen (1,5–2,3 °C). Thermische Vorteile bestätigt für Populationsgesundheit und Hitzerisikoreduktion.",
+    transfer:"Großbritannien/Irland – gemäßigte Klimazone, Methodik auf mitteleuropäische städtische Planung anwendbar"
+  },
+  {
+    journal:"BMJ Open", year:"2026", pmid:"42567636",
+    author:"Shukla N et al.", pubdate:"07.08.2026",
+    added:"07.08.2026",
+    title:"Stickstoffdioxid und akute Asthmanotaufnahmen – Zeitreihenanalyse Birmingham/Solihull, Großbritannien",
+    sum:"Zeitreihenanalyse der Assoziation stündlich gemessener NO₂-Konzentrationen mit Notaufnahmen wegen akuter Asthmaexazerbation bei Erwachsenen (2016–2022).",
+    result:"18.943 Erwachsene mit Asthmaexazerbationen eingeschlossen. Mittlere NO₂-Exposition (18 µg/m³) über 0–24 h lag assoziiert mit 13% erhöhtem Risiko für Notaufnahmen tagsüber (RR=1,13, 95% KI 1,01–1,26). Signifikante Assoziation bei Lag 3–6 h. Höheres Risiko in deprivierten Gebieten.",
+    transfer:"Großbritannien (England), vergleichbare Luftqualitätsstandards und Versorgungsstruktur wie Deutschland"
   },
   {
     journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
     author:"Radici A et al.", pubdate:"Aug. 2026",
     added:"10.08.2026",
-    title:"Aedes albopictus und Denguefieberrisiko in Frankreich während des 21. Jahrhunderts",
-    sum:"Klimasimulationen zeigen, dass 89–96 % Frankreichs bis 2085 klimatisch für die Mücke geeignet sein wird, mit autochthoner Dengueübertragung in 71–95 % der besiedelten Flächen unter Hochemissionsszenario.",
-    result:"Im Hochemissionsszenario werden 89–96 % Frankreichs (außer Gebirgen) klimatisch für Aedes albopictus geeignet; autochthone Dengueübertragung wird in 71–95 % möglich sein. Im Median-Szenario reduziert sich die Eignung auf 49–89 % für Mückenbesiedlung und 31–82 % für Dengueübertragung. Mittelmeer- und Biscaya-Küsten könnten ganzjährige Vektoraktivität ermöglichen.",
-    transfer:"Frankreich, südeuropäische Klimazone, direkt auf deutsche Risikomodelle anwendbar"
+    title:"Aedes albopictus und Dengue-Übertragung in Frankreich im 21. Jahrhundert",
+    sum:"Mechanistisches Klimamodell zur Projektion von Tigermückenverbreitung und Dengue-Transmissionsrisiko in Frankreich bis 2085 unter zwei Emissionsszenarien.",
+    result:"Bis 2085: 89–96% Frankreichs unter Szenario hoher Emissionen klimatisch geeignet für Ae. albopictus-Etablierung (außer Hochgebirge). Autochthone Denguetransmission theoretisch möglich in 71–95% der Länder, außer nördliche Tiefebenen. Im Mittelmeer und Baskenland möglicherweise ganzjährige Aktivität. Großes Unsicherheitsintervall zwischen drei Klimamodellen.",
+    transfer:"Frankreich – relevante geographische Nähe, Methodik für Deutschland adaptierbar, höhere Temperaturschwellen als nördliche DE"
   },
   {
-    journal:"Euro Surveill", year:"2026", pmid:"42565263",
-    author:"Rise N et al.", pubdate:"Aug. 2026",
-    added:"07.08.2026",
-    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa: Rapid Review 2018–2025",
-    sum:"Eine systematische Übersicht europäischer Studien identifizierte Campylobacteriose- und Leptospirose-Ausbrüche nach Hochwasserereignissen, zeigt aber erhebliche Forschungslücken in der Erfassung dieser Assoziationen.",
-    result:"Von 897 identifizierten Publikationen wurden 14 eingeschlossen; Campylobacteriose und Leptospirose wurden nach Starkregen und Überflutungen in mehreren Ländern dokumentiert. Allerdings zeigen die wenigen Studien aus Europa trotz breiter Suchkriterien erhebliche Forschungslücken auf und unterstreichen Bedarf für verbesserte Surveillance und One Health-Systeme.",
-    transfer:"Europaische Länder, einschließlich Deutschland, gemäßigte Klimazone"
+    journal:"Lancet Planet Health", year:"2026", pmid:"42486136",
+    author:"Leal Filho W et al.", pubdate:"22.07.2026",
+    added:"22.07.2026",
+    title:"Klimawandel und Malaria in Westafrika – Politische Integrationsanalys",
+    sum:"Qualitative Analyse von Malaria-Strategieplänen aus 11 west- und zentralafrikanischen Ländern hinsichtlich Klimaadaptationsintegration und prognosegestützter Überwachung.",
+    result:"Meisten Länder erkennen Einfluss von Klima und Saisonalität an, aber explizite Integration von Klimadaten in Planung selten. Ghana und Nigeria verwenden fortgeschrittene Modellierungsansätze (agentenbasiert, subnational stratifiziert). Togo, Benin, Senegal, Gambia zeigen Fortschritte; meiste Pläne bleiben reaktiv statt prognosegestützt wegen Datenlücken und Koordinationsmängeln.",
+    transfer:"Subsahara-Afrika – methodisch relevant für Preparedness-Konzepte, Temperaturgrenzwerte nicht auf Mitteleuropa übertragbar"
   },
   {
     journal:"Environ Int", year:"2026", pmid:"42492428",
     author:"Boser M et al.", pubdate:"18.07.2026",
     added:"23.07.2026",
-    title:"Pollenexposition und asthmabedingte Notfallbehandlungen in Bayern: Multizenterstudie mit automatisiertem Pollenmonitoring",
-    sum:"Eine Zeitreihenanalyse an drei bayerischen Städten zeigt Betula-Pollen mit RR 1,64 (95%-KI 1,41–1,90) bei hoher Exposition und attributable Fraktionen von 10–18 % asthmabedingte Notfallbehandlungen während der Pollensaison.",
-    result:"Hohe Betula-Pollenkonzentrationen erhöhen das Asthmarisiko um RR 1,64 (95%-KI 1,41–1,90); Poaceae zeigten RR 1,19–1,41 bei mittleren bis hohen Konzentrationen. Attributable Fraktionen für Betula variierten zwischen 10,24 % (Augsburg) und 17,75 % (Nürnberg). Dieser Polleneffekt ist unmittelbar auf aktuelle Vorwarnungsysteme übertragbar.",
-    transfer:"Bayern, Deutschland; Daten aus deutschen Ärzten und automatisiertem ePIN-Netzwerk"
+    title:"Pollenexposition und Asthmaanfälle in Bayern – Automatisierte Pollenüberwachung und Notfallbehandlungen",
+    sum:"Studie zu Birken- und Gräserpollen als Trigger für asthmabedingte Notfallambulanzen in drei bayerischen Städten mit hoher zeitlicher Auflösung.",
+    result:"Hohe Birkenpollenkonzentrationen waren mit einem erhöhten Risiko für Asthmabehandlungen assoziiert (RR: 1,64, 95% KI [1,41–1,90]), Gräserpollen zeigten Effekte bei mittleren (RR: 1,19) und hohen Konzentrationen (RR: 1,41). Zurechenbare Anteile für Birken: 10,24–17,75%, für Gräser: 14,25–18,84% während der Pollensaison. Klimawandel wird Pollensaisons verlängern.",
+    transfer:"Bayern, Deutschland – vergleichbares Klima und Gesundheitssystem, übertragbar auf mitteleuropäische Regionen"
   },
   {
     journal:"Curr Probl Cardiol", year:"2026", pmid:"42471098",
     author:"Moscucci F et al.", pubdate:"18.07.2026",
     added:"18.07.2026",
-    title:"Hitzewellen und kardiovaskuläre Mortalität in Europa: Pathophysiologische Mechanismen und autonome Überwachung",
-    sum:"Eine Narrative Review quantifiziert europäische hitzebedingte Übersterblichkeit von ~70 000 (2003) auf 61 672 (2022) und zeigt eine Synergiewirkung mit PM2.5 und Ozon (Synergieindex 1,51) sowie reduzierten HRV-Wert als Vulnerabilitätsmarker.",
-    result:"Hitzebedingte Übersterblichkeit stieg in europäischen Städten von ~70 000 (2003) auf 61 672 Fälle (2022); nur 2025 wurden geschätzt 24 400 Todesfälle in 10 Wochen dokumentiert. Extreme Hitze wirkt synergistisch mit PM2.5 und Ozon (Synergieindex SI 1,51), verstärkt Sympathikus-Hyperaktivation und Arrhythmierisiko. Reduzierte HRV (SDNN, RMSSD) verstärkt Risiko bei Älteren und Herzinsuffizienz.",
-    transfer:"Europa insgesamt, Deutschland, Hocheinkommensländer mit vergleichbarem Versorgungssystem"
+    title:"Hitzewellen und kardiovaskuläre Mortalität in Europa – Pathophysiologie und Autonome Überwachung",
+    sum:"Narrativer Review zu epidemiologischer Last von Hitzewellen-assoziierter kardiovaskulärer Mortalität in Europa, Mechanismen, Umwelt-Kofaktoren und Rolle der Herzfrequenzvariabilität.",
+    result:"Hitzeassoziierte Übersterblichkeit in Europa: ~70.000 (2003) auf 61.672 (2022), geschätzt 24.400 in 10 Wochen 2025. Extreme Hitze wirkt synergistisch mit PM₂.₅ und Ozon (Synergieindex 1,51 für kardiovaskuläre Mortalität). Reduzierte Herzfrequenzvariabilität (SDNN, RMSSD) verstärkt Risiko bei Älteren und Patienten mit Herzinsuffizienz. Tragbare Geräte ermöglichen kontinuierliche HRV-Überwachung.",
+    transfer:"Europa – direkt auf Deutschland übertragbar, gemäßigte Klimazone, etablierte Hitzepläne, deutsches Gesundheitssystem"
   },
   {
     journal:"Int J Epidemiol", year:"2026", pmid:"42470137",
     author:"Sieber S et al.", pubdate:"24.06.2026",
     added:"18.07.2026",
-    title:"Luftqualitätsverbesserung und niedriges Geburtsgewicht in Spanien 2010–2018: Gesundheitsungleichheiten",
-    sum:"Eine Analyse von 1,4 Millionen Geburten zeigt, dass eine PM2.5-Erhöhung um 10 µg/m³ mit 6% höheren Chancen für niedriges Geburtsgewicht (95%-KI 0–11%) assoziiert ist; Einhaltung von EU-Zielwerten hätte 662–2032 Fälle vermieden.",
-    result:"Jede 10 µg/m³ PM2.5-Erhöhung war mit 6 % erhöhtem LBW-Risiko assoziiert (95%-KI 0–11%); NO2-Erhöhung um 10 µg/m³ mit 1 % (95%-KI 0–3%). Erreichung von PM2.5-Zielwerten von 10 und 5 µg/m³ hätte 662 bzw. 2032 LBW-Fälle vermieden. Universelles sekundäres und primäres Bildungsniveau war mit erhöhtem LBW verbunden, zeigt aber größere relative Reduktion unter Luftqualitätsinterventionen.",
-    transfer:"Südeuropa (Spanien), gemäßigte Klimazone, EU-Luftqualitätsrichtlinien anwendbar auf Deutschland"
+    title:"Luftverschmutzung und niedriges Geburtsgewicht in Spanien – Gesundheitliche Ungleichheiten 2010–2018",
+    sum:"Assoziationen von PM₂.₅ und NO₂ mit termgeborenem niedrigem Geburtsgewicht (LBW) in Spanien nach mütterlicher Bildung; Berechnung präventabler LBW-Fälle unter Luftqualitäts- und Bildungsszenarien.",
+    result:"Pro 10 µg/m³ PM₂.₅: 6% höhere LBW-Odds (95% KI 0–11%), NO₂: 1% (95% KI 0–3%). Erreichen von PM₂.₅ 10 µg/m³-Grenzwert hätte 662 LBW-Fälle (95% KI –4 bis 1.271) in 2010–18 verhindert; 5 µg/m³-Ziel: 2.032 Fälle (–74 bis 3.900). Universelle tertäre Bildung hätte &gt;9.200 Fälle verhindert. Höchste Reduktionen in niedrig gebildeten Gruppen.",
+    transfer:"Südeuropa – Luftqualitätsstandards höher als mitteleuropäisch, aber gesundheitliche Ungleichheit relevant für Deutschland"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
