@@ -87,11 +87,14 @@ SCHEMA = {
     "properties": {
         "studies": {
             "type": "array",
-            # Die Anzahl gehoert ins Schema, nicht nur in den Prompt: Beim ersten
-            # Lauf am 17.08.2026 lieferte das Modell trotz "waehle GENAU 6" neun
-            # Studien, und die Plausibilitaetspruefung weiter unten brach den
-            # ganzen Lauf ab. Die Grenzen hier entsprechen dieser Pruefung.
-            "minItems": 5,
+            # Die Obergrenze gehoert ins Schema, nicht nur in den Prompt: Beim
+            # ersten Lauf am 17.08.2026 lieferte das Modell trotz "waehle GENAU 6"
+            # neun Studien, und die Plausibilitaetspruefung weiter unten brach den
+            # ganzen Lauf ab.
+            #
+            # **Kein minItems eintragen.** Die API lehnt Werte ausser 0 und 1 ab:
+            # "For 'array' type, 'minItems' values other than 0 or 1 are not
+            # supported". Die Untergrenze prueft deshalb weiterhin Python.
             "maxItems": 7,
             "items": {
                 "type": "object",
