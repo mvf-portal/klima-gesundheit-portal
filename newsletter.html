@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Newsletter von Monitor Versorgungsforschung bestellen: den täglichen Studien-Newsletter zu Hitze, Klima und Gesundheit, den redaktionellen MVF-Newsletter — oder beide.">
+<title>Newsletter bestellen — Monitor Versorgungsforschung</title>
+<link rel="canonical" href="https://klima.m-vf.de/newsletter.html">
+<style>
+  /* Schrift, Farben und Gerüst wie ueber.html - die Seite gehört sichtbar dazu. */
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:400;
+    src:url("fonts/lato-400.woff2") format("woff2"); font-display:swap; }
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:700;
+    src:url("fonts/lato-700.woff2") format("woff2"); font-display:swap; }
+
+  :root{
+    --paper:#EDF2FA; --card:#FFFFFF; --card-2:#F7FAFD;
+    --ink:#111111; --ink-soft:#444A50; --ink-faint:#545C63;
+    --line:#D0D8E4; --line-soft:#E3EAF3;
+    --brand:#0051A1; --brand-deep:#003B77; --brand-tint:#E1EAF6;
+    --action:#BE9E53; --action-deep:#8A6E28; --on-action:#2A2207;
+    --ok:#1C6B3C; --ok-tint:#E6F4EC; --warn:#8A2D2D; --warn-tint:#FAEAEA;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+      --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+      --line:#22314A; --line-soft:#1A2639;
+      --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+      --action:#D4B878; --action-deep:#D9BE82; --on-action:#221A08;
+      --ok:#7FD3A2; --ok-tint:#12271C; --warn:#F0A3A3; --warn-tint:#2A1414;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+    --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+    --line:#22314A; --line-soft:#1A2639;
+    --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+    --action:#D4B878; --action-deep:#D9BE82; --on-action:#221A08;
+    --ok:#7FD3A2; --ok-tint:#12271C; --warn:#F0A3A3; --warn-tint:#2A1414;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Lato", system-ui, "Segoe UI", Arial, sans-serif;
+    font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:820px; margin:0 auto; padding:0 22px; }
+
+  /* ---------- Menüleiste (wie ueber.html) ---------- */
+  nav.hauptmenu{ background:var(--card); border-bottom:1px solid var(--line); }
+  .menu-inner{
+    display:flex; align-items:center; gap:4px; flex-wrap:nowrap;
+    overflow-x:auto; scrollbar-width:none; padding:0;
+  }
+  .menu-inner::-webkit-scrollbar{ display:none; }
+  .menu-inner a{
+    flex:0 0 auto; padding:11px 13px; font-size:13px; font-weight:700;
+    color:var(--ink-soft); text-decoration:none; white-space:nowrap;
+    border-bottom:2px solid transparent; transition:color .14s, border-color .14s;
+  }
+  .menu-inner a:hover{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a.hier{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a:focus-visible{ outline:2px solid var(--brand); outline-offset:-2px; }
+  .menu-extern::after{ content:" \2197"; font-size:.85em; }
+  @media (max-width:860px){
+    nav.hauptmenu{ position:relative; }
+    nav.hauptmenu::after{
+      content:""; position:absolute; top:0; right:0; bottom:0; width:36px;
+      background:linear-gradient(to right, transparent, var(--card));
+      pointer-events:none;
+    }
+  }
+  @media (max-width:620px){
+    .menu-inner{ flex-wrap:wrap; padding:3px 0; gap:0; }
+    .menu-inner a{ padding:12px 9px; font-size:12px; }
+    .menu-inner a.nur-breit{ display:none; }
+    nav.hauptmenu::after{ display:none; }
+  }
+
+  /* ---------- Kopf ---------- */
+  header.top{ background:var(--card); border-bottom:1px solid var(--line); padding:38px 0 30px; }
+  .kopf-oben{ display:flex; align-items:flex-start; justify-content:space-between; gap:26px; }
+  .eyebrow{
+    font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--brand); margin:0 0 8px;
+  }
+  h1{
+    font-size:clamp(24px,3.6vw,38px); font-weight:700; line-height:1.15;
+    margin:0 0 14px; color:var(--brand); letter-spacing:-.015em; text-wrap:balance;
+  }
+  .standfirst{ margin:0; font-size:clamp(16px,2vw,18px); color:var(--ink-soft); max-width:62ch; text-wrap:pretty; }
+  .marke{ flex:0 0 auto; display:block; line-height:0; border-radius:5px; }
+  .marke img{ width:190px; max-width:34vw; height:auto; display:block; }
+  @media (prefers-color-scheme:dark){ .marke{ background:#fff; padding:9px 12px; } }
+  :root[data-theme="dark"] .marke{ background:#fff; padding:9px 12px; }
+  :root[data-theme="light"] .marke{ background:none; padding:0; }
+  @media (max-width:720px){
+    .kopf-oben{ flex-direction:column-reverse; align-items:flex-start; gap:16px; }
+    .marke img{ width:160px; max-width:56vw; }
+  }
+
+  main{ padding:34px 0 70px; }
+  h2{
+    font-size:clamp(19px,2.6vw,24px); font-weight:700; line-height:1.25;
+    margin:0 0 14px; padding-bottom:9px; border-bottom:2px solid var(--brand);
+  }
+  p{ margin:0 0 14px; max-width:68ch; text-wrap:pretty; }
+  a{ color:var(--brand); text-underline-offset:2px; }
+  a:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; border-radius:3px; }
+
+  /* ---------- Formular ---------- */
+  form{ margin:0 0 30px; }
+  fieldset{ border:0; margin:0 0 22px; padding:0; }
+  legend{
+    font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-faint); padding:0; margin-bottom:10px;
+  }
+
+  /* Die beiden Newsletter als anklickbare Karten - die ganze Fläche schaltet
+     das Kästchen, nicht nur das Kästchen selbst. */
+  .wahl{ display:grid; gap:12px; }
+  @media (min-width:700px){ .wahl{ grid-template-columns:1fr 1fr; } }
+  .karte{
+    display:block; position:relative; cursor:pointer;
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:16px 18px 16px 46px; transition:border-color .14s, background .14s;
+  }
+  .karte:hover{ border-color:var(--brand); }
+  .karte input{
+    position:absolute; left:17px; top:19px; width:18px; height:18px;
+    accent-color:var(--brand); cursor:pointer; margin:0;
+  }
+  .karte:has(input:checked){ border-color:var(--brand); background:var(--brand-tint); }
+  .karte:has(input:focus-visible){ outline:2px solid var(--brand); outline-offset:2px; }
+  .karte b{ display:block; font-size:16px; line-height:1.3; margin-bottom:3px; }
+  .karte .takt{
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--brand-deep); background:var(--card-2);
+    border:1px solid var(--line); border-radius:4px; padding:1px 7px; margin-bottom:6px;
+  }
+  .karte .was{ display:block; font-size:13.5px; line-height:1.5; color:var(--ink-soft); }
+
+  label.feld{ display:block; font-size:13px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  input[type="email"]{
+    width:100%; max-width:420px; min-height:46px; padding:0 13px;
+    font-family:inherit; font-size:16px; color:var(--ink);
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+  }
+  input[type="email"]:focus{ outline:2px solid var(--brand); outline-offset:1px; border-color:var(--brand); }
+
+  .einwilligung{
+    display:flex; gap:11px; align-items:flex-start;
+    font-size:13.5px; line-height:1.55; color:var(--ink-soft); max-width:68ch; margin:18px 0 6px;
+  }
+  .einwilligung input{ flex:0 0 auto; width:18px; height:18px; margin-top:3px; accent-color:var(--brand); }
+
+  .btn-gold{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    min-height:48px; margin-top:18px;
+    background:var(--action); color:var(--on-action); font-family:inherit;
+    font-weight:700; font-size:15px; text-decoration:none;
+    padding:0 26px; border:0; border-radius:6px; cursor:pointer; transition:filter .14s;
+  }
+  .btn-gold:hover{ filter:brightness(1.08); }
+  .btn-gold:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+  .btn-gold[disabled]{ opacity:.6; cursor:default; }
+
+  /* Rückmeldung. Wird per aria-live vorgelesen, deshalb immer im Dokument. */
+  .meldung{ margin:16px 0 0; padding:13px 16px; border-radius:6px; font-size:14.5px; max-width:68ch; }
+  .meldung:empty{ display:none; }
+  .meldung.ok{ background:var(--ok-tint); color:var(--ok); border:1px solid currentColor; }
+  .meldung.fehler{ background:var(--warn-tint); color:var(--warn); border:1px solid currentColor; }
+
+  /* Falle für Formularroboter: sichtbar nur für Maschinen. */
+  .falle{ position:absolute; left:-5000px; }
+
+  .fein{ font-size:13px; color:var(--ink-faint); max-width:68ch; }
+
+  footer{
+    border-top:1px solid var(--line); background:var(--card);
+    padding:26px 0 40px; font-size:13.5px; color:var(--ink-faint);
+  }
+  footer p{ margin:0 0 8px; max-width:70ch; }
+  footer a{ color:var(--ink-soft); }
+</style>
+
+<nav class="hauptmenu">
+  <div class="wrap menu-inner">
+    <a href="./">Knowledge-Hub</a>
+    <a href="ueber.html">Über den Hub</a>
+    <a href="newsletter.html" class="hier" aria-current="page">Newsletter</a>
+    <a href="./#impressum" class="nur-breit">Impressum</a>
+    <a href="./#datenschutz" class="nur-breit">Datenschutz</a>
+    <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=menu" target="_blank" rel="noopener" class="menu-extern">Monitor Versorgungsforschung</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="wrap kopf-oben">
+    <div>
+      <p class="eyebrow">Knowledge-Hub Hitze, Klima &amp; Gesundheit</p>
+      <h1>Newsletter bestellen</h1>
+      <p class="standfirst">Zwei Newsletter, eine Anmeldung: die tägliche Studienauswahl aus dem
+      Hub, der redaktionelle Newsletter von „Monitor Versorgungsforschung" — oder beide.</p>
+    </div>
+    <a class="marke" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=logo" target="_blank" rel="noopener" title="Monitor Versorgungsforschung — Herausgeber dieses Portals">
+      <img src="logo/mvf-logo.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <form id="anmeldung" novalidate>
+    <fieldset>
+      <legend>Was möchten Sie erhalten?</legend>
+      <div class="wahl">
+        <label class="karte">
+          <input type="checkbox" id="wahlStudien" checked>
+          <span class="takt">täglich</span>
+          <b>Studien-Newsletter</b>
+          <span class="was">Die Studienauswahl des Hubs jeden Morgen per E-Mail: neue Arbeiten zu
+          Hitze, Extremwetter und Klimawandel mit deutschen Zusammenfassungen, den Ergebniszahlen
+          und der Einordnung, was sich auf Deutschland übertragen lässt. Dazu die Word- und
+          Excel-Datei zum Tag.</span>
+        </label>
+        <label class="karte">
+          <input type="checkbox" id="wahlMvf">
+          <span class="takt">regelmäßig</span>
+          <b>MVF-Newsletter</b>
+          <span class="was">Der redaktionelle Newsletter von „Monitor Versorgungsforschung":
+          Beiträge aus der Fachzeitschrift, Nachrichten aus Politik und Selbstverwaltung,
+          Veranstaltungen und Ausgabenhinweise.</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div>
+      <label class="feld" for="email">E-Mail-Adresse</label>
+      <input type="email" id="email" name="EMAIL" autocomplete="email" required
+             placeholder="name@einrichtung.de" spellcheck="false">
+    </div>
+
+    <!-- Honigtopf: Menschen sehen dieses Feld nicht, automatische Formularausfueller
+         schon. Ist es gefuellt, verwirft Mailchimp die Anmeldung. -->
+    <div class="falle" aria-hidden="true"><input type="text" id="falle" tabindex="-1" autocomplete="off"></div>
+
+    <label class="einwilligung">
+      <input type="checkbox" id="einwilligung" required>
+      <span>Ich möchte die ausgewählten Newsletter per E-Mail erhalten. Meine E-Mail-Adresse wird
+      dafür an unseren Versanddienstleister übermittelt und dort gespeichert. Die Einwilligung
+      kann ich jederzeit über den Abmeldelink am Ende jeder E-Mail widerrufen — die Rechtmäßigkeit
+      der bis dahin erfolgten Verarbeitung bleibt davon unberührt. Näheres in den
+      <a href="./#datenschutz">Datenschutzhinweisen</a>.</span>
+    </label>
+
+    <button type="submit" class="btn-gold" id="absenden">Newsletter bestellen</button>
+
+    <p class="meldung" id="meldung" role="status" aria-live="polite"></p>
+  </form>
+
+  <p class="fein">Die Anmeldung wird an unseren Versanddienstleister Mailchimp übermittelt.
+  Anschließend erhalten Sie eine E-Mail mit einem Bestätigungslink; erst mit dem Klick darauf
+  beginnt der Versand (Double-Opt-in) — so kann niemand fremde Adressen eintragen. Beide
+  Newsletter sind kostenfrei und jederzeit einzeln abbestellbar.</p>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Ein Angebot von „Monitor Versorgungsforschung" · eRelation AG – Content in Health, Bonn</p>
+    <p><a href="./">Knowledge-Hub</a> · <a href="ueber.html">Über den Hub</a> ·
+       <a href="./#impressum">Impressum</a> · <a href="./#datenschutz">Datenschutz</a></p>
+  </div>
+</footer>
+
+<script>
+// ---------------------------------------------------------------------------
+// Die Anmeldung geht direkt an Mailchimp - der Hub speichert nichts.
+//
+// Warum nicht an WordPress: Das Formular auf m-vf.de ist ein WPForms-Formular,
+// dessen Absende-Adresse bei jedem Seitenaufruf ein frisches Token bekommt
+// (data-token / data-token-time). Ein fest eingetragenes Token waere nach
+// Stunden wertlos, und die Gegenstelle liegt auf fremder Domain.
+//
+// Warum ein echtes Absenden und kein Hintergrundaufruf: Mailchimps
+// JSONP-Schnittstelle /subscribe/post-json antwortet bei diesem Konto mit
+// 404 - gemessen, mit GET wie mit POST. Sie ist abgeschaltet. Uebrig bleibt
+// /subscribe/post, die gewoehnliche Formularadresse; genau die benutzt auch
+// die Anmeldeseite von MVF. Der Browser sendet also ganz normal hin - nur
+// nicht in dieses Fenster, sondern in einen unsichtbaren Rahmen (siehe unten).
+// ---------------------------------------------------------------------------
+const MC = {
+  // Die Formularadresse traegt den Kontonamen als Vorsilbe. Ohne ihn
+  // antwortet list-manage.com mit 404 - das war der erste Fehlversuch.
+  // Die Kennungen gehoeren in die Adresszeile, nicht nur in den Rumpf, und
+  // f_id weist das Formular aus. Genau diese Kombination ersetzt das
+  // Token "ht", das die gehostete Seite mitschickt und das wir nicht
+  // erzeugen koennen.
+  ziel: "https://monitor-versorgungsforschung.us6.list-manage.com/subscribe/post"
+        + "?u=f4c91757bc7d8c740641acb50&id=1c8fc10ec7&f_id=192195",
+  u:    "f4c91757bc7d8c740641acb50",
+  id:   "1c8fc10ec7",
+  // Die Zielgruppe ist die Hausliste des Verlags. In der Gruppenmenge 5629
+  // stehen historisch die Newsletter aller Titel nebeneinander:
+  //   [4]/[8]     Monitor Versorgungsforschung Newsletter / Einladung
+  //   [64]        Datenschutzerklaerung gelesen - so haelt MVF die Einwilligung fest
+  //   [1]/[2]     Pharma Relations          | Altlasten: diese Titel gibt es
+  //   [16]/[32]   MarketAccess&HealthPolicy | nicht mehr. Nicht anbieten,
+  //   [128]/[256] Monitor Pflege            | auch nicht "der Vollstaendigkeit halber".
+  //
+  // Sortiert wird die Hausliste aber ueber TAGS. Das Formular kann sie
+  // mitgeben - Feld "tags" mit den NUMMERN, kommagetrennt. Die Nummer steht in
+  // der Adresszeile, wenn man den Tag in Mailchimp anklickt (als "static_segment").
+  // Hier gehoert die Nummer des Tags "Studien-Newsletter Klima" hinein. Solange
+  // sie fehlt, traegt die Anmeldung nur die Gruppe ein - das genuegt zum Versand,
+  // die RSS-Kampagne kann dann ueber die Gruppe segmentiert werden.
+  tagStudien: "",
+  // Die Gruppen der drei Studien-Newsletter liegen in je eigenen Gruppenmengen.
+  // Am 17.08.2026 auf der gehosteten Mailchimp-Anmeldeseite ausgelesen:
+  //   group[16135][512]   Studien Newsletter VF    -> wissen.m-vf.de
+  //   group[16136][1024]  Studien Newsletter Klima -> dieses Portal
+  //   group[16137][2048]  Studien Newsletter KI    -> noch kein Portal
+  // Achtung beim Nachschlagen: Auf der Mailchimp-Seite steht die Beschriftung
+  // VOR dem Ankreuzfeld. Wer sie dahinter liest, ordnet alle drei falsch zu.
+  gruppeStudien: "group[16136][1024]",   // Studien Newsletter Klima
+  // Der MVF-Newsletter bleibt bewusst bei der Gruppe - das ist kein
+  // Provisorium. Seine Abonnenten tragen sie seit jeher, und das Formular auf
+  // m-vf.de traegt sie weiter ein. Ein zusaetzlicher Tag waere nur bei den
+  // Neuzugaengen vom Hub gesetzt: zwei Kennzeichen fuer dieselbe Sache, und
+  // jedes Segment muesste beide abfragen. Der Studien-Newsletter dagegen ist
+  // neu und kommt nur von hier - dort ist der Tag von Anfang an vollstaendig.
+  // Erst wenn der Altbestand nachgetragen und das WPForms-Formular umgestellt
+  // ist, ergibt ein MVF-Tag Sinn. Dann hier eintauschen, nicht vorher.
+  gruppeMvf:         "group[5629][4]",
+  gruppeDatenschutz: "group[5629][64]"
+};
+const MC_SEITE = "https://monitor-versorgungsforschung.us6.list-manage.com/subscribe?u=f4c91757bc7d8c740641acb50&id=1c8fc10ec7";
+const MVF_FORMULAR = "https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&utm_medium=referral&utm_campaign=newsletter#studien-newsletter";
+
+const form         = document.getElementById('anmeldung');
+const feldMail     = document.getElementById('email');
+const wahlStudien  = document.getElementById('wahlStudien');
+const wahlMvf      = document.getElementById('wahlMvf');
+const einwilligung = document.getElementById('einwilligung');
+const knopf        = document.getElementById('absenden');
+const meldung      = document.getElementById('meldung');
+
+function sage(text, art){
+  meldung.className = 'meldung ' + (art || '');
+  meldung.innerHTML = text;
+}
+
+// Ohne JavaScript kaeme das Formular nicht bis Mailchimp - also gleich beim
+// Laden verdrahten, nicht erst beim Klick. Die Auswahl-Kaestchen tragen dabei
+// keine Namen; ihre Wirkung wird unten in verborgene Felder uebersetzt.
+form.action = MC.ziel;
+form.method = 'post';
+form.setAttribute('novalidate','');
+
+// Gesendet wird in einen unsichtbaren Rahmen, damit der Besucher hier bleibt.
+//
+// Grund: Mailchimp leitet nach erfolgreicher Anmeldung auf die in der
+// Zielgruppe hinterlegte Dankeseite weiter - bei MVF auf m-vf.de. Wer sich
+// hier anmeldet, landete also auf einer fremden Seite. Diese Einstellung gilt
+// fuer die ganze Zielgruppe; sie zu aendern wuerde das Formular auf m-vf.de
+// mitverbiegen.
+//
+// Der Preis: Was im Rahmen passiert, koennen wir nicht lesen - fremde Domain.
+// Die Bestaetigung unten ist deshalb so formuliert, dass sie in beiden Faellen
+// stimmt, auch wenn die Adresse schon eingetragen war.
+const rahmen = document.createElement('iframe');
+rahmen.name = 'mcZiel';
+rahmen.title = 'Übermittlung an Mailchimp';
+rahmen.setAttribute('aria-hidden','true');
+rahmen.style.cssText = 'position:absolute; left:-5000px; width:1px; height:1px; border:0;';
+document.body.appendChild(rahmen);
+form.target = 'mcZiel';
+
+function verborgen(name, wert){
+  const el = document.createElement('input');
+  el.type = 'hidden'; el.name = name; el.value = wert;
+  form.appendChild(el);
+  return el;
+}
+
+// Der Knopf sperrt sich beim Absenden, die Eingabetaste umgeht ihn aber -
+// ohne diesen Riegel liesse sich zweimal senden.
+let laeuft = false;
+
+form.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  if(laeuft) return;
+
+  if(!wahlStudien.checked && !wahlMvf.checked){
+    sage('Bitte wählen Sie mindestens einen Newsletter aus.', 'fehler');
+    wahlStudien.focus(); return;
+  }
+  if(!feldMail.value.trim() || !feldMail.checkValidity()){
+    sage('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'fehler');
+    feldMail.focus(); return;
+  }
+  if(!einwilligung.checked){
+    sage('Ohne Ihre Einwilligung dürfen wir Ihnen nichts schicken. Bitte setzen Sie das Häkchen.', 'fehler');
+    einwilligung.focus(); return;
+  }
+  // Ohne Kennzeichen waere eine Studien-Bestellung nicht von einer MVF-
+  // Bestellung zu unterscheiden - der Besteller bekaeme entweder nichts oder
+  // das Falsche. Dann lieber gar nicht senden.
+  if(wahlStudien.checked && !MC.tagStudien && !MC.gruppeStudien){
+    sage('Die Bestellung des Studien-Newsletters ist über diese Seite noch nicht freigeschaltet. '
+       + 'Bitte nutzen Sie so lange das <a href="' + MVF_FORMULAR + '" target="_blank" rel="noopener">'
+       + 'Formular auf monitor-versorgungsforschung.de</a>.', 'fehler');
+    return;
+  }
+
+  // Aus einem frueheren Anlauf koennen noch Felder stehen - erst raeumen.
+  form.querySelectorAll('input[type="hidden"]').forEach(el=>el.remove());
+  verborgen('u', MC.u);
+  verborgen('id', MC.id);
+  // Mailchimps eigenes Fallenfeld heisst b_<u>_<id> und muss leer bleiben.
+  // Das Fallenfeld traegt Mailchimps eigenen Namen b_<u>_<id>. Menschen sehen
+  // es nicht; fuellt es ein Formularroboter, verwirft Mailchimp die Anmeldung.
+  document.getElementById('falle').name = 'b_' + MC.u + '_' + MC.id;
+  // Zwei Newsletter, zwei Kennzeichen - jedes so, wie es in der Liste
+  // tatsaechlich gefuehrt wird.
+  // Das Tag-Feld nur mitschicken, wenn eine Nummer hinterlegt ist - ein leeres
+  // "tags" wuerde Mailchimp als Loeschanweisung missverstehen koennen.
+  if(wahlStudien.checked && MC.tagStudien) verborgen('tags', MC.tagStudien);
+  if(wahlStudien.checked) verborgen(MC.gruppeStudien, '1');
+  if(wahlMvf.checked)     verborgen(MC.gruppeMvf, '1');
+  // MVF vermerkt die gelesene Datenschutzerklaerung als eigene Gruppe. Damit
+  // Anmeldungen von hier genauso dokumentiert sind wie die von m-vf.de.
+  verborgen(MC.gruppeDatenschutz, '1');
+
+  laeuft = true;
+  knopf.disabled = true;
+  sage('Wird gesendet …', '');
+  form.submit();          // absichtlich .submit(): loest dieses Ereignis nicht erneut aus
+
+  // Der Rahmen meldet, dass Mailchimp geantwortet hat - was er antwortet,
+  // bleibt verborgen. Bleibt die Meldung aus, zeigen wir nach vier Sekunden
+  // dasselbe: Ausbleiben heisst nicht Misserfolg.
+  const fertig = ()=>{
+    rahmen.removeEventListener('load', fertig);
+    clearTimeout(reissleine);
+    form.querySelectorAll('input').forEach(i=>{ i.disabled = true; });
+    sage('<b>Bitte prüfen Sie Ihr Postfach.</b> War Ihre Adresse noch nicht eingetragen, '
+       + 'finden Sie dort gleich eine E-Mail mit einem Bestätigungslink — erst mit dem Klick '
+       + 'darauf beginnt der Versand. Sehen Sie notfalls im Spam-Ordner nach. War die Adresse '
+       + 'bereits angemeldet, ändert sich nichts; Ihre Auswahl können Sie dann über den Link '
+       + '„Einstellungen ändern" am Ende jeder unserer E-Mails anpassen.', 'ok');
+  };
+  const reissleine = setTimeout(fertig, 4000);
+  rahmen.addEventListener('load', fertig);
+});
+</script>
+</html>

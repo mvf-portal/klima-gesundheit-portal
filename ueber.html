@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Über den Knowledge-Hub Hitze, Klima &amp; Gesundheit: was das Portal leistet, wie die Suche funktioniert und wer dahintersteht. Ein Angebot von Monitor Versorgungsforschung.">
+<title>Über den Knowledge-Hub — Hitze, Klima &amp; Gesundheit</title>
+<link rel="canonical" href="https://klima.m-vf.de/ueber.html">
+<style>
+  /* Schrift und Farben wie im Portal - die Seite soll erkennbar dazugehören.
+     Die Dateien liegen auf demselben Server, deshalb relative Pfade. */
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:400;
+    src:url("fonts/lato-400.woff2") format("woff2"); font-display:swap; }
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:700;
+    src:url("fonts/lato-700.woff2") format("woff2"); font-display:swap; }
+
+  :root{
+    --paper:#EDF2FA; --card:#FFFFFF; --card-2:#F7FAFD;
+    --ink:#111111; --ink-soft:#444A50; --ink-faint:#545C63;
+    --line:#D0D8E4; --line-soft:#E3EAF3;
+    --brand:#0051A1; --brand-deep:#003B77; --brand-tint:#E1EAF6;
+    --action:#BE9E53; --action-deep:#8A6E28; --on-action:#2A2207;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+      --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+      --line:#22314A; --line-soft:#1A2639;
+      --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+      --action:#D4B878; --action-deep:#D9BE82; --on-action:#221A08;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+    --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+    --line:#22314A; --line-soft:#1A2639;
+    --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+    --action:#D4B878; --action-deep:#D9BE82; --on-action:#221A08;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Lato", system-ui, "Segoe UI", Arial, sans-serif;
+    font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:820px; margin:0 auto; padding:0 22px; }
+
+  /* ---------- Menüleiste ---------- */
+  nav.hauptmenu{ background:var(--card); border-bottom:1px solid var(--line); }
+  .menu-inner{
+    display:flex; align-items:center; gap:4px; flex-wrap:nowrap;
+    overflow-x:auto; scrollbar-width:none; padding:0;
+  }
+  .menu-inner::-webkit-scrollbar{ display:none; }
+  .menu-inner a{
+    flex:0 0 auto; padding:11px 13px; font-size:13px; font-weight:700;
+    color:var(--ink-soft); text-decoration:none; white-space:nowrap;
+    border-bottom:2px solid transparent; transition:color .14s, border-color .14s;
+  }
+  .menu-inner a:hover{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a.hier{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a:focus-visible{ outline:2px solid var(--brand); outline-offset:-2px; }
+  .menu-extern::after{ content:" \2197"; font-size:.85em; }
+
+  /* Auf schmalen Bildschirmen passt das Menue nicht in eine Zeile und rollt
+     waagerecht. Ohne Andeutung bleibt das unbemerkt - die hinteren Punkte
+     (Impressum, Datenschutz) waeren praktisch unsichtbar. Der weiche Rand
+     rechts zeigt, dass es weitergeht. */
+  /* Bis 860 px passen die sechs Punkte nicht in eine Zeile - gemessen: bei
+     768 px liegen 54 px hinter dem Rand. Der weiche Rand zeigt, dass es
+     weitergeht. Darunter (620 px) bricht das Menue ohnehin um. */
+  @media (max-width:860px){
+    nav.hauptmenu{ position:relative; }
+    nav.hauptmenu::after{
+      content:""; position:absolute; top:0; right:0; bottom:0; width:36px;
+      background:linear-gradient(to right, transparent, var(--card));
+      pointer-events:none;
+    }
+  }
+  /* Auf dem Telefon waren von sechs Punkten nur zwei sichtbar, der Rest lag
+     487 px hinter dem Rand. Deshalb dort umbrechen statt rollen - und
+     Impressum und Datenschutz ausblenden, die ohnehin im Fussbereich stehen
+     und dort die gesetzlich geforderte staendige Erreichbarkeit erfuellen. */
+  @media (max-width:620px){
+    .menu-inner{ flex-wrap:wrap; padding:3px 0; gap:0; }
+    /* Kleiner gesetzt, damit vier Punkte in zwei Reihen passen statt in drei -
+       drei Reihen kosteten 131 px Hoehe ueber dem eigentlichen Inhalt. */
+    .menu-inner a{ padding:12px 9px; font-size:12px; }   /* 44 px Tippflaeche */
+    .menu-inner a.nur-breit{ display:none; }
+    nav.hauptmenu::after{ display:none; }
+  }
+  /* ---------- Kopf ---------- */
+  header.top{ background:var(--card); border-bottom:1px solid var(--line); padding:38px 0 30px; }
+  .kopf-oben{ display:flex; align-items:flex-start; justify-content:space-between; gap:26px; }
+  .eyebrow{
+    font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--brand); margin:0 0 8px;
+  }
+  h1{
+    font-size:clamp(24px,3.6vw,38px); font-weight:700; line-height:1.15;
+    margin:0 0 14px; color:var(--brand); letter-spacing:-.015em; text-wrap:balance;
+  }
+  .standfirst{ margin:0; font-size:clamp(16px,2vw,18px); color:var(--ink-soft); max-width:62ch; text-wrap:pretty; }
+  .marke{ flex:0 0 auto; display:block; line-height:0; border-radius:5px; }
+  .marke img{ width:190px; max-width:34vw; height:auto; display:block; }
+  @media (prefers-color-scheme:dark){ .marke{ background:#fff; padding:9px 12px; } }
+  :root[data-theme="dark"] .marke{ background:#fff; padding:9px 12px; }
+  :root[data-theme="light"] .marke{ background:none; padding:0; }
+  @media (max-width:720px){
+    .kopf-oben{ flex-direction:column-reverse; align-items:flex-start; gap:16px; }
+    .marke img{ width:160px; max-width:56vw; }
+  }
+
+  /* ---------- Fließtext ---------- */
+  main{ padding:38px 0 70px; }
+  section{ margin-bottom:40px; }
+  h2{
+    font-size:clamp(19px,2.6vw,24px); font-weight:700; line-height:1.25;
+    margin:0 0 14px; padding-bottom:9px; border-bottom:2px solid var(--brand);
+    text-wrap:balance;
+  }
+  h3{ font-size:17px; font-weight:700; margin:26px 0 7px; text-wrap:balance; }
+  p{ margin:0 0 14px; max-width:68ch; text-wrap:pretty; }
+  a{ color:var(--brand); text-underline-offset:2px; }
+  a:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; border-radius:3px; }
+  strong{ font-weight:700; }
+  ul{ margin:0 0 14px; padding-left:21px; max-width:66ch; }
+  li{ margin-bottom:8px; }
+
+  .zahlen{ display:flex; flex-wrap:wrap; gap:9px; margin:0 0 22px; padding:0; list-style:none; }
+  .zahlen li{
+    margin:0; font-size:13px; color:var(--ink-soft);
+    background:var(--card); border:1px solid var(--line); border-radius:6px; padding:8px 14px;
+  }
+  .zahlen b{ color:var(--brand); font-size:16px; }
+
+  .kasten{
+    background:var(--card); border:1px solid var(--line);
+    border-left:4px solid var(--action-deep); border-radius:6px;
+    padding:17px 20px; margin:0 0 20px;
+  }
+  .kasten p:last-child{ margin-bottom:0; }
+  .kasten .label{
+    display:block; font-size:11.5px; font-weight:700; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--action-deep); margin-bottom:6px;
+  }
+
+  .zitat{
+    margin:0 0 18px; padding:0 0 0 18px; border-left:3px solid var(--brand);
+    font-size:17px; line-height:1.6; color:var(--ink); max-width:64ch;
+  }
+
+  .btn-gold{
+    display:inline-flex; align-items:center; gap:8px; min-height:46px;
+    background:var(--action); color:var(--on-action); font-weight:700; font-size:15px;
+    text-decoration:none; padding:0 22px; border-radius:6px; transition:filter .14s;
+  }
+  .btn-gold:hover{ filter:brightness(1.08); }
+  .btn-gold:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+
+  footer{
+    border-top:1px solid var(--line); background:var(--card);
+    padding:26px 0 40px; font-size:13.5px; color:var(--ink-faint);
+  }
+  footer p{ margin:0 0 8px; max-width:70ch; }
+  footer a{ color:var(--ink-soft); }
+</style>
+
+<nav class="hauptmenu">
+  <div class="wrap menu-inner">
+    <a href="./">Knowledge-Hub</a>
+    <a href="ueber.html" class="hier" aria-current="page">Über den Hub</a>
+    <a href="newsletter.html">Newsletter</a>
+    <a href="./#impressum" class="nur-breit">Impressum</a>
+    <a href="./#datenschutz" class="nur-breit">Datenschutz</a>
+    <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=menu" target="_blank" rel="noopener" class="menu-extern">Monitor Versorgungsforschung</a>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="wrap kopf-oben">
+    <div>
+      <p class="eyebrow">Knowledge-Hub Hitze, Klima &amp; Gesundheit</p>
+      <h1>Ein Suchbegriff, alle Datenbanken</h1>
+      <p class="standfirst">Wer zu Hitze, Klima und Gesundheit recherchiert, sucht in zwei Welten
+      zugleich: in der medizinischen Literatur und in den Daten der Klimaforschung. Dieses Portal
+      bündelt beide an einer Stelle — kostenfrei, ohne Anmeldung und ohne Tracking.</p>
+    </div>
+    <a class="marke" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=logo" target="_blank" rel="noopener" title="Monitor Versorgungsforschung — Herausgeber dieses Portals">
+      <img src="logo/mvf-logo.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2>Was der Hub leistet</h2>
+    <ul class="zahlen">
+      <li><b>89</b> Datenbanken</li>
+      <li><b>40</b> mit Live-Suche</li>
+      <li><b>9</b> Rubriken</li>
+      <li><b>237</b> Glossarbegriffe</li>
+      <li>täglich <b>6 Uhr</b> aktualisiert</li>
+    </ul>
+
+    <p>Kaum ein Thema ist so weit über die Fächergrenzen verstreut wie dieses. PubMed und Embase
+    decken die medizinische Literatur ab, Cochrane und Epistemonikos die Evidenzsynthesen. Die
+    Messwerte dagegen — Temperaturreihen, Hitzeindizes, Luftqualität — liegen bei Copernicus, beim
+    Deutschen Wetterdienst und bei der Europäischen Umweltagentur. Und ein großer Teil des
+    praktisch verwertbaren Wissens steht überhaupt nicht in Zeitschriften, sondern in Berichten:
+    beim Robert Koch-Institut, beim Umweltbundesamt, bei WHO und ECDC, beim Lancet Countdown.
+    Eine einzige Fragestellung sauber zu recherchieren bedeutet in der Praxis, denselben
+    Suchbegriff ein Dutzend Mal in ein Dutzend verschiedene Suchmasken zu tippen.</p>
+
+    <p>Der Knowledge-Hub löst das mit einem schlichten Prinzip: <strong>ein Suchbegriff,
+    eingegeben an einer Stelle</strong>. Mit dem Absenden stellen sich sämtliche Datenbankkacheln
+    darauf ein; ein Klick führt direkt in die fertige Trefferliste der jeweiligen Datenbank, in
+    einem neuen Tab, ohne erneute Eingabe.</p>
+  </section>
+
+  <section>
+    <h2>Live-Suche, Portal, Lizenz</h2>
+    <p>Nicht jede Datenbank lässt sich gleich ansteuern, und der Hub macht das sichtbar, statt es
+    zu verschweigen:</p>
+    <ul>
+      <li><strong>Live-Suche</strong> (40 Datenbanken) — der Klick führt unmittelbar in die
+      Trefferliste.</li>
+      <li><strong>Portal</strong> (41) — Angebote wie LIVIVO, das DRKS, das Umweltbundesamt oder
+      die WHO-Plattform ICTRP erlauben technisch keine verlinkbaren Ergebnisadressen. Der Klick
+      führt auf die Startseite, der Begriff ist dort erneut einzugeben.</li>
+      <li><strong>Lizenz nötig</strong> (8) — Scopus, Web of Science, Embase, CINAHL, GreenFILE,
+      CAB Abstracts und weitere setzen einen institutionellen Zugang voraus.</li>
+    </ul>
+    <p>Diese Unterscheidung erspart die Enttäuschung, hinter einer vermeintlichen Suche auf einer
+    Bezahlschranke zu landen — und macht transparent, wo die Grenzen frei verfügbarer Recherche
+    verlaufen. Ein Filter blendet auf Wunsch nur die frei zugänglichen Datenbanken ein.</p>
+  </section>
+
+  <section>
+    <h2>Deutsch suchen, international finden</h2>
+    <p>Internationale Datenbanken kennen keine deutschen Fachbegriffe. Wer „Hitzeaktionsplan"
+    eingibt, findet in PubMed so gut wie nichts. Der Hub übersetzt deshalb <strong>237
+    Fachbegriffe</strong> automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff,
+    internationale bekommen den Ausdruck, unter dem sie tatsächlich verschlagworten.</p>
+
+    <p>Maßgeblich ist dabei nicht das Wörterbuch, sondern die Indexierungspraxis. „Hitzeaktionsplan"
+    wird zu <em>heat health action plan</em> und nicht zu <em>heat action plan</em>, „Wärmeinsel"
+    zu <em>urban heat island</em>, „Übersterblichkeit" zu <em>excess mortality</em>. Die
+    Ergebniszeile zeigt jeweils, welche Fassung verwendet wurde; ein Schalter stellt die
+    Übersetzung ab.</p>
+
+    <p>Fehlt ein Begriff, sagt die Seite das offen — und bietet an, ihn der Redaktion zu melden.
+    Das Verzeichnis wächst so mit dem, was tatsächlich gesucht wird.</p>
+
+    <h3>Boolesche Operatoren</h3>
+    <p><strong>AND</strong>, <strong>OR</strong> und <strong>NOT</strong> funktionieren nicht
+    überall gleich. Wir haben es einzeln nachgemessen und kennzeichnen das Ergebnis auf jeder
+    Kachel: geprüft und wirksam, geprüft und unwirksam — oder ungeprüft, wo der Anbieter eine
+    automatisierte Prüfung nicht zulässt. Ungeprüftes zählt dabei nie als „kann es".</p>
+  </section>
+
+  <section>
+    <h2>Neu in PubMed: täglich kuratiert</h2>
+    <p>Über die Suchfunktion hinaus liefert der Hub einen redaktionellen Mehrwert. In der rechten
+    Spalte steht eine täglich aktualisierte Auswahl aktueller Publikationen zu Hitze, Extremwetter
+    und Klimawandel in ihrer Wirkung auf die Gesundheit, jeweils mit deutscher Zusammenfassung.</p>
+
+    <p>Die Auswahl folgt drei Kriterien. Das wichtigste ist die <strong>Übertragbarkeit auf
+    Deutschland</strong>: Bei sonst gleicher Qualität geht die übertragbare Studie der aktuelleren
+    vor. Hier zählen zwei Achsen zugleich. <em>Klimatisch</em> — Befunde aus gemäßigten Breiten
+    lassen sich übertragen, Temperaturschwellen aus den Tropen nicht, weil dort sowohl das Klima
+    als auch die Anpassung der Bevölkerung anders sind. <em>Strukturell</em> — Länder mit
+    ähnlichem Gesundheitssystem stehen vor denselben Umsetzungsfragen wie Deutschland. Jede Studie
+    trägt deshalb eine Zeile <em>Übertragbarkeit</em>, die in einem Halbsatz sagt, worauf sie
+    beruht.</p>
+
+    <p>Hinzu kommen der erkennbare Bezug zwischen Umweltfaktor und Gesundheit — reine Klimaphysik
+    und Emissionsbilanzen ohne Gesundheitsbezug gehören ausdrücklich nicht dazu — und das Vorliegen
+    <strong>konkreter quantitativer Ergebnisse</strong>. Studien ohne belastbare Zahlen werden
+    übersprungen. Zu jeder Studie erscheinen Autor, Journal,
+    Publikationsdatum, eine Einordnung der Fragestellung sowie ein hervorgehobener Ergebnisblock
+    mit den zentralen Kennzahlen. Ein Klick führt auf den Originaleintrag in PubMed.</p>
+
+    <p>Die Auswahl trifft eine KI aus den tagesaktuellen Neuzugängen der US-amerikanischen
+    National Library of Medicine. Damit deutsche Arbeiten sie zuverlässig erreichen, fragt der Hub
+    PubMed zweimal ab: einmal allgemein und einmal gezielt nach Arbeiten mit Bezug zu Deutschland
+    und Europa — nur ein knappes Sechstel aller Neuzugänge hat einen solchen. Nichts geht verloren: Unterhalb der aktuellen Auswahl sammelt
+    ein Archiv alle bislang vorgestellten Studien. Beides lässt sich als Word- oder
+    Excel-Datei herunterladen.</p>
+
+    <div class="kasten">
+      <span class="label">Warum ältere Daten in einer Tagesliste stehen</span>
+      <p>Ausgewählt wird nach dem Tag, an dem <em>PubMed</em> eine Studie aufnimmt — nicht nach
+      ihrem Erscheinungsdatum. Beide liegen oft Wochen auseinander: Eine im Juli erschienene
+      Arbeit kann erst im August indexiert werden. Wo das der Fall ist, nennt die Karte beide
+      Daten. An Wochenenden indexiert PubMed zudem kaum; dann bleibt die Auswahl näher am
+      Freitag.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Volltext beschaffen</h2>
+    <p>Recherche endet selten mit der Trefferliste, sondern mit der Bezahlschranke. Eine eigene
+    Rubrik versammelt fünf Wege, die legal und ohne institutionellen Zugang gangbar sind:</p>
+    <ul>
+      <li><strong>Nationallizenzen der DFG</strong> — Privatpersonen mit Wohnsitz in Deutschland
+      können sich <strong>kostenfrei registrieren</strong> und erhalten damit regulären
+      Volltextzugang zu dauerhaft lizenzierten Zeitschriftenarchiven. Wenig bekannt und der
+      praktisch wirksamste Hinweis dieser Rubrik.</li>
+      <li><strong>Unpaywall</strong> — findet legale Open-Access-Fassungen anhand der DOI.</li>
+      <li><strong>Open Access Button</strong> — sucht freie Fassungen und fragt sie notfalls bei
+      den Autoren an.</li>
+      <li><strong>subito</strong> — Direktlieferdienst wissenschaftlicher Bibliotheken.</li>
+      <li><strong>K10plus</strong> — Verbundkatalog als Grundlage für die Fernleihe.</li>
+    </ul>
+    <p>Der Hub verweist ausschließlich auf Wege, die die Rechteinhaber selbst vorsehen.</p>
+  </section>
+
+  <section>
+    <h2>Wer dahintersteht</h2>
+    <p>Der Knowledge-Hub ist ein Angebot von <strong>Monitor Versorgungsforschung</strong>, dem
+    unabhängigen und interdisziplinären Fachorgan für Versorgungsforschung. Herausgeber ist
+    Prof. Dr. Reinhold Roski, die Chefredaktion liegt bei Peter Stegmaier; Verlag ist die
+    eRelation AG – Content in Health in Bonn.</p>
+
+    <p class="zitat">Frei von irgendwelchen Einflüssen und Einflüsterungen gleich welcher Art
+    dafür sorgen, dass sich Versorgungsforschung zu einer Versorgungsforschungswissenschaft
+    fortentwickelt — zum Wohle aller Patient:innen.</p>
+
+    <p>Das Fachorgan verbindet Versorgungsforschung, Versorgungsmanagement, Wissenschaft und
+    Politik. Es spricht Versorgungsforscherinnen und -forscher auf wissenschaftlicher Ebene an,
+    im redaktionellen Teil ebenso Anwender und Verantwortliche aus Kassen, Politik und Industrie.
+    Seit 2015 erscheinen alle Artikel <strong>Open Access</strong> und damit kostenfrei.
+    Publikationsverhalten und Ethik folgen dem <em>Code of Conduct for Journal Editors</em> sowie
+    den Richtlinien des Verbands Deutscher Zeitschriftenverleger.</p>
+
+    <p>Der Knowledge-Hub führt diesen Gedanken fort: Er macht die Literatur auffindbar, statt sie
+    zu verwalten — und stellt das Ergebnis allen zur Verfügung, die damit arbeiten. Dieses Portal
+    ist das Schwesterangebot zum <a href="https://wissen.m-vf.de/" target="_blank"
+    rel="noopener">Knowledge-Hub Versorgungsforschung</a>; beide sind gleich aufgebaut und
+    unterscheiden sich nur im Thema.</p>
+  </section>
+
+  <section>
+    <h2>Frei zugänglich, ohne Anmeldung, ohne Tracking</h2>
+    <p>Der Hub ist kostenfrei und ohne Anmeldung nutzbar. Er setzt <strong>keine Cookies</strong>,
+    bindet <strong>keine Analyse- oder Trackingdienste</strong> ein und erhebt keine
+    personenbezogenen Daten. Die Seite lädt nichts von fremden Servern nach — Schriften und Logo
+    liegen auf demselben Server wie das Portal.</p>
+    <p>Impressum und Datenschutzhinweise stehen im Fußbereich der
+    <a href="./#datenschutz">Startseite</a>.</p>
+  </section>
+
+  <section>
+    <h2>Ein lebendes Angebot</h2>
+    <p>Die Liste der eingebundenen Datenbanken lässt sich erweitern, ebenso die thematische
+    Ausrichtung der täglichen Studienauswahl und das Suchglossar. Wir laden Sie ausdrücklich ein,
+    uns fehlende Quellen, unbrauchbare Verlinkungen oder Wünsche zur Schwerpunktsetzung
+    mitzuteilen — gern an <a href="mailto:info@m-vf.de">info@m-vf.de</a>.</p>
+    <p>Denn eine Recherchehilfe für dieses Feld ist genau so gut wie die Praxis, aus der heraus
+    sie mitgestaltet wird.</p>
+    <p style="margin-top:26px"><a class="btn-gold" href="./">Zur Suche im Knowledge-Hub</a></p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Knowledge-Hub Hitze, Klima &amp; Gesundheit</strong> — ein Angebot von „Monitor
+    Versorgungsforschung", eRelation AG – Content in Health, Johannes-von-Hanstein-Str. 2,
+    53113 Bonn.</p>
+    <p><a href="./">Zur Suche</a> · <a href="./#impressum">Impressum</a> ·
+    <a href="./#datenschutz">Datenschutz</a> ·
+    <a href="https://www.monitor-versorgungsforschung.de/" target="_blank" rel="noopener">monitor-versorgungsforschung.de</a></p>
+  </div>
+</footer>
+</html>

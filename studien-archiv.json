@@ -1,0 +1,80 @@
+[
+ {
+  "journal": "Environ Int",
+  "year": "2026",
+  "pmid": "42492428",
+  "author": "Boser M et al.",
+  "pubdate": "18.07.2026",
+  "added": "17.08.2026",
+  "title": "Pollenbelastung und Asthma-Notfallbehandlungen: Zeitreihenanalyse aus drei bayerischen Großstädten",
+  "sum": "Multizentrische Zeitreihenanalyse, die ambulante Asthma-Notfallbehandlungen der KV Bayerns in Augsburg, München und Nürnberg mit automatisch gemessenen Tageswerten für Erlen-, Birken-, Hasel- und Gräserpollen verknüpft.",
+  "result": "Hohe Birkenpollenwerte erhöhten das Risiko einer Asthma-Notfallbehandlung deutlich (RR 1,64; 95%-KI 1,41–1,90), Gräserpollen bei mittlerer (RR 1,19; 1,03–1,38) und hoher Belastung (RR 1,41; 1,17–1,70). Birke wirkte am Expositionstag selbst, Gräser erst am zweiten Tag danach. Während der Saison waren 10,2 % (Augsburg) bis 17,8 % (Nürnberg) der Behandlungen der Birke zuzurechnen, 14,3 % (München) bis 18,8 % (Augsburg) den Gräsern. Damit ist ein erheblicher Teil der Asthma-Notfälle im Frühjahr rechnerisch vermeidbar — die Pollensaison verschiebt und verlängert sich mit dem Klimawandel.",
+  "transfer": "Deutsche KV-Abrechnungsdaten, unmittelbar übertragbar",
+  "aufgenommen": "2026-08-17"
+ },
+ {
+  "journal": "Curr Probl Cardiol",
+  "year": "2026",
+  "pmid": "42471098",
+  "author": "Moscucci F et al.",
+  "pubdate": "18.07.2026",
+  "added": "17.08.2026",
+  "title": "Hitzewellen und kardiovaskuläre Sterblichkeit: Wirkungspfade, Schadstoffe als Mitverursacher und autonome Überwachung",
+  "sum": "Narrativer Review zur Frage, wie Hitzewellen das Herz-Kreislauf-System schädigen, welche Rolle Luftschadstoffe dabei spielen und ob sich gefährdete Personen über die Herzfrequenzvariabilität früher erkennen lassen.",
+  "result": "Im Sommer 2025 wurden in 854 europäischen Städten rund 24.400 hitzebedingte Todesfälle in nur zehn Wochen geschätzt, etwa 68 % davon der menschengemachten Erwärmung zuzurechnen. Die europäische Hitzeübersterblichkeit lag 2003 bei rund 70.000 und 2022 bei 61.672 Fällen — trotz zwanzig Jahren Hitzeaktionsplänen. Hitze und Schadstoffe verstärken einander (Interaktionsindex 1,51 für kardiovaskuläre Sterblichkeit). Die Autoren werten das als Beleg, dass bestehende Hitzeaktionspläne die Sterblichkeit bislang nicht durchgreifend senken.",
+  "transfer": "Europäische Städtedaten, gemäßigte Klimazone",
+  "aufgenommen": "2026-08-17"
+ },
+ {
+  "journal": "Euro Surveill",
+  "year": "2026",
+  "pmid": "42565263",
+  "author": "Rise N et al.",
+  "pubdate": "06.08.2026",
+  "added": "17.08.2026",
+  "title": "Starkregen, Hochwasser und Infektionskrankheiten in Europa: Rapid Review 2018–2025",
+  "sum": "Im Auftrag des ECDC durchgeführte schnelle Übersichtsarbeit zu der Frage, welche Infektionskrankheiten nach Starkregen und Überschwemmungen in Europa tatsächlich vermehrt auftreten und welche Vorsorgemaßnahmen berichtet werden.",
+  "result": "Aus 897 gesichteten Datensätzen blieben 14 Arbeiten. Belegt sind vor allem Campylobacteriose-Ausbrüche und Leptospirose-Fälle nach Starkregen und Hochwasser. Als Vorsorge wird am häufigsten Aufklärung zu Hygiene genannt; strukturelle Maßnahmen wie sanitäre Infrastruktur und One-Health-Surveillance werden empfohlen, sind aber selten umgesetzt. Die dünne Studienlage ist selbst das Ergebnis: Europa überwacht die Gesundheitsfolgen von Hochwasser bislang kaum systematisch.",
+  "transfer": "Europäische Übersicht, ECDC-Auftragsarbeit",
+  "aufgenommen": "2026-08-17"
+ },
+ {
+  "journal": "Mult Scler Relat Disord",
+  "year": "2026",
+  "pmid": "42501584",
+  "author": "Iaquinto S et al.",
+  "pubdate": "17.07.2026",
+  "added": "17.08.2026",
+  "title": "Hitzeempfindlichkeit bei Multipler Sklerose: Wie Betroffene sich behelfen — Daten des Schweizer MS-Registers",
+  "sum": "Querschnittsbefragung von 760 Teilnehmenden des Schweizer MS-Registers zu Temperaturempfindlichkeit sowie zu Kenntnis und Nutzung von Kühlmaßnahmen.",
+  "result": "73,3 % berichteten Temperaturempfindlichkeit, am häufigsten gegenüber Hitze (48,8 %) oder Hitze und Kälte (18 %). Verschlechtert wurden vor allem Fatigue (70,2 %), Muskelschwäche (48,7 %) und Gangstörungen (38,6 %). Zwar kannten 62 % Kühlmaßnahmen, aber nur 44,3 % der hitzeempfindlichen Kenner nutzten sie tatsächlich — genutzt wurden kalte Duschen (48,7 %), Ventilatoren (46,1 %) und Kühltücher (33,8 %). Zwischen Wissen und Anwendung klafft also eine Lücke, die in der Beratung durch Behandelnde ansetzen müsste.",
+  "transfer": "Schweizer Registerdaten, gleiche Klimazone und Versorgungsstruktur",
+  "aufgenommen": "2026-08-17"
+ },
+ {
+  "journal": "Nat Commun",
+  "year": "2026",
+  "pmid": "42575902",
+  "author": "Tomkins MD et al.",
+  "pubdate": "10.08.2026",
+  "added": "17.08.2026",
+  "title": "Wie stark Kanäle Städte kühlen: landesweite Modellrechnung für Großbritannien und Irland",
+  "sum": "Energiebilanzmodell, das die Kühlwirkung des gesamten Kanalnetzes Großbritanniens und Irlands auf die Umgebungstemperatur schätzt — als bislang wenig untersuchte Ergänzung zu Grünflächen.",
+  "result": "Im unmittelbaren Umfeld der Kanäle ergab sich eine mittlere Kühlung von rund 0,8 °C tagsüber (0,7–1,0 °C), im Frühjahr und Frühsommer 1,2–1,4 °C und während Hitzewellen 1,5–2,3 °C — also gerade dann am stärksten, wenn es gesundheitlich darauf ankommt. Die Wirkung ist nicht durchgängig positiv, spricht aber dafür, Wasserflächen in der Hitzeplanung ähnlich ernst zu nehmen wie Bäume und Parks.",
+  "transfer": "Großbritannien und Irland, vergleichbares gemäßigtes Klima",
+  "aufgenommen": "2026-08-17"
+ },
+ {
+  "journal": "Health Policy",
+  "year": "2026",
+  "pmid": "42551053",
+  "author": "van der Giessen J et al.",
+  "pubdate": "28.07.2026",
+  "added": "17.08.2026",
+  "title": "Was Patienten von der Nachhaltigkeitspolitik ihres Krankenhauses halten: Befragung an einem niederländischen Universitätsklinikum",
+  "sum": "Online-Querschnittsbefragung eines Patientenpanels eines niederländischen Universitätsklinikums zu vier Feldern der Klinik-Nachhaltigkeit: gesunde Ernährung, Abfallvermeidung, nachhaltige Mobilität und Prävention.",
+  "result": "Von 2.473 eingeladenen Patienten antworteten 1.285 (52 %). Am wichtigsten war ihnen Krankheitsprävention (88 %), gefolgt von Abfallvermeidung (82 %), gesunder Ernährung (76 %) und nachhaltiger Mobilität (58 %); höheres Alter und Bildungsgrad gingen mit höherer Zustimmung einher. Patienten tragen Nachhaltigkeitsmaßnahmen im Krankenhaus also breit mit — die häufig vermutete Sorge, sie als Komforteinbuße zu erleben, bestätigt sich nicht.",
+  "transfer": "Niederlande, vergleichbares Sozialversicherungssystem",
+  "aufgenommen": "2026-08-17"
+ }
+]

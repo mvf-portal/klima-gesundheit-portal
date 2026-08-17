@@ -1,0 +1,1700 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Rechercheportal zu Hitze, Klima und Gesundheit: gebündelte Live-Suchen über Fachdatenbanken, Klimadaten-Portale und Institutionen plus tagesaktuelle Studien mit deutscher Zusammenfassung. Ein Angebot von Monitor Versorgungsforschung.">
+<title>Knowledge-Hub Hitze, Klima &amp; Gesundheit</title>
+<style>
+  /* ---------- Lato: die Hausschrift von Monitor Versorgungsforschung ----------
+     Selbst gehostet wie auf m-vf.de. Bewusst kein Google Fonts: Der Hub baut
+     keine Verbindung zu Dritten auf - das steht so in seinen Datenschutzhinweisen.
+     font-display:swap zeigt sofort die Systemschrift und tauscht dann. */
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:300;
+    src:url("fonts/lato-300.woff2") format("woff2"); font-display:swap; }
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:400;
+    src:url("fonts/lato-400.woff2") format("woff2"); font-display:swap; }
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:700;
+    src:url("fonts/lato-700.woff2") format("woff2"); font-display:swap; }
+
+  :root{
+    --paper:#EDF2FA; --card:#FFFFFF; --card-2:#F7FAFD;
+    --ink:#111111; --ink-soft:#444A50; --ink-faint:#545C63;
+    --line:#D0D8E4; --line-soft:#E3EAF3;
+    --brand:#0051A1; --brand-deep:#003B77; --brand-tint:#E1EAF6;
+    /* Gold ist bei MVF die Handlungsfarbe: Abonnieren, Alle News, Spende. */
+    --action:#BE9E53; --action-deep:#A5873F; --on-action:#2A2207;
+    --on-brand:#FFFFFF;
+    --accent:#8A6E28;
+    --shadow:0 1px 2px rgba(16,40,38,.05), 0 8px 24px -16px rgba(16,40,38,.28);
+    --shadow-hover:0 2px 4px rgba(16,40,38,.06), 0 18px 40px -20px rgba(16,40,38,.40);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+      --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+      --line:#22314A; --line-soft:#1A2639;
+      --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+      --action:#D4B878; --action-deep:#E3CB94; --on-action:#221A08;
+    --on-brand:#081726;
+      --accent:#D9BE82;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.7);
+      --shadow-hover:0 2px 6px rgba(0,0,0,.4), 0 22px 46px -22px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="light"]{
+    --paper:#EDF2FA; --card:#FFFFFF; --card-2:#F7FAFD;
+    --ink:#111111; --ink-soft:#444A50; --ink-faint:#545C63;
+    --line:#D0D8E4; --line-soft:#E3EAF3;
+    --brand:#0051A1; --brand-deep:#003B77; --brand-tint:#E1EAF6;
+    /* Gold ist bei MVF die Handlungsfarbe: Abonnieren, Alle News, Spende. */
+    --action:#BE9E53; --action-deep:#A5873F; --on-action:#2A2207;
+    --on-brand:#FFFFFF;
+    --accent:#8A6E28;
+    --shadow:0 1px 2px rgba(16,40,38,.05), 0 8px 24px -16px rgba(16,40,38,.28);
+    --shadow-hover:0 2px 4px rgba(16,40,38,.06), 0 18px 40px -20px rgba(16,40,38,.40);
+  }
+  :root[data-theme="dark"]{
+    --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+    --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+    --line:#22314A; --line-soft:#1A2639;
+    --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+    --action:#D4B878; --action-deep:#E3CB94; --on-action:#221A08;
+    --on-brand:#081726;
+    --accent:#D9BE82;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -18px rgba(0,0,0,.7);
+    --shadow-hover:0 2px 6px rgba(0,0,0,.4), 0 22px 46px -22px rgba(0,0,0,.8);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Lato", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size:16px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{ font-family:inherit; font-weight:700; letter-spacing:-.005em; }  /* MVF nutzt durchgaengig Lato */
+  /* Keine zweite Schriftfamilie: m-vf.de fuehrt ausschliesslich Lato.
+     Der technische Charakter kommt ueber gleichbreite Ziffern. */
+  .mono{ font-family:inherit; font-variant-numeric:tabular-nums; letter-spacing:.015em; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 22px; }
+
+  /* ---------- Header ---------- */
+  header.masthead{
+    background:
+      radial-gradient(120% 140% at 88% -20%, var(--brand-tint) 0%, transparent 55%),
+      var(--card);
+    border-bottom:1px solid var(--line);
+  }
+  .masthead-inner{ padding:34px 0 30px; }
+  /* Kopfzeile: Titelblock links, MVF-Logo rechts. Ab 760 px untereinander. */
+  .masthead-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:26px; }
+  .masthead-text{ min-width:0; }
+  .brand-link{ flex:0 0 auto; display:block; line-height:0; }
+  .brand-link img{ width:210px; max-width:38vw; height:auto; display:block; }
+  .brand-link:focus-visible{ outline:2px solid var(--brand); outline-offset:4px; border-radius:3px; }
+  /* Das Logo besteht aus genau zwei Farben: Blau #0060A0 und Gold #C0A060.
+     Auf dunklem Grund waere es kaum sichtbar - es wird deshalb NICHT umgefaerbt
+     (das zerstoerte den Goldanteil der Wortmarke), sondern auf eine helle
+     Flaeche gestellt. So bleibt die Marke unveraendert. */
+  .brand-link{ border-radius:5px; }
+  @media (prefers-color-scheme:dark){
+    .brand-link{ background:#FFFFFF; padding:10px 13px; }
+  }
+  :root[data-theme="dark"] .brand-link{ background:#FFFFFF; padding:10px 13px; }
+  :root[data-theme="light"] .brand-link{ background:none; padding:0; }
+  @media (max-width:760px){
+    .masthead-top{ flex-direction:column-reverse; align-items:flex-start; gap:16px; }
+    .brand-link img{ width:170px; max-width:60vw; }
+  }
+  /* Ein durchgehender Titel in der Hausfarbe, Lato 700. Kein max-width und
+     kein text-wrap:balance mehr - beides erzwaenge einen Umbruch. Erst wenn
+     der Platz wirklich nicht reicht, bricht die Zeile (siehe Media Query). */
+  /* Der Titel soll auf EINER Zeile stehen. Gemessen: bei 3,7vw fuellt er die
+     Restbreite neben dem Logo exakt aus - 3,4vw laesst rund 10 % Reserve.
+     Die Untergrenze 18px haelt ihn auch auf 375px-Displays einzeilig.
+     Bewusst kein white-space:nowrap: darunter soll er umbrechen, nicht ueberlaufen. */
+  h1{
+    font-size:clamp(18px,3.4vw,46px); line-height:1.12; margin:0 0 .18em;
+    font-weight:700; letter-spacing:-.015em; color:var(--brand);
+  }
+  h1 .sub{ display:block; color:var(--ink-soft); font-size:.46em; font-weight:400;
+           letter-spacing:0; margin-top:.55em; max-width:52ch; }
+  /* 64ch waren deutlich schmaler als der Titel (631 zu 758 px) und wirkten
+     abgesetzt. 72ch reichen fast an die Titelbreite heran und bleiben unter
+     der Grenze, ab der Zeilen schwer zu verfolgen sind (etwa 75 Zeichen). */
+  .lede{ color:var(--ink-soft); max-width:72ch; font-size:17px; margin:.2em 0 0; }
+
+  /* ---------- Search panel ---------- */
+  .panel{
+    margin-top:26px; background:var(--card-2); border:1px solid var(--line);
+    border-radius:6px; padding:20px; box-shadow:var(--shadow);
+  }
+  .panel-label{
+    font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);
+    font-weight:700; margin-bottom:10px; display:block;
+  }
+  .search-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .search-field{
+    position:relative; flex:1 1 320px; display:flex; align-items:center;
+  }
+  .search-field svg{ position:absolute; left:15px; width:19px; height:19px; color:var(--ink-faint); pointer-events:none; }
+  #q{
+    width:100%; font-size:17px; font-family:inherit; color:var(--ink);
+    background:var(--card); border:1.5px solid var(--line); border-radius:6px;
+    padding:14px 14px 14px 44px; outline:none; transition:border-color .15s, box-shadow .15s;
+  }
+  #q:focus{ border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-tint); }
+  #q::placeholder{ color:var(--ink-faint); }
+  .btn-clear{
+    background:var(--card); border:1.5px solid var(--line); border-radius:6px;
+    color:var(--ink-soft); font-family:inherit; font-size:14px; font-weight:600;
+    padding:0 18px; cursor:pointer; transition:border-color .15s, color .15s;
+    min-height:46px;  /* Touch-Ziel, wenn die Buttons auf schmalen Displays umbrechen */
+  }
+  .btn-clear:hover{ border-color:var(--brand); color:var(--brand); }
+  .btn-clear:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .btn-go{
+    background:var(--action); border:1.5px solid var(--action); border-radius:6px;
+    color:var(--on-action); font-family:inherit; font-size:14px; font-weight:600;
+    padding:0 20px; cursor:pointer; white-space:nowrap;
+    display:flex; align-items:center; justify-content:center; gap:7px; transition:filter .15s;
+    min-height:46px;  /* Touch-Ziel, wenn die Buttons auf schmalen Displays umbrechen */
+    flex:0 1 auto;    /* natuerliche Breite: das Suchfeld soll den Platz bekommen */
+  }
+  /* Auf sehr schmalen Displays darf die Beschriftung umbrechen, statt zu ueberlaufen. */
+  @media (max-width:560px){
+    .btn-go{ white-space:normal; flex:1 1 100%; padding:10px 16px; }
+    .btn-select{ max-width:none; flex:1 1 auto; }
+  }
+  :root[data-theme="dark"] .btn-go{ color:var(--on-action); }
+  @media (prefers-color-scheme:dark){ .btn-go{ color:var(--on-action); } }
+  :root[data-theme="light"] .btn-go{ color:var(--on-action); }
+  .btn-go:hover{ filter:brightness(1.12); }
+  .btn-select{
+    background:var(--card); border:1.5px solid var(--line); border-radius:6px;
+    color:var(--ink-soft); font-family:inherit; font-size:14px; font-weight:600;
+    padding:0 12px; cursor:pointer; min-height:46px; max-width:230px;
+    transition:border-color .15s, color .15s;
+  }
+  .btn-select:hover{ border-color:var(--brand); color:var(--brand); }
+  .btn-select:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn-select:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .btn-select optgroup{ font-weight:700; color:var(--ink); }
+  .btn-select option{ font-weight:500; color:var(--ink); }
+  .btn-go:disabled{ opacity:.45; cursor:not-allowed; filter:none; }
+  .btn-go:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; align-items:center; }
+  .chips .chips-label{ font-size:12.5px; color:var(--ink-faint); margin-right:2px; }
+  .chip{
+    font-size:13px; font-family:inherit; color:var(--ink-soft); font-weight:500;
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:6px 13px; cursor:pointer; transition:all .14s; white-space:nowrap;
+  }
+  .chip:hover{ border-color:var(--brand); color:var(--brand); }
+  .chip[aria-pressed="true"]{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  :root[data-theme="dark"] .chip[aria-pressed="true"],
+  .chip[aria-pressed="true"]{ color:var(--on-brand); }
+  .chip:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+
+  .meta-row{
+    display:flex; align-items:center; gap:8px; margin-top:16px;
+    font-size:13px; color:var(--ink-faint); flex-wrap:wrap;
+  }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 0 var(--accent); animation:pulse 2.4s infinite; }
+  @keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(179,97,42,.5)} 70%{box-shadow:0 0 0 7px rgba(179,97,42,0)} 100%{box-shadow:0 0 0 0 rgba(179,97,42,0)} }
+  @media (prefers-reduced-motion:reduce){ .dot{ animation:none } }
+
+  /* ---------- Category nav ---------- */
+  nav.jump{
+    position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:saturate(180%) blur(8px); border-bottom:1px solid var(--line);
+  }
+  .jump-inner{ display:flex; gap:6px; overflow-x:auto; padding:11px 0; scrollbar-width:thin; }
+  .jump a{
+    flex:0 0 auto; font-size:13px; color:var(--ink-soft); text-decoration:none; font-weight:500;
+    padding:6px 12px; border-radius:6px; border:1px solid transparent; white-space:nowrap; transition:all .14s;
+  }
+  .jump a:hover{ background:var(--card); border-color:var(--line); color:var(--brand); }
+
+  /* ---------- Layout (Datenbanken + Studien-Frame) ---------- */
+  .layout{ padding:26px 0 40px; display:grid; grid-template-columns:minmax(0,1fr); gap:28px; align-items:start; }
+  @media (min-width:1000px){ .layout{ grid-template-columns:minmax(0,1fr) 358px; } }
+  .col-main{ min-width:0; }
+
+  /* ---------- Studien-Frame (rechts) ---------- */
+  aside.studies{ min-width:0; }
+  @media (min-width:1000px){
+    aside.studies{
+      position:sticky; top:58px; max-height:calc(100vh - 74px);
+      display:flex; flex-direction:column;
+      overflow-y:auto; scrollbar-width:thin;  /* Ventil, wenn alle Teile zusammen zu hoch werden */
+    }
+  }
+  .studies-head{
+    background:var(--card); border:1px solid var(--line); border-top:3px solid var(--accent);
+    border-radius:5px 13px 0 0; padding:15px 16px 13px; box-shadow:var(--shadow);
+  }
+  .studies-title{ display:flex; align-items:center; gap:9px; font-weight:600; font-size:16px; letter-spacing:-.01em; }
+  .studies-title .dot{ width:8px; height:8px; }
+  /* Zweite Zeile unter der Ueberschrift. Der Einzug von 17 px = Punkt (8) plus
+     Abstand (9) setzt sie buendig unter den Titeltext, nicht unter den Punkt. */
+  .studies-claim{ font-size:12px; font-weight:400; color:var(--ink-soft);
+                  margin-top:2px; padding-left:17px; line-height:1.35; }
+  /* Meldung ueber den letzten Lauf. Zwei Faelle mit eigener Farbe:
+     "nichts Neues" ist normal (neutral), ein ausgefallener Lauf nicht (Warnfarbe). */
+  .studies-status{
+    font-size:11.5px; line-height:1.4; margin-top:7px; padding:6px 9px;
+    border-radius:5px; border-left:3px solid var(--ink-faint);
+    background:var(--card-2); color:var(--ink-soft);
+  }
+  .studies-status[data-art="ausfall"]{ border-left-color:var(--action-deep); }
+  .studies-hint{ font-size:11.5px; color:var(--ink-faint); margin-top:7px; line-height:1.45; }
+  .studies-sub{ font-size:12px; color:var(--ink-faint); margin-top:6px; padding-top:6px;
+                border-top:1px solid var(--line-soft); line-height:1.4; }
+  .studies-sub b{ color:var(--ink-soft); font-weight:600; }
+  .studies-list{
+    border:1px solid var(--line); border-top:none; border-radius:0 0 13px 13px;
+    background:var(--card-2); padding:12px; display:flex; flex-direction:column; gap:11px;
+    box-shadow:var(--shadow);
+    /* Volle Hoehe, kein eigener Rollbalken: Eine Studienkarte ist rund 420 px
+       hoch: in einem eingeklemmten Kasten war stets nur eine sichtbar.
+       Gescrollt wird stattdessen die Spalte als Ganzes (siehe aside.studies). */
+    flex:0 0 auto;
+  }
+  article.study{
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:11px 13px; display:flex; flex-direction:column; gap:5px;
+  }
+  .study-top{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .study-journal{ font-size:11.5px; font-weight:600; color:var(--accent); line-height:1.3; }
+  .study-year{ font-size:11px; color:var(--ink-faint); font-variant-numeric:tabular-nums;
+               flex:0 0 auto; white-space:nowrap; }
+  .study-author{ font-size:11.5px; color:var(--ink-faint); line-height:1.3; margin-top:-3px; }
+  .study-added{ font-size:10.5px; color:var(--ink-faint); line-height:1.3; margin-top:-3px; opacity:.85; }
+  a.study-title{ font-size:14.5px; font-weight:600; color:var(--ink); text-decoration:none; line-height:1.32; letter-spacing:-.005em; }
+  a.study-title:hover{ color:var(--brand); text-decoration:underline; }
+  .study-sum{ font-size:13px; color:var(--ink-soft); line-height:1.46; margin:0; }
+  .study-result{
+    font-size:12.5px; line-height:1.45; color:var(--ink); background:var(--brand-tint);
+    border-left:3px solid var(--brand); border-radius:0 5px 5px 0; padding:7px 9px;
+  }
+  /* Inline statt auf eigener Zeile: spart je Karte eine Zeile Hoehe. */
+  .study-result .rlabel{
+    display:inline; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--brand-deep); font-weight:700; margin-right:6px;
+  }
+  :root[data-theme="dark"] .study-result .rlabel{ color:var(--brand); }
+  @media (prefers-color-scheme:dark){ .study-result .rlabel{ color:var(--brand); } }
+  /* Uebertragbarkeit auf das deutsche System - das wichtigste Auswahlkriterium.
+     Bewusst zurueckhaltender gesetzt als der Ergebnisblock: eine Einordnung,
+     kein Befund. */
+  .study-transfer{
+    font-size:11.5px; line-height:1.4; color:var(--ink-soft);
+    border-left:3px solid var(--line); padding:5px 9px; border-radius:0 4px 4px 0;
+    background:var(--card-2);
+  }
+  .study-transfer .tlabel{
+    display:inline; font-size:9.5px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:700; margin-right:6px;
+  }
+  a.study-src{ font-size:11.5px; font-weight:600; color:var(--ink-faint); text-decoration:none; align-self:flex-start; }
+  a.study-src:hover{ color:var(--brand); }
+  /* Hinweise unter dem Suchfeld: zwei Textspalten, keine Rasterzellen.
+     Ein Raster richtet Zeilen an der hoechsten Karte aus - der kurze Absatz
+     wurde dadurch gestreckt und hinterliess knapp 50 px Loch. Textspalten
+     lassen den Text einfach fliessen und packen dicht. */
+  .hints{
+    columns:2; column-gap:26px;
+    margin-top:14px; padding-top:13px; border-top:1px solid var(--line-soft);
+  }
+  .hints p{
+    margin:0 0 9px; font-size:12px; line-height:1.5; color:var(--ink-faint);
+    break-inside:avoid;           /* ein Absatz wird nie zerrissen */
+  }
+  .hints p:last-child{ margin-bottom:0; }
+  .hints b{ color:var(--ink-soft); font-weight:700; }
+  /* Auf schmalen Bildschirmen untereinander - zwei Spalten waeren dort unlesbar. */
+  @media (max-width:760px){ .hints{ columns:1; } }
+
+  /* ---------- Download-Leisten ---------- */
+  .dl-row{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-top:10px; }
+  .dl-label{ font-size:11px; color:var(--ink-faint); }
+  .dl-btn{
+    font-size:11.5px; font-family:inherit; font-weight:600; color:var(--ink-soft);
+    background:var(--card-2); border:1px solid var(--line); border-radius:5px;
+    padding:5px 10px; cursor:pointer; transition:border-color .14s, color .14s;
+  }
+  .dl-btn:hover:not(:disabled){ border-color:var(--brand); color:var(--brand); }
+  .dl-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .dl-btn:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .archive .dl-row{ margin:0; padding:10px 14px 4px; border-bottom:1px solid var(--line-soft); }
+
+  /* ---------- Studien-Newsletter ---------- */
+  /* Die Anmeldung selbst liegt bei Monitor Versorgungsforschung; hier steht nur
+     der Hinweis darauf. Wie .archive: flex:0 0 auto, sonst staucht die
+     Studienliste den Kasten in der Sticky-Spalte weg. */
+  .nl{
+    margin-top:10px; border:1px solid var(--line); border-radius:6px;
+    background:var(--card); padding:11px 13px; flex:0 0 auto;
+  }
+  .nl-title{
+    display:flex; align-items:center; gap:8px;
+    font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:5px;
+  }
+  .nl-title::before{ content:"\2709"; font-size:15px; filter:grayscale(.3); }
+  .nl-text{ font-size:11px; line-height:1.45; color:var(--ink-faint); margin:0 0 8px; }
+  .nl-btn{
+    display:inline-flex; align-items:center; font-size:12px; font-weight:700;
+    text-decoration:none; color:var(--on-action); background:var(--action); border-radius:5px;
+    padding:8px 13px; transition:filter .14s;
+    min-height:46px;  /* Touch-Ziel, wie bei den uebrigen Knoepfen */
+  }
+  .nl-btn:hover{ filter:brightness(1.12); }
+  .nl-btn:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .nl-host{ display:block; font-size:10.5px; color:var(--ink-faint); margin-top:7px; }
+
+
+  .boolmark{
+    font-size:9.5px; font-weight:700; letter-spacing:.05em;
+    border-radius:3px; padding:1px 4px;
+    margin-left:6px; white-space:nowrap; vertical-align:middle;
+  }
+  .boolmark.ja  { color:var(--brand); border:1px solid var(--brand); }
+  /* Bewusst zurueckgenommen: die Aussage ist wahr, aber kein Verkaufsargument. */
+  .boolmark.nein{ color:var(--ink-faint); border:1px solid var(--line); }
+
+  /* ---------- Menueleiste ---------- */
+  nav.hauptmenu{ background:var(--card); border-bottom:1px solid var(--line); }
+  .menu-inner{
+    display:flex; align-items:center; gap:2px;
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .menu-inner::-webkit-scrollbar{ display:none; }
+  .menu-inner a{
+    flex:0 0 auto; padding:11px 13px; font-size:13px; font-weight:700;
+    color:var(--ink-soft); text-decoration:none; white-space:nowrap;
+    border-bottom:2px solid transparent; transition:color .14s, border-color .14s;
+  }
+  .menu-inner a:hover{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a.hier{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a:focus-visible{ outline:2px solid var(--brand); outline-offset:-2px; }
+  .menu-extern::after{ content:" 97"; font-size:.85em; }
+
+  /* Auf schmalen Bildschirmen passt das Menue nicht in eine Zeile und rollt
+     waagerecht. Ohne Andeutung bleibt das unbemerkt - die hinteren Punkte
+     (Impressum, Datenschutz) waeren praktisch unsichtbar. Der weiche Rand
+     rechts zeigt, dass es weitergeht. */
+  /* Bis 860 px passen die sechs Punkte nicht in eine Zeile - gemessen: bei
+     768 px liegen 54 px hinter dem Rand. Der weiche Rand zeigt, dass es
+     weitergeht. Darunter (620 px) bricht das Menue ohnehin um. */
+  @media (max-width:860px){
+    nav.hauptmenu{ position:relative; }
+    nav.hauptmenu::after{
+      content:""; position:absolute; top:0; right:0; bottom:0; width:36px;
+      background:linear-gradient(to right, transparent, var(--card));
+      pointer-events:none;
+    }
+  }
+  /* Auf dem Telefon waren von sechs Punkten nur zwei sichtbar, der Rest lag
+     487 px hinter dem Rand. Deshalb dort umbrechen statt rollen - und
+     Impressum und Datenschutz ausblenden, die ohnehin im Fussbereich stehen
+     und dort die gesetzlich geforderte staendige Erreichbarkeit erfuellen. */
+  @media (max-width:620px){
+    .menu-inner{ flex-wrap:wrap; padding:3px 0; gap:0; }
+    /* Kleiner gesetzt, damit vier Punkte in zwei Reihen passen statt in drei -
+       drei Reihen kosteten 131 px Hoehe ueber dem eigentlichen Inhalt. */
+    .menu-inner a{ padding:12px 9px; font-size:12px; }   /* 44 px Tippflaeche */
+    .menu-inner a.nur-breit{ display:none; }
+    nav.hauptmenu::after{ display:none; }
+  }
+  /* Einleitung und Newsletter-Knopf nebeneinander. Der Knopf steht damit
+     im ersten Blickfeld, ohne den Text zu unterbrechen; unter 860 px rutscht
+     er darunter, weil zwei Spalten dort nur noch Silbentrennung erzeugen. */
+  .lede-zeile{ display:flex; align-items:flex-start; gap:30px; margin:.2em 0 0; }
+  .lede-zeile .lede{ flex:1 1 auto; margin:0; }
+  .lede-nl{
+    flex:0 0 auto; width:236px; padding:16px 18px;
+    background:var(--card); border:1px solid var(--line);
+    border-left:4px solid var(--action); border-radius:6px;
+  }
+  .btn-nl{
+    display:flex; align-items:center; justify-content:center; min-height:46px;
+    background:var(--action); color:var(--on-action); font-weight:700; font-size:14.5px;
+    text-decoration:none; padding:0 16px; border-radius:6px; transition:filter .14s;
+    text-align:center; line-height:1.25;
+  }
+  .btn-nl:hover{ filter:brightness(1.08); }
+  .btn-nl:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+  .nl-mini{ display:block; margin-top:9px; font-size:12px; line-height:1.45; color:var(--ink-faint); }
+  @media (max-width:860px){
+    .lede-zeile{ flex-direction:column; gap:18px; }
+    .lede-nl{ width:100%; }
+  }
+
+  /* Knopf zur Über-Seite, direkt unter dem Einleitungstext */
+  .lede-aktion{ margin:16px 0 0; }
+  .btn-ueber{
+    display:inline-flex; align-items:center; gap:8px; min-height:46px;
+    background:var(--action); color:var(--on-action); font-weight:700; font-size:14px;
+    text-decoration:none; padding:0 20px; border-radius:6px; transition:filter .14s;
+  }
+  .btn-ueber:hover{ filter:brightness(1.08); }
+  .btn-ueber:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+
+  /* ---------- Rueckmeldung nach dem Absenden ---------- */
+  /* Fruehere Fassung schrieb die Links still um - niemand sah, dass etwas
+     geschah. Diese Leiste ist die sichtbare Antwort auf die Eingabetaste. */
+  .result-bar{
+    margin-top:12px; padding:11px 14px; border-radius:6px;
+    background:var(--brand-tint); border-left:3px solid var(--brand);
+    font-size:13.5px; line-height:1.5; color:var(--ink);
+  }
+  .result-bar b{ font-weight:700; }
+  .result-bar .rb-zusatz{ display:block; margin-top:3px; font-size:12px; color:var(--ink-soft); }
+
+  .leer-hinweis{
+    margin-top:10px; padding:11px 14px; border-radius:6px;
+    background:var(--card-2); border-left:3px solid var(--action-deep);
+    font-size:13px; line-height:1.5; color:var(--ink-soft);
+  }
+  .leer-hinweis b{ color:var(--ink); }
+
+  .uebersetzen{
+    display:flex; align-items:center; gap:7px; margin-top:9px;
+    font-size:12px; color:var(--ink-soft); cursor:pointer;
+  }
+  .uebersetzen input{ accent-color:var(--brand); width:15px; height:15px; cursor:pointer; }
+  .rb-uebersetzung{
+    display:block; margin-top:6px; padding-top:6px;
+    border-top:1px solid var(--line-soft); font-size:12px; color:var(--ink-soft);
+  }
+  .rb-uebersetzung b{ color:var(--brand); }
+  .rb-fehlt{
+    display:block; margin-top:6px; padding-top:6px;
+    border-top:1px solid var(--line-soft); font-size:12px; color:var(--ink-soft);
+  }
+  .rb-fehlt b{ color:var(--ink); }
+  .rb-fehlt a{ color:var(--brand); font-weight:700; white-space:nowrap; }
+
+  .bool-hint{
+    margin-top:9px; padding:9px 13px; border-radius:6px;
+    background:var(--card-2); border-left:3px solid var(--action-deep);
+    font-size:12.5px; line-height:1.5; color:var(--ink-soft);
+  }
+  .bool-hint b{ color:var(--ink); font-weight:700; }
+
+  /* ---------- Filter ---------- */
+  .filters{ margin-top:12px; }
+  /* Bewusst eine Leiste, kein blasser Textlink: Der Filter ging vorher unter.
+     Zusammengeklappt bleibt er eine Zeile hoch - er soll keinen Platz fressen. */
+  .filters summary{
+    cursor:pointer; list-style:none;
+    display:flex; align-items:center; gap:9px;
+    padding:12px 13px; border:1px solid var(--line); border-radius:6px;
+    background:var(--card-2); transition:border-color .14s, background .14s;
+    min-height:44px;   /* Touch-Ziel; 39 px waren zu knapp fuer Finger */
+  }
+  .filters summary::-webkit-details-marker{ display:none; }
+  .filters summary:hover{ border-color:var(--brand); background:var(--card); }
+  .filters summary:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .filters[open] summary{ border-color:var(--brand); background:var(--card); }
+  /* Symbole als SVG - Schriftzeichen wie oder haengen davon ab, ob die
+     Hausschrift sie enthaelt; Lato tut es nicht. */
+  .f-icon{ width:15px; height:15px; flex:0 0 auto; color:var(--brand); }
+  .f-titel{ font-size:12.5px; font-weight:700; color:var(--brand); }
+  .f-dims{
+    font-size:11.5px; color:var(--ink-faint); flex:1 1 auto;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .f-pfeil{ width:13px; height:13px; flex:0 0 auto; color:var(--ink-faint); transition:transform .16s; }
+  .filters[open] .f-pfeil{ transform:rotate(90deg); }
+  @media (max-width:620px){ .f-dims{ display:none; } }
+  .filter-badge{
+    background:var(--brand); color:var(--on-brand); border-radius:999px;
+    font-size:11px; padding:1px 7px; font-weight:700;
+  }
+  .filter-body{ display:flex; flex-direction:column; gap:9px; margin-top:11px; }
+  .filter-group{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+  .filter-label{
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:700; min-width:104px;
+  }
+  .fchip{
+    font-size:12px; font-family:inherit; font-weight:600; color:var(--ink-soft);
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:4px 11px; cursor:pointer; transition:all .13s;
+  }
+  .fchip:hover{ border-color:var(--brand); color:var(--brand); }
+  .fchip[aria-pressed="true"]{
+    background:var(--brand); border-color:var(--brand); color:var(--on-brand);
+  }
+  .fchip:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .filter-reset{ display:flex; justify-content:flex-end; margin-top:2px; }
+  .fchip.reset{ border-style:dashed; color:var(--ink-faint); }
+  .fchip.reset:hover{ border-style:solid; border-color:var(--brand); color:var(--brand); }
+
+  /* Ausgeblendete Kacheln und leergefilterte Rubriken */
+  .card.aus, .cat.aus{ display:none; }
+  .cat-leer{
+    font-size:12.5px; color:var(--ink-faint); padding:10px 2px;
+  }
+
+  /* Marker auf der Kachel, sobald die Suche vorbereitet ist */
+  .card .bereit{
+    display:none; font-size:10px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--brand);
+  }
+  body.gesucht .card[data-live="1"] .bereit{ display:inline; }
+
+  /* ---------- Ordner „Ältere Suchergebnisse" ---------- */
+  .archive{
+    margin-top:10px; border:1px solid var(--line); border-radius:6px;
+    background:var(--card); overflow:hidden;
+    flex:0 0 auto;   /* darf nicht gestaucht werden - sonst verschwindet der Ordner */
+  }
+  .archive summary{
+    cursor:pointer; padding:12px 14px; font-weight:600; font-size:13.5px; color:var(--ink-soft);
+    list-style:none; display:flex; align-items:center; gap:9px;
+  }
+  .archive summary::-webkit-details-marker{ display:none; }
+  .archive summary::before{ content:"\1F5C2"; font-size:15px; filter:grayscale(.35); }
+  .archive summary::after{ content:"\25B8"; margin-left:auto; color:var(--ink-faint); transition:transform .15s; }
+  .archive[open] summary::after{ transform:rotate(90deg); }
+  .archive summary:hover{ color:var(--brand); }
+  .archive[open] summary{ border-bottom:1px solid var(--line); }
+  /* 32vh laesst der Studienliste genug Platz, wenn der Ordner offen ist. */
+  /* 32vh war zu viel: zusammen mit dem Newsletter-Kasten blieb fuer die
+     Studienliste kaum Hoehe uebrig. Das Archiv ist zweitrangig. */
+  .archive-body{ padding:6px 12px 12px; max-height:20vh; overflow-y:auto; scrollbar-width:thin; }
+  .arch-day{ margin-top:12px; }
+  .arch-day:first-child{ margin-top:4px; }
+  .arch-date{
+    position:sticky; top:0; z-index:1; background:var(--card);
+    font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--brand); padding:6px 0 5px; border-bottom:1px solid var(--line-soft);
+  }
+  .arch-item{ padding:9px 0 8px; border-bottom:1px solid var(--line-soft); }
+  .arch-item:last-child{ border-bottom:none; }
+  .arch-top{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .arch-journal{ font-size:11px; font-weight:600; color:var(--accent); line-height:1.3; }
+  .arch-year{ font-size:10.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; flex:0 0 auto; white-space:nowrap; }
+  a.arch-title{ display:block; font-size:13.5px; font-weight:600; color:var(--ink); text-decoration:none; line-height:1.32; margin-top:2px; }
+  a.arch-title:hover{ color:var(--brand); text-decoration:underline; }
+  .arch-result{ font-size:12px; color:var(--ink-soft); line-height:1.45; margin:4px 0 0; }
+  .arch-status{ font-size:12px; color:var(--ink-faint); padding:10px 2px; }
+
+  /* ---------- Sections ---------- */
+  .cat{ scroll-margin-top:64px; margin-top:0; }
+  .cat + .cat{ margin-top:34px; }
+  /* MVF fuehrt genau zwei Farben: Blau und Gold. Ein Regenbogen aus acht
+     Kategorietoenen widerspraeche dem, deshalb tragen alle Rubriken die
+     Hausfarbe; die Rubriknummer steht in Gold. Das --h-System in CATS
+     bleibt unangetastet und laesst sich mit einer Zeile reaktivieren. */
+  .cat{ --cat:var(--brand); }
+  /* Gold bleibt den Knoepfen vorbehalten - bei MVF ebenso. Als kleine
+     Textfarbe reicht sein Kontrast nicht (3,04:1 auf hellem Grund). */
+  .cat-num{ color:var(--brand) !important; }
+
+  .cat-head{ display:flex; align-items:baseline; gap:13px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+  .cat-num{ font-family:inherit; font-size:13px; font-weight:700; color:var(--cat);
+            letter-spacing:.06em; font-variant-numeric:tabular-nums; }
+  .cat-head h2{ font-size:clamp(20px,2.6vw,25px); margin:0; font-weight:600; letter-spacing:-.01em; }
+  .cat-count{ margin-left:auto; font-size:12.5px; color:var(--ink-faint); align-self:center; }
+
+  /* Hinweiszeile, die nur der Klimadaten-Block traegt (CATS[].hinweis). */
+  .cat-hinweis{ margin:14px 0 0; padding:11px 14px; font-size:13.5px; line-height:1.55;
+                color:var(--ink-soft); background:var(--card-2);
+                border-left:3px solid var(--cat); border-radius:0 6px 6px 0; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:14px; margin-top:16px; }
+
+  a.card{
+    display:flex; flex-direction:column; gap:9px; text-decoration:none; color:inherit;
+    background:var(--card); border:1px solid var(--line); border-left:3px solid var(--cat);
+    border-radius:5px; padding:16px 16px 15px; box-shadow:var(--shadow);
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s;
+    position:relative; min-height:120px;
+  }
+  a.card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover); }
+  a.card:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .card-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .card-name{ font-weight:600; font-size:16.5px; letter-spacing:-.005em; line-height:1.25; }
+  .badge{
+    flex:0 0 auto; font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+    padding:3px 8px; border-radius:6px; white-space:nowrap; margin-top:2px;
+  }
+  .badge.live{ background:var(--brand-tint); color:var(--brand-deep); }
+  :root[data-theme="dark"] .badge.live{ color:var(--brand); }
+  @media (prefers-color-scheme:dark){ .badge.live{ color:var(--brand); } }
+  .badge.portal{ background:transparent; color:var(--ink-faint); border:1px solid var(--line); }
+  .badge.lic{ background:transparent; color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  .card-desc{ font-size:13.5px; color:var(--ink-soft); line-height:1.42; flex:1; }
+  .card-foot{ display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--cat); font-weight:600; margin-top:2px; }
+  .card-foot .host{ color:var(--ink-faint); font-weight:500; }
+  .arrow{ transition:transform .16s; }
+  a.card:hover .arrow{ transform:translate(3px,-3px); }
+
+  .empty{ grid-column:1/-1; text-align:center; color:var(--ink-faint); padding:30px; font-size:14px; }
+
+  /* ---------- Footer ---------- */
+  footer{ border-top:1px solid var(--line); margin-top:44px; }
+  .foot-inner{ padding:26px 0 40px; color:var(--ink-faint); font-size:13px; display:grid; gap:10px; }
+  .foot-inner strong{ color:var(--ink-soft); font-weight:600; }
+  .foot-inner a{ color:var(--brand); text-decoration:none; }
+  .foot-inner a:hover{ text-decoration:underline; }
+  .attrib{ color:var(--ink-soft); font-weight:600; margin-top:4px; }
+  .legal{ display:grid; gap:8px; margin-top:2px; }
+  .legal details{ border:1px solid var(--line); border-radius:6px; background:var(--card); overflow:hidden; }
+  .legal summary{ cursor:pointer; padding:10px 13px; font-weight:600; color:var(--ink-soft); font-size:13px; list-style:none; }
+  .legal summary::-webkit-details-marker{ display:none; }
+  .legal summary::before{ content:"\25B8\00a0"; color:var(--ink-faint); }
+  .legal details[open] summary::before{ content:"\25BE\00a0"; }
+  .legal details[open] summary{ border-bottom:1px solid var(--line); }
+  .legal .legal-body{ padding:10px 14px 14px; font-size:12px; line-height:1.55; color:var(--ink-soft); }
+  .legal .legal-body h4{ margin:11px 0 2px; font-size:12px; color:var(--ink); font-weight:700; }
+  .legal .legal-body h4:first-child{ margin-top:0; }
+  .legal .legal-body p{ margin:3px 0; }
+  .legal .legal-body a{ color:var(--brand); word-break:break-word; }
+
+  @media (max-width:560px){
+    .masthead-inner{ padding:26px 0 22px; }
+    .panel{ padding:16px; }
+    .cat-count{ display:none; }
+  }
+</style>
+
+<nav class="hauptmenu">
+  <div class="wrap menu-inner">
+    <a href="./" class="hier" aria-current="page">Knowledge-Hub</a>
+    <a href="ueber.html" target="_blank" rel="noopener">Über den Hub</a>
+    <a href="newsletter.html">Newsletter</a>
+    <a href="#impressum" class="nur-breit">Impressum</a>
+    <a href="#datenschutz" class="nur-breit">Datenschutz</a>
+    <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=menu" target="_blank" rel="noopener" class="menu-extern">Monitor Versorgungsforschung</a>
+  </div>
+</nav>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <div class="masthead-top">
+      <div class="masthead-text">
+        <h1 class="serif">Knowledge-Hub Hitze, Klima &amp; Gesundheit
+          <span class="sub">Ein Zugang zu Studien, Daten und Praxiswissen</span>
+        </h1>
+      </div>
+      <a class="brand-link" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=logo" target="_blank" rel="noopener" title="Monitor Versorgungsforschung — Herausgeber dieses Portals">
+        <img src="logo/mvf-logo.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
+      </a>
+    </div>
+    <div class="lede-zeile">
+      <p class="lede">Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.</p>
+      <aside class="lede-nl">
+        <a class="btn-nl" href="newsletter.html">Newsletter abonnieren</a>
+        <span class="nl-mini">Die Studienauswahl jeden Morgen per E-Mail — kostenfrei und jederzeit kündbar.</span>
+      </aside>
+    </div>
+    <p class="lede-aktion"><a class="btn-ueber" href="ueber.html" target="_blank" rel="noopener">Über den Knowledge-Hub <span aria-hidden="true">↗</span></a></p>
+
+    <div class="panel">
+      <label class="panel-label" for="q">Suchbegriff</label>
+      <div class="search-row">
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" autocomplete="off" spellcheck="false" value="Hitzewelle" placeholder="z. B. Hitzewelle, Hitzeaktionsplan, heat mortality …">
+        </div>
+        <button class="btn-go" id="go" type="button" title="Stellt alle Datenbanken auf Ihren Suchbegriff ein (oder Eingabetaste drücken)">In allen Datenbanken suchen</button>
+        <button class="btn-clear" id="clear" type="button">Leeren</button>
+      </div>
+
+      <!-- Rueckmeldung nach dem Absenden. Vorher unsichtbar: Ohne Suche gibt
+           es nichts zu melden. -->
+      <div class="result-bar" id="resultBar" hidden></div>
+      <div class="leer-hinweis" id="leerHinweis" hidden></div>
+
+      <!-- Hinweis auf Boolesche Operatoren - erscheint nur, wenn welche
+           getippt werden. -->
+      <div class="bool-hint" id="boolHint" hidden></div>
+      <label class="uebersetzen"><input type="checkbox" id="uebersetzenAn" checked>
+        Deutsche Fachbegriffe für internationale Datenbanken übersetzen</label>
+      <div class="chips" id="chips">
+        <span class="chips-label">Schnellwahl:</span>
+      </div>
+
+      <details class="filters" id="filters">
+        <summary>
+          <svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+          <span class="f-titel">Filter</span>
+          <span class="f-dims">Zugang &middot; Suchart &middot; Operatoren &middot; Art der Quelle</span>
+          <span class="filter-badge" id="filterBadge" hidden></span>
+          <svg class="f-pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+        </summary>
+        <div class="filter-body">
+          <div class="filter-group" data-gruppe="zugang">
+            <span class="filter-label">Zugang</span>
+            <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
+            <button type="button" class="fchip" data-wert="frei" aria-pressed="false">Frei zugänglich</button>
+            <button type="button" class="fchip" data-wert="lizenz" aria-pressed="false">Lizenz nötig</button>
+          </div>
+          <div class="filter-group" data-gruppe="suchart">
+            <span class="filter-label">Suchart</span>
+            <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
+            <button type="button" class="fchip" data-wert="live" aria-pressed="false">Live-Suche</button>
+            <button type="button" class="fchip" data-wert="portal" aria-pressed="false">Portal</button>
+          </div>
+          <div class="filter-group" data-gruppe="bool">
+            <span class="filter-label">Operatoren</span>
+            <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
+            <button type="button" class="fchip" data-wert="ja" aria-pressed="false">Wertet AND/OR/NOT aus</button>
+          </div>
+          <div class="filter-group" data-gruppe="rubrik" id="filterRubrik">
+            <span class="filter-label">Art der Quelle</span>
+          </div>
+          <!-- Erscheint nur, wenn etwas zurueckzusetzen ist - sonst waere es
+               ein Knopf ohne Wirkung. -->
+          <div class="filter-reset" id="filterResetZeile" hidden>
+            <button type="button" class="fchip reset" id="filterReset">Alle Filter zurücksetzen</button>
+          </div>
+        </div>
+      </details>
+      <div class="hints">
+        <p><b>So funktioniert die Suche.</b> Begriff eingeben, <b>Eingabetaste</b> drücken oder auf <b>„In allen Datenbanken suchen"</b> klicken — damit werden alle Kacheln auf Ihren Begriff eingestellt. Ein Klick auf eine Kachel öffnet dann <b>direkt die Trefferliste</b> dieser Datenbank in einem neuen Tab; ein zweites Mal suchen müssen Sie dort nicht. Die Kacheln bleiben eingestellt, Sie können also nacheinander mehrere Datenbanken öffnen, ohne den Begriff erneut einzugeben. Ausnahme sind die als <b>„Portal"</b> gekennzeichneten Anbieter — die erlauben technisch keine verlinkbare Trefferadresse.</p>
+        <p><b>Vollständigkeit.</b> Auch dieses Portal kann nicht sämtliche Artikel „aller Datenbanken" enthalten — das verhindern Lizenz- und Technikgrenzen. Es bündelt stattdessen die maßgeblichen Suchen, sodass eine Recherche systematisch über alle relevanten Datenbanken laufen kann.</p>
+        <p><b>Literatur und Daten getrennt.</b> Dieses Themenfeld lebt von zwei Sorten Quellen. Die Blöcke 01 bis 03 und 07 bis 09 führen zu <b>Publikationen</b>. Block 04 „Klima- &amp; Umweltdaten" führt zu <b>Messreihen, Modellen und Indikatoren</b> — dort landen Sie bei Datensätzen, nicht bei Studien. Und ein großer Teil des Wissens steht in diesem Feld nicht in Zeitschriften, sondern in Berichten von Behörden und Institutionen; dafür gibt es die Blöcke 05 und 06.</p>
+        <p><b>Portal vs. Live-Suche.</b> Von den derzeit <b id="cntGesamt"></b> eingebundenen Datenbanken unterstützen <b id="cntLive"></b> die Live-Suche; sie sind entsprechend gekennzeichnet. Weitere <b id="cntPortal"></b> sind als „Portal" markiert: Angebote wie LIVIVO, das DRKS oder die WHO-Plattform ICTRP erlauben technisch keine verlinkbaren Ergebnisadressen. Der Klick führt dort auf die Startseite — der Suchbegriff ist anschließend von Hand einzugeben.</p>
+        <p><b>Suchoperatoren.</b> <b>AND</b>, <b>OR</b> und <b>NOT</b> funktionieren nicht überall gleich — wir haben es einzeln nachgemessen. <span class="boolmark ja">AND/OR ✓</span> heißt: geprüft, die Operatoren wirken (<b id="cntBoolJa"></b> Datenbanken). <span class="boolmark nein">AND/OR ✗</span> heißt: geprüft, sie wirken nicht — die Wörter werden einfach mitgesucht (<b id="cntBoolNein"></b>). <b>Ohne Zeichen ist es ungeprüft</b> (<b id="cntBoolOffen"></b>): Diese Anbieter liefern eine Bot-Sperre oder eine reine JavaScript-Oberfläche, aus der sich kein belastbares Ergebnis ablesen ließ — das heißt ausdrücklich <i>nicht</i>, dass sie es nicht können. Der Filter „Operatoren" zeigt auf Wunsch nur die geprüft tauglichen.</p>
+        <p><b>Deutsch suchen, international finden.</b> Internationale Datenbanken kennen keine deutschen Fachbegriffe — „Hitzeaktionsplan" liefert dort fast nichts. Der Hub übersetzt deshalb <b id="cntGlossar"></b> Fachbegriffe automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff, internationale bekommen den Ausdruck, unter dem sie tatsächlich indexieren („Hitzeaktionsplan" wird zu <i>heat health action plan</i>, „Wärmeinsel" zu <i>urban heat island</i>). Die Ergebnisleiste zeigt die verwendete Fassung; der Schalter unter dem Suchfeld stellt es ab.</p>
+        <p><b>Hinweis zu Lizenzen.</b> Mit <span style="color:var(--accent)">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
+      </div>
+      <div class="meta-row">
+        <span class="dot"></span>
+        <span id="statusText"><strong id="dbCount"></strong> Datenbanken · <span id="searchHint">Links aktualisieren sich live · öffnen in neuem Tab</span></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="wrap jump-inner" id="jumpNav"></div>
+</nav>
+
+<div class="wrap layout">
+  <main class="col-main" id="main"></main>
+
+  <aside class="studies">
+    <div class="studies-head">
+      <div class="studies-title"><span class="dot"></span>Neu in PubMed</div>
+      <div class="studies-claim">Hitze, Klima &amp; Gesundheit — mit Bezug zu Deutschland ausgewählt</div>
+      <div class="studies-status" id="studiesStatus" hidden></div>
+      <div class="studies-hint">Bei den Suchergebnissen handelt es sich um eine Momentaufnahme, um keinen Live-Feed. Die Liste wird jeden Morgen um 6 Uhr automatisch aus PubMed geholt, auf Deutsch zusammengefasst und neu veröffentlicht. Bringt PubMed an einem Tag nichts Neues — an Wochenenden häufig —, bleiben die zuletzt gefundenen Studien aktuell, bis neue hinzukommen. Gesucht wird nach Hitze, Extremwetter und Klimawandel in Verbindung mit gesundheitlichen Folgen. Ausgewählt wird nach Übertragbarkeit auf Deutschland: Vorrang haben Arbeiten aus vergleichbaren Klimazonen und Gesundheitssystemen — Mitteleuropa und gemäßigte Breiten vor tropischen und ariden Regionen, deren Befunde sich selten übertragen lassen.</div>
+      <div class="studies-sub">Datenbank: <b>PubMed</b>, nach Datum sortiert · jede Studie mit deutscher Zusammenfassung · Zuletzt aktualisiert: <b id="snapDate">Momentaufnahme</b></div>
+      <div class="dl-row">
+        <span class="dl-label">Download:</span>
+        <button class="dl-btn" id="dlAktuellDoc" type="button" title="Als Word-Dokument herunterladen">⤓ Word</button>
+        <button class="dl-btn" id="dlAktuellCsv" type="button" title="Als Tabelle für Excel herunterladen">⤓ Excel</button>
+      </div>
+    </div>
+    <div class="studies-list" id="studiesList"></div>
+
+    <details class="archive" id="archive" open>
+      <summary id="archiveSummary">Ältere Suchergebnisse</summary>
+      <div class="dl-row">
+        <span class="dl-label">Download:</span>
+        <button class="dl-btn" id="dlArchivDoc" type="button" disabled title="Als Word-Dokument herunterladen">⤓ Word</button>
+        <button class="dl-btn" id="dlArchivCsv" type="button" disabled title="Als Tabelle für Excel herunterladen">⤓ Excel</button>
+      </div>
+      <div class="archive-body" id="archiveBody">
+        <p class="arch-status">Wird geladen …</p>
+      </div>
+    </details>
+    <!-- Anmeldung bewusst NICHT hier: Der Hub erhebt keine personenbezogenen
+         Daten. Das Formular liegt bei Monitor Versorgungsforschung, wo auch
+         Double-Opt-in und Einwilligung verwaltet werden. -->
+    <div class="nl">
+      <div class="nl-title">Studien-Newsletter</div>
+      <p class="nl-text">Diese Studienauswahl kommt auf Wunsch jeden Morgen per E-Mail — mit deutschen Zusammenfassungen und den Ergebniszahlen, dazu Word- und Excel-Download. Kostenfrei, jederzeit kündbar.</p>
+      <a class="nl-btn" id="nlLink" href="newsletter.html">Newsletter abonnieren</a>
+      <span class="nl-host">Kostenfrei, mit Bestätigung per E-Mail, jederzeit kündbar.</span>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="attrib">Ein Angebot von „Monitor Versorgungsforschung" · eRelation AG – Content in Health</div>
+
+    <div class="legal">
+      <details id="impressum">
+        <summary>Impressum</summary>
+        <div class="legal-body">
+          <h4>Angaben gemäß § 5 DDG und § 18 Abs. 2 MStV</h4>
+          <p>eRelation AG – Content in Health<br>Johannes-von-Hanstein-Str. 2<br>53115 Bonn, Deutschland</p>
+          <p>Vertreten durch den Vorstand: Peter Stegmaier (Vorsitzender)</p>
+          <p>Telefon: +49 228 76 36 80-30<br>Fax: +49 228 76 36 80-01<br>E-Mail: info@m-vf.de</p>
+          <p>Registergericht: Amtsgericht Bonn · Registernummer: HRB 9392</p>
+          <p>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV: Peter Stegmaier (Anschrift wie oben, stegmaier@m-vf.de)</p>
+          <p>Herausgeber: Prof. Dr. Reinhold Roski · Chefredaktion: Peter Stegmaier</p>
+          <p>Dieser Knowledge-Hub ist ein Angebot von „Monitor Versorgungsforschung".</p>
+        </div>
+      </details>
+      <details id="datenschutz">
+        <summary>Datenschutzhinweise</summary>
+        <div class="legal-body">
+          <h4>1. Verantwortlicher</h4>
+          <p>eRelation AG – Content in Health, vertreten durch Peter Stegmaier, Johannes-von-Hanstein-Str. 2, 53115 Bonn. Kontakt siehe Impressum.</p>
+          <h4>2. Charakter dieses Angebots</h4>
+          <p>Dieses Portal ist eine statische Informationsseite. Es setzt keine Cookies und nutzt keine Analyse- oder Tracking-Dienste. Beim bloßen Lesen werden personenbezogene Daten durch das Portal selbst nicht erhoben oder gespeichert.</p><p>Eine Ausnahme bildet die Seite <a href="newsletter.html">Newsletter bestellen</a>: Dort können Sie freiwillig eine E-Mail-Adresse angeben, um einen Newsletter zu abonnieren. Näheres in den Abschnitten 3 und 4.</p>
+          <h4>3. Newsletter-Anmeldung</h4>
+          <p><b>Welche Daten.</b> Für die Bestellung eines Newsletters benötigen wir Ihre E-Mail-Adresse. Weitere Angaben verlangen wir nicht. Mit übermittelt wird, welchen der beiden Newsletter Sie ausgewählt haben.</p>
+          <p><b>Bestätigungsverfahren.</b> Nach dem Absenden erhalten Sie eine E-Mail mit einem Bestätigungslink; der Versand beginnt erst, wenn Sie ihn anklicken (Double-Opt-in). So kann niemand fremde Adressen eintragen. Anmeldung und Bestätigung werden mit Zeitpunkt und IP-Adresse protokolliert, damit wir Ihre Einwilligung nachweisen können.</p>
+          <p><b>Rechtsgrundlage.</b> Der Versand erfolgt aufgrund Ihrer Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO. Die Protokollierung der Einwilligung stützt sich auf Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit der Nachweispflicht aus Art. 7 Abs. 1 DSGVO.</p>
+          <p><b>Widerruf.</b> Sie können Ihre Einwilligung jederzeit widerrufen — am einfachsten über den Abmeldelink am Ende jeder E-Mail. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt davon unberührt. Nach dem Widerruf entfernen wir Ihre Adresse aus dem Verteiler; die Einwilligungsnachweise bewahren wir auf, solange Ansprüche gegen uns geltend gemacht werden könnten.</p>
+          <p><b>Erfolgsmessung.</b> Unsere Newsletter enthalten ein Zählpixel und nachverfolgbare Links. Damit lässt sich erkennen, ob eine E-Mail geöffnet und welche Links angeklickt wurden. Wir werten das aus, um die Newsletter besser auf die Interessen unserer Leserinnen und Leser zuzuschneiden; auch dies erfolgt auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) und endet mit dem Widerruf.</p>
+
+          <h4>4. Versanddienstleister (Mailchimp)</h4>
+          <p>Für Anmeldung, Verwaltung und Versand nutzen wir <b>Mailchimp</b>, einen Dienst der The Rocket Science Group LLC, 405 N. Angier Ave. NE, Atlanta, GA 30308, USA (ein Unternehmen von Intuit Inc.). Ihre Angaben werden dort gespeichert und in unserem Auftrag verarbeitet; Grundlage ist ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO.</p>
+          <p>Wenn Sie das Anmeldeformular absenden, werden Ihre Eingaben unmittelbar an Mailchimp übertragen. Dabei erhält Mailchimp auch technische Verbindungsdaten wie Ihre IP-Adresse.</p>
+          <p>Die Verarbeitung findet in den USA statt. Mailchimp ist unter dem <b>EU-US Data Privacy Framework</b> zertifiziert, für das die Europäische Kommission am 10. Juli 2023 ein angemessenes Schutzniveau festgestellt hat; ergänzend hat sich Mailchimp vertraglich zu den EU-Standardvertragsklauseln verpflichtet. Näheres in der <a href="https://www.intuit.com/privacy/statement/" target="_blank" rel="noopener">Datenschutzerklärung von Intuit/Mailchimp</a>.</p>
+
+          <h4>5. Hosting (GitHub Pages)</h4>
+          <p>Die Auslieferung erfolgt über GitHub Pages (GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Dabei verarbeitet GitHub technisch notwendige Zugriffsdaten (u. a. IP-Adresse, Datum und Uhrzeit, angeforderte Datei, Browsertyp) in Server-Logdateien zum sicheren Betrieb. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Näheres im <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a>. Die Übermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln.</p>
+          <h4>6. Externe Links</h4>
+          <p>Das Portal verlinkt auf externe Datenbanken, Studien und Institutionen (z. B. PubMed, Cochrane, LIVIVO). Mit dem Anklicken verlassen Sie dieses Angebot; die aufgerufenen Anbieter erhalten Ihre IP-Adresse, die Angabe, dass Sie von diesem Portal kommen (Referrer), und ggf. weitere Daten und verarbeiten diese nach ihren eigenen Bestimmungen. Hierfür sind die jeweiligen Anbieter verantwortlich.</p>
+          <h4>7. Ihre Rechte</h4>
+          <p>Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO) sowie das Recht auf Beschwerde bei einer Aufsichtsbehörde (Art. 77 DSGVO). Zuständig ist die Landesbeauftragte für Datenschutz und Informationsfreiheit Nordrhein-Westfalen (LDI NRW).</p>
+          <h4>8. Stand</h4>
+          <p>Stand: August 2026.</p>
+        </div>
+      </details>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+const CATS = [
+  {id:"deutsch", h:14, num:"01", name:"Deutschsprachig: Klima, Hitze & Gesundheit"},
+  {id:"biblio", h:190, num:"02", name:"Bibliografische Datenbanken (international)"},
+  {id:"evidenz", h:262, num:"03", name:"Systematische Reviews & Evidenzsynthesen"},
+  {id:"klimadaten", h:196, num:"04", name:"Klima- & Umweltdaten",
+   hinweis:"Diese Quellen liefern Messreihen, Modelle und Indikatoren — keine Publikationen. Sie beantworten das „Wie viel“, nicht das „Warum“. Ein Suchbegriff führt hier oft zu Datensätzen statt zu Studien."},
+  {id:"policy", h:338, num:"05", name:"Public Health & Umweltinstitutionen (international)"},
+  {id:"praxis", h:38, num:"06", name:"Hitzeschutz & Praxis"},
+  {id:"openaccess", h:150, num:"07", name:"Open Access & Discovery"},
+  {id:"register", h:212, num:"08", name:"Studienregister & Preprints"},
+  {id:"volltext", h:100, num:"09", name:"Volltext beschaffen"},
+];
+
+// type: "live" = URL-Suche mit %s | "portal" = feste URL | "lic" = lizenzpflichtig (feste URL)
+const DB = [
+  // 1 — Deutschsprachig: Klima, Hitze & Gesundheit
+  {c:"deutsch", n:"KLUG – Klimawandel & Gesundheit", de:1, d:"Deutsche Allianz Klimawandel und Gesundheit — Fachnetzwerk, Positionen, Fortbildung, Hitzeschutz.", t:"live", u:"https://www.klimawandel-gesundheit.de/?s=%s", b:0},
+  {c:"deutsch", n:"Robert Koch-Institut (RKI)", de:1, d:"Sachstandsberichte Klimawandel und Gesundheit, wöchentliches Hitzemortalitäts-Monitoring, Surveillance.", t:"portal", u:"https://www.rki.de/DE/Themen/Umwelt-und-Gesundheit/Klima-und-Gesundheit/klima-und-gesundheit-node.html"},
+  {c:"deutsch", n:"Umweltbundesamt (UBA)", de:1, d:"Klimafolgen, Vulnerabilitätsanalysen, Hitze in Städten, Kompetenzzentrum KomPass — Begriff nach Öffnen eingeben.", t:"portal", u:"https://www.umweltbundesamt.de/themen/klima-energie/klimafolgen-anpassung"},
+  {c:"deutsch", n:"Deutscher Wetterdienst (DWD)", de:1, d:"Wetter- und Klimadienst des Bundes — Suche über Berichte, Klimadaten und den Bereich Medizin-Meteorologie.", t:"live", u:"https://www.dwd.de/DE/service/suche/suche_node.html?queryResultId=null&nn=16102&templateQueryString=%s"},
+  {c:"deutsch", n:"DWD Hitzewarnsystem", de:1, d:"Amtliche Hitzewarnungen für Deutschland, Warnkriterien und das Klima-Michel-Modell der gefühlten Temperatur.", t:"portal", u:"https://www.dwd.de/DE/leistungen/hitzewarnung/hitzewarnung.html"},
+  {c:"deutsch", n:"Bundesärztekammer", de:1, d:"Beschlüsse der Ärztetage zu Klimaschutz und Hitzeschutz, Musterpläne und Fortbildungsangebote für Praxen.", t:"live", u:"https://www.bundesaerztekammer.de/suche?tx_solr%5Bq%5D=%s"},
+  {c:"deutsch", n:"Zentrum KlimaAnpassung (ZKA)", de:1, d:"Beratungsstelle für Kommunen und soziale Einrichtungen — Hitzeaktionspläne, Förderung, Praxisbeispiele.", t:"portal", u:"https://zentrum-klimaanpassung.de/"},
+  {c:"deutsch", n:"GBE-Bund", de:1, d:"Gesundheitsberichterstattung des Bundes — Indikatoren zu Umwelt, Sterblichkeit und Krankheitslast (RKI/Destatis).", t:"portal", u:"https://www.gbe-bund.de/"},
+  {c:"deutsch", n:"Destatis — Sterbefallzahlen", de:1, d:"Wöchentliche Sterbefallzahlen und Übersterblichkeit — die Datengrundlage jeder deutschen Hitzemortalitätsanalyse.", t:"portal", u:"https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Sterbefaelle-Lebenserwartung/_inhalt.html"},
+  {c:"deutsch", n:"Helmholtz Klima-Initiative", de:1, d:"Forschungsergebnisse und Einordnungen der Helmholtz-Zentren zu Klimawandel und Klimafolgen.", t:"portal", u:"https://www.helmholtz-klima.de/"},
+  {c:"deutsch", n:"Deutsches Klimarechenzentrum (DKRZ)", de:1, d:"Rechenzentrum der deutschen Klimaforschung — Modelldaten, Szenarien, das Langzeitarchiv CERA.", t:"portal", u:"https://www.dkrz.de/"},
+  {c:"deutsch", n:"LIVIVO (ZB MED)", de:1, d:"Größtes deutschsprachiges Suchportal der Lebenswissenschaften — Begriff nach Öffnen eingeben.", t:"portal", u:"https://www.livivo.de/"},
+  {c:"deutsch", n:"German Medical Science (GMS)", de:1, d:"Open-Access-Portal deutscher medizinischer Fachgesellschaften (AWMF/ZB MED).", t:"portal", u:"https://www.egms.de/"},
+  {c:"deutsch", n:"Monitor Versorgungsforschung", de:1, d:"Deutsche Fachzeitschrift für Politik, Praxis & Forschung der Versorgung — durchsuchbares Facharchiv.", t:"live", u:"https://www.monitor-versorgungsforschung.de/?s=%s&utm_source=klima-hub&utm_medium=referral&utm_campaign=klima-portal", b:0},
+  {c:"deutsch", n:"Knowledge-Hub Versorgungsforschung", de:1, d:"Das Schwesterportal von Monitor Versorgungsforschung — dieselbe Suche über alle Datenbanken der Versorgungsforschung.", t:"portal", u:"https://wissen.m-vf.de/"},
+
+  // 2 — Bibliografisch international
+  {c:"biblio", n:"PubMed / MEDLINE", d:"Die zentrale biomedizinische Datenbank der US-Nationalbibliothek (NLM). >37 Mio. Nachweise.", t:"live", u:"https://pubmed.ncbi.nlm.nih.gov/?term=%s", b:1},
+  {c:"biblio", n:"PubMed Central (PMC)", d:"Volltext-Archiv frei zugänglicher biomedizinischer Artikel.", t:"live", u:"https://www.ncbi.nlm.nih.gov/pmc/?term=%s", b:1},
+  {c:"biblio", n:"Europe PMC", d:"Europäisches Pendant zu PMC mit Volltexten, Preprints und Fördermittel-Nachweisen.", t:"live", u:"https://europepmc.org/search?query=%s", b:1},
+  {c:"biblio", n:"Environmental Evidence Journal", d:"Zeitschrift der Collaboration for Environmental Evidence — systematische Reviews zu Umwelt und Gesundheit.", t:"live", u:"https://environmentalevidencejournal.biomedcentral.com/search?query=%s"},
+  {c:"biblio", n:"Embase", d:"Biomedizin & Pharmakologie mit starkem Europa-Fokus (Elsevier).", t:"lic", u:"https://www.embase.com/"},
+  {c:"biblio", n:"Web of Science", d:"Interdisziplinäre Zitationsdatenbank (Clarivate) — deckt auch Geo- und Umweltwissenschaften ab.", t:"lic", u:"https://www.webofscience.com/"},
+  {c:"biblio", n:"Scopus", d:"Große Abstract- & Zitationsdatenbank (Elsevier).", t:"lic", u:"https://www.scopus.com/"},
+  {c:"biblio", n:"GreenFILE (EBSCO)", d:"Speziell auf die Wechselwirkung von Umwelt und Mensch ausgerichtete Datenbank.", t:"lic", u:"https://www.ebsco.com/products/research-databases/greenfile"},
+  {c:"biblio", n:"CINAHL", d:"Pflege & Gesundheitsfachberufe (EBSCO) — relevant für Hitzeschutz in Pflege und Klinik.", t:"lic", u:"https://www.ebsco.com/products/research-databases/cinahl-database"},
+  {c:"biblio", n:"APA PsycInfo", d:"Psychologie & Verhaltenswissenschaften — Klimaangst, psychische Folgen von Extremwetter.", t:"lic", u:"https://www.apa.org/pubs/databases/psycinfo"},
+  {c:"biblio", n:"CAB Abstracts", d:"Landwirtschaft, Ernährungssicherheit, Vektoren und Zoonosen (CABI).", t:"lic", u:"https://www.cabidigitallibrary.org/product/qc"},
+  {c:"biblio", n:"GEOBASE / GeoRef", d:"Geo-, Umwelt- und Erdwissenschaften — die physikalische Seite des Themas.", t:"lic", u:"https://www.elsevier.com/products/scopus/content"},
+
+  // 3 — Evidenzsynthesen
+  {c:"evidenz", n:"Cochrane Library", d:"Systematische Reviews & kontrollierte Studien — Goldstandard der Evidenzsynthese.", t:"live", u:"https://www.cochranelibrary.com/search?q=%s"},
+  {c:"evidenz", n:"Epistemonikos", d:"Datenbank systematischer Reviews und ihrer eingeschlossenen Studien.", t:"live", u:"https://www.epistemonikos.org/en/search?q=%s"},
+  {c:"evidenz", n:"Trip Database", d:"Klinische Suchmaschine für evidenzbasierte Antworten & Leitlinien.", t:"live", u:"https://www.tripdatabase.com/search?criteria=%s"},
+  {c:"evidenz", n:"Campbell Collaboration", d:"Systematische Reviews zu sozialen und umweltbezogenen Interventionen, Evidence & Gap Maps.", t:"live", u:"https://onlinelibrary.wiley.com/action/doSearch?SeriesKey=18911803&AllField=%s"},
+  {c:"evidenz", n:"3ie Development Evidence Portal", d:"Evidenz zu Klimaanpassung in Ländern niedrigen und mittleren Einkommens — Begriff nach Öffnen eingeben.", t:"portal", u:"https://developmentevidence.3ieimpact.org/"},
+  {c:"evidenz", n:"Collaboration for Environmental Evidence", d:"Methodennetzwerk für systematische Reviews im Umweltbereich, mit eigener Evidenzbibliothek.", t:"portal", u:"https://environmentalevidence.org/"},
+  {c:"evidenz", n:"PROSPERO", d:"Internationales Register geplanter systematischer Reviews (CRD, York).", t:"portal", u:"https://www.crd.york.ac.uk/prospero/"},
+  {c:"evidenz", n:"JBI EBP Database", d:"Evidenzsynthesen des Joanna Briggs Institute.", t:"portal", u:"https://jbi.global/ebp"},
+
+  // 4 — Klima- & Umweltdaten (Messreihen und Indikatoren, keine Publikationen)
+  {c:"klimadaten", n:"Copernicus Climate Data Store", d:"Europäischer Klimadatendienst (C3S) — ERA5-Reanalyse, Hitzeindizes, Gesundheitsindikatoren zum Herunterladen.", t:"live", u:"https://cds.climate.copernicus.eu/datasets?q=%s"},
+  {c:"klimadaten", n:"Copernicus Atmosphere (CAMS)", d:"Luftqualität in Europa — Ozon, Feinstaub, Waldbrandrauch, Pollen. Tagesaktuelle Vorhersagen und Reanalysen.", t:"portal", u:"https://atmosphere.copernicus.eu/"},
+  {c:"klimadaten", n:"IPCC", d:"Weltklimarat — Sachstandsberichte inklusive des Gesundheitskapitels der Arbeitsgruppe II.", t:"live", u:"https://www.ipcc.ch/?s=%s"},
+  {c:"klimadaten", n:"European Environment Agency (EEA)", d:"Europäische Umweltagentur — Indikatoren, Berichte und Datensätze zu Klima, Luft und Gesundheit.", t:"live", u:"https://www.eea.europa.eu/en/advanced-search?q=%s"},
+  {c:"klimadaten", n:"NOAA NCEI", d:"US-Klimaarchiv — globale Temperaturreihen, Extremwetter-Statistiken, Klimaberichte.", t:"live", u:"https://www.ncei.noaa.gov/search?q=%s"},
+  {c:"klimadaten", n:"NASA GISS Surface Temperature", d:"Globale Temperaturanomalien seit 1880 (GISTEMP) — die meistzitierte Referenzreihe.", t:"portal", u:"https://data.giss.nasa.gov/gistemp/"},
+  {c:"klimadaten", n:"EM-DAT", d:"Internationale Katastrophendatenbank (CRED, Louvain) — Hitzewellen mit Todesfällen und Betroffenenzahlen.", t:"portal", u:"https://www.emdat.be/"},
+  {c:"klimadaten", n:"IHME — Global Burden of Disease", d:"Krankheitslast nach Risikofaktor, darunter Hitze, Kälte und Luftverschmutzung. Interaktive Auswertung über GBD Compare.", t:"portal", u:"https://vizhub.healthdata.org/gbd-compare/"},
+  {c:"klimadaten", n:"State of Global Air", d:"Luftverschmutzung und ihre Sterblichkeitsfolgen, aufbereitet vom Health Effects Institute.", t:"portal", u:"https://www.stateofglobalair.org/"},
+  {c:"klimadaten", n:"WHO Global Health Observatory", d:"Weltweite Gesundheitsindikatoren der WHO, einschließlich Umwelt- und Klimadaten.", t:"portal", u:"https://www.who.int/data/gho"},
+  {c:"klimadaten", n:"World Weather Attribution", d:"Schnelle Zuordnungsstudien: Wie stark hat der Klimawandel ein konkretes Extremereignis wahrscheinlicher gemacht?", t:"live", u:"https://www.worldweatherattribution.org/?s=%s"},
+  {c:"klimadaten", n:"DWD Climate Data Center", d:"Deutsche Klimamessreihen aus dem Stationsnetz — Tages- und Stundenwerte zum freien Herunterladen.", t:"portal", u:"https://opendata.dwd.de/climate_environment/CDC/"},
+
+  // 5 — Public Health & Umweltinstitutionen international
+  {c:"policy", n:"WHO — Climate Change and Health", d:"Leitlinien, Länderprofile und die Anleitung der WHO zu Hitzeaktionsplänen (HHAP).", t:"portal", u:"https://www.who.int/health-topics/climate-change"},
+  {c:"policy", n:"WHO IRIS", d:"Institutionelles Repositorium der WHO — Volltexte aller Berichte und Leitlinien.", t:"live", u:"https://iris.who.int/discover?query=%s"},
+  {c:"policy", n:"ECDC", d:"Europäisches Zentrum für Prävention und Kontrolle von Krankheiten — vektorübertragene Erkrankungen, Klimaatlas, VectorNet.", t:"live", u:"https://www.ecdc.europa.eu/en/search?s=%s"},
+  {c:"policy", n:"US CDC — Climate and Health", d:"Heat-&-Health-Tracker, BRACE-Rahmenwerk, Handreichungen des öffentlichen Gesundheitsdienstes.", t:"live", u:"https://search.cdc.gov/search/?query=%s"},
+  {c:"policy", n:"US EPA — Climate Indicators", d:"Indikatoren zu Hitzewellen, städtischen Wärmeinseln und Klimafolgen — Begriff nach Öffnen eingeben.", t:"portal", u:"https://www.epa.gov/climate-indicators"},
+  {c:"policy", n:"NIEHS — Climate Change & Health", d:"Forschungsprogramm der US-Umweltgesundheitsbehörde, mit Literatur- und Materialsammlung.", t:"portal", u:"https://www.niehs.nih.gov/research/programs/climate-health"},
+  {c:"policy", n:"Lancet Countdown", d:"Jährliche Indikatorenberichte zu Gesundheit und Klimawandel, mit eigenem Policy-Brief für Deutschland.", t:"live", u:"https://lancetcountdown.org/?s=%s"},
+  {c:"policy", n:"Europäisches Klima- und Gesundheitsobservatorium", d:"Gemeinsame Plattform von EU-Kommission und EEA — Evidenz, Werkzeuge und Länderbeispiele.", t:"portal", u:"https://climate-adapt.eea.europa.eu/en/observatory"},
+  {c:"policy", n:"PAHO", d:"Panamerikanische Gesundheitsorganisation — Klima und Gesundheit in Nord- und Südamerika.", t:"portal", u:"https://www.paho.org/en/topics/climate-change-and-health"},
+  {c:"policy", n:"UNEP", d:"Umweltprogramm der Vereinten Nationen — Emissionsberichte, Umwelt und menschliche Gesundheit.", t:"portal", u:"https://www.unep.org/"},
+  {c:"policy", n:"UNDRR", d:"UN-Büro für Katastrophenvorsorge — Hitzewellen als Katastrophenrisiko, Frühwarnsysteme.", t:"portal", u:"https://www.undrr.org/"},
+  {c:"policy", n:"OECD — Environment & Health", d:"Vergleichende Analysen zu Umweltbelastung, Gesundheitskosten und Politikinstrumenten.", t:"portal", u:"https://www.oecd.org/en/topics/environment.html"},
+
+  // 6 — Hitzeschutz & Praxis
+  {c:"praxis", n:"Global Heat Health Information Network", d:"Netzwerk von WHO und WMO speziell zu Hitze und Gesundheit — Praxiswissen, Fallbeispiele, Fortbildung.", t:"live", u:"https://ghhin.org/?s=%s"},
+  {c:"praxis", n:"Climate-ADAPT", d:"Europäische Anpassungsplattform der EEA — Fallstudien, Werkzeuge und Maßnahmen, auch für den Gesundheitssektor.", t:"live", u:"https://climate-adapt.eea.europa.eu/en/search?query=%s"},
+  {c:"praxis", n:"Health Care Without Harm Europe", d:"Klimafußabdruck und Klimaresilienz des Gesundheitswesens selbst — Kliniken, Beschaffung, Emissionen.", t:"live", u:"https://europe.noharm.org/search?search_api_fulltext=%s"},
+  {c:"praxis", n:"Global Green and Healthy Hospitals", d:"Weltweites Netzwerk von Kliniken für Nachhaltigkeit und Klimaresilienz.", t:"portal", u:"https://greenhospitals.org/"},
+  {c:"praxis", n:"C40 Cities", d:"Städtenetzwerk für Klimaschutz — Hitzeresilienz, Stadtbegrünung, kommunale Aktionspläne.", t:"portal", u:"https://www.c40.org/"},
+  {c:"praxis", n:"ICLEI", d:"Kommunalnetzwerk für Nachhaltigkeit — Anpassungsstrategien auf Stadt- und Kreisebene.", t:"portal", u:"https://iclei.org/"},
+  {c:"praxis", n:"Klimaanpassung.de (BMUV)", de:1, d:"Portal des Bundes zur Klimaanpassung — Hitzeaktionspläne, Förderprogramme, kommunale Praxisbeispiele.", t:"portal", u:"https://www.klimaanpassung.de/"},
+  {c:"praxis", n:"Hitzeaktionspläne (KLUG)", de:1, d:"Musterhitzeaktionspläne, Hitzeschutzbündnisse und Handreichungen für Kommunen, Praxen und Pflegeeinrichtungen.", t:"portal", u:"https://hitze.info/"},
+
+  // 7 — Open Access & Discovery
+  {c:"openaccess", n:"Google Scholar", d:"Breite Suchmaschine für wissenschaftliche Literatur inkl. grauer Literatur & Zitationen.", t:"live", u:"https://scholar.google.com/scholar?q=%s", b:1},
+  {c:"openaccess", n:"Semantic Scholar", d:"KI-gestützte Discovery mit Zitationskontext (Allen Institute).", t:"live", u:"https://www.semanticscholar.org/search?q=%s&sort=relevance"},
+  {c:"openaccess", n:"OpenAlex", d:"Offener Katalog von >250 Mio. Werken, Autoren & Institutionen.", t:"live", u:"https://openalex.org/works?filter=default.search%3A%s", b:1},
+  {c:"openaccess", n:"BASE", d:"Bielefeld Academic Search Engine — >400 Mio. Dokumente aus Repositorien.", t:"live", u:"https://www.base-search.net/Search/Results?lookfor=%s"},
+  {c:"openaccess", n:"CORE", d:"Weltweit größte Sammlung offener Volltexte aus Repositorien.", t:"live", u:"https://core.ac.uk/search?q=%s"},
+  {c:"openaccess", n:"DOAJ", d:"Directory of Open Access Journals — qualitätsgeprüfte OA-Artikel.", t:"live", u:'https://doaj.org/search/articles?source=%7B%22query%22%3A%7B%22query_string%22%3A%7B%22query%22%3A%22%s%22%2C%22default_operator%22%3A%22AND%22%7D%7D%7D'},
+  {c:"openaccess", n:"The Lens", d:"Verknüpfte Suche über Publikationen und Patente.", t:"live", u:"https://www.lens.org/lens/search/scholar/list?q=%s"},
+  {c:"openaccess", n:"Dimensions", d:"Publikationen, Förderung, Patente & klinische Studien vernetzt (Digital Science).", t:"live", u:"https://app.dimensions.ai/discover/publication?search_text=%s"},
+  {c:"openaccess", n:"Zenodo", d:"Offenes Repositorium (CERN) für Artikel, Daten & Preprints — auch Klimadatensätze.", t:"live", u:"https://zenodo.org/search?q=%s", b:1},
+
+  // 8 — Studienregister & Preprints
+  {c:"register", n:"ClinicalTrials.gov", d:"Weltweit größtes Register klinischer Studien (NLM).", t:"live", u:"https://clinicaltrials.gov/search?term=%s", b:1},
+  {c:"register", n:"DRKS", de:1, d:"Deutsches Register Klinischer Studien — Begriff nach Öffnen eingeben.", t:"portal", u:"https://drks.de/"},
+  {c:"register", n:"WHO ICTRP", d:"International Clinical Trials Registry Platform — Meta-Suche über alle Register.", t:"portal", u:"https://trialsearch.who.int/"},
+  {c:"register", n:"medRxiv", d:"Preprint-Server für die medizinischen & Gesundheitswissenschaften.", t:"live", u:"https://www.medrxiv.org/search/%s", b:1},
+  {c:"register", n:"EarthArXiv", d:"Preprint-Server der Geo- und Klimawissenschaften — Begriff nach Öffnen eingeben.", t:"portal", u:"https://eartharxiv.org/"},
+  {c:"register", n:"ESS Open Archive", d:"Preprints der Erd- und Weltraumwissenschaften (AGU) — Begriff nach Öffnen eingeben.", t:"portal", u:"https://essopenarchive.org/"},
+  {c:"register", n:"OSF", d:"Open Science Framework — Preprints, Daten & Projektmaterialien.", t:"live", u:"https://osf.io/search/?q=%s"},
+  {c:"register", n:"Graue Literatur (über BASE)", d:"Berichte, Dissertationen & Konferenzbeiträge — bei diesem Thema besonders ergiebig.", t:"live", u:"https://www.base-search.net/Search/Results?lookfor=%s&type=all&filter[]=f_dctypenorm%3A%224%22"},
+
+  // 9 — Volltext beschaffen (legale Wege zum Volltext hinter der Bezahlschranke)
+  {c:"volltext", n:"Nationallizenzen (DFG)", de:1, d:"DFG-finanzierte Lizenzen für Zeitschriftenarchive und E-Books. Privatpersonen mit Wohnsitz in Deutschland können sich kostenlos registrieren.", t:"live", u:"https://www.nationallizenzen.de/@@search?SearchableText=%s", b:0},
+  {c:"volltext", n:"Unpaywall", d:"Findet legale Open-Access-Fassungen zu einer DOI — über 50 Mio. Volltexte aus Repositorien und Verlagen. DOI nach dem Öffnen eingeben.", t:"portal", u:"https://unpaywall.org/"},
+  {c:"volltext", n:"Open Access Button", d:"Sucht frei zugängliche Fassungen und fordert sie bei Bedarf direkt beim Autor an. DOI oder Titel nach dem Öffnen eingeben.", t:"portal", u:"https://openaccessbutton.org/"},
+  {c:"volltext", n:"subito", de:1, d:"Direktlieferdienst wissenschaftlicher Bibliotheken — Aufsätze und Bücher kostenpflichtig, aber schnell und lizenzkonform.", t:"live", u:"https://search.subito-doc.de/vufind/Search/Results?lookfor=%s&type=AllFields", b:1},
+  {c:"volltext", n:"Fernleihe (K10plus)", de:1, d:"Verbundkatalog mit Bestandsnachweis: zeigt, welche Bibliothek den Titel führt — Bestellung über die eigene Bibliothek.", t:"live", u:"https://opac.k10plus.de/DB=2.299/CMD?ACT=SRCHA&IKT=1016&SRT=YOP&TRM=%s"},
+];
+
+// Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
+// === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
+const SNAP_DATE = "17. Aug. 2026, 14:30 Uhr";
+const SNAP_STATUS = "neu";
+const STUDIES = [
+  {
+    journal:"Environ Int", year:"2026", pmid:"42492428",
+    author:"Boser M et al.", pubdate:"18.07.2026",
+    added:"17.08.2026",
+    title:"Pollenbelastung und Asthma-Notfallbehandlungen: Zeitreihenanalyse aus drei bayerischen Großstädten",
+    sum:"Multizentrische Zeitreihenanalyse, die ambulante Asthma-Notfallbehandlungen der KV Bayerns in Augsburg, München und Nürnberg mit automatisch gemessenen Tageswerten für Erlen-, Birken-, Hasel- und Gräserpollen verknüpft.",
+    result:"Hohe Birkenpollenwerte erhöhten das Risiko einer Asthma-Notfallbehandlung deutlich (RR 1,64; 95%-KI 1,41–1,90), Gräserpollen bei mittlerer (RR 1,19; 1,03–1,38) und hoher Belastung (RR 1,41; 1,17–1,70). Birke wirkte am Expositionstag selbst, Gräser erst am zweiten Tag danach. Während der Saison waren 10,2 % (Augsburg) bis 17,8 % (Nürnberg) der Behandlungen der Birke zuzurechnen, 14,3 % (München) bis 18,8 % (Augsburg) den Gräsern. Damit ist ein erheblicher Teil der Asthma-Notfälle im Frühjahr rechnerisch vermeidbar — die Pollensaison verschiebt und verlängert sich mit dem Klimawandel.",
+    transfer:"Deutsche KV-Abrechnungsdaten, unmittelbar übertragbar"
+  },
+  {
+    journal:"Curr Probl Cardiol", year:"2026", pmid:"42471098",
+    author:"Moscucci F et al.", pubdate:"18.07.2026",
+    added:"17.08.2026",
+    title:"Hitzewellen und kardiovaskuläre Sterblichkeit: Wirkungspfade, Schadstoffe als Mitverursacher und autonome Überwachung",
+    sum:"Narrativer Review zur Frage, wie Hitzewellen das Herz-Kreislauf-System schädigen, welche Rolle Luftschadstoffe dabei spielen und ob sich gefährdete Personen über die Herzfrequenzvariabilität früher erkennen lassen.",
+    result:"Im Sommer 2025 wurden in 854 europäischen Städten rund 24.400 hitzebedingte Todesfälle in nur zehn Wochen geschätzt, etwa 68 % davon der menschengemachten Erwärmung zuzurechnen. Die europäische Hitzeübersterblichkeit lag 2003 bei rund 70.000 und 2022 bei 61.672 Fällen — trotz zwanzig Jahren Hitzeaktionsplänen. Hitze und Schadstoffe verstärken einander (Interaktionsindex 1,51 für kardiovaskuläre Sterblichkeit). Die Autoren werten das als Beleg, dass bestehende Hitzeaktionspläne die Sterblichkeit bislang nicht durchgreifend senken.",
+    transfer:"Europäische Städtedaten, gemäßigte Klimazone"
+  },
+  {
+    journal:"Euro Surveill", year:"2026", pmid:"42565263",
+    author:"Rise N et al.", pubdate:"06.08.2026",
+    added:"17.08.2026",
+    title:"Starkregen, Hochwasser und Infektionskrankheiten in Europa: Rapid Review 2018–2025",
+    sum:"Im Auftrag des ECDC durchgeführte schnelle Übersichtsarbeit zu der Frage, welche Infektionskrankheiten nach Starkregen und Überschwemmungen in Europa tatsächlich vermehrt auftreten und welche Vorsorgemaßnahmen berichtet werden.",
+    result:"Aus 897 gesichteten Datensätzen blieben 14 Arbeiten. Belegt sind vor allem Campylobacteriose-Ausbrüche und Leptospirose-Fälle nach Starkregen und Hochwasser. Als Vorsorge wird am häufigsten Aufklärung zu Hygiene genannt; strukturelle Maßnahmen wie sanitäre Infrastruktur und One-Health-Surveillance werden empfohlen, sind aber selten umgesetzt. Die dünne Studienlage ist selbst das Ergebnis: Europa überwacht die Gesundheitsfolgen von Hochwasser bislang kaum systematisch.",
+    transfer:"Europäische Übersicht, ECDC-Auftragsarbeit"
+  },
+  {
+    journal:"Mult Scler Relat Disord", year:"2026", pmid:"42501584",
+    author:"Iaquinto S et al.", pubdate:"17.07.2026",
+    added:"17.08.2026",
+    title:"Hitzeempfindlichkeit bei Multipler Sklerose: Wie Betroffene sich behelfen — Daten des Schweizer MS-Registers",
+    sum:"Querschnittsbefragung von 760 Teilnehmenden des Schweizer MS-Registers zu Temperaturempfindlichkeit sowie zu Kenntnis und Nutzung von Kühlmaßnahmen.",
+    result:"73,3 % berichteten Temperaturempfindlichkeit, am häufigsten gegenüber Hitze (48,8 %) oder Hitze und Kälte (18 %). Verschlechtert wurden vor allem Fatigue (70,2 %), Muskelschwäche (48,7 %) und Gangstörungen (38,6 %). Zwar kannten 62 % Kühlmaßnahmen, aber nur 44,3 % der hitzeempfindlichen Kenner nutzten sie tatsächlich — genutzt wurden kalte Duschen (48,7 %), Ventilatoren (46,1 %) und Kühltücher (33,8 %). Zwischen Wissen und Anwendung klafft also eine Lücke, die in der Beratung durch Behandelnde ansetzen müsste.",
+    transfer:"Schweizer Registerdaten, gleiche Klimazone und Versorgungsstruktur"
+  },
+  {
+    journal:"Nat Commun", year:"2026", pmid:"42575902",
+    author:"Tomkins MD et al.", pubdate:"10.08.2026",
+    added:"17.08.2026",
+    title:"Wie stark Kanäle Städte kühlen: landesweite Modellrechnung für Großbritannien und Irland",
+    sum:"Energiebilanzmodell, das die Kühlwirkung des gesamten Kanalnetzes Großbritanniens und Irlands auf die Umgebungstemperatur schätzt — als bislang wenig untersuchte Ergänzung zu Grünflächen.",
+    result:"Im unmittelbaren Umfeld der Kanäle ergab sich eine mittlere Kühlung von rund 0,8 °C tagsüber (0,7–1,0 °C), im Frühjahr und Frühsommer 1,2–1,4 °C und während Hitzewellen 1,5–2,3 °C — also gerade dann am stärksten, wenn es gesundheitlich darauf ankommt. Die Wirkung ist nicht durchgängig positiv, spricht aber dafür, Wasserflächen in der Hitzeplanung ähnlich ernst zu nehmen wie Bäume und Parks.",
+    transfer:"Großbritannien und Irland, vergleichbares gemäßigtes Klima"
+  },
+  {
+    journal:"Health Policy", year:"2026", pmid:"42551053",
+    author:"van der Giessen J et al.", pubdate:"28.07.2026",
+    added:"17.08.2026",
+    title:"Was Patienten von der Nachhaltigkeitspolitik ihres Krankenhauses halten: Befragung an einem niederländischen Universitätsklinikum",
+    sum:"Online-Querschnittsbefragung eines Patientenpanels eines niederländischen Universitätsklinikums zu vier Feldern der Klinik-Nachhaltigkeit: gesunde Ernährung, Abfallvermeidung, nachhaltige Mobilität und Prävention.",
+    result:"Von 2.473 eingeladenen Patienten antworteten 1.285 (52 %). Am wichtigsten war ihnen Krankheitsprävention (88 %), gefolgt von Abfallvermeidung (82 %), gesunder Ernährung (76 %) und nachhaltiger Mobilität (58 %); höheres Alter und Bildungsgrad gingen mit höherer Zustimmung einher. Patienten tragen Nachhaltigkeitsmaßnahmen im Krankenhaus also breit mit — die häufig vermutete Sorge, sie als Komforteinbuße zu erleben, bestätigt sich nicht.",
+    transfer:"Niederlande, vergleichbares Sozialversicherungssystem"
+  },
+];
+// === STUDIES-BLOCK-ENDE ===
+
+const CHIPS = [
+  "Hitzewelle",
+  "Hitzeaktionsplan",
+  "heat-related mortality",
+  "urban heat island",
+  "Klimawandel Gesundheit",
+  "vector-borne disease",
+  "climate change adaptation health",
+];
+
+function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ""; } }
+
+const main = document.getElementById('main');
+const jumpNav = document.getElementById('jumpNav');
+const cardIndex = []; // {el, tpl, type}
+
+// Kein Sprung-Link in der Navigation - die id bleibt aber bestehen,
+// damit Direktlinks auf #studien weiter funktionieren.
+document.querySelector('aside.studies').id = 'studien';
+document.querySelector('aside.studies').style.scrollMarginTop = '64px';
+
+CATS.forEach(cat=>{
+  const items = DB.filter(x=>x.c===cat.id);
+  // jump link
+  const jl = document.createElement('a');
+  jl.href = '#'+cat.id; jl.textContent = cat.name;
+  jumpNav.appendChild(jl);
+
+  const sec = document.createElement('section');
+  sec.className='cat'; sec.id=cat.id; sec.style.setProperty('--h', cat.h);
+  sec.innerHTML =
+    '<div class="cat-head"><span class="cat-num mono">'+cat.num+'</span>'+
+    '<h2 class="serif">'+cat.name+'</h2>'+
+    '<span class="cat-count">'+items.length+' Datenbanken</span></div>'+
+    // Nur der Klimadaten-Block traegt einen Hinweis: Dort liegen Messreihen,
+    // keine Publikationen - das erwartet niemand ungewarnt.
+    (cat.hinweis ? '<p class="cat-hinweis">'+cat.hinweis+'</p>' : '')+
+    '<div class="grid"></div>';
+  const grid = sec.querySelector('.grid');
+
+  items.forEach(x=>{
+    const a = document.createElement('a');
+    a.className='card'; a.target='_blank'; a.rel='noopener';
+    if(x.t==='live') a.dataset.live='1';
+    const badge = x.t==='live' ? '<span class="badge live">Live-Suche</span>'
+                : x.t==='lic' ? '<span class="badge lic">Lizenz</span>'
+                : '<span class="badge portal">Portal</span>';
+    const foot = x.t==='live'
+      ? '<span class="bereit">Trefferliste · </span><span class="arrow">↗</span> Suche öffnen <span class="host mono">· '+hostOf(x.u)+'</span>'
+      : '<span class="arrow">↗</span> Öffnen <span class="host mono">· '+hostOf(x.u)+'</span>';
+    a.innerHTML =
+      '<div class="card-top"><span class="card-name">'+x.n+'</span>'+
+    (x.b===1 ? '<span class="boolmark ja" title="Geprüft: wertet AND, OR und NOT aus">AND/OR ✓</span>'
+     : x.b===0 ? '<span class="boolmark nein" title="Geprüft: wertet die Operatoren nicht aus – sie werden als Wörter mitgesucht">AND/OR ✗</span>'
+     : '')+badge+'</div>'+
+      '<div class="card-desc">'+x.d+'</div>'+
+      '<div class="card-foot">'+foot+'</div>';
+    grid.appendChild(a);
+    cardIndex.push({el:a, tpl:x.u, type:x.t, eintrag:x});
+  });
+
+  main.appendChild(sec);
+});
+
+document.getElementById('dbCount').textContent = DB.length;
+// Die Zahlen im Hinweis 'Portal vs. Live-Suche' aus DB zaehlen, nicht fest
+// eintragen - sonst veralten sie beim naechsten neuen Eintrag unbemerkt.
+document.getElementById('cntGesamt').textContent = DB.length;
+document.getElementById('cntLive').textContent   = DB.filter(x=>x.t==='live').length;
+document.getElementById('cntPortal').textContent = DB.filter(x=>x.t==='portal').length;
+// Boolesch-Zahlen aus denselben Daten wie die Kennzeichen - nie getrennt pflegen.
+const _live = DB.filter(x=>x.t==='live');
+document.getElementById('cntBoolJa').textContent    = _live.filter(x=>x.b===1).length;
+document.getElementById('cntBoolNein').textContent  = _live.filter(x=>x.b===0).length;
+document.getElementById('cntBoolOffen').textContent = _live.filter(x=>x.b===undefined).length;
+
+// ---- Studien-Frame rendern ----
+document.getElementById('snapDate').textContent = SNAP_DATE;
+
+// ---- Meldung ueber den letzten Lauf -------------------------------------
+// Drei Faelle sollen unterscheidbar sein:
+//   1. alles normal              -> keine Meldung
+//   2. Lauf war da, nichts Neues -> neutraler Hinweis (SNAP_STATUS)
+//   3. Lauf ausgefallen          -> Warnhinweis (Zeitstempel zu alt)
+// Fall 3 erkennt die Seite selbst: SNAP_DATE wird bei jedem erfolgreichen Lauf
+// neu gesetzt. Ist er aelter als 30 Stunden, kann kein Lauf stattgefunden haben.
+(function(){
+  const el = document.getElementById('studiesStatus');
+  if(!el) return;
+  const MON = {'Jan':0,'Feb':1,'März':2,'Apr':3,'Mai':4,'Juni':5,
+               'Juli':6,'Aug':7,'Sept':8,'Okt':9,'Nov':10,'Dez':11};
+  // Format: "15. Aug. 2026, 07:01 Uhr"
+  const m = /^(\d{1,2})\.\s*([^\s.]+)\.?\s*(\d{4}),\s*(\d{1,2}):(\d{2})/.exec(SNAP_DATE || '');
+  let stunden = null;
+  if(m && MON[m[2]] !== undefined){
+    const d = new Date(+m[3], MON[m[2]], +m[1], +m[4], +m[5]);
+    stunden = (Date.now() - d.getTime()) / 36e5;
+  }
+  const status = (typeof SNAP_STATUS !== 'undefined') ? SNAP_STATUS : 'neu';
+
+  if(stunden !== null && stunden > 30){
+    const tage = Math.floor(stunden / 24);
+    el.dataset.art = 'ausfall';
+    el.textContent = 'Die automatische Aktualisierung ist ausgefallen — die Liste '
+      + 'stammt vom ' + SNAP_DATE.replace(/,.*/, '') + (tage >= 1 ? ' (vor ' + tage + ' Tag' + (tage>1?'en':'') + ')' : '')
+      + '. Ursache ist eine technische Störung, nicht fehlende Studien.';
+    el.hidden = false;
+  } else if(status === 'unveraendert'){
+    el.dataset.art = 'unveraendert';
+    el.textContent = 'Der heutige Abgleich lief planmäßig, PubMed hat aber keine '
+      + 'neuen passenden Studien geliefert. Die Liste ist deshalb unverändert.';
+    el.hidden = false;
+  }
+})();
+const studiesList = document.getElementById('studiesList');
+STUDIES.forEach(s=>{
+  const art = document.createElement('article');
+  art.className = 'study';
+  const url = 'https://pubmed.ncbi.nlm.nih.gov/' + s.pmid + '/';
+  art.innerHTML =
+    '<div class="study-top"><span class="study-journal">'+s.journal+'</span>'+
+    // Publikationsdatum, sofern PubMed eines kennt - sonst das Jahr.
+    '<span class="study-year">'+(s.pubdate || s.year)+'</span></div>'+
+    '<a class="study-title" href="'+url+'" target="_blank" rel="noopener">'+s.title+'</a>'+
+    (s.author ? '<div class="study-author">'+s.author+'</div>' : '')+
+    // Das Aufnahmedatum erklaert, warum aeltere Publikationsdaten in einer
+    // taeglichen Liste auftauchen: Ausgewaehlt wird nach dem Tag, an dem
+    // PubMed den Eintrag aufnimmt - der liegt oft Wochen nach dem Erscheinen.
+    (s.added && s.added !== s.pubdate
+       ? '<div class="study-added">in PubMed seit '+s.added+'</div>' : '')+
+    '<p class="study-sum">'+s.sum+'</p>'+
+    '<div class="study-result"><span class="rlabel">Ergebnis</span>'+s.result+'</div>'+
+    (s.transfer ? '<div class="study-transfer"><span class="tlabel">Übertragbarkeit</span>'+s.transfer+'</div>' : '')+
+    '<a class="study-src" href="'+url+'" target="_blank" rel="noopener">PubMed · PMID '+s.pmid+' ↗</a>';
+  studiesList.appendChild(art);
+});
+
+// ---- Download der Studienlisten (Word / Excel) ----
+// Bewusst ohne Fremdbibliothek: Word oeffnet HTML mit der Endung .doc,
+// Excel oeffnet CSV mit Semikolon und UTF-8-BOM. Die Seite bleibt eigenstaendig.
+
+// Die Texte liegen HTML-maskiert vor (z. B. "p &lt; 0,001"), weil sie per innerHTML
+// eingesetzt werden. Fuer Dateien muss das zurueckverwandelt werden.
+function alsKlartext(v){
+  const t = document.createElement('textarea');
+  t.innerHTML = (v == null ? '' : String(v));
+  return t.value;
+}
+function pubmedUrl(pmid){ return 'https://pubmed.ncbi.nlm.nih.gov/' + pmid + '/'; }
+function htmlEsc(v){
+  return alsKlartext(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function dateiStempel(){
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+function speichern(dateiname, inhalt, mime){
+  const url = URL.createObjectURL(new Blob([inhalt], {type: mime}));
+  const a = document.createElement('a');
+  a.href = url; a.download = dateiname; a.style.display = 'none';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+
+// Das Logo fuer den Word-Kopf. Ein relativer Pfad wuerde in einer verschickten
+// Datei ins Leere laufen, deshalb wird das Bild als data:-URI eingebettet -
+// ueber die Leinwand, weil das Logo je nach Fassung als Datei oder bereits als
+// data:-URI vorliegt.
+function logoDataUri(){
+  const img = document.querySelector('.brand-link img');
+  if(!img || !img.complete || !img.naturalWidth) return '';
+  if(img.src.startsWith('data:')) return img.src;
+  try{
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    c.getContext('2d').drawImage(img, 0, 0);
+    return c.toDataURL('image/png');
+  }catch(e){ return ''; }   // z. B. wenn die Leinwand als fremd gilt
+}
+
+const DL_KOPFTEXT = 'Ein Service des Knowledge-Hubs Hitze, Klima & Gesundheit von Monitor Versorgungsforschung. '
+  + 'Täglich automatisiert KI-kuratiert aus PubMed und auf Deutsch übersetzt.';
+
+function baueCSV(liste, mitDatum){
+  const feld = v => '"' + alsKlartext(v).replace(/"/g,'""') + '"';
+  const kopf = (mitDatum ? ['Aufgenommen am'] : [])
+    .concat(['Autor','Publiziert am','In PubMed seit','Journal','Jahr','Titel','Fragestellung','Ergebnis','Übertragbarkeit','PMID','PubMed-Link']);
+  // Eine Tabelle kann kein Logo aufnehmen - deshalb nur der Kopftext, gefolgt
+  // von einer Leerzeile, damit die Spaltenueberschriften klar abgesetzt sind.
+  const zeilen = [feld(DL_KOPFTEXT), '', kopf.map(feld).join(';')];
+  liste.forEach(s=>{
+    zeilen.push((mitDatum ? [s.aufgenommen || ''] : [])
+      .concat([s.author || '', s.pubdate || '', s.added || '', s.journal, s.year, s.title, s.sum, s.result, s.transfer || '', s.pmid, pubmedUrl(s.pmid)])
+      .map(feld).join(';'));
+  });
+  // Das BOM explizit als Escape-Sequenz: als wortwoertliches Zeichen ginge es
+  // beim Speichern unsichtbar verloren. Ohne BOM zeigt deutsches Excel Umlaute falsch.
+  return '\uFEFF' + zeilen.join('\r\n');
+}
+
+function baueDoc(titel, untertitel, liste, mitDatum){
+  const logo = logoDataUri();
+  const eintraege = liste.map(s =>
+      '<h2 style="font-size:13pt;margin:16pt 0 2pt">' + htmlEsc(s.title) + '</h2>'
+    + '<p style="margin:0 0 5pt;color:#555">'
+    + (s.author ? htmlEsc(s.author) + ' &middot; ' : '')
+    + '<i>' + htmlEsc(s.journal) + '</i> &middot; ' + htmlEsc(s.pubdate || s.year)
+    + (s.added && s.added !== s.pubdate ? ' (in PubMed seit ' + htmlEsc(s.added) + ')' : '')
+    + (mitDatum && s.aufgenommen ? ' &middot; aufgenommen am ' + htmlEsc(s.aufgenommen) : '') + '</p>'
+    + '<p style="margin:0 0 5pt">' + htmlEsc(s.sum) + '</p>'
+    + '<p style="margin:0 0 5pt"><b>Ergebnis:</b> ' + htmlEsc(s.result) + '</p>'
+    + (s.transfer ? '<p style="margin:0 0 5pt;color:#555"><b>Übertragbarkeit:</b> ' + htmlEsc(s.transfer) + '</p>' : '')
+    + '<p style="margin:0 0 12pt;font-size:9pt">PMID ' + htmlEsc(s.pmid) + ' &ndash; '
+    + '<a href="' + pubmedUrl(s.pmid) + '">' + pubmedUrl(s.pmid) + '</a></p>'
+  ).join('');
+  return '<html xmlns:o="urn:schemas-microsoft-com:office:office" '
+    + 'xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+    + '<head><meta charset="utf-8"><title>' + htmlEsc(titel) + '</title></head>'
+    + '<body style="font-family:Lato,Calibri,Arial,sans-serif;font-size:11pt">'
+    + (logo ? '<p style="margin:0 0 6pt"><img src="' + logo + '" width="170" height="45" '
+              + 'alt="Monitor Versorgungsforschung"></p>' : '')
+    + '<p style="margin:0 0 14pt;padding-bottom:8pt;border-bottom:1pt solid #C0A060;'
+              + 'font-size:9.5pt;color:#0051A1">' + htmlEsc(DL_KOPFTEXT) + '</p>'
+    + '<h1 style="font-size:16pt;margin:0 0 3pt;color:#0051A1">' + htmlEsc(titel) + '</h1>'
+    + '<p style="margin:0 0 16pt;color:#555">' + htmlEsc(untertitel) + '</p>'
+    + eintraege
+    + '<p style="margin-top:20pt;font-size:8.5pt;color:#777">Quelle: Knowledge-Hub '
+    + 'Hitze, Klima &amp; Gesundheit, klima.m-vf.de &ndash; ein Angebot von Monitor Versorgungsforschung. '
+    + 'Studiendaten aus PubMed (U.S. National Library of Medicine).</p></body></html>';
+}
+
+const DOC_MIME = 'application/msword';
+const CSV_MIME = 'text/csv;charset=utf-8';
+
+document.getElementById('dlAktuellDoc').addEventListener('click', ()=>{
+  speichern('MVF-Klima-Hub_Neueste-Studien_'+dateiStempel()+'.doc',
+    baueDoc('Neu in PubMed — Studien zu Hitze, Klima & Gesundheit', 'Stand: '+alsKlartext(SNAP_DATE), STUDIES, false), DOC_MIME);
+});
+document.getElementById('dlAktuellCsv').addEventListener('click', ()=>{
+  speichern('MVF-Klima-Hub_Neueste-Studien_'+dateiStempel()+'.csv',
+    baueCSV(STUDIES, false), CSV_MIME);
+});
+
+// ---- Ordner „Ältere Suchergebnisse" ----
+// Standardmaessig aufgeklappt. Das Archiv liegt in einer eigenen Datei, damit
+// index.html nicht mit jedem Tag weiterwaechst; geladen wird es einmal pro Aufruf.
+const archiveEl = document.getElementById('archive');
+const archiveBody = document.getElementById('archiveBody');
+const archiveSummary = document.getElementById('archiveSummary');
+let archivGeladen = false;
+let archivListe = [];   // gefilterte Liste fuer den Download
+
+const MONATE = ['Jan.','Feb.','März','Apr.','Mai','Juni','Juli','Aug.','Sept.','Okt.','Nov.','Dez.'];
+function datumLang(iso){
+  const p = iso.split('-');
+  return parseInt(p[2],10)+'. '+MONATE[parseInt(p[1],10)-1]+' '+p[0];
+}
+
+function ladeArchiv(){
+  if(archivGeladen) return;
+  archivGeladen = true;
+  fetch('studien-archiv.json', {cache:'no-cache'})
+    .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(alle=>{
+      const aktuell = new Set(STUDIES.map(s=>s.pmid));
+      const aeltere = alle.filter(e=>!aktuell.has(e.pmid));
+      if(!aeltere.length){
+        archiveBody.innerHTML = '<p class="arch-status">Noch keine älteren Ergebnisse — '
+          + 'das Archiv füllt sich mit jeder Aktualisierung.</p>';
+        return;
+      }
+      const tage = {};
+      aeltere.forEach(e=>{ (tage[e.aufgenommen] = tage[e.aufgenommen] || []).push(e); });
+      archiveBody.innerHTML = Object.keys(tage).sort().reverse().map(tag=>{
+        const items = tage[tag].map(e=>{
+          const url = 'https://pubmed.ncbi.nlm.nih.gov/'+e.pmid+'/';
+          return '<div class="arch-item">'
+               + '<div class="arch-top"><span class="arch-journal">'+e.journal+'</span>'
+               + '<span class="arch-year">'+e.year+'</span></div>'
+               + '<a class="arch-title" href="'+url+'" target="_blank" rel="noopener">'+e.title+'</a>'
+               + '<p class="arch-result">'+e.result+'</p></div>';
+        }).join('');
+        return '<div class="arch-day"><div class="arch-date">'+datumLang(tag)
+             + ' · '+tage[tag].length+' Studien</div>'+items+'</div>';
+      }).join('');
+      archiveSummary.textContent = 'Ältere Suchergebnisse ('+aeltere.length+')';
+      archivListe = aeltere;
+      document.getElementById('dlArchivDoc').disabled = false;
+      document.getElementById('dlArchivCsv').disabled = false;
+    })
+    .catch(()=>{
+      archivGeladen = false;   // beim naechsten Aufklappen erneut versuchen
+      archiveBody.innerHTML = '<p class="arch-status">Archiv konnte nicht geladen werden. '
+        + 'Bitte später erneut versuchen.</p>';
+    });
+}
+
+// Beim Laden holen (der Ordner ist offen); zusaetzlich beim Aufklappen,
+// falls er zuvor geschlossen wurde oder der erste Versuch fehlschlug.
+archiveEl.addEventListener('toggle', ()=>{ if(archiveEl.open) ladeArchiv(); });
+if(archiveEl.open) ladeArchiv();
+
+document.getElementById('dlArchivDoc').addEventListener('click', ()=>{
+  if(!archivListe.length) return;
+  speichern('MVF-Klima-Hub_Aeltere-Suchergebnisse_'+dateiStempel()+'.doc',
+    baueDoc('Ältere Suchergebnisse', archivListe.length+' Studien, nach Aufnahmetag sortiert',
+            archivListe, true), DOC_MIME);
+});
+document.getElementById('dlArchivCsv').addEventListener('click', ()=>{
+  if(!archivListe.length) return;
+  speichern('MVF-Klima-Hub_Aeltere-Suchergebnisse_'+dateiStempel()+'.csv',
+    baueCSV(archivListe, true), CSV_MIME);
+});
+
+// ---- Suchglossar: deutsche Fachbegriffe -> der Ausdruck, unter dem
+// internationale Datenbanken sie fuehren. Redaktionell gepflegt, kein
+// Uebersetzungsdienst: kein Fremdzugriff, kein Schluessel, korrigierbar.
+const GLOSSAR = [{"de":"Hitze","en":"heat"},{"de":"Hitzewelle","en":"heat wave"},{"de":"Hitzeperiode","en":"heat wave"},{"de":"Hitzetag","en":"hot day"},{"de":"Tropennacht","en":"tropical night"},{"de":"Extremhitze","en":"extreme heat"},{"de":"Hitzestress","en":"heat stress"},{"de":"Hitzebelastung","en":"heat exposure"},{"de":"Hitzeerschöpfung","en":"heat exhaustion"},{"de":"Hitzschlag","en":"heat stroke"},{"de":"Sonnenstich","en":"sunstroke"},{"de":"Dehydratation","en":"dehydration"},{"de":"Austrocknung","en":"dehydration"},{"de":"Elektrolytstörung","en":"electrolyte imbalance"},{"de":"Hitzekrampf","en":"heat cramps"},{"de":"gefühlte Temperatur","en":"perceived temperature"},{"de":"Wärmebelastung","en":"thermal stress"},{"de":"thermischer Komfort","en":"thermal comfort"},{"de":"Kältewelle","en":"cold spell"},{"de":"Kältebelastung","en":"cold exposure"},{"de":"Temperaturextreme","en":"temperature extremes"},{"de":"Übersterblichkeit","en":"excess mortality"},{"de":"hitzebedingte Sterblichkeit","en":"heat-related mortality"},{"de":"hitzebedingte Erkrankung","en":"heat-related illness"},{"de":"Hitzemortalität","en":"heat mortality"},{"de":"Sterblichkeit","en":"mortality"},{"de":"Krankenhauseinweisung","en":"hospital admission"},{"de":"Notaufnahme","en":"emergency department"},{"de":"Rettungsdiensteinsatz","en":"emergency medical services"},{"de":"Krankheitslast","en":"burden of disease"},{"de":"Expositions-Wirkungs-Beziehung","en":"exposure-response relationship"},{"de":"Schwellenwert","en":"threshold temperature"},{"de":"zurechenbare Todesfälle","en":"attributable deaths"},{"de":"Klimawandel","en":"climate change"},{"de":"Erderwärmung","en":"global warming"},{"de":"Klimakrise","en":"climate crisis"},{"de":"Klimaschutz","en":"climate change mitigation"},{"de":"Klimaanpassung","en":"climate change adaptation"},{"de":"Anpassungsstrategie","en":"adaptation strategy"},{"de":"Klimaresilienz","en":"climate resilience"},{"de":"Vulnerabilität","en":"vulnerability"},{"de":"Risikogruppe","en":"vulnerable population"},{"de":"Klimaszenario","en":"climate scenario"},{"de":"Klimaprojektion","en":"climate projection"},{"de":"Klimamodell","en":"climate model"},{"de":"Attributionsforschung","en":"extreme event attribution"},{"de":"Treibhausgas","en":"greenhouse gas"},{"de":"Kohlendioxid","en":"carbon dioxide"},{"de":"CO2-Fußabdruck","en":"carbon footprint"},{"de":"Emissionen","en":"emissions"},{"de":"Dekarbonisierung","en":"decarbonization"},{"de":"Klimaneutralität","en":"carbon neutrality"},{"de":"planetare Gesundheit","en":"planetary health"},{"de":"Eine Gesundheit","en":"One Health"},{"de":"Umweltgerechtigkeit","en":"environmental justice"},{"de":"Klimagerechtigkeit","en":"climate justice"},{"de":"Hitzeaktionsplan","en":"heat health action plan"},{"de":"Hitzewarnsystem","en":"heat health warning system"},{"de":"Hitzewarnung","en":"heat warning"},{"de":"Frühwarnsystem","en":"early warning system"},{"de":"Hitzeschutz","en":"heat protection"},{"de":"Hitzeschutzplan","en":"heat protection plan"},{"de":"Katastrophenvorsorge","en":"disaster risk reduction"},{"de":"Notfallplanung","en":"emergency preparedness"},{"de":"Kühlraum","en":"cooling centre"},{"de":"Trinkbrunnen","en":"drinking water fountain"},{"de":"Verschattung","en":"shading"},{"de":"Klimatisierung","en":"air conditioning"},{"de":"Gebäudekühlung","en":"building cooling"},{"de":"Wärmeinsel","en":"urban heat island"},{"de":"städtische Wärmeinsel","en":"urban heat island"},{"de":"Stadtklima","en":"urban climate"},{"de":"Stadtbegrünung","en":"urban greening"},{"de":"Grünfläche","en":"green space"},{"de":"Baumbestand","en":"urban tree canopy"},{"de":"Entsiegelung","en":"desealing"},{"de":"Schwammstadt","en":"sponge city"},{"de":"blaue Infrastruktur","en":"blue infrastructure"},{"de":"grüne Infrastruktur","en":"green infrastructure"},{"de":"Flächennutzung","en":"land use"},{"de":"Stadtplanung","en":"urban planning"},{"de":"Quartier","en":"neighbourhood"},{"de":"Luftqualität","en":"air quality"},{"de":"Luftverschmutzung","en":"air pollution"},{"de":"Feinstaub","en":"particulate matter"},{"de":"Stickstoffdioxid","en":"nitrogen dioxide"},{"de":"bodennahes Ozon","en":"ground-level ozone"},{"de":"Ozon","en":"ozone"},{"de":"Waldbrandrauch","en":"wildfire smoke"},{"de":"Schadstoffbelastung","en":"pollutant exposure"},{"de":"Innenraumluft","en":"indoor air quality"},{"de":"Lärm","en":"noise pollution"},{"de":"UV-Strahlung","en":"ultraviolet radiation"},{"de":"Sonnenschutz","en":"sun protection"},{"de":"Hautkrebs","en":"skin cancer"},{"de":"Pollenflug","en":"pollen exposure"},{"de":"Pollensaison","en":"pollen season"},{"de":"Allergie","en":"allergy"},{"de":"Heuschnupfen","en":"allergic rhinitis"},{"de":"Asthma","en":"asthma"},{"de":"Ambrosia","en":"ragweed"},{"de":"Neophyten","en":"invasive plant species"},{"de":"Extremwetter","en":"extreme weather"},{"de":"Dürre","en":"drought"},{"de":"Starkregen","en":"heavy precipitation"},{"de":"Überschwemmung","en":"flood"},{"de":"Hochwasser","en":"flooding"},{"de":"Sturm","en":"storm"},{"de":"Waldbrand","en":"wildfire"},{"de":"Naturkatastrophe","en":"natural disaster"},{"de":"Meeresspiegelanstieg","en":"sea level rise"},{"de":"vektorübertragene Krankheit","en":"vector-borne disease"},{"de":"Überträger","en":"disease vector"},{"de":"Stechmücke","en":"mosquito"},{"de":"Tigermücke","en":"Aedes albopictus"},{"de":"Zecke","en":"tick"},{"de":"Borreliose","en":"Lyme disease"},{"de":"FSME","en":"tick-borne encephalitis"},{"de":"Denguefieber","en":"dengue"},{"de":"West-Nil-Virus","en":"West Nile virus"},{"de":"Malaria","en":"malaria"},{"de":"Leishmaniose","en":"leishmaniasis"},{"de":"Hantavirus","en":"hantavirus"},{"de":"Zoonose","en":"zoonosis"},{"de":"Infektionskrankheit","en":"communicable disease"},{"de":"Ausbruch","en":"disease outbreak"},{"de":"Surveillance","en":"public health surveillance"},{"de":"Vibrionen","en":"Vibrio"},{"de":"Badegewässer","en":"bathing water"},{"de":"Trinkwasserqualität","en":"drinking water quality"},{"de":"Lebensmittelsicherheit","en":"food safety"},{"de":"Ernährungssicherheit","en":"food security"},{"de":"Mangelernährung","en":"malnutrition"},{"de":"Landwirtschaft","en":"agriculture"},{"de":"Ernteausfall","en":"crop failure"},{"de":"Herz-Kreislauf-Erkrankung","en":"cardiovascular disease"},{"de":"Herzinsuffizienz","en":"heart failure"},{"de":"Herzinfarkt","en":"myocardial infarction"},{"de":"Schlaganfall","en":"stroke"},{"de":"Bluthochdruck","en":"hypertension"},{"de":"Atemwegserkrankung","en":"respiratory disease"},{"de":"COPD","en":"chronic obstructive pulmonary disease"},{"de":"Nierenerkrankung","en":"kidney disease"},{"de":"akutes Nierenversagen","en":"acute kidney injury"},{"de":"Diabetes","en":"diabetes mellitus"},{"de":"Demenz","en":"dementia"},{"de":"Frühgeburt","en":"preterm birth"},{"de":"Schwangerschaft","en":"pregnancy"},{"de":"Geburtsgewicht","en":"birth weight"},{"de":"Schlafqualität","en":"sleep quality"},{"de":"psychische Gesundheit","en":"mental health"},{"de":"Klimaangst","en":"climate anxiety"},{"de":"Depression","en":"depression"},{"de":"Suizid","en":"suicide"},{"de":"Aggression","en":"aggression"},{"de":"Medikamentenwirkung","en":"drug effects"},{"de":"Arzneimittelsicherheit","en":"medication safety"},{"de":"Diuretika","en":"diuretics"},{"de":"Polypharmazie","en":"polypharmacy"},{"de":"Arzneimittellagerung","en":"drug storage"},{"de":"ältere Menschen","en":"aged"},{"de":"Hochbetagte","en":"oldest old"},{"de":"Pflegeheim","en":"nursing home"},{"de":"Pflegebedürftigkeit","en":"need for long-term care"},{"de":"Säuglinge","en":"infants"},{"de":"Kinder","en":"child"},{"de":"Schwangere","en":"pregnant women"},{"de":"Obdachlosigkeit","en":"homelessness"},{"de":"Wohnungslose","en":"homeless persons"},{"de":"Armut","en":"poverty"},{"de":"soziale Ungleichheit","en":"health inequalities"},{"de":"sozioökonomischer Status","en":"socioeconomic status"},{"de":"Einsamkeit","en":"loneliness"},{"de":"chronische Erkrankung","en":"chronic disease"},{"de":"Multimorbidität","en":"multimorbidity"},{"de":"Beschäftigte im Freien","en":"outdoor workers"},{"de":"Arbeitsschutz","en":"occupational safety"},{"de":"Arbeitsmedizin","en":"occupational health"},{"de":"Arbeitsproduktivität","en":"work productivity"},{"de":"Bauarbeiter","en":"construction workers"},{"de":"Landarbeiter","en":"agricultural workers"},{"de":"Arbeitsunfall","en":"occupational injury"},{"de":"Sportler","en":"athletes"},{"de":"Migration","en":"migration"},{"de":"Klimaflucht","en":"climate migration"},{"de":"Vertreibung","en":"displacement"},{"de":"öffentlicher Gesundheitsdienst","en":"public health services"},{"de":"Gesundheitsamt","en":"local health authority"},{"de":"Kommune","en":"municipality"},{"de":"Krankenhaus","en":"hospital"},{"de":"Arztpraxis","en":"medical practice"},{"de":"Hausarzt","en":"general practitioner"},{"de":"Apotheke","en":"pharmacy"},{"de":"Pflegekraft","en":"nurse"},{"de":"Gesundheitspersonal","en":"health personnel"},{"de":"Gesundheitssystem","en":"health system"},{"de":"Gesundheitswesen","en":"health care sector"},{"de":"Klimafolgen des Gesundheitswesens","en":"health care carbon footprint"},{"de":"nachhaltiges Krankenhaus","en":"sustainable hospital"},{"de":"Versorgungsforschung","en":"health services research"},{"de":"Gesundheitspolitik","en":"health policy"},{"de":"Prävention","en":"prevention"},{"de":"Gesundheitsförderung","en":"health promotion"},{"de":"Gesundheitskompetenz","en":"health literacy"},{"de":"Risikokommunikation","en":"risk communication"},{"de":"Aufklärungskampagne","en":"public awareness campaign"},{"de":"Verhaltensänderung","en":"behaviour change"},{"de":"Kosteneffektivität","en":"cost-effectiveness"},{"de":"Gesundheitsausgaben","en":"health expenditure"},{"de":"Zusatznutzen","en":"co-benefits"},{"de":"aktive Mobilität","en":"active travel"},{"de":"Radverkehr","en":"cycling"},{"de":"Fußverkehr","en":"walking"},{"de":"Ernährungswende","en":"dietary transition"},{"de":"pflanzliche Ernährung","en":"plant-based diet"},{"de":"Epidemiologie","en":"epidemiology"},{"de":"Zeitreihenanalyse","en":"time series analysis"},{"de":"Fall-Crossover-Studie","en":"case-crossover study"},{"de":"Kohortenstudie","en":"cohort study"},{"de":"Querschnittstudie","en":"cross-sectional study"},{"de":"Beobachtungsstudie","en":"observational study"},{"de":"Modellierung","en":"modelling"},{"de":"Risikoabschätzung","en":"risk assessment"},{"de":"Gesundheitsfolgenabschätzung","en":"health impact assessment"},{"de":"systematische Übersichtsarbeit","en":"systematic review"},{"de":"Metaanalyse","en":"meta-analysis"},{"de":"Scoping Review","en":"scoping review"},{"de":"Fernerkundung","en":"remote sensing"},{"de":"Satellitendaten","en":"satellite data"},{"de":"Geoinformationssystem","en":"geographic information system"},{"de":"Routinedaten","en":"claims data"},{"de":"Sekundärdaten","en":"secondary data analysis"},{"de":"Register","en":"registry"},{"de":"Monitoring","en":"monitoring"},{"de":"Indikator","en":"indicator"},{"de":"Messstation","en":"monitoring station"},{"de":"Reanalyse","en":"reanalysis"}];
+
+document.getElementById('cntGlossar').textContent = GLOSSAR.length;
+
+// Sprungziele Impressum/Datenschutz: Die Texte stecken in <details>. Wird eines
+// direkt angesprungen, muss es aufklappen - sonst landet man auf einer
+// geschlossenen Ueberschrift und haelt den Link fuer kaputt.
+function oeffneZiel(){
+  const id = location.hash.replace('#','');
+  if(!id) return;
+  const el = document.getElementById(id);
+  if(el && el.tagName === 'DETAILS'){
+    el.open = true;
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+window.addEventListener('hashchange', oeffneZiel);
+oeffneZiel();
+
+// ---- Suche ---------------------------------------------------------------
+// Grundsatz: Es passiert nichts, bevor der Nutzer absendet. Frueher schrieb
+// die Seite die Links schon beim Tippen um - unsichtbar, ohne Rueckmeldung.
+// Jetzt gilt das Muster gaengiger Suchmaschinen: eingeben, Enter, Ergebnis.
+const input     = document.getElementById('q');
+const goBtn     = document.getElementById('go');
+const resultBar = document.getElementById('resultBar');
+const boolHint  = document.getElementById('boolHint');
+let   gesucht   = '';        // zuletzt abgeschickter Begriff
+
+const OPERATOR = /(^|\s)(AND|OR|NOT)(\s|$)/;
+
+function basisUrl(tpl){
+  return tpl.split('?')[0].split('/%s')[0];
+}
+
+// Laengste Begriffe zuerst - sonst zerfaellt "integrierte Versorgung" in
+// "Versorgung" und der Rest bleibt deutsch stehen.
+const GLOSSAR_LANG = GLOSSAR.slice().sort((a,b)=>b.de.length - a.de.length);
+
+// Alle Woerter, die in der englischen Spalte vorkommen. Wer 'primary care'
+// oder 'diabetes' eingibt, sucht bereits international - dann ist eine
+// fehlende Uebersetzung kein Mangel und es braucht keinen Hinweis.
+const EN_WOERTER = new Set(GLOSSAR.flatMap(g=>g.en.toLowerCase().split(/\s+/)));
+function wirktEnglisch(t){
+  const w = t.toLowerCase().split(/[\s,;]+/).filter(Boolean);
+  return w.length > 0 && w.every(x=>EN_WOERTER.has(x));
+}
+
+// Deutsche Fachbegriffe durch den international ueblichen Ausdruck ersetzen.
+// Wortweise, damit auch "Primaerversorgung Diabetes" funktioniert.
+function uebersetze(term){
+  let text = term;
+  const treffer = [];
+  GLOSSAR_LANG.forEach(g=>{
+    // Sonderzeichen im Begriff maskieren, damit z. B. ein Punkt nicht als
+    // "beliebiges Zeichen" wirkt. Wortgrenzen ueber Leerzeichen und Komma
+    // statt \b: \b trennt bei Umlauten und Bindestrichen falsch.
+    const roh = g.de.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const muster = new RegExp('(^|[\\s,;])(' + roh + ')(?=[\\s,;]|$)', 'gi');
+    if(muster.test(text)){
+      text = text.replace(muster, (_m, vor)=> vor + g.en);
+      treffer.push(g);
+    }
+  });
+  return { text, treffer, geaendert: text.toLowerCase() !== term.toLowerCase() };
+}
+
+// Eine deutschsprachige Datenbank bekommt den deutschen Begriff. Das sind die
+// Rubrik 01 und einzeln gekennzeichnete Kataloge (subito, K10plus, DRKS ...).
+function istDeutsch(x){ return x.c === 'deutsch' || x.de === 1; }
+
+let uebersetzung = null;   // Ergebnis von uebersetze() zur zuletzt gesendeten Suche
+
+// Links einstellen - deutsche Datenbanken deutsch, internationale uebersetzt.
+function verdrahte(term){
+  const deutschEnc = encodeURIComponent(term);
+  const intText = (uebersetzung && uebersetzung.geaendert) ? uebersetzung.text : term;
+  const intEnc  = encodeURIComponent(intText);
+  cardIndex.forEach(c=>{
+    const enc = istDeutsch(c.eintrag) ? deutschEnc : intEnc;
+    c.el.href = (c.type === 'live' && term) ? c.tpl.replace('%s', enc)
+              : (c.type === 'live')         ? basisUrl(c.tpl)
+              :                               c.tpl;
+  });
+}
+
+// Die Ergebniszeile getrennt vom Springen: Beim Filtern sollen sich die
+// Zahlen aktualisieren, die Ansicht aber stehen bleiben - sonst rutscht die
+// Seite bei jedem Filterklick weg, und man kann keine zwei Filter setzen.
+function zeigeErgebnis(){
+  if(!gesucht) return;
+  const sichtbar = cardIndex.filter(c=>!c.el.classList.contains('aus'));
+  const live     = sichtbar.filter(c=>c.type==='live').length;
+  const portale  = sichtbar.filter(c=>c.type==='portal').length;
+  const lizenz   = sichtbar.filter(c=>c.type==='lic').length;
+
+  resultBar.innerHTML =
+    '<b>&bdquo;' + htmlEsc(gesucht) + '&ldquo;</b> ist in <b>' + live + '</b> Datenbanken vorbereitet &mdash; '
+    + 'ein Klick &ouml;ffnet die Trefferliste in einem neuen Tab.'
+    + '<span class="rb-zusatz">Dazu ' + portale + ' Portale, in denen der Begriff nach dem &Ouml;ffnen '
+    + 'einzugeben ist, und ' + lizenz + ' Datenbanken mit Lizenzpflicht.</span>'
+    + ((uebersetzung && uebersetzung.geaendert)
+        ? '<span class="rb-uebersetzung">In internationalen Datenbanken wird gesucht als '
+          + '<b>' + htmlEsc(uebersetzung.text) + '</b> &mdash; deutschsprachige Datenbanken '
+          + 'behalten Ihren Begriff.</span>'
+        : (uebersetzung && !wirktEnglisch(gesucht))
+        ? '<span class="rb-fehlt">F&uuml;r <b>&bdquo;' + htmlEsc(gesucht) + '&ldquo;</b> ist keine '
+          + '&Uuml;bersetzung hinterlegt &mdash; internationale Datenbanken suchen den deutschen '
+          + 'Begriff und finden damit vermutlich wenig. '
+          + '<a href="' + vorschlagLink(gesucht) + '">Begriff vorschlagen</a></span>'
+        : '');
+  resultBar.hidden = false;
+}
+
+// Die Falle, in die ein Betatester lief: Begriff eingetippt, nicht abgesendet,
+// dann auf eine Kachel geklickt - und die Datenbank oeffnete ihre Startseite,
+// wo er den Begriff ein zweites Mal eingeben musste. Aus seiner Sicht zu
+// Recht unverstaendlich. Ein Klick auf eine Kachel holt das Absenden deshalb
+// jetzt selbst nach: Der Zugriff erfolgt in der Erfassungsphase, also bevor
+// der Browser dem Link folgt - die Adresse steht dann schon richtig.
+document.addEventListener('click', (e)=>{
+  const link = e.target.closest('.card');
+  if(!link) return;
+  const term = input.value.trim();
+  if(!term || term === gesucht) return;      // nichts Neues einzustellen
+  gesucht = term;
+  uebersetzung = document.getElementById('uebersetzenAn').checked ? uebersetze(term) : null;
+  verdrahte(term);
+  document.body.classList.add('gesucht');
+  zeigeErgebnis();
+  aktualisiereChips(term);
+}, true);
+
+function suchen(){
+  const term = input.value.trim();
+  if(!term){ input.focus(); return; }
+  gesucht = term;
+  uebersetzung = document.getElementById('uebersetzenAn').checked ? uebersetze(term) : null;
+  verdrahte(term);
+  document.body.classList.add('gesucht');
+  zeigeErgebnis();
+  aktualisiereChips(term);
+
+  // Nur beim Absenden hinunterspringen - nicht bei jeder Filteraenderung.
+  const ziel = document.querySelector('.cat:not(.aus)');
+  if(ziel) ziel.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Vorbereitete E-Mail an die Redaktion. Bewusst ohne Server und ohne Messung:
+// Wer den Begriff vermisst, meldet ihn selbst - so entsteht die Sammlung der
+// wirklich gesuchten Begriffe, ohne dass jemand beobachtet wird.
+function vorschlagLink(begriff){
+  const betreff = 'Knowledge-Hub: Begriff fürs Suchglossar';
+  const U = String.fromCharCode(10);   // Zeilenumbruch, ohne Escape-Fallen
+  const text = 'Guten Tag,' + U + U
+    + 'bitte ergänzen Sie folgenden Begriff im Suchglossar des Knowledge-Hubs:' + U + U
+    + 'Deutsch:  ' + begriff + U
+    + 'Englisch: ' + U + U
+    + '(Falls Ihnen der englische Fachbegriff bekannt ist, gern eintragen.)' + U + U
+    + 'Mit freundlichen Grüßen' + U;
+  return 'mailto:info@m-vf.de?subject=' + encodeURIComponent(betreff)
+       + '&body=' + encodeURIComponent(text);
+}
+
+function zuruecksetzen(){
+  gesucht = '';
+  uebersetzung = null;
+  input.value = '';
+  verdrahte('');
+  document.body.classList.remove('gesucht');
+  resultBar.hidden = true;
+  boolHint.hidden = true;
+  aktualisiereChips('');
+  input.focus();
+}
+
+function aktualisiereChips(term){
+  document.querySelectorAll('.chip').forEach(ch=>{
+    ch.setAttribute('aria-pressed',
+      ch.dataset.term.toLowerCase() === term.toLowerCase() ? 'true' : 'false');
+  });
+}
+
+// Operatoren-Hinweis: nur wenn welche getippt werden, und mit den echten
+// Zahlen. b:1 = geprueft, wertet aus. b:0 = geprueft, wertet nicht aus.
+// Fehlendes Merkmal = ungeprueft und wird NICHT als "kann es" gezaehlt.
+function pruefeOperatoren(){
+  if(!OPERATOR.test(input.value)){ boolHint.hidden = true; return; }
+  const live  = DB.filter(x=>x.t === 'live');
+  const ja    = live.filter(x=>x.b === 1).length;
+  const nein  = live.filter(x=>x.b === 0).length;
+  const offen = live.length - ja - nein;
+  boolHint.innerHTML =
+    'Sie verwenden <b>Suchoperatoren</b>. Von ' + live.length + ' Live-Suchen werten <b>'
+    + ja + '</b> sie nachweislich aus (Zeichen <b>AND/OR &#10003;</b>), ' + nein
+    + ' nachweislich nicht (<b>AND/OR &#10007;</b>) &mdash; dort werden die W&ouml;rter '
+    + 'einfach mitgesucht. Bei ' + offen + ' ohne Zeichen ist es ungepr&uuml;ft.';
+  boolHint.hidden = false;
+}
+
+input.addEventListener('input', ()=>{
+  pruefeOperatoren();
+  goBtn.disabled = !input.value.trim();
+});
+input.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){ e.preventDefault(); suchen(); }
+});
+goBtn.addEventListener('click', suchen);
+document.getElementById('clear').addEventListener('click', zuruecksetzen);
+
+// Umschalten wirkt sofort auf die laufende Suche - Links neu einstellen und
+// Zahlen nachfuehren, aber nicht springen.
+document.getElementById('uebersetzenAn').addEventListener('change', ()=>{
+  if(!gesucht) return;
+  uebersetzung = document.getElementById('uebersetzenAn').checked ? uebersetze(gesucht) : null;
+  verdrahte(gesucht);
+  zeigeErgebnis();
+});
+
+// ---- Schnellwahl ----
+const chipsBox = document.getElementById('chips');
+CHIPS.forEach(t=>{
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'chip'; b.textContent = t; b.dataset.term = t;
+  // Ein Chip ist eine fertige Suche - er sendet direkt ab.
+  b.addEventListener('click', ()=>{ input.value = t; pruefeOperatoren(); suchen(); });
+  chipsBox.appendChild(b);
+});
+
+// ---- Filter --------------------------------------------------------------
+const FILTER = { zugang:'alle', suchart:'alle', bool:'alle', rubrik:new Set() };
+
+// Rubrik-Chips aus CATS aufbauen, damit beides nie auseinanderlaeuft.
+const rubrikBox = document.getElementById('filterRubrik');
+CATS.forEach(cat=>{
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'fchip'; b.dataset.wert = cat.id;
+  b.textContent = cat.name; b.setAttribute('aria-pressed','false');
+  rubrikBox.appendChild(b);
+});
+
+function passt(x){
+  if(FILTER.zugang === 'frei'   && x.t === 'lic') return false;
+  if(FILTER.zugang === 'lizenz' && x.t !== 'lic') return false;
+  if(FILTER.suchart === 'live'   && x.t !== 'live')   return false;
+  if(FILTER.suchart === 'portal' && x.t !== 'portal') return false;
+  if(FILTER.bool === 'ja' && x.b !== 1) return false;
+  if(FILTER.rubrik.size && !FILTER.rubrik.has(x.c)) return false;
+  return true;
+}
+
+function filtern(){
+  let sichtbar = 0;
+  cardIndex.forEach(c=>{
+    const ok = passt(c.eintrag);
+    c.el.classList.toggle('aus', !ok);
+    if(ok) sichtbar++;
+  });
+  // Rubriken ohne sichtbare Kachel ganz ausblenden - samt Sprungmarke.
+  CATS.forEach(cat=>{
+    const sek = document.getElementById(cat.id);
+    if(!sek) return;
+    const drin = cardIndex.filter(c=>c.eintrag.c === cat.id && !c.el.classList.contains('aus'));
+    sek.classList.toggle('aus', drin.length === 0);
+    const nav = document.querySelector('.jump a[href="#' + cat.id + '"]');
+    if(nav) nav.classList.toggle('aus', drin.length === 0);
+    const z = sek.querySelector('.cat-count');
+    if(z) z.textContent = drin.length + ' Datenbanken';
+  });
+
+  const aktiv = (FILTER.zugang !== 'alle') + (FILTER.suchart !== 'alle')
+              + (FILTER.bool !== 'alle') + (FILTER.rubrik.size ? 1 : 0);
+  const badge = document.getElementById('filterBadge');
+  badge.textContent = aktiv; badge.hidden = !aktiv;
+  document.getElementById('filterResetZeile').hidden = !aktiv;
+  document.getElementById('dbCount').textContent = sichtbar;
+  // Sackgasse abfangen: Vier Filter zusammen koennen alles ausblenden.
+  const leer = document.getElementById('leerHinweis');
+  if(sichtbar === 0){
+    leer.innerHTML = '<b>Keine Datenbank erf&uuml;llt alle gew&auml;hlten Filter.</b> '
+      + 'Nehmen Sie einen Filter zur&uuml;ck &mdash; oder setzen Sie unten alle zur&uuml;ck.';
+    leer.hidden = false;
+  } else {
+    leer.hidden = true;
+  }
+  zeigeErgebnis();   // nur die Zahlen nachfuehren, nicht springen
+}
+
+// Alles auf Ausgangswerte - die Suche selbst bleibt bestehen.
+document.getElementById('filterReset').addEventListener('click', ()=>{
+  FILTER.zugang = FILTER.suchart = FILTER.bool = 'alle';
+  FILTER.rubrik.clear();
+  document.querySelectorAll('.filter-group').forEach(g=>{
+    g.querySelectorAll('.fchip').forEach(b=>
+      b.setAttribute('aria-pressed', b.dataset.wert === 'alle' ? 'true' : 'false'));
+  });
+  filtern();
+});
+
+document.querySelectorAll('.filter-group').forEach(gruppe=>{
+  const name = gruppe.dataset.gruppe;
+  gruppe.addEventListener('click', e=>{
+    const b = e.target.closest('.fchip');
+    if(!b) return;
+    if(name === 'rubrik'){
+      const an = b.getAttribute('aria-pressed') === 'true';
+      b.setAttribute('aria-pressed', an ? 'false' : 'true');
+      if(an) FILTER.rubrik.delete(b.dataset.wert); else FILTER.rubrik.add(b.dataset.wert);
+    } else {
+      FILTER[name] = b.dataset.wert;
+      gruppe.querySelectorAll('.fchip').forEach(x=>
+        x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    }
+    filtern();
+  });
+});
+
+// ---- Anfangszustand: nichts ist gesucht, Links zeigen auf die Startseiten.
+verdrahte('');
+filtern();
+goBtn.disabled = !input.value.trim();
+</script>

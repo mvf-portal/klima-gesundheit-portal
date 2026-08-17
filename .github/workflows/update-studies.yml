@@ -1,0 +1,84 @@
+name: Studien-Update (täglich)
+
+# 04:00 UTC = 06:00 Uhr Berlin (Sommerzeit) bzw. 05:00 Uhr (Winterzeit).
+# GitHub führt geplante Läufe bei hoher Last mit einigen Minuten Verzögerung aus.
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:        # erlaubt manuelles Starten über die Actions-Oberfläche
+
+permissions:
+  contents: write           # GITHUB_TOKEN darf index.html zurück ins Repo pushen
+  pages: write              # erlaubt das explizite Anstoßen des Pages-Builds (letzter Schritt)
+
+concurrency:
+  group: studien-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhängigkeiten installieren
+        run: pip install --quiet "anthropic>=0.40" requests tzdata python-docx
+
+      - name: Studienliste aktualisieren
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MODEL: claude-haiku-4-5          # günstiges Modell; z. B. claude-sonnet-5 für mehr Qualität
+          # SEARCH_TERM: '...'   # optional: Standardabfrage ueberschreiben (siehe update_studies.py)
+        run: python scripts/update_studies.py
+
+      # Baut RSS-Feed (Mailchimp) und Download-Dateien aus dem Archiv.
+      # Braucht weder API-Key noch Netz – liest nur studien-archiv.json.
+      - name: Newsletter-Feed & Downloads erzeugen
+        run: python scripts/build_newsletter.py
+
+      # Legt bei Mailchimp einen ENTWURF an und schickt eine Testausgabe zur
+      # Freigabe. Verschickt wird nichts an die Leserschaft - das bleibt ein
+      # Klick von Hand. Ohne hinterlegten Schlüssel passiert schlicht nichts;
+      # ein Fehler hier darf das Studien-Update nicht scheitern lassen.
+      - name: Newsletter-Entwurf zur Freigabe anlegen
+        continue-on-error: true
+        env:
+          # Das Geheimnis heisst im Repository KNOWLEDGEHUB. Der zweite Name
+          # bleibt stehen, falls es spaeter sprechender benannt wird.
+          MAILCHIMP_API_KEY: ${{ secrets.KNOWLEDGEHUB || secrets.MAILCHIMP_API_KEY }}
+        run: python scripts/mailchimp_entwurf.py
+
+      - name: Committen & pushen (nur bei Änderung)
+        id: commit
+        env:
+          DATEIEN: index.html studien-archiv.json studien-feed.xml download
+        run: |
+          if [ -z "$(git status --porcelain $DATEIEN)" ]; then
+            echo "Keine Änderung – nichts zu committen."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name  "Klima-Portal Bot"
+          git config user.email "stegmaier@m-vf.de"
+          git add $DATEIEN
+          git commit -m "Studien-Update $(TZ=Europe/Berlin date +%d.%m.%Y)"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Pushes mit dem GITHUB_TOKEN lösen nicht zuverlässig einen Pages-Build aus.
+      # Deshalb stoßen wir ihn explizit an; schlägt das fehl, ist der Lauf trotzdem OK
+      # (der Build kommt dann über den normalen Push-Mechanismus).
+      - name: GitHub-Pages-Build anstoßen
+        if: steps.commit.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
