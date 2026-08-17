@@ -87,6 +87,12 @@ SCHEMA = {
     "properties": {
         "studies": {
             "type": "array",
+            # Die Anzahl gehoert ins Schema, nicht nur in den Prompt: Beim ersten
+            # Lauf am 17.08.2026 lieferte das Modell trotz "waehle GENAU 6" neun
+            # Studien, und die Plausibilitaetspruefung weiter unten brach den
+            # ganzen Lauf ab. Die Grenzen hier entsprechen dieser Pruefung.
+            "minItems": 5,
+            "maxItems": 7,
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -98,8 +104,9 @@ SCHEMA = {
                     "title": {"type": "string"},
                     "sum": {"type": "string"},
                     "result": {"type": "string"},
-                    # Kurze Begruendung, warum das Ergebnis auf das deutsche
-                    # Versorgungssystem uebertragbar ist - oder warum nur bedingt.
+                    # Kurze Begruendung, warum das Ergebnis auf Deutschland
+                    # uebertragbar ist - oder warum nur bedingt. Hier zaehlen
+                    # Klimazone und Versorgungsstruktur gleichermassen.
                     "transfer": {"type": "string"},
                 },
             },
