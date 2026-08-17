@@ -87,15 +87,11 @@ SCHEMA = {
     "properties": {
         "studies": {
             "type": "array",
-            # Die Obergrenze gehoert ins Schema, nicht nur in den Prompt: Beim
-            # ersten Lauf am 17.08.2026 lieferte das Modell trotz "waehle GENAU 6"
-            # neun Studien, und die Plausibilitaetspruefung weiter unten brach den
-            # ganzen Lauf ab.
-            #
-            # **Kein minItems eintragen.** Die API lehnt Werte ausser 0 und 1 ab:
-            # "For 'array' type, 'minItems' values other than 0 or 1 are not
-            # supported". Die Untergrenze prueft deshalb weiterhin Python.
-            "maxItems": 7,
+            # **Hier keine Laengenbegrenzung eintragen.** Am 17.08.2026 nacheinander
+            # ausprobiert und beide Male mit HTTP 400 abgelehnt:
+            #   minItems -> "values other than 0 or 1 are not supported"
+            #   maxItems -> "property 'maxItems' is not supported"
+            # Die Anzahl wird deshalb in pick_studies() geregelt, nicht im Schema.
             "items": {
                 "type": "object",
                 "additionalProperties": False,
@@ -359,7 +355,16 @@ def pick_studies(abstracts: str) -> list[dict]:
     )
     text = next(b.text for b in resp.content if b.type == "text")
     studies = json.loads(text)["studies"]
-    if not 5 <= len(studies) <= 7:
+    # Zu viele ist kein Grund abzubrechen: Die Auswahl ist nach Relevanz
+    # geordnet, die vorderen sechs sind brauchbar. Am 17.08.2026 lieferte das
+    # Modell trotz "waehle GENAU 6" neun Stueck - und weil das Schema keine
+    # Laengenbegrenzung zulaesst (siehe SCHEMA), wird hier gekappt.
+    if len(studies) > 7:
+        print(f"{len(studies)} Studien geliefert - auf die ersten 6 gekuerzt.")
+        studies = studies[:6]
+    # Zu wenige dagegen heisst, dass etwas grundsaetzlich schieflief - dann
+    # lieber sichtbar scheitern als eine duenne Auswahl veroeffentlichen.
+    if len(studies) < 5:
         raise RuntimeError(f"Unerwartete Studienanzahl: {len(studies)}")
     return studies
 
