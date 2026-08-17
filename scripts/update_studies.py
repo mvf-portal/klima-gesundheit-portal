@@ -143,6 +143,20 @@ Reine Klimaphysik, Emissionsbilanzen ohne Gesundheitsbezug, Tier- und
 Pflanzenoekologie gehoeren NICHT in die Auswahl, auch wenn das Wort "health"
 im Abstract vorkommt.
 
+ZWEI HARTE REGELN ZUR ZUSAMMENSETZUNG (sie gehen der thematischen Rangfolge vor):
+
+  1. MINDESTENS DREI der sechs Studien muessen Europa, Nordamerika oder eine
+     andere gemaessigte Klimazone betreffen. Liegen weniger als drei solche
+     Arbeiten vor, nimm die verbleibenden Plaetze aus dem Rest - aber schoepfe
+     die europaeischen zuerst aus, auch wenn sie thematisch nur zweitbeste sind.
+  2. HOECHSTENS ZWEI der sechs duerfen reine Luftschadstoff-Studien sein
+     (Feinstaub, Ozon, Stickoxide). Dieses Feld publiziert um ein Vielfaches
+     mehr als die Hitzeforschung und verdraengt sie sonst vollstaendig.
+
+Diese Regeln entstanden aus einem Fehlversuch: Ohne sie bestand die Auswahl aus
+Luftverschmutzung in China, Duerre in Brasilien und einer chinesischen Megastadt -
+fachlich einwandfrei, fuer eine deutsche Leserschaft aber unbrauchbar.
+
 ZWEITES AUSWAHLKRITERIUM - Übertragbarkeit auf Deutschland:
 Bei sonst gleicher Qualität hat die übertragbare Studie IMMER Vorrang vor der
 aktuelleren. Übertragbarkeit richtet sich hier nach ZWEI Achsen:
@@ -237,23 +251,28 @@ def _suche(term: str, anzahl: int) -> list[str]:
 def fetch_pubmed() -> str:
     """Zwei Abfragen statt einer, zusammengefuehrt und entdoppelt.
 
-    Die allgemeine Abfrage allein reicht nicht: Nur etwa 17 % der Neuaufnahmen
-    haben ueberhaupt Deutschlandbezug (gemessen: 35 von 209 im August). In
-    dichten Wochen - zuletzt 92 Neuaufnahmen in sieben Tagen - fielen deutsche
-    Arbeiten aus dem Fenster, bevor das Modell sie zu sehen bekam.
+    Die allgemeine Abfrage allein reicht nicht - bei diesem Thema sogar noch
+    weniger als im Schwesterportal. Klima- und Umweltgesundheit wird weltweit
+    stark aus China, Suedasien und Suedamerika publiziert; die tagesaktuellen
+    Neuaufnahmen sind entsprechend dominiert. Der erste Lauf am 17.08.2026 mit
+    einem Pool aus 40 allgemeinen und 11 europaeischen Treffern lieferte eine
+    Auswahl ganz ohne Europabezug: Huaihe-Region, Brasilien, chinesische
+    Megastadt. Fuer eine deutsche Leserschaft ist das wertlos - Temperatur-
+    schwellen und Anpassungsgrad sind dort nicht vergleichbar.
 
-    Die zweite Abfrage stellt sicher, dass sie es immer tun. Ueber Journalnamen
-    zu suchen bringt uebrigens nichts: im ganzen August genau ein Treffer.
+    Deshalb stellt die Europa-Abfrage inzwischen die MEHRHEIT des Pools und
+    steht vorn: Ein Sprachmodell gewichtet, was es zuerst liest. Ueber
+    Journalnamen zu suchen bringt uebrigens nichts: im ganzen August ein Treffer.
     """
-    allgemein = _suche(TERM, 40)
-    deutsch = _suche(TERM_DE, 15)
-    # Reihenfolge: erst die allgemein neuesten, dann alles mit Deutschlandbezug,
-    # das noch nicht dabei ist. Der Abstract-Block bleibt so nach Datum sortiert.
-    ids = allgemein + [p for p in deutsch if p not in allgemein]
+    europa = _suche(TERM_DE, 30)
+    allgemein = _suche(TERM, 25)
+    # Reihenfolge: erst Europa, dann der Rest der weltweit neuesten. Wer das
+    # umdreht, bekommt wieder eine Auswahl ohne Bezug zu hiesigen Verhaeltnissen.
+    ids = europa + [p for p in allgemein if p not in europa]
     if not ids:
         raise RuntimeError("esearch lieferte keine PMIDs")
-    print(f"{len(allgemein)} allgemein + {len(ids) - len(allgemein)} zusaetzlich "
-          f"mit Deutschlandbezug = {len(ids)} Kandidaten.")
+    print(f"{len(europa)} mit Europa-/Deutschlandbezug + {len(ids) - len(europa)} "
+          f"zusaetzlich weltweit = {len(ids)} Kandidaten.")
     r2 = _get(
         "efetch.fcgi",
         {"db": "pubmed", "id": ",".join(ids), "rettype": "abstract", "retmode": "text"},
