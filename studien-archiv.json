@@ -91,6 +91,19 @@
   "aufgenommen": "2026-08-17"
  },
  {
+  "pmid": "42572830",
+  "journal": "Global Change Biology",
+  "year": "2026",
+  "author": "Radici A et al.",
+  "pubdate": "Aug. 2026",
+  "added": "10.08.2026",
+  "transfer": "Frankreich, südliches Europa - Übertragbarkeit mit Einschränkung; höhere Temperaturschwellen als Mitteleuropa",
+  "title": "Aedes albopictus und Dengue-Transmissionsrisiko in Frankreich im 21. Jahrhundert – Klimaszenarien bis 2085",
+  "sum": "Mechanistisches Modell zu zukünftiger Verbreitung der Asiatischen Tigermücke und Dengue-Übertragungsrisiko in Frankreich unter verschiedenen Emissionsszenarien.",
+  "result": "Bis 2085: im High-Pressure-Szenario 89–96 % Frankreichs klimatisch für Ae. albopictus geeignet (außer Bergregionen); autochthone Dengue-Transmission in 71–95 % des Landes theoretisch möglich. Im Median-Szenario 49–89 % Eignung und 31–82 % Transmissionsrisiko. Ganzjährige Vektoraktivität an Mittelmeer- und Biskaya-Küsten ohne Eidiapause möglich.",
+  "aufgenommen": "2026-08-17"
+ },
+ {
   "journal": "Euro Surveill",
   "year": "2026",
   "pmid": "42565263",
@@ -156,6 +169,19 @@
   "aufgenommen": "2026-08-17"
  },
  {
+  "pmid": "42486136",
+  "journal": "Lancet Planet Health",
+  "year": "2026",
+  "author": "Leal Filho W et al.",
+  "pubdate": "22.07.2026",
+  "added": "22.07.2026",
+  "transfer": "Tropische/subtropische Länder - Methodik zur Überwachung von Vektorkrankheiten übertragbar",
+  "title": "Dengue-Übertragungsrisiko durch Klimawandel und Städtebau in Ländern mit niedrigem und mittlerem Einkommen",
+  "sum": "Rapid Review zu Auswirkungen von Temperaturanstieg und Urbanisierung auf Dengue-Transmission: 65 % der Studien zeigten positive Assoziation zwischen Temperaturanstieg und Dengue-Übertragung, Urbanisierung war in 35 % der Studien untersucht, fragmentierte Surveillance und fehlende Integration von Klimadaten in Public Health-Planung.",
+  "result": "65 % der Studien berichten positive Assoziation zwischen Temperaturanstieg und erhöhter Dengue-Transmission; Urbanisierung in 35 % der Studien als Risikofaktor dokumentiert; nur 29 % der Studien zeigen dokumentierte staatliche Reaktionen. Unzureichende Surveillance und Cross-Sector-Koordination als Haupthindernisse identifiziert.",
+  "aufgenommen": "2026-08-17"
+ },
+ {
   "journal": "Curr Probl Cardiol",
   "year": "2026",
   "pmid": "42471098",
@@ -166,6 +192,19 @@
   "sum": "Narrativer Review zur Frage, wie Hitzewellen das Herz-Kreislauf-System schädigen, welche Rolle Luftschadstoffe dabei spielen und ob sich gefährdete Personen über die Herzfrequenzvariabilität früher erkennen lassen.",
   "result": "Im Sommer 2025 wurden in 854 europäischen Städten rund 24.400 hitzebedingte Todesfälle in nur zehn Wochen geschätzt, etwa 68 % davon der menschengemachten Erwärmung zuzurechnen. Die europäische Hitzeübersterblichkeit lag 2003 bei rund 70.000 und 2022 bei 61.672 Fällen — trotz zwanzig Jahren Hitzeaktionsplänen. Hitze und Schadstoffe verstärken einander (Interaktionsindex 1,51 für kardiovaskuläre Sterblichkeit). Die Autoren werten das als Beleg, dass bestehende Hitzeaktionspläne die Sterblichkeit bislang nicht durchgreifend senken.",
   "transfer": "Europäische Städtedaten, gemäßigte Klimazone",
+  "aufgenommen": "2026-08-17"
+ },
+ {
+  "pmid": "42470137",
+  "journal": "Int J Epidemiol",
+  "year": "2026",
+  "author": "Sieber S et al.",
+  "pubdate": "24.06.2026",
+  "added": "18.07.2026",
+  "transfer": "Südeuropa, Spanien - höhere Grundbelastung als Deutschland, aber Methodik und Inequity-Fokus relevant",
+  "title": "Luftverschmutzung und niedriges Geburtsgewicht in Spanien 2010–2018 – Gesundheitsungleichheiten und Luftqualitätsziele",
+  "sum": "Epidemiologische Auswertung von 1,4 Mio. Geburten in Spanien zur Assoziation von PM2,5/NO2-Exposition mit Niedriggeburtsgewicht, stratifiziert nach Mutterbildung.",
+  "result": "PM2,5-Anstieg um 10 µg/m³ mit 6 % erhöhtem Niedriges-Geburtsgewicht-Risiko (95%-KI 0–11 %); NO2 um 1 % (95%-KI 0–3 %). Erreichung der EU-Ziele von 10 µg/m³ PM2,5 hätte 662–2032 Fälle verhindert; 20 µg/m³ NO2-Ziel 432–938 Fälle. Primäre mütterliche Schulbildung zeigte höchste relative Risikoreduktion unter Luftqualitätsinterventionen.",
   "aufgenommen": "2026-08-17"
  }
 ]
