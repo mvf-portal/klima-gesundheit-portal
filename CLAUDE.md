@@ -122,6 +122,14 @@ Das ist die Fehlerquelle, die beim Aufsetzen zugeschlagen hat. `mailchimp_entwur
 
 Mit dem geerbten Praefix meldete der erste Lauf hier „Entwurf besteht bereits" und legte gar keinen an — er hatte den Entwurf des Schwesterportals fuer seinen eigenen gehalten. Ein Zusatz reicht als Abhilfe **nicht**: `datum_aus_titel()` prueft mit `startswith()`, ein „MVF Studien-Newsletter Klima …" waere drueben als eigene Kampagne durchgegangen. Der Praefix muss vollstaendig eigen sein.
 
+### Der Newsletter laedt alles von der eigenen Domain — auch das Logo
+
+Logo, Schriften und die vier Download-Links im Newsletter zeigen auf `https://klima.m-vf.de/...`. **Das setzt ein gueltiges HTTPS-Zertifikat voraus.** Am 17.08.2026 fehlte das Logo in der Testausgabe, weil GitHub das Zertifikat fuer die frische Domain noch nicht ausgestellt hatte: E-Mail-Programme laden Bilder ausschliesslich ueber HTTPS, und ueber `http://` war alles laengst da (200, 23.551 Bytes) — nur eben nicht abrufbar fuer den Mail-Client.
+
+Das Logo war dabei nur das Sichtbarste. Betroffen waren ebenso die Schriften und **alle vier Download-Links**, die still ins Leere gefuehrt haetten.
+
+**Merke fuer ein weiteres Portal:** Erst das Zertifikat abwarten, dann den ersten Newsletter versenden. Und wenn im Newsletter etwas fehlt, zuerst pruefen, ob die Ressource ueber `https://` erreichbar ist — nicht die Vorlage durchsuchen.
+
 ## Newsletter-Anmeldung (`newsletter.html`)
 
 Zwei Newsletter, eine Seite: Studien-Newsletter (taeglich, aus dem Hub) und MVF-Newsletter
