@@ -34,6 +34,16 @@ from thema import (ANZAHL_MAX, ANZAHL_MIN, ANZAHL_SOLL, EUROPA_ZUERST, KAPPEN,
                    NCBI_TOOL, POOL_ALLGEMEIN, POOL_EUROPA, SYSTEM, TERM, TERM_DE,
                    USER_TEMPLATE)
 
+# GitHub gibt ein Secret genau so weiter, wie es eingefuegt wurde - mit einem
+# angehaengten Zeilenumbruch, wenn beim Einfuegen einer mitkam. httpx weigert
+# sich dann, den Kopfzeilenwert zu senden, und der Abbruch erscheint als
+# "APIConnectionError: Connection error" - also als Netzproblem, das keines ist.
+# Beim Longevity-Portal hat das am 18.08.2026 zwei Laeufe gekostet. Deshalb hier
+# einmal abschneiden, statt den Fehler spaeter im Secret zu suchen.
+_schluessel = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+if _schluessel:
+    os.environ["ANTHROPIC_API_KEY"] = _schluessel
+
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 MODEL = os.environ.get("MODEL", "claude-haiku-4-5")  # Standard: guenstig; via MODEL-env aenderbar
 INDEX = "index.html"
