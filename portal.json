@@ -18,6 +18,7 @@
   "MC_GRUPPE_NAME": "Studien Newsletter Klima",
   "MC_GRUPPE_FELD": "group[16136][1024]",
   "MC_TAG_ID": "0",
+  "MC_TAG_STUDIEN": "",
   "META_BESCHREIBUNG": "Rechercheportal zu Hitze, Klima und Gesundheit: gebündelte Live-Suchen über Fachdatenbanken, Klimadaten-Portale und Institutionen plus tagesaktuelle Studien mit deutscher Zusammenfassung. Ein Angebot von Monitor Versorgungsforschung.",
   "LEDE_HTML": "Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.",
   "CLAIM_HTML": "Hitze, Klima &amp; Gesundheit — mit Bezug zu Deutschland ausgewählt",
@@ -37,5 +38,7 @@
   "N_PORTAL": "41",
   "N_LIZENZ": "8",
   "N_RUBRIKEN": "9",
-  "N_GLOSSAR": "237"
+  "N_GLOSSAR": "237",
+  "META_NEWSLETTER": "Newsletter von Monitor Versorgungsforschung bestellen: den täglichen Studien-Newsletter zu Hitze, Klima und Gesundheit, die Studienauswahl der Schwesterportale, den redaktionellen MVF-Newsletter — einzeln oder zusammen.",
+  "NL_STUDIEN_WAS": "Die Studienauswahl des Hubs jeden Morgen per E-Mail: neue Arbeiten zu Hitze, Extremwetter und Klimawandel mit deutschen Zusammenfassungen, den Ergebniszahlen und der Einordnung, was sich auf Deutschland übertragen lässt. Dazu die Word- und Excel-Datei zum Tag."
 }

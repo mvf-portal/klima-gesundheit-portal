@@ -136,6 +136,20 @@ Zwei Newsletter, eine Seite: Studien-Newsletter (taeglich, aus dem Hub) und MVF-
 (redaktionell). Gesendet wird **direkt an Mailchimp**, nicht an WordPress — das WPForms-Formular
 auf m-vf.de minted sein Token je Seitenaufruf und liegt auf fremder Domain.
 
+### Die Schwesterportale stehen mit auf der Seite
+
+Seit dem 18.08.2026 bietet die Anmeldung auch die Studien-Newsletter der anderen Portale an.
+Die Liste heisst `REIHE` und steht im Skriptteil von `newsletter.html` — **in jedem Portal
+gleich**; das eigene Portal filtert sich anhand von `MC.gruppeStudien` selbst heraus. Gepflegt
+wird sie in `portal-vorlage/vorlage/newsletter.html`, nicht hier: Die Datei ist seit demselben
+Tag **neutral** und laeuft beim Abgleich mit. Portaleigen sind nur noch vier Platzhalter
+(`META_NEWSLETTER`, `NL_STUDIEN_WAS`, `MC_GRUPPE_FELD`, `MC_TAG_STUDIEN`) aus `portal.json`.
+
+Zwei Regeln dazu: `bereit: false` haelt ein Portal aus dem Angebot heraus, solange es noch nicht
+versendet. Und `MC.tagStudien` darf **nie** `"0"` enthalten — in JavaScript ist die Zeichenkette
+`"0"` wahr, und die Anmeldung schickte Mailchimp `tags=0`. Wo es keinen Tag gibt, bleibt das
+Feld leer.
+
 ### Die drei Fallen, die uns je einen Anlauf gekostet haben
 
 | Falle | Symptom | Loesung |
