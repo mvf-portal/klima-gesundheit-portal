@@ -31,11 +31,26 @@ import urllib.request
 
 ESUMMARY = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
 
-# Woran eine deutsche Zusammenfassung zu erkennen ist. Ein englisch gebliebener
-# Abstract enthaelt keines dieser Woerter - das ist der billigste zuverlaessige
-# Test, den es dafuer gibt.
-DEUTSCH = re.compile(r"\b(der|die|das|und|wurde|wurden|zeigte|zeigten|bei|"
-                     r"nicht|eine|einer|einem|Studie|Patienten)\b")
+# Gesucht wird nicht das Deutsche, sondern das Englische.
+#
+# Der erste Anlauf verlangte, dass die Zusammenfassung eines von fuenfzehn
+# deutschen Funktionswoertern enthaelt. Das ging am 18.08.2026 im ersten
+# Echtlauf schief: "Systematische Uebersicht identifizierte 81 Publikationen
+# mit 53 Interventionen zur Foerderung kritischer Gesundheitskompetenz;
+# Schwerpunkt lag auf Appraisal-Faehigkeiten fuer informierte Entscheidungen in
+# Bildungseinrichtungen." - tadelloses Deutsch, aber ohne der/die/das/und/bei.
+# Eine Wortliste kann Deutsch nicht beweisen; ein deutscher Satz darf jedes
+# einzelne Wort vermeiden.
+#
+# Der Fehlerfall ist ohnehin ein anderer: nicht "zu wenig Deutsch", sondern ein
+# stehengebliebener englischer Abstract. Den erkennt man sicher an englischen
+# Funktionswoertern, die im Deutschen praktisch nicht vorkommen. Ab drei
+# Treffern ist es kein Zufall mehr - einzelne Fachwendungen wie "shared
+# decision making" oder "teach-back" bleiben damit unbeanstandet.
+ENGLISCH = re.compile(r"\b(the|of|and|was|were|with|that|this|from|"
+                      r"have|has|been|their|its|which|among|between)\b",
+                      re.IGNORECASE)
+ENGLISCH_SCHWELLE = 3
 # Das Ergebnisfeld muss etwas aussagen - aber NICHT zwingend eine Zahl
 # enthalten. Qualitative Interviewstudien und Expertenpapiere sind seit dem
 # 18.08.2026 ausdruecklich zugelassen (Entscheidung des Herausgebers); eine
@@ -78,9 +93,10 @@ def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
         if len(str(e.get("sum", ""))) < 80:
             m.append(f"{kopf}: Zusammenfassung ist verdaechtig kurz "
                      f"({len(str(e.get('sum', '')))} Zeichen)")
-        if not DEUTSCH.search(str(e.get("sum", ""))):
-            m.append(f"{kopf}: Zusammenfassung enthaelt kein deutsches Wort - "
-                     f"vermutlich der englische Abstract")
+        treffer = len(ENGLISCH.findall(str(e.get("sum", ""))))
+        if treffer >= ENGLISCH_SCHWELLE:
+            m.append(f"{kopf}: Zusammenfassung enthaelt {treffer} englische "
+                     f"Funktionswoerter - vermutlich der englische Abstract")
         if not 20 <= len(str(e.get("title", ""))) <= 200:
             m.append(f"{kopf}: Titellaenge ausserhalb 20-200 Zeichen")
 
