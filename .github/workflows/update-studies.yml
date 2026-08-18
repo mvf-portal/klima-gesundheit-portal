@@ -47,10 +47,13 @@ jobs:
         run: python scripts/build_newsletter.py
 
       # Legt bei Mailchimp einen ENTWURF an und schickt eine Testausgabe zur
-      # Freigabe. Verschickt wird nichts an die Leserschaft - das bleibt ein
-      # Klick von Hand. Ohne hinterlegten Schlüssel passiert schlicht nichts;
-      # ein Fehler hier darf das Studien-Update nicht scheitern lassen.
-      - name: Newsletter-Entwurf zur Freigabe anlegen
+      # Entwurf anlegen, pruefen, terminieren. Verschickt wird hier noch nichts:
+      # Die Kampagne wird auf TERMIN_UTC gesetzt und laesst sich bis dahin in
+      # Mailchimp absagen. Faellt der Torwaechter durch, bleibt der Entwurf
+      # liegen. Ohne hinterlegten Schluessel passiert schlicht nichts; ein
+      # Fehler hier darf das Studien-Update nicht scheitern lassen - und er
+      # faellt in die sichere Richtung, weil dann eben nichts terminiert ist.
+      - name: Newsletter-Entwurf anlegen, pruefen und terminieren
         continue-on-error: true
         env:
           # Das Geheimnis heisst in diesem Repository KLIMAHUBMC ("MC" fuer
