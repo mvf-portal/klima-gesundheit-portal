@@ -392,7 +392,7 @@ Sichtbar gemacht wird das in der Ergebnisleiste („In internationalen Datenbank
 
 ## Versand: Torwächter und Veto-Fenster
 
-Seit dem 18.08.2026 wird der Newsletter **nicht mehr von Hand freigegeben**. Der nächtliche Lauf legt den Entwurf an, `scripts/torwaechter.py` prüft ihn, und `mailchimp_entwurf.py` **terminiert** die Kampagne auf `TERMIN_UTC` (08:00 UTC = 10:00 Uhr deutscher Sommerzeit). Bis dahin lässt sie sich in Mailchimp mit einem Klick absagen — *Unschedule*.
+Seit dem 18.08.2026 wird der Newsletter **nicht mehr von Hand freigegeben**. Der nächtliche Lauf legt den Entwurf an, `scripts/torwaechter.py` prüft ihn, und `mailchimp_entwurf.py` **terminiert** die Kampagne auf `TERMIN_LOKAL` (09:00 Uhr deutscher Ortszeit — bewusst nicht in UTC festgeschrieben, sonst verschöbe die Zeitumstellung den Versand). Bis dahin lässt sie sich in Mailchimp mit einem Klick absagen — *Unschedule*.
 
 Der Grund für diese Bauweise: Versand ist der einzige Schritt der Kette, der sich nicht zurücknehmen lässt. Der Torwächter fängt **mechanischen** Unfug (fehlende Felder, Platzhalter, erfundene Zeitschriften — gegen PubMed geprüft, englisch gebliebene Zusammenfassungen, Dubletten, leeres Empfängersegment). Er fängt **nicht** die Zusammenfassung, die flüssig klingt und die Studie falsch wiedergibt; dafür ist das Zeitfenster da.
 

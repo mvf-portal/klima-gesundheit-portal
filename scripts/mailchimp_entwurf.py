@@ -63,13 +63,17 @@ REPLY_TO = "redaktion@m-vf.de"   # Antworten sollen in der Redaktion landen,
                                 # Mailchimp als Absender freigegeben sein.
 FREIGABE_MAIL = "stegmaier@m-vf.de"
 
-# Wann eine gepruefte Ausgabe rausgeht - UTC, in Viertelstundenschritten
-# (Mailchimp nimmt nichts anderes an). 08:00 UTC sind 10:00 Uhr deutscher
-# Sommerzeit. Der naechtliche Lauf beginnt um 04:00 UTC, es bleiben also rund
-# vier Stunden, in denen sich die Terminierung mit einem Klick absagen laesst.
-# Dieses Fenster ist der ganze Sinn der Sache: Der Torwaechter faengt
-# mechanischen Unfug, das Fenster faengt den inhaltlichen.
-TERMIN_UTC = "08:00"
+# Wann eine gepruefte Ausgabe rausgeht - **deutsche Ortszeit**, in
+# Viertelstundenschritten (Mailchimp nimmt nichts anderes an). Bewusst nicht in
+# UTC festgeschrieben: Eine feste UTC-Zeit verschoebe den Versand bei der
+# Zeitumstellung um eine Stunde, ohne dass es jemand bemerkt - aus 09:00 wuerde
+# im Winter 08:00. naechster_termin() rechnet deshalb von hier nach UTC um.
+#
+# Der naechtliche Lauf beginnt um 06:00 Ortszeit, die Sammelmeldung kommt um
+# 06:45. Es bleiben also gut zwei Stunden, in denen sich die Terminierung mit
+# einem Klick absagen laesst. Dieses Fenster ist der ganze Sinn der Sache: Der
+# Torwaechter faengt mechanischen Unfug, das Fenster faengt den inhaltlichen.
+TERMIN_LOKAL = "09:00"
 
 # Titel aller von hier erzeugten Kampagnen. Daran erkennt das Skript spaeter,
 # was schon versendet wurde und was noch aussteht - Mailchimp fuehrt darueber
@@ -411,15 +415,19 @@ class Mailchimp:
 # --------------------------------------------------------------------- main
 
 def naechster_termin() -> str:
-    """Der naechste TERMIN_UTC, der noch in der Zukunft liegt (ISO, UTC)."""
-    jetzt = dt.datetime.now(dt.timezone.utc)
-    stunde, minute = (int(x) for x in TERMIN_UTC.split(":"))
+    """Der naechste TERMIN_LOKAL, der noch in der Zukunft liegt - als UTC-ISO.
+
+    Gerechnet wird in Europe/Berlin und erst am Ende nach UTC gewandelt, damit
+    der Versand sommers wie winters um dieselbe Ortszeit stattfindet.
+    """
+    jetzt = dt.datetime.now(TZ)
+    stunde, minute = (int(x) for x in TERMIN_LOKAL.split(":"))
     ziel = jetzt.replace(hour=stunde, minute=minute, second=0, microsecond=0)
     if ziel <= jetzt + dt.timedelta(minutes=20):
         # Zu knapp oder schon vorbei: dann morgen. Ein Termin in zehn Minuten
         # waere kein Veto-Fenster, sondern nur eine Verzoegerung.
         ziel += dt.timedelta(days=1)
-    return ziel.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+    return ziel.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00")
 
 
 def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
