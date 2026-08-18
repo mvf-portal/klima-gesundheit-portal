@@ -4,9 +4,9 @@
 Ablauf:
   1. PubMed E-utilities: zwei Abfragen - die neuesten Treffer allgemein und
      zusaetzlich die mit Deutschlandbezug (MeSH/Affiliation), zusammengefuehrt.
-  2. Claude-API: 5-7 Studien auswaehlen, die konkrete Ergebnisse nennen UND auf
+  2. Claude-API: Studien auswaehlen, die konkrete Ergebnisse nennen UND auf
      das deutsche Versorgungssystem uebertragbar sind, und auf Deutsch
-     zusammenfassen (strukturierte JSON-Ausgabe).
+     zusammenfassen (strukturierte JSON-Ausgabe). Kriterien: thema.py.
   3. Nur den Marker-Block (SNAP_DATE + STUDIES) in index.html ersetzen.
 
 Bricht mit Exit-Code != 0 ab, wenn etwas fehlschlaegt - dann bleibt index.html
@@ -26,50 +26,20 @@ from zoneinfo import ZoneInfo
 import anthropic
 import requests
 
+# Alles Themenspezifische steht in thema.py - Suchabfrage, Rollenbeschreibung,
+# Auswahlregeln, Anzahl. Diese Datei bleibt in allen Portalen wortgleich; wer
+# hier etwas korrigiert, kann es mit vorlage-abgleich.py in die Schwesterportale
+# uebernehmen. Wer das Thema aendert, aendert thema.py.
+from thema import (ANZAHL_MAX, ANZAHL_MIN, ANZAHL_SOLL, EUROPA_ZUERST, KAPPEN,
+                   NCBI_TOOL, POOL_ALLGEMEIN, POOL_EUROPA, SYSTEM, TERM, TERM_DE,
+                   USER_TEMPLATE)
+
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-# Hitze/Klima UND Gesundheit muessen beide vorkommen - sonst spuelt die Abfrage
-# reine Klimaphysik oder reine Klinik herein. Die Gesundheitsseite ist bewusst
-# breit gehalten (Sterblichkeit, Morbiditaet, Versorgung), die Umweltseite ueber
-# MeSH plus Freitext, weil "heat wave" nicht durchgaengig verschlagwortet ist.
-_UMWELT = (
-    '("Climate Change"[MeSH Terms] OR "Extreme Heat"[MeSH Terms] '
-    'OR "Hot Temperature"[MeSH Terms] OR "Global Warming"[MeSH Terms] '
-    'OR "Heat Stress Disorders"[MeSH Terms] OR "Air Pollution"[MeSH Terms] '
-    'OR "heat wave"[Title/Abstract] OR heatwave*[Title/Abstract] '
-    'OR "extreme heat"[Title/Abstract] OR "urban heat island"[Title/Abstract] '
-    'OR "extreme weather"[Title/Abstract] OR "climate change"[Title/Abstract])'
-)
-_GESUNDHEIT = (
-    '("Mortality"[MeSH Terms] OR "Morbidity"[MeSH Terms] '
-    'OR "Public Health"[MeSH Terms] OR "Health Services"[MeSH Terms] '
-    'OR "Hospitalization"[MeSH Terms] OR "Environmental Health"[MeSH Terms] '
-    'OR "Emergency Medical Services"[MeSH Terms] '
-    'OR mortality[Title/Abstract] OR morbidity[Title/Abstract] '
-    'OR hospitali*[Title/Abstract] OR "health outcome*"[Title/Abstract] '
-    'OR "public health"[Title/Abstract] OR "health risk*"[Title/Abstract] '
-    'OR "health impact*"[Title/Abstract] OR patients[Title/Abstract])'
-)
-# "Humans"[MeSH] ist wichtiger, als es aussieht: ohne diese Klammer spuelt die
-# Abfrage Algenbluete, Emissionsbilanzen und Tierstudien herein, die formal beide
-# Seiten erfuellen. Gemessen am 17.08.2026: rund 89.000 Treffer gesamt,
-# 14.600 mit Europa-/Deutschlandbezug - genug Nachschub fuer die Tagesauswahl.
-TERM = os.environ.get(
-    "SEARCH_TERM",
-    f'(({_UMWELT} AND {_GESUNDHEIT}) AND "Humans"[MeSH Terms])',
-)
-# Zweite Abfrage, damit Arbeiten mit Deutschlandbezug den Kandidatenpool
-# sicher erreichen. Ueber MeSH und Autorenadresse, nicht ueber Journalnamen -
-# deutschsprachige Journale liefern kaum Treffer.
-TERM_DE = os.environ.get(
-    "SEARCH_TERM_DE",
-    f"{TERM} AND (Germany[MeSH Terms] OR Germany[Affiliation] "
-    "OR Europe[MeSH Terms] OR Europe[Affiliation])",
-)
 MODEL = os.environ.get("MODEL", "claude-haiku-4-5")  # Standard: guenstig; via MODEL-env aenderbar
 INDEX = "index.html"
 
 # NCBI bittet bei automatisierten Zugriffen um Tool-Kennung und Kontaktadresse.
-NCBI_TOOL = "klima-gesundheit-portal"
+# Die Kennung kommt aus thema.py (Repo-Name des jeweiligen Portals).
 NCBI_EMAIL = os.environ.get("NCBI_EMAIL", "stegmaier@m-vf.de")
 
 START = "// === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ==="
@@ -104,123 +74,13 @@ SCHEMA = {
                     "sum": {"type": "string"},
                     "result": {"type": "string"},
                     # Kurze Begruendung, warum das Ergebnis auf Deutschland
-                    # uebertragbar ist - oder warum nur bedingt. Hier zaehlen
-                    # Klimazone und Versorgungsstruktur gleichermassen.
+                    # uebertragbar ist - oder warum nur bedingt.
                     "transfer": {"type": "string"},
                 },
             },
         }
     },
 }
-
-SYSTEM = (
-    "Du bist Fachredakteur fuer Klimawandel und Gesundheit / Planetary Health. "
-    "Aus einer Liste von PubMed-Abstracts waehlst du die relevantesten aktuellen "
-    "Studien aus und fasst sie praezise auf Deutsch zusammen. Deine Leserschaft "
-    "arbeitet im deutschen Gesundheitswesen: oeffentlicher Gesundheitsdienst, "
-    "Kliniken, Praxen, Kommunen, Gesundheitspolitik."
-)
-
-USER_TEMPLATE = """Unten stehen aktuelle PubMed-Abstracts (nach Datum sortiert).
-
-Waehle GENAU 6 Studien aus, die (a) einen erkennbaren Bezug zwischen Umwelt- bzw.
-Klimafaktoren und menschlicher Gesundheit haben UND (b) im Abstract KONKRETE
-quantitative Ergebnisse nennen (Prozentwerte, relative Risiken, Odds/Hazard Ratios,
-zurechenbare Todesfaelle, p-Werte, Fallzahlen). Ueberspringe Studien ohne Abstract
-oder ohne konkrete Ergebnisse. Achte auf thematische Vielfalt.
-
-THEMATISCHE RANGFOLGE - in dieser Reihenfolge bevorzugen:
-  1. Hitze und Extremtemperatur: Sterblichkeit, Morbiditaet, Notaufnahmen,
-     Risikogruppen, Hitzeaktionsplaene, Warnsysteme, Wirksamkeit von Schutzmassnahmen.
-  2. Weitere Klimafolgen mit direktem Gesundheitsbezug: Extremwetter, Duerre,
-     Ueberschwemmung, Waldbrandrauch, vektor- und wasseruebertragene Krankheiten,
-     Pollen und Allergien, psychische Folgen.
-  3. Luftqualitaet und Umweltexposition, wenn ein Klimabezug erkennbar ist.
-  4. Das Gesundheitswesen selbst als Verursacher und Betroffener: Emissionen von
-     Kliniken, Klimaresilienz der Versorgung, Anpassung von Einrichtungen.
-
-Reine Klimaphysik, Emissionsbilanzen ohne Gesundheitsbezug, Tier- und
-Pflanzenoekologie gehoeren NICHT in die Auswahl, auch wenn das Wort "health"
-im Abstract vorkommt.
-
-ZWEI HARTE REGELN ZUR ZUSAMMENSETZUNG (sie gehen der thematischen Rangfolge vor):
-
-  1. MINDESTENS DREI der sechs Studien muessen Europa, Nordamerika oder eine
-     andere gemaessigte Klimazone betreffen. Liegen weniger als drei solche
-     Arbeiten vor, nimm die verbleibenden Plaetze aus dem Rest - aber schoepfe
-     die europaeischen zuerst aus, auch wenn sie thematisch nur zweitbeste sind.
-  2. HOECHSTENS ZWEI der sechs duerfen reine Luftschadstoff-Studien sein
-     (Feinstaub, Ozon, Stickoxide). Dieses Feld publiziert um ein Vielfaches
-     mehr als die Hitzeforschung und verdraengt sie sonst vollstaendig.
-
-Diese Regeln entstanden aus einem Fehlversuch: Ohne sie bestand die Auswahl aus
-Luftverschmutzung in China, Duerre in Brasilien und einer chinesischen Megastadt -
-fachlich einwandfrei, fuer eine deutsche Leserschaft aber unbrauchbar.
-
-ZWEITES AUSWAHLKRITERIUM - Übertragbarkeit auf Deutschland:
-Bei sonst gleicher Qualität hat die übertragbare Studie IMMER Vorrang vor der
-aktuelleren. Übertragbarkeit richtet sich hier nach ZWEI Achsen:
-
-  Klimatisch: Mitteleuropa und gemäßigte Breiten sind übertragbar. Studien aus
-    tropischen, ariden oder subtropischen Regionen nur, wenn die Fragestellung
-    davon unabhängig ist (Methodik, Warnsysteme, Risikogruppen als Prinzip) -
-    absolute Temperaturschwellen und Anpassungsniveaus sind es nie.
-  Strukturell: Deutschland, Österreich, Schweiz, Niederlande, Belgien, Frankreich
-    hoch; Skandinavien, Großbritannien, Kanada, Australien mittel; USA gering.
-
-  Hoch:    Deutschland und deutschsprachiger Raum, Mitteleuropa.
-  Mittel:  Übriges Europa mit gemäßigtem Klima, Kanada, Nordchina, Japan, Korea -
-           vergleichbare Klimazone, andere Versorgungsstruktur.
-  Gering:  Tropen und Subtropen, Länder mit grundlegend anderer Ressourcenlage.
-           Nur nehmen, wenn die Fragestellung klimazonenunabhängig ist.
-
-Eine Studie aus Südasien zur Hitzesterblichkeit gehört nur in die Auswahl, wenn
-sonst nichts Brauchbares vorliegt - die Temperaturschwellen und die
-Anpassungsfähigkeit der Bevölkerung sind dort nicht mit Deutschland vergleichbar.
-
-Fuer jede Studie:
-- journal: Journalname genau so, wie er in der Kopfzeile des Abstracts steht -
-  Abkuerzung nicht aufloesen, nichts ergaenzen. (Wird ohnehin durch die Angabe
-  aus PubMed ersetzt; rate hier nichts.)
-- year: Erscheinungsjahr, z. B. "2026"
-- pmid: die PubMed-ID
-- title: praegnanter deutscher Titel
-- sum: 1 Satz auf Deutsch, was die Studie untersucht hat
-- result: Deutsch, die konkreten Zahlen/Befunde + ein kurzer Einordnungssatz.
-  Deutsches Zahlenformat mit Komma (z. B. 0,63).
-- transfer: EIN Halbsatz (höchstens 12 Wörter), warum das Ergebnis für Deutschland
-  taugt - oder wo die Grenze liegt. Nenne Land bzw. Klimazone und Datengrundlage.
-  Keine ganzen Sätze, keine Wiederholung des Titels.
-  Gut:      "Deutsche Sterbedaten, gemäßigte Klimazone"
-            "Südeuropa - höhere Temperaturschwellen als hierzulande"
-            "Niederlande, vergleichbares Klima und Versorgungssystem"
-            "Tropen - nur die Methodik ist übertragbar"
-            "Nur bedingt: Bevölkerung dort besser hitzeangepasst"
-  Schlecht: "Diese Studie ist gut übertragbar." (sagt nichts)
-
-WICHTIG - Fachterminologie: Etablierte englische Fachbegriffe NICHT eindeutschen.
-Sie sind auch im deutschen Fachdeutsch stehende Begriffe; eine woertliche Uebersetzung
-wirkt unprofessionell und erschwert das Wiederfinden. Beispiele fuer Begriffe, die
-englisch bleiben: Public Health, Planetary Health, One Health, Urban Heat Island,
-Heat Health Action Plan, Screening, Follow-up, Outcome, Exposure, Confounder,
-Baseline, Setting, Cluster, Hazard Ratio, Odds Ratio, Attributable Fraction,
-Distributed Lag Non-linear Model. Gaengige Abkuerzungen ebenfalls unveraendert
-lassen: COPD, ICU, PM2.5, PM10, NO2, UTCI, WBGT, DLNM.
-Deutsche Fachbegriffe, die es gibt, aber verwenden: Hitzewelle, Tropennacht,
-Uebersterblichkeit, Waermeinsel, Hitzeaktionsplan, Gefuehlte Temperatur,
-Zurechenbare Todesfaelle, Risikogruppe.
-Faustregel: Wuerde eine deutsche Fachzeitschrift wie Monitor Versorgungsforschung den
-Begriff englisch stehen lassen, dann tue es auch. Im Zweifel englisch belassen und bei
-Bedarf eine kurze deutsche Erlaeuterung in Klammern ergaenzen.
-Umgekehrt gilt: Wo es ein gebraeuchliches deutsches Fachwort gibt (Verweildauer,
-Hausarztkontakt, Nutzenbewertung, Fallzahl), dieses verwenden.
-
-Gib ausschliesslich das geforderte JSON zurueck.
-
-=== ABSTRACTS ===
-{abstracts}
-"""
-
 
 def _get(path: str, params: dict, timeout: int) -> requests.Response:
     """GET mit drei Versuchen - PubMed ist gelegentlich kurz nicht erreichbar."""
@@ -253,28 +113,30 @@ def _suche(term: str, anzahl: int) -> list[str]:
 def fetch_pubmed() -> str:
     """Zwei Abfragen statt einer, zusammengefuehrt und entdoppelt.
 
-    Die allgemeine Abfrage allein reicht nicht - bei diesem Thema sogar noch
-    weniger als im Schwesterportal. Klima- und Umweltgesundheit wird weltweit
-    stark aus China, Suedasien und Suedamerika publiziert; die tagesaktuellen
-    Neuaufnahmen sind entsprechend dominiert. Der erste Lauf am 17.08.2026 mit
-    einem Pool aus 40 allgemeinen und 11 europaeischen Treffern lieferte eine
-    Auswahl ganz ohne Europabezug: Huaihe-Region, Brasilien, chinesische
-    Megastadt. Fuer eine deutsche Leserschaft ist das wertlos - Temperatur-
-    schwellen und Anpassungsgrad sind dort nicht vergleichbar.
+    Die allgemeine Abfrage allein reicht in keinem der Portale. Publiziert wird
+    weltweit, mit starkem Uebergewicht der USA und Asiens; die tagesaktuellen
+    Neuaufnahmen sind entsprechend dominiert. Fuer eine deutsche Leserschaft
+    zaehlt aber, was in einem vergleichbaren Versorgungs- und Rechtsrahmen gilt.
 
-    Deshalb stellt die Europa-Abfrage inzwischen die MEHRHEIT des Pools und
-    steht vorn: Ein Sprachmodell gewichtet, was es zuerst liest. Ueber
-    Journalnamen zu suchen bringt uebrigens nichts: im ganzen August ein Treffer.
+    Deshalb stellt die Europa-Abfrage die MEHRHEIT des Pools und steht vorn:
+    Ein Sprachmodell gewichtet, was es zuerst liest. Die Groessen stehen in
+    thema.py (POOL_EUROPA, POOL_ALLGEMEIN).
     """
-    europa = _suche(TERM_DE, 30)
-    allgemein = _suche(TERM, 25)
-    # Reihenfolge: erst Europa, dann der Rest der weltweit neuesten. Wer das
-    # umdreht, bekommt wieder eine Auswahl ohne Bezug zu hiesigen Verhaeltnissen.
-    ids = europa + [p for p in allgemein if p not in europa]
+    europa = _suche(TERM_DE, POOL_EUROPA)
+    allgemein = _suche(TERM, POOL_ALLGEMEIN)
+    # Reihenfolge: in der Regel erst Europa, dann der Rest der weltweit neuesten.
+    # Wer das umdreht, bekommt eine Auswahl ohne Bezug zu hiesigen Verhaeltnissen
+    # - im Klima-Portal nachgewiesen. EUROPA_ZUERST steht in thema.py, weil das
+    # Versorgungsforschungs-Portal es seit jeher andersherum haelt.
+    if EUROPA_ZUERST:
+        ids = europa + [p for p in allgemein if p not in europa]
+    else:
+        ids = allgemein + [p for p in europa if p not in allgemein]
     if not ids:
         raise RuntimeError("esearch lieferte keine PMIDs")
-    print(f"{len(europa)} mit Europa-/Deutschlandbezug + {len(ids) - len(europa)} "
-          f"zusaetzlich weltweit = {len(ids)} Kandidaten.")
+    print(f"{len(europa)} mit Europa-/Deutschlandbezug, {len(allgemein)} weltweit, "
+          f"zusammengefuehrt {len(ids)} Kandidaten "
+          f"({'Europa zuerst' if EUROPA_ZUERST else 'weltweit zuerst'}).")
     r2 = _get(
         "efetch.fcgi",
         {"db": "pubmed", "id": ",".join(ids), "rettype": "abstract", "retmode": "text"},
@@ -327,18 +189,18 @@ def fetch_meta(pmids: list[str]) -> dict[str, dict]:
     """Journal, Jahr, Autor und Publikationsdatum ueber esummary holen.
 
     Bewusst nicht vom Sprachmodell erraten lassen: Das sind harte Fakten.
+    sortpubdate wird ignoriert - PubMed setzt dort bei reinen Monatsangaben
+    den 1. ein, was einen Tag vortaeuschen wuerde. Genommen wird die
+    genaueste ECHTE Angabe aus pubdate und epubdate.
 
-    **Das Journal gehoert unbedingt hierher, nicht in die Modellantwort.** Im
-    Schwesterportal ki.m-vf.de stand am 17.08.2026 ueber einer Studie aus
+    **Das Journal gehoert unbedingt hierher, nicht in die Modellantwort.** Beim
+    ersten Lauf dieses Portals am 17.08.2026 stand ueber einer Studie aus
     NPJ Prim Care Respir Med der Name Nat Commun, und aus Qual Life Res wurde
     das ausgeschriebene Quality of Life Research. Beides plausibel, beides
     falsch: Der Abstract-Block nennt das Journal nur in der Kopfzeile, und ein
     Sprachmodell ergaenzt dort bereitwillig, was haeufig vorkommt. Eine falsche
     Quellenangabe ist in einem Rechercheportal der teuerste aller kleinen
-    Fehler - sie macht die Studie unauffindbar.
-    sortpubdate wird ignoriert - PubMed setzt dort bei reinen Monatsangaben
-    den 1. ein, was einen Tag vortaeuschen wuerde. Genommen wird die
-    genaueste ECHTE Angabe aus pubdate und epubdate.
+    Fehler - sie macht die Studie unauffindbar und das Portal unglaubwuerdig.
     """
     r = _get("esummary.fcgi",
              {"db": "pubmed", "retmode": "json", "id": ",".join(pmids)},
@@ -368,8 +230,8 @@ def fetch_meta(pmids: list[str]) -> dict[str, dict]:
         eintrag = {"author": autor, "pubdate": datum,
                    "added": aufnahme, "_sort": _sortschluessel(e)}
         # source ist die von PubMed gefuehrte Journal-Abkuerzung. Nur setzen,
-        # wenn sie wirklich da ist - eine ungefaehre Angabe ist immer noch
-        # besser als eine leere.
+        # wenn sie wirklich da ist - sonst bliebe die Angabe leer, und eine
+        # ungefaehre Angabe ist immer noch besser als gar keine.
         if e.get("source"):
             eintrag["journal"] = e["source"]
         jahr = (datum or "")[-4:]
@@ -398,12 +260,14 @@ def pick_studies(abstracts: str) -> list[dict]:
     # geordnet, die vorderen sechs sind brauchbar. Am 17.08.2026 lieferte das
     # Modell trotz "waehle GENAU 6" neun Stueck - und weil das Schema keine
     # Laengenbegrenzung zulaesst (siehe SCHEMA), wird hier gekappt.
-    if len(studies) > 7:
-        print(f"{len(studies)} Studien geliefert - auf die ersten 6 gekuerzt.")
-        studies = studies[:6]
+    if len(studies) > ANZAHL_MAX:
+        if not KAPPEN:
+            raise RuntimeError(f"Unerwartete Studienanzahl: {len(studies)}")
+        print(f"{len(studies)} Studien geliefert - auf die ersten {ANZAHL_SOLL} gekuerzt.")
+        studies = studies[:ANZAHL_SOLL]
     # Zu wenige dagegen heisst, dass etwas grundsaetzlich schieflief - dann
     # lieber sichtbar scheitern als eine duenne Auswahl veroeffentlichen.
-    if len(studies) < 5:
+    if len(studies) < ANZAHL_MIN:
         raise RuntimeError(f"Unerwartete Studienanzahl: {len(studies)}")
     return studies
 
