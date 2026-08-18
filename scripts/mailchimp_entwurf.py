@@ -202,7 +202,7 @@ def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
       <p style="margin:0;font:bold 12px/1.5 {FONT};letter-spacing:1.5px;color:#C9DCF2;">
         VOM KNOWLEDGE-HUB VON MONITOR VERSORGUNGSFORSCHUNG</p>
       <p style="margin:4px 0 0;font:bold 24px/1.3 {FONT};color:#ffffff;">
-        Neueste Studien zu Hitze, Klima und Gesundheit</p>
+        Neueste Studien - Hitze, Klima und Gesundheit</p>
       <p style="margin:6px 0 0;font:13px/1.5 {FONT};color:#D8E5F5;">
         Ausgabe vom {escape(lang(tage(studien)[0]))}</p>
     </td></tr>
@@ -448,7 +448,7 @@ def main() -> int:
 
     titel = f"{PRAEFIX} {dt.date.fromisoformat(heute).strftime('%d.%m.%Y')}"
     t = tage(offen)
-    betreff = ("Neueste Studien zu Hitze, Klima und Gesundheit – " +
+    betreff = ("Neueste Studien - Hitze, Klima und Gesundheit – " +
                (lang(t[0]) if len(t) == 1 else f"{lang(t[-1])} bis {lang(t[0])}"))
 
     for k, d in eigene:

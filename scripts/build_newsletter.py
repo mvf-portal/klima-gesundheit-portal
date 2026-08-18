@@ -118,7 +118,7 @@ def build_feed(entries: list[dict]) -> str:
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
         "<channel>",
-        "<title>MVF-Klima-Hub: Neueste Studien zu Hitze, Klima und Gesundheit</title>",
+        "<title>MVF-Klima-Hub: Neueste Studien - Hitze, Klima und Gesundheit</title>",
         f"<link>{escape(utm(HUB, 'email', 'kanal'))}</link>",
         "<description>Täglich ausgewählte Studien aus PubMed, auf Deutsch "
         "zusammengefasst mit den konkreten Ergebnissen. Ein Angebot von "
@@ -145,7 +145,7 @@ def build_feed(entries: list[dict]) -> str:
 
 # ----------------------------------------------------------------- Downloads
 
-KOPFTEXT = ("Ein Service des Knowledge-Hubs Hitze, Klima und Gesundheit von Monitor Versorgungsforschung. "
+KOPFTEXT = ("Ein Service des Knowledge-Hubs von Monitor Versorgungsforschung. "
             "Täglich automatisiert KI-kuratiert aus PubMed und auf Deutsch übersetzt.")
 LOGO = "logo/mvf-logo.png"
 
@@ -279,9 +279,9 @@ def main() -> int:
     write_csv(f"{DL_DIR}/studien-aktuell.csv", aktuell)
     write_csv(f"{DL_DIR}/studien-archiv.csv", entries)
     write_docx(f"{DL_DIR}/studien-aktuell.docx", aktuell,
-               "Neueste Studien zu Hitze, Klima und Gesundheit", stand, zeitpunkt)
+               "Neueste Studien - Hitze, Klima und Gesundheit", stand, zeitpunkt)
     write_docx(f"{DL_DIR}/studien-archiv.docx", entries,
-               "Studienarchiv Hitze, Klima und Gesundheit", stand, zeitpunkt)
+               "Studienarchiv - Hitze, Klima und Gesundheit", stand, zeitpunkt)
     print(f"{DL_DIR}/: aktuell {len(aktuell)} Studien, Archiv {len(entries)} Studien.")
     return 0
 

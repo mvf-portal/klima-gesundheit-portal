@@ -34,10 +34,9 @@ jobs:
 
       - name: Studienliste aktualisieren
         env:
-          # Das Geheimnis heisst in diesem Repository KLIMAHUB. Der Zweitname
-          # bleibt stehen, falls es spaeter sprechender benannt wird - genau wie
-          # beim Mailchimp-Schluessel weiter unten.
-          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB || secrets.ANTHROPIC_API_KEY }}
+          # Das Geheimnis heisst in diesem Repository KLIMAHUB. Fehlt es, bricht der
+          # Lauf ab - bewusst ohne Rueckfallweg, damit ein falscher Name auffaellt.
+          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
           MODEL: claude-haiku-4-5          # günstiges Modell; z. B. claude-sonnet-5 für mehr Qualität
           # SEARCH_TERM: '...'   # optional: Standardabfrage ueberschreiben (siehe update_studies.py)
         run: python scripts/update_studies.py
@@ -55,9 +54,9 @@ jobs:
         continue-on-error: true
         env:
           # Das Geheimnis heisst in diesem Repository KLIMAHUBMC ("MC" fuer
-          # Mailchimp - nicht mit KLIMAHUB verwechseln, das ist der Claude-
-          # Schluessel). Die weiteren Namen sind Rueckfallwege.
-          MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC || secrets.KNOWLEDGEHUB || secrets.MAILCHIMP_API_KEY }}
+          # Mailchimp - nicht mit KLIMAHUB verwechseln, das ist der
+          # Claude-Schluessel).
+          MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
         run: python scripts/mailchimp_entwurf.py
 
       - name: Committen & pushen (nur bei Änderung)

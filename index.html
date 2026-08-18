@@ -1247,7 +1247,7 @@ function logoDataUri(){
   }catch(e){ return ''; }   // z. B. wenn die Leinwand als fremd gilt
 }
 
-const DL_KOPFTEXT = 'Ein Service des Knowledge-Hubs Hitze, Klima & Gesundheit von Monitor Versorgungsforschung. '
+const DL_KOPFTEXT = 'Ein Service des Knowledge-Hubs von Monitor Versorgungsforschung. '
   + 'Täglich automatisiert KI-kuratiert aus PubMed und auf Deutsch übersetzt.';
 
 function baueCSV(liste, mitDatum){
@@ -1303,7 +1303,7 @@ const CSV_MIME = 'text/csv;charset=utf-8';
 
 document.getElementById('dlAktuellDoc').addEventListener('click', ()=>{
   speichern('MVF-Klima-Hub_Neueste-Studien_'+dateiStempel()+'.doc',
-    baueDoc('Neu in PubMed — Studien zu Hitze, Klima & Gesundheit', 'Stand: '+alsKlartext(SNAP_DATE), STUDIES, false), DOC_MIME);
+    baueDoc('Neu in PubMed: Hitze, Klima & Gesundheit', 'Stand: '+alsKlartext(SNAP_DATE), STUDIES, false), DOC_MIME);
 });
 document.getElementById('dlAktuellCsv').addEventListener('click', ()=>{
   speichern('MVF-Klima-Hub_Neueste-Studien_'+dateiStempel()+'.csv',
