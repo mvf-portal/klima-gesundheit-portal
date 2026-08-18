@@ -70,10 +70,10 @@ FREIGABE_MAIL = "stegmaier@m-vf.de"
 # im Winter 08:00. naechster_termin() rechnet deshalb von hier nach UTC um.
 #
 # Der naechtliche Lauf beginnt um 06:00 Ortszeit, die Sammelmeldung kommt um
-# 06:45. Es bleiben also gut zwei Stunden, in denen sich die Terminierung mit
+# 06:45. Es bleiben also gut drei Stunden, in denen sich die Terminierung mit
 # einem Klick absagen laesst. Dieses Fenster ist der ganze Sinn der Sache: Der
 # Torwaechter faengt mechanischen Unfug, das Fenster faengt den inhaltlichen.
-TERMIN_LOKAL = "09:00"
+TERMIN_LOKAL = "10:00"
 
 # Titel aller von hier erzeugten Kampagnen. Daran erkennt das Skript spaeter,
 # was schon versendet wurde und was noch aussteht - Mailchimp fuehrt darueber
