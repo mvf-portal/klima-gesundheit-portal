@@ -81,10 +81,17 @@ SYSTEM = (
 USER_TEMPLATE = """Unten stehen aktuelle PubMed-Abstracts (nach Datum sortiert).
 
 Waehle GENAU 6 Studien aus, die (a) einen erkennbaren Bezug zwischen Umwelt- bzw.
-Klimafaktoren und menschlicher Gesundheit haben UND (b) im Abstract KONKRETE
-quantitative Ergebnisse nennen (Prozentwerte, relative Risiken, Odds/Hazard Ratios,
-zurechenbare Todesfaelle, p-Werte, Fallzahlen). Ueberspringe Studien ohne Abstract
-oder ohne konkrete Ergebnisse. Achte auf thematische Vielfalt.
+Klimafaktoren und menschlicher Gesundheit haben UND (b) im Abstract ein
+BENENNBARES ERGEBNIS berichten. Bei quantitativen Arbeiten heisst das: konkrete
+Zahlen (Prozentwerte, relative Risiken, Odds/Hazard Ratios, zurechenbare
+Todesfaelle, p-Werte, Fallzahlen) - und die gehoeren dann auch in die
+Zusammenfassung.
+Qualitative Studien (Interviews, Fokusgruppen) und Expertenpapiere sind
+ausdruecklich zugelassen; bei ihnen tritt an die Stelle der Zahl die klar benannte
+Kernaussage. Was NICHT genuegt, ist ein Abstract, der nur ankuendigt, was untersucht
+wurde, ohne zu sagen, was dabei herauskam.
+Ueberspringe Studien ohne Abstract oder ohne benennbares Ergebnis. Achte auf
+thematische Vielfalt und mische quantitative und qualitative Arbeiten.
 
 THEMATISCHE RANGFOLGE - in dieser Reihenfolge bevorzugen:
   1. Hitze und Extremtemperatur: Sterblichkeit, Morbiditaet, Notaufnahmen,
