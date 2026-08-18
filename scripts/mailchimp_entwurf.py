@@ -34,6 +34,8 @@ import datetime as dt
 import json
 import os
 import sys
+
+import torwaechter
 from html import escape
 from zoneinfo import ZoneInfo
 
@@ -61,6 +63,14 @@ REPLY_TO = "redaktion@m-vf.de"   # Antworten sollen in der Redaktion landen,
                                 # Mailchimp als Absender freigegeben sein.
 FREIGABE_MAIL = "stegmaier@m-vf.de"
 
+# Wann eine gepruefte Ausgabe rausgeht - UTC, in Viertelstundenschritten
+# (Mailchimp nimmt nichts anderes an). 08:00 UTC sind 10:00 Uhr deutscher
+# Sommerzeit. Der naechtliche Lauf beginnt um 04:00 UTC, es bleiben also rund
+# vier Stunden, in denen sich die Terminierung mit einem Klick absagen laesst.
+# Dieses Fenster ist der ganze Sinn der Sache: Der Torwaechter faengt
+# mechanischen Unfug, das Fenster faengt den inhaltlichen.
+TERMIN_UTC = "08:00"
+
 # Titel aller von hier erzeugten Kampagnen. Daran erkennt das Skript spaeter,
 # was schon versendet wurde und was noch aussteht - Mailchimp fuehrt darueber
 # selbst kein Buch, seit die RSS-Kampagne weg ist.
@@ -79,6 +89,8 @@ PRAEFIX = "MVF Klima-Newsletter"
 # Obergrenze, falls laenger nicht freigegeben wurde. Eine Ausgabe mit 80
 # Studien liest niemand; der Rest bleibt im Archiv und im Hub sichtbar.
 MAX_STUDIEN = 25
+# Tagesbericht fuer den Sammelbericht ueber alle Hubs.
+STATUSDATEI = "versand-status.json"
 
 MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni",
           "Juli", "August", "September", "Oktober", "November", "Dezember"]
@@ -383,8 +395,56 @@ class Mailchimp:
         self._ruf("POST", f"/campaigns/{kid}/actions/test",
                   json={"test_emails": [adresse], "send_type": "html"})
 
+    def empfaengerzahl(self, kid: str) -> int:
+        """Wie viele die Ausgabe bekaemen. Null heisst: etwas stimmt nicht."""
+        d = self._ruf("GET", f"/campaigns/{kid}")
+        return int(d.get("recipients", {}).get("recipient_count", 0))
+
+    def terminieren(self, kid: str, zeitpunkt: str) -> None:
+        # Mailchimp nimmt nur volle Viertelstunden an und lehnt alles in der
+        # Vergangenheit ab. Absagen laesst sich das bis zur letzten Minute -
+        # ueber die Oberflaeche oder mit actions/unschedule.
+        self._ruf("POST", f"/campaigns/{kid}/actions/schedule",
+                  json={"schedule_time": zeitpunkt})
+
 
 # --------------------------------------------------------------------- main
+
+def naechster_termin() -> str:
+    """Der naechste TERMIN_UTC, der noch in der Zukunft liegt (ISO, UTC)."""
+    jetzt = dt.datetime.now(dt.timezone.utc)
+    stunde, minute = (int(x) for x in TERMIN_UTC.split(":"))
+    ziel = jetzt.replace(hour=stunde, minute=minute, second=0, microsecond=0)
+    if ziel <= jetzt + dt.timedelta(minutes=20):
+        # Zu knapp oder schon vorbei: dann morgen. Ein Termin in zehn Minuten
+        # waere kein Veto-Fenster, sondern nur eine Verzoegerung.
+        ziel += dt.timedelta(days=1)
+    return ziel.strftime("%Y-%m-%dT%H:%M:%S+00:00")
+
+
+def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
+                    link: str, beanstandungen: list[str], termin: str | None) -> None:
+    """Was heute geschah - fuer den Sammelbericht ueber alle Hubs.
+
+    Die Datei wird vom Workflow mitcommittet; der Bericht im Repo
+    knowledge-hubs liest sie von allen Portalen ein und macht daraus EINE
+    Meldung statt fuenf.
+    """
+    with open(STATUSDATEI, "w", encoding="utf-8") as f:
+        json.dump({
+            "hub": "Knowledge-Hub Hitze, Klima & Gesundheit",
+            "domain": "klima.m-vf.de",
+            "datum": dt.datetime.now(TZ).date().isoformat(),
+            "stand": stand,                      # terminiert | gestoppt
+            "titel": titel,
+            "betreff": betreff,
+            "anzahl": len(studien),
+            "pmids": [str(e.get("pmid", "")) for e in studien],
+            "kampagne": link,
+            "termin_utc": termin,
+            "beanstandungen": beanstandungen,
+        }, f, ensure_ascii=False, indent=1)
+
 
 def datum_aus_titel(titel: str) -> str | None:
     """'MVF Studien-Newsletter 16.08.2026' -> '2026-08-16'."""
@@ -464,7 +524,28 @@ def main() -> int:
     mc.inhalt(kid, newsletter_html(offen, freigabe_hinweis(offen, link)))
     mc.testen(kid, FREIGABE_MAIL)
     # Dann sauber, damit die Leserschaft den Kasten nicht sieht.
-    mc.inhalt(kid, newsletter_html(offen))
+    sauber = newsletter_html(offen)
+    mc.inhalt(kid, sauber)
+
+    # ------------------------------------------------------------ Torwaechter
+    # Ab hier entscheidet die Maschine, ob die Ausgabe rausgeht. Schlaegt auch
+    # nur eine Pruefung an, wird NICHT terminiert: Der Entwurf bleibt liegen,
+    # der Grund steht in versand-status.json, und die Redaktion bekommt die
+    # Testausgabe mit dem Freigabekasten - dann eben doch von Hand.
+    beanstandungen = torwaechter.pruefe(
+        offen, html=sauber, empfaenger=mc.empfaengerzahl(kid))
+    termin = naechster_termin()
+    if beanstandungen:
+        print(f"Torwaechter: {len(beanstandungen)} Beanstandung(en) - nicht terminiert.")
+        for x in beanstandungen:
+            print("  ! " + x)
+        mc.inhalt(kid, newsletter_html(offen, freigabe_hinweis(offen, link)))
+        mc.testen(kid, FREIGABE_MAIL)
+        schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen, None)
+    else:
+        mc.terminieren(kid, termin)
+        print(f"Torwaechter: nichts zu beanstanden - terminiert auf {termin}.")
+        schreibe_status("terminiert", titel, betreff, offen, link, [], termin)
 
     # Aeltere, nie versendete Entwuerfe sind jetzt ueberholt: Ihre Studien
     # stecken vollstaendig im neuen. Zwei Entwuerfe mit ueberlappendem Inhalt

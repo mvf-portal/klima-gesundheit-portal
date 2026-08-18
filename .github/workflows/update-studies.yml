@@ -62,7 +62,7 @@ jobs:
       - name: Committen & pushen (nur bei Änderung)
         id: commit
         env:
-          DATEIEN: index.html studien-archiv.json studien-feed.xml download
+          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json
         run: |
           if [ -z "$(git status --porcelain $DATEIEN)" ]; then
             echo "Keine Änderung – nichts zu committen."

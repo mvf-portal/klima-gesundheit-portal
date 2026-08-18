@@ -390,6 +390,18 @@ Bewusst **kein Uebersetzungsdienst**: Ein Schluessel fuer DeepL oder Google mues
 
 Sichtbar gemacht wird das in der Ergebnisleiste („In internationalen Datenbanken wird gesucht als …"); der Schalter `#uebersetzenAn` stellt es ab und wirkt sofort, ohne Sprung.
 
+## Versand: Torwächter und Veto-Fenster
+
+Seit dem 18.08.2026 wird der Newsletter **nicht mehr von Hand freigegeben**. Der nächtliche Lauf legt den Entwurf an, `scripts/torwaechter.py` prüft ihn, und `mailchimp_entwurf.py` **terminiert** die Kampagne auf `TERMIN_UTC` (08:00 UTC = 10:00 Uhr deutscher Sommerzeit). Bis dahin lässt sie sich in Mailchimp mit einem Klick absagen — *Unschedule*.
+
+Der Grund für diese Bauweise: Versand ist der einzige Schritt der Kette, der sich nicht zurücknehmen lässt. Der Torwächter fängt **mechanischen** Unfug (fehlende Felder, Platzhalter, erfundene Zeitschriften — gegen PubMed geprüft, englisch gebliebene Zusammenfassungen, Dubletten, leeres Empfängersegment). Er fängt **nicht** die Zusammenfassung, die flüssig klingt und die Studie falsch wiedergibt; dafür ist das Zeitfenster da.
+
+**Schlägt eine Prüfung an, wird nicht terminiert.** Der Entwurf bleibt liegen, die Redaktion bekommt die Testausgabe mit Freigabekasten, und der Grund steht in `versand-status.json`. Lieber ein Tag ohne Newsletter als ein falscher.
+
+`versand-status.json` wird vom Workflow mitcommittet. Das Repo `mvf-portal/knowledge-hubs` liest sie von allen Portalen ein und macht daraus **eine** GitHub-Issue statt fünf E-Mails (`scripts/versand_bericht.py`, täglich 04:45 UTC).
+
+Qualitative Interviewstudien und Expertenpapiere sind ausdrücklich **zugelassen** — der Torwächter verlangt deshalb Substanz im Ergebnisfeld, aber keine Zahl.
+
 ## Fallstricke
 
 - **`const` vor seiner Definition benutzen legt die ganze Seite lahm.** Beim Einbau des Glossars stand `document.getElementById('cntGlossar').textContent = GLOSSAR.length;` vor der `const GLOSSAR`-Zeile. `const` wird zwar hochgezogen, ist davor aber nicht benutzbar — die Folge war ein `ReferenceError`, und weil das gesamte Skript in einem Block liegt, wurden **weder Kacheln noch Studien** gerendert. Nach Aenderungen am Skriptteil immer die Konsole pruefen.
