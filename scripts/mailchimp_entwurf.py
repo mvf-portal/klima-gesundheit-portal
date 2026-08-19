@@ -2,10 +2,16 @@
 # -*- coding: utf-8 -*-
 """Legt bei Mailchimp einen Kampagnen-ENTWURF fuer die Studien des Tages an.
 
-Verschickt wird NICHTS an die Leserschaft. Das Skript baut den fertigen
-Newsletter, legt ihn als Entwurf an und schickt eine Testausgabe an die
-Redaktion. Der Versand bleibt ein Klick von Hand - bei einer KI-kuratierten
-Auswahl ist das Absicht, nicht Umstaendlichkeit.
+Das Skript baut den fertigen Newsletter, legt ihn als Entwurf an, laesst ihn
+vom Torwaechter pruefen und terminiert ihn auf TERMIN_LOKAL. Bis dahin ist er
+in Mailchimp mit einem Klick absagbar - das Veto-Fenster ersetzt die Freigabe
+von Hand.
+
+Eine E-Mail geht nur noch heraus, wenn der Torwaechter etwas beanstandet: Dann
+bekommt die Redaktion die Testausgabe mit dem Grund, und der Entwurf bleibt
+liegen. Im Regelfall meldet der taegliche Sammelbericht ueber alle Hubs
+(knowledge-hubs/scripts/versand_bericht.py), was terminiert wurde - eine
+Meldung statt sechs Vorschauen.
 
 Warum ueberhaupt ein Skript: Mailchimp hat die klassischen Automationen im
 Juni 2025 abgeschaltet, darunter die RSS-Kampagne. Der Journey-Builder, der
@@ -16,9 +22,10 @@ Ablauf:
      endet das Skript ohne Entwurf - kein Versand ohne neue Studien.
   2. pruefen, ob fuer diesen Tag schon ein Entwurf besteht (doppelte Laeufe).
   3. Kampagne anlegen, Empfaenger ist der Tag "Studien-Newsletter Pubmed".
-  4. Inhalt setzen - zunaechst MIT Freigabe-Hinweis obenauf.
-  5. Testausgabe an die Redaktion schicken; sie ist zugleich die Vorschau.
-  6. Inhalt ohne den Hinweis erneut setzen, damit die Leserschaft ihn nicht sieht.
+  4. Inhalt setzen - in der Fassung, die die Leserschaft sieht.
+  5. Torwaechter pruefen lassen.
+  6. Sauber: terminieren, keine E-Mail. Beanstandet: Inhalt mit Stopp-Kasten
+     erneut setzen und als Testausgabe an die Redaktion schicken.
 
 Aufruf:
     python scripts/mailchimp_entwurf.py            # Entwurf anlegen
@@ -61,6 +68,8 @@ FROM_NAME = "Monitor Versorgungsforschung"
 REPLY_TO = "redaktion@m-vf.de"   # Antworten sollen in der Redaktion landen,
                                 # nicht beim Redaktionssystem. Die Adresse muss in
                                 # Mailchimp als Absender freigegeben sein.
+# Empfaenger der einzigen E-Mail, die dieses Skript noch verschickt: der
+# Testausgabe im Stopp-Fall. Im Regelfall meldet der Sammelbericht.
 FREIGABE_MAIL = "stegmaier@m-vf.de"
 
 # Wann eine gepruefte Ausgabe rausgeht - **deutsche Ortszeit**, in
@@ -283,8 +292,14 @@ def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
 </table>"""
 
 
-def freigabe_hinweis(studien: list[dict], link: str) -> str:
-    """Steht nur in der Testausgabe an die Redaktion, nie im Versand."""
+def stopp_hinweis(studien: list[dict], link: str, gruende: list[str]) -> str:
+    """Steht nur in der Testausgabe nach einer Beanstandung, nie im Versand.
+
+    Der Kasten sagt bewusst, dass NICHTS terminiert ist. Solange er im
+    Regelfall mitlief, behauptete er "Entwurf zur Freigabe", obwohl der
+    Versand langst auf 10:00 Uhr stand - eine Meldung, die das Gegenteil
+    dessen sagte, was geschah.
+    """
     anzahl = len(studien)
     t = tage(studien)
     zeitraum = (f" vom {lang(t[0])}" if len(t) == 1
@@ -292,9 +307,12 @@ def freigabe_hinweis(studien: list[dict], link: str) -> str:
     return f"""
     <tr><td style="background:{GOLD};padding:16px 28px;">
       <p style="margin:0 0 6px;font:bold 15px/1.4 {FONT};color:#2A2207;">
-        Entwurf zur Freigabe &ndash; noch nicht versendet</p>
+        Gestoppt &ndash; diese Ausgabe wird nicht versendet</p>
       <p style="margin:0;font:13px/1.6 {FONT};color:#2A2207;">
-        {anzahl} Studien{zeitraum}. So sähe die Ausgabe aus. Zum Prüfen und Senden:<br>
+        {anzahl} Studien{zeitraum}. Der Torwächter hat beanstandet:<br>
+        <strong>{escape('; '.join(gruende) or 'unbekannt')}</strong><br>
+        Der Entwurf liegt in Mailchimp und ist nicht terminiert. Zum Ansehen,
+        Bearbeiten und gegebenenfalls Senden von Hand:<br>
         <a href="{escape(link)}" style="color:#2A2207;"><strong>{escape(link)}</strong></a><br>
         Dieser Kasten steht nur in dieser Testausgabe; die Leserschaft sieht ihn nicht.</p>
     </td></tr>"""
@@ -475,7 +493,9 @@ def main() -> int:
         # die mehrtaegige Fassung mit Tagesbalken ansehen.
         drei = tage(alle)[:3]
         studien = [e for e in alle if e["aufgenommen"] in drei][:MAX_STUDIEN]
-        html = newsletter_html(studien, freigabe_hinweis(studien, "https://beispiel.invalid/entwurf"))
+        html = newsletter_html(studien, stopp_hinweis(
+            studien, "https://beispiel.invalid/entwurf",
+            ["Beispielbeanstandung - so sieht der Stopp-Fall aus"]))
         with open("_probe.html", "w", encoding="utf-8") as f:
             f.write(html)
         print(f"{len(studien)} Studien aus {len(tage(studien))} Tagen -> _probe.html")
@@ -528,10 +548,9 @@ def main() -> int:
     kid = kampagne["id"]
     link = f"https://{mc.dc}.admin.mailchimp.com/campaigns/edit?id={kampagne.get('web_id', '')}"
 
-    # Erst mit Freigabe-Kasten - diese Fassung geht nur an die Redaktion.
-    mc.inhalt(kid, newsletter_html(offen, freigabe_hinweis(offen, link)))
-    mc.testen(kid, FREIGABE_MAIL)
-    # Dann sauber, damit die Leserschaft den Kasten nicht sieht.
+    # Gleich die Fassung, die die Leserschaft sieht. Frueher lief hier erst
+    # eine Testausgabe mit Freigabe-Kasten mit; die ist entfallen, seit der
+    # Torwaechter terminiert und der Sammelbericht taeglich meldet.
     sauber = newsletter_html(offen)
     mc.inhalt(kid, sauber)
 
@@ -539,7 +558,8 @@ def main() -> int:
     # Ab hier entscheidet die Maschine, ob die Ausgabe rausgeht. Schlaegt auch
     # nur eine Pruefung an, wird NICHT terminiert: Der Entwurf bleibt liegen,
     # der Grund steht in versand-status.json, und die Redaktion bekommt die
-    # Testausgabe mit dem Freigabekasten - dann eben doch von Hand.
+    # einzige E-Mail, die dieses Skript noch verschickt - die Testausgabe mit
+    # dem Stopp-Kasten. Dann eben doch von Hand.
     beanstandungen = torwaechter.pruefe(
         offen, html=sauber, empfaenger=mc.empfaengerzahl(kid))
     termin = naechster_termin()
@@ -547,8 +567,9 @@ def main() -> int:
         print(f"Torwaechter: {len(beanstandungen)} Beanstandung(en) - nicht terminiert.")
         for x in beanstandungen:
             print("  ! " + x)
-        mc.inhalt(kid, newsletter_html(offen, freigabe_hinweis(offen, link)))
+        mc.inhalt(kid, newsletter_html(offen, stopp_hinweis(offen, link, beanstandungen)))
         mc.testen(kid, FREIGABE_MAIL)
+        print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
         schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen, None)
     else:
         mc.terminieren(kid, termin)
@@ -566,8 +587,7 @@ def main() -> int:
     print(f"Entwurf angelegt: {titel} - {len(offen)} Studien aus {len(t)} Tag(en)")
     if len(t) > 1:
         print(f"  darunter Nachzuegler seit {t[-1]} (zuletzt versendet: {seit or 'noch nie'})")
-    print(f"Testausgabe an {FREIGABE_MAIL} verschickt.")
-    print(f"Freigeben unter: {link}")
+    print(f"Kampagne: {link}")
     return 0
 
 
