@@ -42,6 +42,7 @@ import json
 import os
 import sys
 
+import sponsoren
 import torwaechter
 from html import escape
 from zoneinfo import ZoneInfo
@@ -70,6 +71,9 @@ REPLY_TO = "redaktion@m-vf.de"   # Antworten sollen in der Redaktion landen,
                                 # Mailchimp als Absender freigegeben sein.
 # Empfaenger der einzigen E-Mail, die dieses Skript noch verschickt: der
 # Testausgabe im Stopp-Fall. Im Regelfall meldet der Sammelbericht.
+SEITE = "https://klima.m-vf.de"   # einfache Zeichenkette: klima.m-vf.de wird beim
+                               # Erzeugen ersetzt, ein f-String wuerde die
+                               # Klammern verdoppeln und stehen lassen.
 FREIGABE_MAIL = "stegmaier@m-vf.de"
 
 # Wann eine gepruefte Ausgabe rausgeht - **deutsche Ortszeit**, in
@@ -275,6 +279,7 @@ def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
     <tr><td style="padding:28px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="border-top:1px solid #D0D8E4;padding-top:18px;font:12px/1.7 {FONT};color:#777;">
+          {sponsor_fuss()}
           <p style="margin:0 0 8px;">
             <strong>Monitor Versorgungsforschung</strong><br>
             eRelation AG &ndash; Content in Health<br>
@@ -290,6 +295,26 @@ def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
   </table>
 </td></tr>
 </table>"""
+
+
+def sponsor_fuss() -> str:
+    """Der Sponsorenhinweis fuer die Fusszeile - leer, wenn es keinen gibt.
+
+    Das Logo braucht hier eine ABSOLUTE Adresse: E-Mail-Programme loesen keine
+    relativen Pfade auf. Sie zeigt auf das Portal selbst, nicht auf den Server
+    des Sponsors - damit gilt auch im Newsletter, was auf der Seite gilt.
+    """
+    liste = sponsoren.lade()
+    if not liste:
+        return ""
+    bilder = "".join(
+        f'<a href="{escape(s["u"])}" style="text-decoration:none;">'
+        f'<img src="{SEITE}/{escape(s["logo"])}" height="34" alt="{escape(s["n"])}"'
+        f' style="height:34px;width:auto;border:0;vertical-align:middle;margin-right:14px;"></a>'
+        for s in liste)
+    return (f'<p style="margin:0 0 14px;">'
+            f'<span style="display:block;margin-bottom:6px;">Gesponsert von '
+            f'&ndash; ohne Einfluss auf die Inhalte:</span>{bilder}</p>')
 
 
 def stopp_hinweis(studien: list[dict], link: str, gruende: list[str]) -> str:

@@ -18,6 +18,7 @@ mehreren Tagen in den PubMed-Treffern auftaucht, geht dadurch nie doppelt raus.
 from __future__ import annotations
 
 import csv
+import sponsoren
 import datetime as dt
 import io
 import json
@@ -147,6 +148,17 @@ def build_feed(entries: list[dict]) -> str:
 
 KOPFTEXT = ("Ein Service des Knowledge-Hubs von Monitor Versorgungsforschung. "
             "Täglich automatisiert KI-kuratiert aus PubMed und auf Deutsch übersetzt.")
+
+
+def kopftext() -> str:
+    """Kopftext samt Sponsorenhinweis - ohne Sponsor unveraendert.
+
+    In die Tabelle selbst gehoert der Hinweis nicht: Die CSV wird importiert,
+    und eine zusaetzliche Datenzeile landete als Datensatz in einer Zelle.
+    Der Kopftext ueber der Leerzeile ist die dafuer vorgesehene Stelle.
+    """
+    zusatz = sponsoren.zeile()
+    return f"{KOPFTEXT} {zusatz}" if zusatz else KOPFTEXT
 LOGO = "logo/mvf-logo.png"
 
 SPALTEN = ["Aufgenommen", "Autor", "Publiziert am", "In PubMed seit", "Journal", "Jahr", "Titel",
@@ -167,7 +179,7 @@ def write_csv(pfad: str, entries: list[dict]) -> None:
     w = csv.writer(buf, delimiter=";", quoting=csv.QUOTE_MINIMAL, lineterminator="\r\n")
     # Eine Tabelle kann kein Logo aufnehmen - deshalb nur der Kopftext,
     # abgesetzt durch eine Leerzeile.
-    w.writerow([KOPFTEXT])
+    w.writerow([kopftext()])
     w.writerow([])
     w.writerow(SPALTEN)
     for e in entries:
@@ -214,7 +226,7 @@ def write_docx(pfad: str, entries: list[dict], titel: str, stand: str,
     if os.path.exists(LOGO):
         doc.add_picture(LOGO, width=Inches(1.9))
     pk = doc.add_paragraph()
-    rk = pk.add_run(KOPFTEXT)
+    rk = pk.add_run(kopftext())
     rk.font.size = Pt(9.5)
     rk.font.color.rgb = RGBColor(0x00, 0x51, 0xA1)
 
