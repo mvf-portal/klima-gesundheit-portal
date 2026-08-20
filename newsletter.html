@@ -551,3 +551,31 @@ form.addEventListener('submit', (e)=>{
 });
 </script>
 </html>
+
+<!-- ZAEHLER-START --------------------------------------------------------
+     Zaehlt den Aufruf auf dem eigenen Server von Monitor Versorgungsforschung.
+     Kein Cookie, keine Kennung auf dem Geraet, keine fremde Firma. Wer Do Not
+     Track gesetzt hat, wird gar nicht erst gezaehlt. Schlaegt der Abruf fehl,
+     merkt die Seite es nicht - ein Bild, das nicht laedt, ist folgenlos.
+     Gegenstueck: /zaehler/z.php auf monitor-versorgungsforschung.de -->
+<script>
+(function () {
+  try {
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1'
+        || navigator.globalPrivacyControl === true) return;
+    if (!/\.m-vf\.de$/.test(location.hostname)) return;   // lokal nicht zaehlen
+    var r = '';
+    try { r = document.referrer ? new URL(document.referrer).hostname : ''; }
+    catch (e) { r = ''; }
+    if (r === location.hostname) r = '';
+    var q = 'h=' + encodeURIComponent(location.hostname)
+          + '&p=' + encodeURIComponent(location.pathname)
+          + '&r=' + encodeURIComponent(r ? 'https://' + r + '/' : '')
+          + '&g=' + (Math.min(screen.width, screen.height) < 768 ? 'm' : 'd')
+          + '&c=' + Date.now();
+    new Image(1, 1).src =
+      'https://www.monitor-versorgungsforschung.de/zaehler/z.php?' + q;
+  } catch (e) { /* Zaehlung ist nie wichtiger als die Seite */ }
+})();
+</script>
+<!-- ZAEHLER-ENDE -->
