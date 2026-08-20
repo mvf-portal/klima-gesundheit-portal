@@ -70,8 +70,17 @@ def _esummary(pmids: list[str]) -> dict:
         return json.load(r).get("result", {})
 
 
+# Anteil der Gesamtliste, ab dem eine Ausgabe nicht mehr als Segment gelten
+# kann. Ein Studien-Newsletter richtet sich an die Abonnenten EINES Hubs; wer
+# fast die ganze Hausliste erreicht, hat sein Segment verloren - etwa weil eine
+# Gruppenkennung nicht mehr stimmt und Mailchimp auf "alle" zurueckfaellt.
+# Bewusst hoch angesetzt: Ein falscher Stopp kostet eine Ausgabe, ein
+# versehentlicher Vollversand an ueber 10.000 Menschen ist nicht zurueckholbar.
+ANTEIL_MAX = 0.9
+
+
 def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
-           gegen_pubmed: bool = True) -> list[str]:
+           gegen_pubmed: bool = True, listengroesse: int | None = None) -> list[str]:
     """Alle Beanstandungen als Liste. Leere Liste heisst: terminieren."""
     m: list[str] = []
     if not studien:
@@ -157,6 +166,9 @@ def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
 
     if empfaenger is not None and empfaenger < 1:
         m.append("das Empfaengersegment ist leer - niemand wuerde die Ausgabe bekommen")
+    if empfaenger and listengroesse and empfaenger >= ANTEIL_MAX * listengroesse:
+        m.append(f"das Empfaengersegment umfasst {empfaenger} von {listengroesse} "
+                 f"Adressen der ganzen Zielgruppe - das ist kein Segment mehr")
 
     return m
 

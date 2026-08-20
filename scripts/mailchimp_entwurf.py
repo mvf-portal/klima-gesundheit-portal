@@ -447,6 +447,15 @@ class Mailchimp:
         d = self._ruf("GET", f"/campaigns/{kid}")
         return int(d.get("recipients", {}).get("recipient_count", 0))
 
+    def listengroesse(self) -> int:
+        """Wie viele Menschen insgesamt in der Zielgruppe stehen.
+
+        Nur als Bezugsgroesse: Eine Ausgabe, die fast die ganze Liste
+        erreicht, hat ihr Segment verloren - siehe torwaechter.pruefe().
+        """
+        d = self._ruf("GET", f"/lists/{LIST_ID}")
+        return int(d.get("stats", {}).get("member_count", 0))
+
     def terminieren(self, kid: str, zeitpunkt: str) -> None:
         # Mailchimp nimmt nur volle Viertelstunden an und lehnt alles in der
         # Vergangenheit ab. Absagen laesst sich das bis zur letzten Minute -
@@ -474,7 +483,8 @@ def naechster_termin() -> str:
 
 
 def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
-                    link: str, beanstandungen: list[str], termin: str | None) -> None:
+                    link: str, beanstandungen: list[str], termin: str | None,
+                    empfaenger: int = 0, listengroesse: int = 0) -> None:
     """Was heute geschah - fuer den Sammelbericht ueber alle Hubs.
 
     Die Datei wird vom Workflow mitcommittet; der Bericht im Repo
@@ -493,6 +503,8 @@ def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
             "pmids": [str(e.get("pmid", "")) for e in studien],
             "kampagne": link,
             "termin_utc": termin,
+            "empfaenger": empfaenger,
+            "listengroesse": listengroesse,
             "beanstandungen": beanstandungen,
         }, f, ensure_ascii=False, indent=1)
 
@@ -585,8 +597,11 @@ def main() -> int:
     # der Grund steht in versand-status.json, und die Redaktion bekommt die
     # einzige E-Mail, die dieses Skript noch verschickt - die Testausgabe mit
     # dem Stopp-Kasten. Dann eben doch von Hand.
+    empfaenger = mc.empfaengerzahl(kid)
+    gesamt = mc.listengroesse()
+    print(f"Empfaengerzahl: {empfaenger} von {gesamt} in der Zielgruppe.")
     beanstandungen = torwaechter.pruefe(
-        offen, html=sauber, empfaenger=mc.empfaengerzahl(kid))
+        offen, html=sauber, empfaenger=empfaenger, listengroesse=gesamt)
     termin = naechster_termin()
     if beanstandungen:
         print(f"Torwaechter: {len(beanstandungen)} Beanstandung(en) - nicht terminiert.")
@@ -595,11 +610,13 @@ def main() -> int:
         mc.inhalt(kid, newsletter_html(offen, stopp_hinweis(offen, link, beanstandungen)))
         mc.testen(kid, FREIGABE_MAIL)
         print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
-        schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen, None)
+        schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen,
+                        None, empfaenger, gesamt)
     else:
         mc.terminieren(kid, termin)
         print(f"Torwaechter: nichts zu beanstanden - terminiert auf {termin}.")
-        schreibe_status("terminiert", titel, betreff, offen, link, [], termin)
+        schreibe_status("terminiert", titel, betreff, offen, link, [], termin,
+                        empfaenger, gesamt)
 
     # Aeltere, nie versendete Entwuerfe sind jetzt ueberholt: Ihre Studien
     # stecken vollstaendig im neuen. Zwei Entwuerfe mit ueberlappendem Inhalt
