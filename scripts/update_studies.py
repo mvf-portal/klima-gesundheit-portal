@@ -110,10 +110,20 @@ def _get(path: str, params: dict, timeout: int) -> requests.Response:
     raise RuntimeError(f"PubMed nicht erreichbar: {last}")
 
 
+# Publikationstypen, die nie in eine Ausgabe gehoeren. Eine Berichtigung
+# ("Corrigendum to ...") traegt keine eigenen Ergebnisse; das Modell waehlt sie
+# trotzdem, wenn sie im Pool liegt, und schreibt dann Platzhalter in die Felder.
+# Am 20.08.2026 im Versorgungsforschungs-Portal passiert (PMID 42617323).
+# Der Ausschluss steht hier und nicht im Prompt: Was gar nicht erst im Pool
+# liegt, kann auch nicht ausgewaehlt werden.
+AUSSCHLUSS = ('NOT ("Published Erratum"[pt] OR "Retraction of Publication"[pt] '
+              'OR "Retracted Publication"[pt] OR "Duplicate Publication"[pt])')
+
+
 def _suche(term: str, anzahl: int) -> list[str]:
     r = _get(
         "esearch.fcgi",
-        {"db": "pubmed", "term": term, "sort": "date",
+        {"db": "pubmed", "term": f"({term}) {AUSSCHLUSS}", "sort": "date",
          "retmax": str(anzahl), "retmode": "json"},
         timeout=30,
     )

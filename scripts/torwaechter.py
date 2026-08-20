@@ -87,6 +87,14 @@ def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
         text = " ".join(str(e.get(f, "")) for f in ("title", "sum", "result"))
         if "{{" in text or "}}" in text:
             m.append(f"{kopf}: unersetzter Platzhalter im Text")
+        # Eckige Klammern am Feldanfang sind die Notbremse des Modells: Statt
+        # eine unbrauchbare Arbeit zu ueberspringen, schreibt es hinein, warum
+        # sie unbrauchbar ist - "[Nicht verwertbar - Berichtigung ohne eigene
+        # Ergebnisse]". Das gehoert nie in eine Ausgabe.
+        if any(str(e.get(f, "")).strip().startswith("[")
+               for f in ("title", "sum", "result", "transfer")):
+            m.append(f"{kopf}: Feld beginnt mit einer Klammerbemerkung statt "
+                     f"mit Inhalt")
         if len(str(e.get("result", "")).strip()) < MIN_ERGEBNIS:
             m.append(f"{kopf}: Ergebnisfeld ist mit "
                      f"{len(str(e.get('result', '')).strip())} Zeichen zu duenn")
@@ -125,6 +133,16 @@ def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
                 jahr = (d.get("pubdate") or "")[:4]
                 if jahr and str(e.get("year", "")) not in (jahr, ""):
                     m.append(f"PMID {e['pmid']}: Jahr {e.get('year')} statt {jahr}")
+                # Berichtigungen und Ruecknahmen tragen keine eigenen
+                # Ergebnisse. Die Abfrage schliesst sie aus; falls doch eine
+                # durchkommt, faellt sie hier auf - und zwar unter ihrem
+                # richtigen Namen, nicht als "Zusammenfassung zu kurz".
+                typen = {t.lower() for t in (d.get("pubtype") or [])}
+                schlecht = typen & {"published erratum", "retraction of publication",
+                                    "retracted publication", "duplicate publication"}
+                if schlecht:
+                    m.append(f"PMID {e['pmid']}: ist laut PubMed "
+                             f"{', '.join(sorted(schlecht))} - keine eigene Studie")
         except Exception as fehler:              # Netz weg, PubMed langsam
             m.append(f"Abgleich mit PubMed nicht moeglich: {fehler}")
 
