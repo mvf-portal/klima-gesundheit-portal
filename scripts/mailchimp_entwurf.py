@@ -317,6 +317,24 @@ def sponsor_fuss() -> str:
             f'&ndash; ohne Einfluss auf die Inhalte:</span>{bilder}</p>')
 
 
+# Kein Versand am Wochenende. Die Hubs werden weiter taeglich aktualisiert -
+# nur die E-Mail pausiert. Was am Samstag und Sonntag hinzukommt, bleibt offen
+# und laeuft montags mit; das Skript versendet ohnehin nicht "die Studien von
+# heute", sondern alle noch nicht versendeten.
+WOCHENENDE_AUS = True
+
+
+def montags_hinweis(studien: list[dict]) -> str:
+    """Erklaert die laengere Montagsausgabe - sonst wirkt sie wie ein Fehler."""
+    return f"""
+    <tr><td style="background:#E3EBF7;padding:14px 28px;">
+      <p style="margin:0;font:13px/1.6 {FONT};color:#1B3352;">
+        <strong>Ausgabe vom Montag.</strong> Sie erhalten heute die Studien vom
+        Wochenende und von heute in einer Ausgabe &ndash; deshalb ist diese
+        Liste laenger als sonst.</p>
+    </td></tr>"""
+
+
 def stopp_hinweis(studien: list[dict], link: str, gruende: list[str]) -> str:
     """Steht nur in der Testausgabe nach einer Beanstandung, nie im Versand.
 
@@ -479,6 +497,10 @@ def naechster_termin() -> str:
         # Zu knapp oder schon vorbei: dann morgen. Ein Termin in zehn Minuten
         # waere kein Veto-Fenster, sondern nur eine Verzoegerung.
         ziel += dt.timedelta(days=1)
+    if WOCHENENDE_AUS:
+        # Ein Freitagslauf nach 10:00 wuerde sonst auf Samstag rutschen.
+        while ziel.weekday() >= 5:
+            ziel += dt.timedelta(days=1)
     return ziel.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00")
 
 
@@ -556,6 +578,13 @@ def main() -> int:
         print(f"Nichts offen - zuletzt versendet wurde der Stand vom {seit}.")
         return 0
 
+    if WOCHENENDE_AUS and dt.date.fromisoformat(heute).weekday() >= 5:
+        # Kein Entwurf, keine Terminierung - die offenen Studien laufen am
+        # Montag mit. Die Seite selbst ist da laengst aktualisiert.
+        tag = "Samstag" if dt.date.fromisoformat(heute).weekday() == 5 else "Sonntag"
+        print(f"{tag}: kein Versand. {len(offen)} offene Studien warten auf Montag.")
+        return 0
+
     entwuerfe = [(k, datum_aus_titel(k.get("settings", {}).get("title", "")))
                  for k in mc.entwuerfe()]
     eigene = [(k, d) for k, d in entwuerfe if d]
@@ -588,7 +617,11 @@ def main() -> int:
     # Gleich die Fassung, die die Leserschaft sieht. Frueher lief hier erst
     # eine Testausgabe mit Freigabe-Kasten mit; die ist entfallen, seit der
     # Torwaechter terminiert und der Sammelbericht taeglich meldet.
-    sauber = newsletter_html(offen)
+    # Montags erklaert ein Kasten die laengere Ausgabe. Nur dann, und nur
+    # wenn wirklich mehrere Tage darin stecken - sonst erklaert er nichts.
+    montag = (WOCHENENDE_AUS and dt.date.fromisoformat(heute).weekday() == 0
+              and len(t) > 1)
+    sauber = newsletter_html(offen, montags_hinweis(offen) if montag else "")
     mc.inhalt(kid, sauber)
 
     # ------------------------------------------------------------ Torwaechter
@@ -607,7 +640,9 @@ def main() -> int:
         print(f"Torwaechter: {len(beanstandungen)} Beanstandung(en) - nicht terminiert.")
         for x in beanstandungen:
             print("  ! " + x)
-        mc.inhalt(kid, newsletter_html(offen, stopp_hinweis(offen, link, beanstandungen)))
+        mc.inhalt(kid, newsletter_html(
+            offen, stopp_hinweis(offen, link, beanstandungen)
+            + (montags_hinweis(offen) if montag else "")))
         mc.testen(kid, FREIGABE_MAIL)
         print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
         schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen,
