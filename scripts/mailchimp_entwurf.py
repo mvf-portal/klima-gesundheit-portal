@@ -331,7 +331,7 @@ def montags_hinweis(studien: list[dict]) -> str:
       <p style="margin:0;font:13px/1.6 {FONT};color:#1B3352;">
         <strong>Ausgabe vom Montag.</strong> Sie erhalten heute die Studien vom
         Wochenende und von heute in einer Ausgabe &ndash; deshalb ist diese
-        Liste laenger als sonst.</p>
+        Liste länger als sonst.</p>
     </td></tr>"""
 
 
