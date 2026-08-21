@@ -402,7 +402,13 @@ const REIHE = [
   { gruppe:"group[16143][131072]", titel:"Nicht uebertragbare Krankheiten",
     url:"https://ncd.m-vf.de", domain:"ncd.m-vf.de", bereit:true,
     was:"Die Versorgung chronisch Kranker: Diabetes, Herz-Kreislauf, Krebs "
-      + "und Mehrfacherkrankung - Programme, Leitlinien, Ergebnisse." }
+      + "und Mehrfacherkrankung - Programme, Leitlinien, Ergebnisse." },
+  // bereit:false, solange Secrets, Zertifikat und erster Versand fehlen -
+  // niemand soll einen Newsletter bestellen, den es noch nicht gibt.
+  { gruppe:"group[16145][262144]", titel:"Geschlechtersensible Medizin",
+    url:"http://gender.m-vf.de", domain:"gender.m-vf.de", bereit:false,
+    was:"Geschlecht als Einflussgroesse in der Versorgung: Diagnostik, "
+      + "Dosierung, Zugang - und woran der Unterschied jeweils haengt." }
 ];
 
 const MC_SEITE = "https://monitor-versorgungsforschung.us6.list-manage.com/subscribe?u=f4c91757bc7d8c740641acb50&id=1c8fc10ec7";
@@ -563,15 +569,27 @@ form.addEventListener('submit', (e)=>{
   try {
     if (navigator.doNotTrack === '1' || window.doNotTrack === '1'
         || navigator.globalPrivacyControl === true) return;
+    // Automatische Umgebungen melden sich selbst: navigator.webdriver setzen
+    // Headless Chrome und Selenium von sich aus. Zuverlaessiger als jede
+    // Liste von Browserkennungen, weil es nicht geraten, sondern gemeldet wird.
+    if (navigator.webdriver) return;
+    if (!screen.width || !screen.height) return;   // kein echter Bildschirm
     if (!/\.m-vf\.de$/.test(location.hostname)) return;   // lokal nicht zaehlen
     var r = '';
     try { r = document.referrer ? new URL(document.referrer).hostname : ''; }
     catch (e) { r = ''; }
     if (r === location.hostname) r = '';
+    // Bildschirmbreite nur in Stufen. Die genaue Aufloesung waere eines der
+    // staerksten Merkmale zum Wiedererkennen eines Browsers; fuer die Frage,
+    // fuer welche Breite zu gestalten ist, genuegt die Schublade.
+    var w = screen.width;
+    var stufe = w < 480 ? 'bis480' : w < 768 ? 'bis768' : w < 1024 ? 'bis1024'
+              : w < 1440 ? 'bis1440' : w < 1920 ? 'bis1920' : 'ueber1920';
     var q = 'h=' + encodeURIComponent(location.hostname)
           + '&p=' + encodeURIComponent(location.pathname)
           + '&r=' + encodeURIComponent(r ? 'https://' + r + '/' : '')
           + '&g=' + (Math.min(screen.width, screen.height) < 768 ? 'm' : 'd')
+          + '&b=' + stufe
           + '&c=' + Date.now();
     new Image(1, 1).src =
       'https://www.monitor-versorgungsforschung.de/zaehler/z.php?' + q;
