@@ -1051,62 +1051,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "21. Aug. 2026, 07:50 Uhr";
+const SNAP_DATE = "22. Aug. 2026, 07:05 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
+  {
+    journal:"Nat Commun", year:"2026", pmid:"42624863",
+    author:"Heil CS et al.", pubdate:"21.08.2026",
+    added:"20.08.2026",
+    title:"Hitze und Schwangerschaftsergebnisse: systematische Übersicht und Meta-Analyse zu Temperaturschwellen",
+    sum:"Eine systematische Übersicht und Meta-Analyse (103 Studien, n=41,9 Millionen) identifizierte Temperaturschwellen für Hitzeeffekte auf Schwangerschafts- und Geburtsoutcomes.",
+    result:"Meta-Regressionsanalysen bestimmten maximale Temperaturschwellen von 30,55 °C (für 5 % Risikosteigerung), 34,11 °C (10 %) und 39,07 °C (20 % Risikosteigerung, 21 Studien, n=5.589.862). Die Ergebnisse zeigen heterogene Indikatoren und mangelnde standardisierte Heat-Stress-Indizes.",
+    transfer:"Internationale Evidenz, aber Schwellenwerte klim aabhängig – für Süddeutschland relevanter als Norden"
+  },
   {
     journal:"Int J Epidemiol", year:"2026", pmid:"42613027",
     author:"Park J et al.", pubdate:"18.08.2026",
     added:"18.08.2026",
-    title:"Altersabhängige Anfälligkeit von Nierenkrankheiten gegenüber Temperaturextremen: nationale Fall-Crossover-Studie",
-    sum:"Analyse von 1,9 Millionen Notaufnahmebesuchen in Südkorea (2011–2019) zur Assoziation von Außentemperatur und Nierenkrankheitsdiagnosen nach Alter und Subtyp.",
-    result:"Hitzerisiko für Nierenkrankheits-Notaufnahmen war höchst bei 50–59-Jährigen (OR: 1,28, 95%-KI 1,22–1,34). Kälterisiko war höchst bei 30–39-Jährigen (OR: 1,13, 95%-KI 1,05–1,20). Jüngere und mittlere Altersgruppen sollten in Klimaanpassungsstrategien berücksichtigt werden.",
-    transfer:"Gemäßigte Klimazone, große Kohortengröße – Methodik hochwertig, aber Temperaturschwellen nicht auf Deutschland übertragbar."
+    title:"Temperaturabhängige Nierenkrankheits-Vulnerabilität nach Alter: nationale Fall-Crossover-Studie",
+    sum:"Eine landesweite Fall-Crossover-Studie in Südkorea untersuchte altersabhängige Assoziationen zwischen Umgebungstemperatur und Notaufnahmebesuchen wegen Nierenkrankheiten (1,9 Millionen Fälle 2011–2019).",
+    result:"Hitzebedingte Risiken waren bei 50–59-Jährigen höchst (OR: 1,28; 95%-KI: 1,22–1,34). Kältebedingte Risiken waren bei 30–39-Jährigen höchst (OR: 1,13; 95%-KI: 1,05–1,20). Bei Hitzestress dominierte Urinsteininfekt bei unter 30-Jährigen (OR: 1,37) und akutes Nierenversagen bei 40-Jährigen (OR: 2,29). Ältere Erwachsene (≥70 Jahre) hatten höchste medizinische Kostenlast.",
+    transfer:"Südkorea – gemäßigte Klimazone, gute Datenqualität, aber höhere Hitzeschwellen als Deutschland"
+  },
+  {
+    journal:"BMJ Open Respir Res", year:"2026", pmid:"42608143",
+    author:"Tornevi A et al.", pubdate:"17.08.2026",
+    added:"17.08.2026",
+    title:"Kurzzeitexposition gegenüber Luftverschmutzung und COVID-19 in schwedischen Städten: Fall-Crossover-Analyse",
+    sum:"Eine Fall-Crossover-Studie mit 3.999 COVID-19-Fällen aus drei schwedischen Städten (2020–2022) untersuchte Assoziationen zwischen täglichen PM2,5-, PM10- und NO2-Werten und positiven PCR-Tests.",
+    result:"Erhöhte PM2,5-Werte waren signifikant mit COVID-19-Positivtests am selben Tag assoziiert (OR: 1,084; 95%-KI: 1,011–1,162 pro IQR 3,3 µg/m³). PM10 zeigte Effekte bei Lag 3, NO2-Effekte waren weniger konsistent. Subgruppenanalysen zeigten ähnliche Muster bei Personen mit Atemwegserkrankungen in der Vorgeschichte.",
+    transfer:"Schweden – gemäßigte Klimazone, vergleichbare Luftqualitätsdaten und Infrastruktur"
   },
   {
     journal:"Nat Commun", year:"2026", pmid:"42575902",
     author:"Tomkins MD et al.", pubdate:"10.08.2026",
     added:"10.08.2026",
-    title:"Wasserflächen und städtische Temperaturausgleich: nationale Analyse von Kanälen in Großbritannien und Irland",
-    sum:"Energiebilanzmodellierung zur Berechnung des Kühleffekts von Kanalnetzwerken auf städtische Oberflächentemperaturen.",
-    result:"Kanäle erbrachten durchschnittlich einen Kühleffekt von etwa 0,8°C (0,7–1,0°C) in unmittelbarer Umgebung; stärker ausgeprägt in Frühjahr und Frühsommer (1,2–1,4°C) sowie während Hitzewellen (1,5–2,3°C). Damit reduzieren Wasserflächen messbar die Hitzebelastung in städtischen Siedlungen.",
-    transfer:"Großbritannien und Irland – gemäßigte Klimazone, vergleichbare Urbanisierung; übertragbar auf Deutschland bezüglich Urban-Heat-Island-Reduktion."
-  },
-  {
-    journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
-    author:"Radici A et al.", pubdate:"Aug. 2026",
-    added:"10.08.2026",
-    title:"Aedes albopictus und Dengueübertragungsrisiko in Frankreich im 21. Jahrhundert",
-    sum:"Mechanistisches Modell zur Projektion der Klimatauglichkeit für Aedes-albopictus-Etablierung und autochthone Dengueübertragung in Frankreich bis 2085 unter unterschiedlichen Emissionsszenarien.",
-    result:"Im Szenario hoher Emissionen werden 89–96% des französischen Territoriums climatisch geeignet für Aedes albopictus (außer Bergregionen). Autochthone Dengueübertragung wäre in 71–95% der besiedelten Gebiete möglich. Im Mittelszenario deutlich höhere regionale Variabilität (49–89% Etablierungstauglichkeit, 31–82% Transmissionsrisiko).",
-    transfer:"Südfrankreich – mediterrane Klimazone mit höheren Temperaturschwellen als Deutschland; Methodik und Vektorkompetenz relevanter als absolute Zahlen."
+    title:"Kanäle als Kühleffekt in britischen Städten: nationale Analyse zur Wärmereduktion",
+    sum:"Eine Energiebilanzmodellierung untersuchte die thermischen Effekte des Kanalnetzes in Großbritannien und Irland auf städtische Temperaturen.",
+    result:"Kanäle bieten einen durchschnittlichen jährlichen Tageskühleffekt von etwa 0,8 °C (0,7–1,0 °C) in unmittelbarer Nähe, mit ausgeprägteren Kühleffekten während Hitzewellen von 1,5–2,3 °C. Die Erkenntnisse zeigen, dass Blauräume das Hitzerisiko reduzieren und die Bevölkerungsgesundheit verbessern können.",
+    transfer:"Großbritannien und Irland – gemäßigte Klimazone, urbane Infrastruktur vergleichbar mit Deutschland"
   },
   {
     journal:"Euro Surveill", year:"2026", pmid:"42565263",
     author:"Rise N et al.", pubdate:"Aug. 2026",
     added:"07.08.2026",
-    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa: Rapid Review 2018–2025",
-    sum:"Systematische Übersichtsarbeit zu Assoziationen zwischen Extremwetterereignissen (Starkregen, Hochwasser) und Infektionskrankheiten in Europa über 14 eingeschlossene Studien.",
-    result:"Hauptsächlich Ausbrüche von Campylobacteriose und Leptospirose nach Überschwemmungen in Europa dokumentiert. Öffentliche Gesundheitskommunikation zu Hygiene war häufigste Gegenmaßnahme. Aber: Nur 14 Artikel aus 897 identifizierten – deutliche Forschungslücke in Europa trotz breiter Suchkriterien. Strukturelle Maßnahmen (Abwasserinfrastruktur) und One-Health-Surveillance wurden empfohlen.",
-    transfer:"Europa-Review – direkt auf Deutschland übertragbar für Infektionsepidemien nach Extremwetter."
-  },
-  {
-    journal:"Lancet Planet Health", year:"2026", pmid:"42486136",
-    author:"Leal Filho W et al.", pubdate:"22.07.2026",
-    added:"22.07.2026",
-    title:"Malaria-Kontrollstrategien in Westafrika: Klimawandel und fehlende Anpassung",
-    sum:"Qualitative Analyse von 11 nationalen Malaria-Strategieplänen aus West- und Zentralafrika zur Integration von Klimadaten in die Überwachung und Bekämpfung.",
-    result:"Obwohl die meisten Länder den Einfluss von Klima auf Malaria anerkennen, zeigen nur Ghana und Nigeria fortgeschrittene datengestützte Ansätze. Die meisten Strategien bleiben reaktiv statt vorhersagend wegen Datenlücken, technischer und Koordinationsmängel – ein klares Politikdefizit in der Anpassung.",
-    transfer:"Tropen – Methodik zur Politikbewertung übertragbar, aber Temperaturschwellen nicht."
+    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa: systematische schnelle Übersicht 2018–2025",
+    sum:"Eine schnelle systematische Übersicht (14 eingeschlossene Artikel aus 897 identifizierten) untersuchte Assoziationen zwischen Starkregen, Überschwemmungen und Infektionskrankheitsinzidenz in Europa.",
+    result:"Campylobacteriose- und Leptospirose-Ausbrüche wurden nach Starkregen und Überschwemmungsereignissen in Europa berichtet. Häufigste Präventionsmaßnahmen: Public-Health-Kommunikation und Hygienemaßnahmen; strukturelle Maßnahmen (Abwasserinfrastruktur, One-Health-Surveillance) wurden weniger häufig berichtet. Trotz breiter Suchkriterien waren europäische Studien selten, was auf Forschungslücken deutet.",
+    transfer:"Europa – direkt relevant; zeigt etablierte Erreger (Campylobacter, Leptospira) in bekannten Überschwemmungskontexten"
   },
   {
     journal:"Environ Int", year:"2026", pmid:"42492428",
     author:"Boser M et al.", pubdate:"18.07.2026",
     added:"23.07.2026",
-    title:"Pollenpräsenz und asthmabedingte Notfallbehandlungen: Zeitreihenanalyse mit automatisierter Pollenüberwachung in Bayern",
-    sum:"Studie zu Asthma-Exazerbationen in Relation zu Pollen-Exposition (Betula, Poaceae) in Bayern mit hochauflösenden Echtzeit-Daten.",
-    result:"Hohe Betula-Konzentrationen waren mit erhöhtem Asthmarisiko verbunden (RR: 1,64, 95%-KI [1,41–1,90]). Poaceae zeigten signifikante Effekte bei mittleren und hohen Konzentrationen (RR: 1,19–1,41). Die Attributable Fraction für Betula betrug 10,24–17,75% der Asthma-Notfallbehandlungen je nach Stadt während der Pollensaison.",
-    transfer:"Süddeutschland (Bayern) – direkt übertragbar auf deutschsprachigen Raum und Mitteleuropa."
+    title:"Pollenexposition und Asthmanotfälle in Bayern: Automatisiertes Monitoring und multizentrische Analyse",
+    sum:"Eine multizentrische Zeitreihenanalyse untersuchte die Assoziation zwischen Pollenkonzentrationen (Alnus, Betula, Corylus, Poaceae) und Asthma-Notfallbehandlungen in drei bayerischen Städten.",
+    result:"Hohe Betula-Konzentrationen waren mit erhöhtem Asthmabehandlungsrisiko assoziiert (RR: 1,64; 95%-KI [1,41–1,90]). Poaceae zeigte signifikante Effekte bei mittleren (RR: 1,19) und hohen Konzentrationen (RR: 1,41). Betula trug während der Pollensaison zu 10,24–17,75 % der Asthmabehandlungen bei, Poaceae zu 14,25–18,84 %. Die Effekte zeigen Lags von 0–2 Tagen.",
+    transfer:"Bayern, Deutschland – direkt übertragbar, identische Klimazone und Pollentaxa"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===

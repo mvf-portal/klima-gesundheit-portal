@@ -1,5 +1,31 @@
 [
  {
+  "pmid": "42624863",
+  "journal": "Nat Commun",
+  "year": "2026",
+  "author": "Heil CS et al.",
+  "pubdate": "21.08.2026",
+  "added": "20.08.2026",
+  "transfer": "Internationale Evidenz, aber Schwellenwerte klim aabhängig – für Süddeutschland relevanter als Norden",
+  "title": "Hitze und Schwangerschaftsergebnisse: systematische Übersicht und Meta-Analyse zu Temperaturschwellen",
+  "sum": "Eine systematische Übersicht und Meta-Analyse (103 Studien, n=41,9 Millionen) identifizierte Temperaturschwellen für Hitzeeffekte auf Schwangerschafts- und Geburtsoutcomes.",
+  "result": "Meta-Regressionsanalysen bestimmten maximale Temperaturschwellen von 30,55 °C (für 5 % Risikosteigerung), 34,11 °C (10 %) und 39,07 °C (20 % Risikosteigerung, 21 Studien, n=5.589.862). Die Ergebnisse zeigen heterogene Indikatoren und mangelnde standardisierte Heat-Stress-Indizes.",
+  "aufgenommen": "2026-08-22"
+ },
+ {
+  "pmid": "42608143",
+  "journal": "BMJ Open Respir Res",
+  "year": "2026",
+  "author": "Tornevi A et al.",
+  "pubdate": "17.08.2026",
+  "added": "17.08.2026",
+  "transfer": "Schweden – gemäßigte Klimazone, vergleichbare Luftqualitätsdaten und Infrastruktur",
+  "title": "Kurzzeitexposition gegenüber Luftverschmutzung und COVID-19 in schwedischen Städten: Fall-Crossover-Analyse",
+  "sum": "Eine Fall-Crossover-Studie mit 3.999 COVID-19-Fällen aus drei schwedischen Städten (2020–2022) untersuchte Assoziationen zwischen täglichen PM2,5-, PM10- und NO2-Werten und positiven PCR-Tests.",
+  "result": "Erhöhte PM2,5-Werte waren signifikant mit COVID-19-Positivtests am selben Tag assoziiert (OR: 1,084; 95%-KI: 1,011–1,162 pro IQR 3,3 µg/m³). PM10 zeigte Effekte bei Lag 3, NO2-Effekte waren weniger konsistent. Subgruppenanalysen zeigten ähnliche Muster bei Personen mit Atemwegserkrankungen in der Vorgeschichte.",
+  "aufgenommen": "2026-08-22"
+ },
+ {
   "pmid": "42586104",
   "journal": "Lancet Healthy Longev",
   "year": "2026",
