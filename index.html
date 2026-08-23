@@ -1051,62 +1051,71 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "22. Aug. 2026, 07:05 Uhr";
+const SNAP_DATE = "23. Aug. 2026, 07:16 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
     journal:"Nat Commun", year:"2026", pmid:"42624863",
     author:"Heil CS et al.", pubdate:"21.08.2026",
     added:"20.08.2026",
-    title:"Hitze und Schwangerschaftsergebnisse: systematische Übersicht und Meta-Analyse zu Temperaturschwellen",
-    sum:"Eine systematische Übersicht und Meta-Analyse (103 Studien, n=41,9 Millionen) identifizierte Temperaturschwellen für Hitzeeffekte auf Schwangerschafts- und Geburtsoutcomes.",
-    result:"Meta-Regressionsanalysen bestimmten maximale Temperaturschwellen von 30,55 °C (für 5 % Risikosteigerung), 34,11 °C (10 %) und 39,07 °C (20 % Risikosteigerung, 21 Studien, n=5.589.862). Die Ergebnisse zeigen heterogene Indikatoren und mangelnde standardisierte Heat-Stress-Indizes.",
-    transfer:"Internationale Evidenz, aber Schwellenwerte klim aabhängig – für Süddeutschland relevanter als Norden"
+    title:"Hitze­schwellen für Müttergesundheit und Geburtsausgänge – Systematische Übersicht und Meta-Analyse",
+    sum:"Metaregression aus 103 Studien (41,95 Millionen Teilnehmer) zur Bestimmung kritischer Temperatur­schwellen für Schwangerschafts- und Neugeborenen­komplikationen.",
+    result:"Schwellen für 5%, 10% und 20% Risikozunahme bei Tmax: 30,55°C, 34,11°C, 39,07°C (21 Studien, N=5,589,862). Heterogenität bestand in Indikatoren­auswahl; Befunde zeigen kontinuierlich steigende Risiken mit Temperaturanstieg.",
+    transfer:"Meta-Analyse international; Temperaturschwellen in Subtropen/Tropen höher als mitteleuropäisch zu erwartend – nur methodisch übertragbar"
   },
   {
     journal:"Int J Epidemiol", year:"2026", pmid:"42613027",
     author:"Park J et al.", pubdate:"18.08.2026",
     added:"18.08.2026",
-    title:"Temperaturabhängige Nierenkrankheits-Vulnerabilität nach Alter: nationale Fall-Crossover-Studie",
-    sum:"Eine landesweite Fall-Crossover-Studie in Südkorea untersuchte altersabhängige Assoziationen zwischen Umgebungstemperatur und Notaufnahmebesuchen wegen Nierenkrankheiten (1,9 Millionen Fälle 2011–2019).",
-    result:"Hitzebedingte Risiken waren bei 50–59-Jährigen höchst (OR: 1,28; 95%-KI: 1,22–1,34). Kältebedingte Risiken waren bei 30–39-Jährigen höchst (OR: 1,13; 95%-KI: 1,05–1,20). Bei Hitzestress dominierte Urinsteininfekt bei unter 30-Jährigen (OR: 1,37) und akutes Nierenversagen bei 40-Jährigen (OR: 2,29). Ältere Erwachsene (≥70 Jahre) hatten höchste medizinische Kostenlast.",
-    transfer:"Südkorea – gemäßigte Klimazone, gute Datenqualität, aber höhere Hitzeschwellen als Deutschland"
+    title:"Temperaturempfindlichkeit von Nierenerkrankungen in Südkorea – alters­spezifische Hitze- und Kälterisiken",
+    sum:"Größte Fall-Crossover-Studie zu Temperaturextremen und Notaufnahmebesuchen wegen Nierenkrankheiten nach Altersgruppe und Erkrankungstyp.",
+    result:"Bei 1,9 Millionen ED-Besuchen: Hitze-assoziiert höchstes OR 1,28 (95%-KI: 1,22–1,34) bei 50–59-Jährigen; Kälte-assoziiert höchstes OR 1,13 (95%-KI: 1,05–1,20) bei 30–39-Jährigen. Akutes Nierenschädigungsrisiko bei Hitze-Exposition (40–49 Jahre): OR 2,29 (95%-KI: 1,52–3,44). Altersheterogene Risiken deuten auf Anpassungsbedarf in Klimastrategien hin.",
+    transfer:"Südkorea – gemäßigte bis subtropische Zone; Hitze­schwellen dort höher als in Mitteleuropa"
   },
   {
-    journal:"BMJ Open Respir Res", year:"2026", pmid:"42608143",
-    author:"Tornevi A et al.", pubdate:"17.08.2026",
-    added:"17.08.2026",
-    title:"Kurzzeitexposition gegenüber Luftverschmutzung und COVID-19 in schwedischen Städten: Fall-Crossover-Analyse",
-    sum:"Eine Fall-Crossover-Studie mit 3.999 COVID-19-Fällen aus drei schwedischen Städten (2020–2022) untersuchte Assoziationen zwischen täglichen PM2,5-, PM10- und NO2-Werten und positiven PCR-Tests.",
-    result:"Erhöhte PM2,5-Werte waren signifikant mit COVID-19-Positivtests am selben Tag assoziiert (OR: 1,084; 95%-KI: 1,011–1,162 pro IQR 3,3 µg/m³). PM10 zeigte Effekte bei Lag 3, NO2-Effekte waren weniger konsistent. Subgruppenanalysen zeigten ähnliche Muster bei Personen mit Atemwegserkrankungen in der Vorgeschichte.",
-    transfer:"Schweden – gemäßigte Klimazone, vergleichbare Luftqualitätsdaten und Infrastruktur"
+    journal:"Environ Health", year:"2026", pmid:"42608705",
+    author:"Perera F et al.", pubdate:"15.08.2026",
+    added:"18.08.2026",
+    title:"Weniger Luftverschmutzung durch Klimapolitik verbessert die kognitiven Leistungen bei New Yorker Kindern",
+    sum:"Abwärtstrend bei Luftschadstoffbelastungen in aufeinanderfolgenden Geburtskohor­ten (1998–2020) wurde mit Verbesserungen der kognitiven Entwicklung assoziiert.",
+    result:"Pränatale PM2,5-, NO₂- und PAH-Expositionen nahmen deutlich ab; Mental Development Index-Scores stiegen signifikant an (N=1109). In der größten Kohorte (N&gt;700, 1998–2006) war inverse Assoziation zwischen pränataler Exposition und 3-Jahres-kognitiven Scores statistisch signifikant für PM2,5, NO₂ und PAH; in der späteren Kohorte (2008–2016) mit niedrigerer Exposition waren Assoziationen schwächer.",
+    transfer:"NYC, USA - gemäßigte Klimazone, Luftqualitätspolitik nicht direkt auf Deutschland übertragbar"
   },
   {
     journal:"Nat Commun", year:"2026", pmid:"42575902",
     author:"Tomkins MD et al.", pubdate:"10.08.2026",
     added:"10.08.2026",
-    title:"Kanäle als Kühleffekt in britischen Städten: nationale Analyse zur Wärmereduktion",
-    sum:"Eine Energiebilanzmodellierung untersuchte die thermischen Effekte des Kanalnetzes in Großbritannien und Irland auf städtische Temperaturen.",
-    result:"Kanäle bieten einen durchschnittlichen jährlichen Tageskühleffekt von etwa 0,8 °C (0,7–1,0 °C) in unmittelbarer Nähe, mit ausgeprägteren Kühleffekten während Hitzewellen von 1,5–2,3 °C. Die Erkenntnisse zeigen, dass Blauräume das Hitzerisiko reduzieren und die Bevölkerungsgesundheit verbessern können.",
-    transfer:"Großbritannien und Irland – gemäßigte Klimazone, urbane Infrastruktur vergleichbar mit Deutschland"
+    title:"Kanäle als urbane Kühlinfrastruktur in Großbritannien und Irland – nationale Energiebilanz­modellierung",
+    sum:"Quantifizierung des Kühleffekts von Kanälen auf Stadttemperaturen mittels Energiebilanzmodell für das gesamte Kanalnetz Großbritanniens und Irlands.",
+    result:"Kanäle zeigen mittlere jährliche Kühleffekte von ~0,8°C (0,7–1,0°C) in unmittelbarer Nähe; deutlichere Kühlwirkung im Frühling und Frühsommer (~1,2–1,4°C) sowie während Hitzewellen (~1,5–2,3°C). Thermische Effekte verbessern Wärmekomfort und reduzieren Hitzerisiken.",
+    transfer:"Großbritannien, Irland – gemäßigte Klimazone, urbane Infrastruktur; auf deutsche Städte übertragbar"
+  },
+  {
+    journal:"Front Public Health", year:"2026", pmid:"42630885",
+    author:"Punzo O et al.", pubdate:"07.08.2026",
+    added:"22.08.2026",
+    title:"Umweltverträglicher und klimaresilienter Gesundheitsbetrieb – Roadmap für Italien",
+    sum:"Partizipativ entwickelter nationaler Strategiemapplan für Nachhaltigkeit und Klimaresilienz des italienischen Gesundheitssystems mit Governance-, Finanzierungs- und Evaluationsempfehlungen.",
+    result:"Identifiziert vier strategische Ziele: Emissionsziele setzen, Nachhaltigkeit in Gesundheitssystem-Planung integrieren, Tools zur Messung von Umweltauswirkungen und Klimarisiken, health-environmental-benefit-Maßnahmen. Prioritätsaktionen umfassen Energieeffizienz, Abfallreduktion, Supply-Chain-Nachhaltigkeit, Personal­schulung und Accountability-Systeme. Lücken in aktueller Politik dokumentiert.",
+    transfer:"Italien, Europa – deutschsprachiger Raum strukturell vergleichbar, Governance­modelle hochgradig übertragbar"
+  },
+  {
+    journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
+    author:"Radici A et al.", pubdate:"Aug. 2026",
+    added:"10.08.2026",
+    title:"Aedes albopictus und Dengue-Transmissionsrisiko in Frankreich bis 2085",
+    sum:"Mechanistisches Modell prognostiziert räumliche Ausbreitung der Tigermücke und autochthones Dengue-Transmissionsrisiko unter Klimawandel­szenarien bis Jahrhundert­ende.",
+    result:"Bei High-Pressure-Szenario (hohe Emissionen, hohes Bevölkerungswachstum) bis 2085: 89–96% Frankreichs klimatisch geeignet für Ae. albopictus-Etablierung (außer Bergregionen); autochthone Dengue-Transmission in 71–95% besiedelter Flächen möglich. Median-Druck-Szenario zeigt größere Varianz: 49–89% Geeignetheit, 31–82% Transmissionsrisiko.",
+    transfer:"Frankreich – Südeuropa, gemäßigte bis mediterrane Klimazone; Projektion auf Mitteleuropa bedingt, nördliche Grenzen relevant"
   },
   {
     journal:"Euro Surveill", year:"2026", pmid:"42565263",
     author:"Rise N et al.", pubdate:"Aug. 2026",
     added:"07.08.2026",
-    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa: systematische schnelle Übersicht 2018–2025",
-    sum:"Eine schnelle systematische Übersicht (14 eingeschlossene Artikel aus 897 identifizierten) untersuchte Assoziationen zwischen Starkregen, Überschwemmungen und Infektionskrankheitsinzidenz in Europa.",
-    result:"Campylobacteriose- und Leptospirose-Ausbrüche wurden nach Starkregen und Überschwemmungsereignissen in Europa berichtet. Häufigste Präventionsmaßnahmen: Public-Health-Kommunikation und Hygienemaßnahmen; strukturelle Maßnahmen (Abwasserinfrastruktur, One-Health-Surveillance) wurden weniger häufig berichtet. Trotz breiter Suchkriterien waren europäische Studien selten, was auf Forschungslücken deutet.",
-    transfer:"Europa – direkt relevant; zeigt etablierte Erreger (Campylobacter, Leptospira) in bekannten Überschwemmungskontexten"
-  },
-  {
-    journal:"Environ Int", year:"2026", pmid:"42492428",
-    author:"Boser M et al.", pubdate:"18.07.2026",
-    added:"23.07.2026",
-    title:"Pollenexposition und Asthmanotfälle in Bayern: Automatisiertes Monitoring und multizentrische Analyse",
-    sum:"Eine multizentrische Zeitreihenanalyse untersuchte die Assoziation zwischen Pollenkonzentrationen (Alnus, Betula, Corylus, Poaceae) und Asthma-Notfallbehandlungen in drei bayerischen Städten.",
-    result:"Hohe Betula-Konzentrationen waren mit erhöhtem Asthmabehandlungsrisiko assoziiert (RR: 1,64; 95%-KI [1,41–1,90]). Poaceae zeigte signifikante Effekte bei mittleren (RR: 1,19) und hohen Konzentrationen (RR: 1,41). Betula trug während der Pollensaison zu 10,24–17,75 % der Asthmabehandlungen bei, Poaceae zu 14,25–18,84 %. Die Effekte zeigen Lags von 0–2 Tagen.",
-    transfer:"Bayern, Deutschland – direkt übertragbar, identische Klimazone und Pollentaxa"
+    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa – Rapid Review 2018–2025",
+    sum:"Systematische Schnellbewertung von 14 Studien zu Assoziationen zwischen Extremwetter­ereignissen und Infektionskrankheiten­inzidenzen in Europa.",
+    result:"Campylobacteriose und Leptospirose-Ausbrüche nach Starkregen und Überschwemmungen dokumentiert. Häufigste Präventionsmaßnahmen: öffentliche Gesundheitskommunikation und Hygiene­aufklärung; strukturelle Maßnahmen (Sanitärinfrastruktur, One-Health-Überwachung) unterrepräsentiert. Trotz breiter Suchstrategie nur 14 europäische Studien gefunden – Forschungslücke erkannt.",
+    transfer:"Europa – temperate Zonen; Methoden und Erkenntnisse direkt auf Deutschland übertragbar"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
