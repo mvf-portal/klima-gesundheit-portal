@@ -87,7 +87,7 @@ Einrichtung und Kampagnenvorlage: `NEWSLETTER-MAILCHIMP.md` und `newsletter/mail
 
 ### Studien aktualisieren
 
-**Automatisch, täglich** — das ist der aktive Weg: `.github/workflows/update-studies.yml` läuft um 04:00 UTC — das sind 06:00 Uhr deutscher Sommerzeit, 05:00 Uhr Winterzeit — (und per *Run workflow* manuell), ruft `scripts/update_studies.py` auf → PubMed → Claude-API (`claude-haiku-4-5`, Secret `ANTHROPIC_API_KEY`) → Marker-Block ersetzen → commit & push. Einrichtung dokumentiert in `EINRICHTUNG-GITHUB-ACTIONS.md`.
+**Automatisch, täglich** — das ist der aktive Weg: `.github/workflows/update-studies.yml` läuft um 03:00 UTC — das sind 05:00 Uhr deutscher Sommerzeit, 04:00 Uhr Winterzeit — (und per *Run workflow* manuell), ruft `scripts/update_studies.py` auf → PubMed → Claude-API (`claude-haiku-4-5`, Secret `ANTHROPIC_API_KEY`) → Marker-Block ersetzen → commit & push. Einrichtung dokumentiert in `EINRICHTUNG-GITHUB-ACTIONS.md`.
 
 **Manuell auf Zuruf** — der Slash-Command **`/studien-update`** (`~/.claude/commands/studien-update.md`): Claude recherchiert und formuliert selbst im Chat, ohne API-Key. Nützlich für Sonderfälle (anderer Suchbegriff, Zwischenstand), ersetzt aber nicht die Automatik.
 
@@ -398,7 +398,9 @@ Der Grund für diese Bauweise: Versand ist der einzige Schritt der Kette, der si
 
 **Schlägt eine Prüfung an, wird nicht terminiert.** Der Entwurf bleibt liegen, die Redaktion bekommt die Testausgabe mit Freigabekasten, und der Grund steht in `versand-status.json`. Lieber ein Tag ohne Newsletter als ein falscher.
 
-`versand-status.json` wird vom Workflow mitcommittet. Das Repo `mvf-portal/knowledge-hubs` liest sie von allen Portalen ein und macht daraus **eine** GitHub-Issue statt fünf E-Mails (`scripts/versand_bericht.py`, täglich 04:45 UTC).
+**Der Torwächter arbeitet in zwei Stufen** (seit 24.08.2026). `vorpruefung()` sortiert einzelne missglückte Studien aus, bevor die Ausgabe gebaut wird — ein zu langer Titel an einer Studie soll nicht sieben einwandfreie mitnehmen. Fällt mehr als ein Drittel weg oder bleiben weniger als zwei übrig, stoppt stattdessen die ganze Ausgabe. Danach entscheidet `pruefe()` über die Ausgabe als Ganzes; **die Abgleiche gegen PubMed stoppen weiterhin hart** — eine falsche Zeitschrift ist kein Formfehler, sondern ein Rückfall im Mechanismus. Was aussortiert wurde, steht in `versand-status.json` und im Sammelbericht: Aussortieren ist der stille Fall, und still darf er nicht bleiben.
+
+`versand-status.json` wird vom Workflow mitcommittet. Das Repo `mvf-portal/knowledge-hubs` liest sie von allen Portalen ein und macht daraus **eine** GitHub-Issue statt fünf E-Mails (`scripts/versand_bericht.py`, täglich 03:45 UTC).
 
 Qualitative Interviewstudien und Expertenpapiere sind ausdrücklich **zugelassen** — der Torwächter verlangt deshalb Substanz im Ergebnisfeld, aber keine Zahl.
 

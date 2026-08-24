@@ -18,6 +18,14 @@ Schlaegt auch nur eine Pruefung an, wird **nicht terminiert**. Der Entwurf
 bleibt liegen, und der Grund steht in versand-status.json. Lieber ein Tag ohne
 Newsletter als ein falscher - so hat der Herausgeber es am 18.08.2026 entschieden.
 
+**Zwei Stufen, seit dem 24.08.2026.** Ein Formfehler an einer einzelnen Studie
+soll nicht sieben einwandfreie mitnehmen: `vorpruefung()` sortiert solche
+Studien aus, bevor die Ausgabe gebaut wird, und `pruefe()` entscheidet danach
+ueber die Ausgabe als Ganzes. Wer eine Pruefung ergaenzt, gehoert in
+`pruefe_studie()`, wenn sie eine Studie betrifft, und in `pruefe()`, wenn sie
+die Ausgabe betrifft - Empfaengersegment, HTML, Dubletten und die Abgleiche
+gegen PubMed sind Letzteres und stoppen weiterhin hart.
+
 Alleine aufrufbar, dann prueft sie den aktuellen Archivstand ohne Mailchimp:
     py scripts/torwaechter.py
 """
@@ -79,6 +87,87 @@ def _esummary(pmids: list[str]) -> dict:
 ANTEIL_MAX = 0.9
 
 
+def pruefe_studie(e: dict, kopf: str) -> list[str]:
+    """Was an einer EINZELNEN Studie zu beanstanden ist - ohne Netz.
+
+    Herausgeloest am 24.08.2026, damit `vorpruefung()` dieselben Regeln zum
+    Aussortieren nutzen kann, die `pruefe()` zum Stoppen nutzt. Zwei getrennte
+    Regelsaetze waeren mit Sicherheit irgendwann auseinandergelaufen.
+    """
+    m: list[str] = []
+    for feld in PFLICHT:
+        if not str(e.get(feld, "")).strip():
+            m.append(f"{kopf}: Feld '{feld}' ist leer")
+    if not str(e.get("pmid", "")).isdigit():
+        m.append(f"{kopf}: PMID ist keine Zahl")
+    text = " ".join(str(e.get(f, "")) for f in ("title", "sum", "result"))
+    if "{{" in text or "}}" in text:
+        m.append(f"{kopf}: unersetzter Platzhalter im Text")
+    # Eckige Klammern am Feldanfang sind die Notbremse des Modells: Statt
+    # eine unbrauchbare Arbeit zu ueberspringen, schreibt es hinein, warum
+    # sie unbrauchbar ist - "[Nicht verwertbar - Berichtigung ohne eigene
+    # Ergebnisse]". Das gehoert nie in eine Ausgabe.
+    if any(str(e.get(f, "")).strip().startswith("[")
+           for f in ("title", "sum", "result", "transfer")):
+        m.append(f"{kopf}: Feld beginnt mit einer Klammerbemerkung statt "
+                 f"mit Inhalt")
+    if len(str(e.get("result", "")).strip()) < MIN_ERGEBNIS:
+        m.append(f"{kopf}: Ergebnisfeld ist mit "
+                 f"{len(str(e.get('result', '')).strip())} Zeichen zu duenn")
+    if len(str(e.get("sum", ""))) < 80:
+        m.append(f"{kopf}: Zusammenfassung ist verdaechtig kurz "
+                 f"({len(str(e.get('sum', '')))} Zeichen)")
+    treffer = len(ENGLISCH.findall(str(e.get("sum", ""))))
+    if treffer >= ENGLISCH_SCHWELLE:
+        m.append(f"{kopf}: Zusammenfassung enthaelt {treffer} englische "
+                 f"Funktionswoerter - vermutlich der englische Abstract")
+    if not 20 <= len(str(e.get("title", ""))) <= 200:
+        m.append(f"{kopf}: Titellaenge ausserhalb 20-200 Zeichen "
+                 f"({len(str(e.get('title', '')))})")
+    return m
+
+
+# Wie viel einer Ausgabe hoechstens still verschwinden darf, bevor stattdessen
+# die ganze Ausgabe stoppt. Faellt mehr weg, ist nicht eine Studie missglueckt,
+# sondern der Lauf - und dann soll ein Mensch hinsehen.
+ANTEIL_AUS_MAX = 1 / 3
+MIN_BEHALTEN = 2
+
+
+def vorpruefung(studien: list[dict]) -> tuple[list[dict], list[str]]:
+    """Einzelne missglueckte Studien aussortieren, bevor die Ausgabe gebaut wird.
+
+    Warum es das gibt: Am 24.08.2026 stoppte das Pflege-Portal, weil EIN
+    deutscher Titel 205 statt der erlaubten 200 Zeichen hatte. Sieben
+    einwandfreie Studien gingen deshalb nicht raus - und weil der offene
+    Bestand sich am letzten *versendeten* Entwurf ausrichtet, waere derselbe
+    Titel am naechsten Morgen wieder dabei gewesen. Ein Formfehler an einer
+    Studie hatte das Portal dauerhaft blockiert.
+
+    Aussortieren statt stoppen ist die konservative Richtung: Es geht nie etwas
+    Falsches raus, nur weniger. Geprueft wird hier bewusst **ohne Netz** - die
+    Abgleiche gegen PubMed (Zeitschrift, Jahr, Berichtigungen) bleiben in
+    `pruefe()` und stoppen weiterhin hart. Sie sind kein Formfehler an einer
+    Studie, sondern der Hinweis auf einen Rueckfall im Mechanismus.
+
+    Rueckgabe: (was bleibt, Meldungen ueber das Aussortierte). Bleibt zu wenig
+    uebrig, kommt die Liste unveraendert zurueck - dann stoppt `pruefe()`.
+    """
+    behalten: list[dict] = []
+    weg: list[str] = []
+    for i, e in enumerate(studien, 1):
+        m = pruefe_studie(e, f"Studie {i} (PMID {e.get('pmid', '?')})")
+        if m:
+            weg.append("; ".join(m))
+        else:
+            behalten.append(e)
+    if not weg:
+        return studien, []
+    if len(behalten) < MIN_BEHALTEN or len(weg) > len(studien) * ANTEIL_AUS_MAX:
+        return studien, []
+    return behalten, weg
+
+
 def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
            gegen_pubmed: bool = True, listengroesse: int | None = None) -> list[str]:
     """Alle Beanstandungen als Liste. Leere Liste heisst: terminieren."""
@@ -87,35 +176,7 @@ def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
         return ["keine Studien in der Ausgabe"]
 
     for i, e in enumerate(studien, 1):
-        kopf = f"Studie {i} (PMID {e.get('pmid', '?')})"
-        for feld in PFLICHT:
-            if not str(e.get(feld, "")).strip():
-                m.append(f"{kopf}: Feld '{feld}' ist leer")
-        if not str(e.get("pmid", "")).isdigit():
-            m.append(f"{kopf}: PMID ist keine Zahl")
-        text = " ".join(str(e.get(f, "")) for f in ("title", "sum", "result"))
-        if "{{" in text or "}}" in text:
-            m.append(f"{kopf}: unersetzter Platzhalter im Text")
-        # Eckige Klammern am Feldanfang sind die Notbremse des Modells: Statt
-        # eine unbrauchbare Arbeit zu ueberspringen, schreibt es hinein, warum
-        # sie unbrauchbar ist - "[Nicht verwertbar - Berichtigung ohne eigene
-        # Ergebnisse]". Das gehoert nie in eine Ausgabe.
-        if any(str(e.get(f, "")).strip().startswith("[")
-               for f in ("title", "sum", "result", "transfer")):
-            m.append(f"{kopf}: Feld beginnt mit einer Klammerbemerkung statt "
-                     f"mit Inhalt")
-        if len(str(e.get("result", "")).strip()) < MIN_ERGEBNIS:
-            m.append(f"{kopf}: Ergebnisfeld ist mit "
-                     f"{len(str(e.get('result', '')).strip())} Zeichen zu duenn")
-        if len(str(e.get("sum", ""))) < 80:
-            m.append(f"{kopf}: Zusammenfassung ist verdaechtig kurz "
-                     f"({len(str(e.get('sum', '')))} Zeichen)")
-        treffer = len(ENGLISCH.findall(str(e.get("sum", ""))))
-        if treffer >= ENGLISCH_SCHWELLE:
-            m.append(f"{kopf}: Zusammenfassung enthaelt {treffer} englische "
-                     f"Funktionswoerter - vermutlich der englische Abstract")
-        if not 20 <= len(str(e.get("title", ""))) <= 200:
-            m.append(f"{kopf}: Titellaenge ausserhalb 20-200 Zeichen")
+        m += pruefe_studie(e, f"Studie {i} (PMID {e.get('pmid', '?')})")
 
     pmids = [str(e.get("pmid", "")) for e in studien]
     doppelt = {p for p in pmids if pmids.count(p) > 1}

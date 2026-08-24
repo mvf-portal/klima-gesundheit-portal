@@ -506,7 +506,8 @@ def naechster_termin() -> str:
 
 def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
                     link: str, beanstandungen: list[str], termin: str | None,
-                    empfaenger: int = 0, listengroesse: int = 0) -> None:
+                    empfaenger: int = 0, listengroesse: int = 0,
+                    aussortiert: list[str] | None = None) -> None:
     """Was heute geschah - fuer den Sammelbericht ueber alle Hubs.
 
     Die Datei wird vom Workflow mitcommittet; der Bericht im Repo
@@ -528,6 +529,10 @@ def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
             "empfaenger": empfaenger,
             "listengroesse": listengroesse,
             "beanstandungen": beanstandungen,
+            # Was die Vorpruefung aussortiert hat. Steht hier, damit es nicht
+            # still passiert: Der Sammelbericht zeigt es, und nur so faellt
+            # auf, wenn taeglich eine Studie durchrutscht.
+            "aussortiert": aussortiert or [],
         }, f, ensure_ascii=False, indent=1)
 
 
@@ -596,6 +601,15 @@ def main() -> int:
               f"'{eigene[0][0]['settings']['title']}'.")
         return 0
 
+    # Erste Stufe des Torwaechters: einzelne missglueckte Studien fallen hier
+    # heraus, bevor die Ausgabe gebaut wird. Muss VOR dem HTML-Bau stehen -
+    # der Torwaechter prueft spaeter, dass jede Studie auch im HTML vorkommt.
+    offen, aussortiert = torwaechter.vorpruefung(offen)
+    for x in aussortiert:
+        print("  ~ aussortiert: " + x)
+    if aussortiert:
+        print(f"{len(aussortiert)} Studie(n) aussortiert, {len(offen)} bleiben.")
+
     if len(offen) > MAX_STUDIEN:
         print(f"{len(offen)} offene Studien - auf die {MAX_STUDIEN} neuesten begrenzt.")
         offen = offen[:MAX_STUDIEN]
@@ -646,12 +660,12 @@ def main() -> int:
         mc.testen(kid, FREIGABE_MAIL)
         print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
         schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen,
-                        None, empfaenger, gesamt)
+                        None, empfaenger, gesamt, aussortiert)
     else:
         mc.terminieren(kid, termin)
         print(f"Torwaechter: nichts zu beanstanden - terminiert auf {termin}.")
         schreibe_status("terminiert", titel, betreff, offen, link, [], termin,
-                        empfaenger, gesamt)
+                        empfaenger, gesamt, aussortiert)
 
     # Aeltere, nie versendete Entwuerfe sind jetzt ueberholt: Ihre Studien
     # stecken vollstaendig im neuen. Zwei Entwuerfe mit ueberlappendem Inhalt

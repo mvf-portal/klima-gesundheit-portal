@@ -1,10 +1,13 @@
 name: Studien-Update (täglich)
 
-# 04:00 UTC = 06:00 Uhr Berlin (Sommerzeit) bzw. 05:00 Uhr (Winterzeit).
-# GitHub führt geplante Läufe bei hoher Last mit einigen Minuten Verzögerung aus.
+# 03:00 UTC = 05:00 Uhr Berlin (Sommerzeit) bzw. 04:00 Uhr (Winterzeit).
+# GitHub führt geplante Läufe bei hoher Last mit einigen Minuten Verzögerung aus
+# - am 24.08.2026 waren es fast zwei Stunden. Deshalb am selben Tag um eine
+# Stunde vorgezogen: Der Sammelbericht (03:45 UTC, Repo knowledge-hubs) muss
+# nach diesem Lauf kommen, und beide deutlich vor dem Versand um 10:00 Ortszeit.
 on:
   schedule:
-    - cron: "0 4 * * *"
+    - cron: "0 3 * * *"
   workflow_dispatch:        # erlaubt manuelles Starten über die Actions-Oberfläche
 
 permissions:
