@@ -1,0 +1,130 @@
+name: Archiv nachtragen (von Hand)
+
+# Holt die Studienauswahl fuer zurueckliegende Tage nach - fuer einen Hub, der
+# spaeter dazukam als seine Schwestern und dessen Ordner deshalb duenn ist.
+#
+# Was der Lauf TUT: Er fragt PubMed je Tag mit demselben Suchraum ab wie der
+# Regelbetrieb, eingeschnuert auf den Aufnahmetag ([EDAT]), laesst dasselbe
+# Modell nach denselben Regeln auswaehlen und schreibt das Ergebnis ins Archiv.
+#
+# Was er NICHT tut, und das ist die Absicht:
+#   - Er ruehrt index.html nicht an. Die Startseite zeigt weiter die Auswahl des
+#     heutigen Tages; ein Nachtrag fuellt den Ordner, nicht die Buehne.
+#   - Er legt keinen Newsletter an. Die Eintraege tragen `nachtrag: true` und
+#     werden von mailchimp_entwurf.py uebergangen - sonst bekaeme die
+#     Leserschaft den Bestand mehrerer Wochen in einer einzigen E-Mail.
+#   - Er datiert nichts zurueck, was es nie gab. Die Eintraege sind als
+#     Nachtrag gekennzeichnet und behaupten keine Ausgabe, die verschickt wurde.
+#
+# Der Lauf kostet je Tag einen Modellaufruf und rund 20 Sekunden.
+
+on:
+  workflow_dispatch:
+    inputs:
+      von:
+        description: "Erster Tag (JJJJ-MM-TT, PubMed-Aufnahmetag)"
+        required: true
+      bis:
+        description: "Letzter Tag (JJJJ-MM-TT, muss in der Vergangenheit liegen)"
+        required: true
+      trocken:
+        description: "Nur zeigen, welche Tage laufen wuerden - nichts schreiben"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Niemals gleichzeitig mit dem taeglichen Lauf: Beide schreiben in
+# studien-archiv.json, und der Zweite ueberschriebe den Ersten.
+concurrency:
+  group: studien-update
+  cancel-in-progress: false
+
+jobs:
+  nachtragen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhängigkeiten installieren
+        run: pip install --quiet "anthropic>=0.40" requests tzdata python-docx
+
+      - name: Zeitraum prüfen
+        id: pruefen
+        env:
+          VON: ${{ inputs.von }}
+          BIS: ${{ inputs.bis }}
+        run: |
+          python - <<'PY'
+          import datetime as dt, os, sys
+          try:
+              von = dt.date.fromisoformat(os.environ["VON"])
+              bis = dt.date.fromisoformat(os.environ["BIS"])
+          except ValueError as f:
+              sys.exit(f"Datum unlesbar - erwartet wird JJJJ-MM-TT ({f}).")
+          heute = dt.date.today()
+          if bis >= heute:
+              sys.exit(f"'bis' muss in der Vergangenheit liegen; heute ist {heute}.")
+          if von > bis:
+              sys.exit("'von' liegt nach 'bis'.")
+          tage = (bis - von).days + 1
+          # Eine Obergrenze, damit ein Vertipper (2025 statt 2026) nicht
+          # dreihundert Modellaufrufe ausloest.
+          if tage > 45:
+              sys.exit(f"{tage} Tage sind zu viel auf einmal - hoechstens 45.")
+          print(f"{tage} Tag(e): {von} bis {bis}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"tage={tage}\n")
+          PY
+
+      - name: Tage nachtragen
+        if: ${{ inputs.trocken == false }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
+          VON: ${{ inputs.von }}
+          BIS: ${{ inputs.bis }}
+        run: |
+          python - <<'PY' > tage.txt
+          import datetime as dt, os
+          von = dt.date.fromisoformat(os.environ["VON"])
+          bis = dt.date.fromisoformat(os.environ["BIS"])
+          # Aeltester Tag zuerst: So steht am Ende der juengste Nachtrag oben im
+          # Archiv, und die Reihenfolge liest sich wie gewachsen.
+          d = von
+          while d <= bis:
+              print(d.isoformat())
+              d += dt.timedelta(days=1)
+          PY
+          while read -r tag; do
+            echo "::group::$tag"
+            # Ein Tag ohne brauchbare Kandidaten darf den Lauf nicht abbrechen -
+            # in einem engen Themenfeld gibt es solche Tage.
+            python scripts/update_studies.py --nachtrag "$tag" || echo "$tag uebersprungen."
+            echo "::endgroup::"
+            sleep 2
+          done < tage.txt
+
+      - name: Committen & pushen (nur bei Änderung)
+        if: ${{ inputs.trocken == false }}
+        env:
+          VON: ${{ inputs.von }}
+          BIS: ${{ inputs.bis }}
+        run: |
+          if [ -z "$(git status --porcelain studien-archiv.json)" ]; then
+            echo "Keine Änderung – nichts nachzutragen."
+            exit 0
+          fi
+          git config user.name  "Klima-Portal Bot"
+          git config user.email "stegmaier@m-vf.de"
+          git add studien-archiv.json
+          git commit -m "Archiv nachgetragen: $VON bis $BIS"
+          git push

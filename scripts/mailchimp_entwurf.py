@@ -597,6 +597,11 @@ def main() -> int:
                              for k in mc.gesendet()) if d]
     seit = max(versendet) if versendet else None
 
+    # Nachgetragene Eintraege bleiben aussen vor. Sie stammen aus einem
+    # spaeteren Lauf ueber zurueckliegende Aufnahmetage; sie gehoeren in den
+    # Ordner, aber in keine Ausgabe - sonst bekaeme die Leserschaft nach einem
+    # Nachtrag einmalig den gesamten Bestand von Wochen in einer E-Mail.
+    alle = [e for e in alle if not e.get("nachtrag")]
     offen = [e for e in alle if seit is None or e["aufgenommen"] > seit]
     if not offen:
         print(f"Nichts offen - zuletzt versendet wurde der Stand vom {seit}.")

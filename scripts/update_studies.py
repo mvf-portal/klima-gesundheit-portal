@@ -14,6 +14,7 @@ unveraendert und der Workflow schlaegt sichtbar fehl (kein kaputter Commit).
 """
 from __future__ import annotations
 
+import argparse
 import datetime as dt
 import html
 import json
@@ -120,10 +121,26 @@ AUSSCHLUSS = ('NOT ("Published Erratum"[pt] OR "Retraction of Publication"[pt] '
               'OR "Retracted Publication"[pt] OR "Duplicate Publication"[pt])')
 
 
+# Beim Nachtrag wird die Abfrage auf EINEN Tag eingeschnuert. Massgeblich ist
+# [EDAT] - der Tag, an dem PubMed die Arbeit aufgenommen hat, nicht das
+# Publikationsdatum. Genau dieser Tag ist es, den der taegliche Lauf gesehen
+# haette: Er sortiert nach `date`, und das ist die Aufnahme. Ueber [DP] zu
+# fenstern ergaebe eine andere, nie dagewesene Auswahl.
+NACHTRAG_TAG: str | None = None
+
+
+def _fenster(term: str) -> str:
+    """Die Abfrage, im Nachtrag auf den Aufnahmetag begrenzt."""
+    if not NACHTRAG_TAG:
+        return term
+    d = NACHTRAG_TAG.replace("-", "/")
+    return f'({term}) AND ("{d}"[EDAT] : "{d}"[EDAT])'
+
+
 def _suche(term: str, anzahl: int) -> list[str]:
     r = _get(
         "esearch.fcgi",
-        {"db": "pubmed", "term": f"({term}) {AUSSCHLUSS}", "sort": "date",
+        {"db": "pubmed", "term": f"({_fenster(term)}) {AUSSCHLUSS}", "sort": "date",
          "retmax": str(anzahl), "retmode": "json"},
         timeout=30,
     )
@@ -347,19 +364,29 @@ def update_archive(studies: list[dict]) -> int:
         entries = []
 
     known = {e["pmid"] for e in entries}
-    heute = dt.datetime.now(ZoneInfo("Europe/Berlin")).strftime("%Y-%m-%d")
+    # Im Nachtrag traegt der Eintrag den nachgetragenen Tag, nicht den Tag des
+    # Laufs. Sonst rutschte ein Bestand von Wochen als "heute aufgenommen" in
+    # die Sortierung - und in den offenen Bestand des Newsletters.
+    heute = NACHTRAG_TAG or dt.datetime.now(ZoneInfo("Europe/Berlin")).strftime("%Y-%m-%d")
     neu = 0
     for s in studies:
         if s["pmid"] in known:
             continue
-        entries.append({
+        eintrag = {
             "pmid": s["pmid"], "journal": s["journal"], "year": s["year"],
             "author": s.get("author", ""), "pubdate": s.get("pubdate", ""),
             "added": s.get("added", ""),
             "transfer": s.get("transfer", ""),
             "title": s["title"], "sum": s["sum"], "result": s["result"],
             "aufgenommen": heute,
-        })
+        }
+        if NACHTRAG_TAG:
+            # Das Kennzeichen ist keine Formalie: Es haelt den Nachtrag aus dem
+            # Newsletter heraus (mailchimp_entwurf.py) und sagt im Archiv
+            # ehrlich, dass diese Auswahl spaeter entstanden ist und an jenem
+            # Tag nie verschickt wurde.
+            eintrag["nachtrag"] = True
+        entries.append(eintrag)
         known.add(s["pmid"])
         neu += 1
 
@@ -371,6 +398,26 @@ def update_archive(studies: list[dict]) -> int:
 
 
 def main() -> int:
+    global NACHTRAG_TAG
+    a = argparse.ArgumentParser(description="Studienauswahl des Tages")
+    a.add_argument("--nachtrag", metavar="JJJJ-MM-TT",
+                   help="Auswahl fuer einen zurueckliegenden Aufnahmetag nachholen. "
+                        "Schreibt NUR ins Archiv - die Seite behaelt ihre aktuelle "
+                        "Auswahl, und der Newsletter uebergeht die Eintraege.")
+    args = a.parse_args()
+    if args.nachtrag:
+        try:
+            tag = dt.date.fromisoformat(args.nachtrag)
+        except ValueError:
+            print(f"--nachtrag braucht JJJJ-MM-TT, nicht '{args.nachtrag}'.")
+            return 2
+        if tag >= dt.datetime.now(ZoneInfo("Europe/Berlin")).date():
+            print(f"{tag} liegt nicht in der Vergangenheit - das ist der Regellauf.")
+            return 2
+        NACHTRAG_TAG = tag.isoformat()
+        print(f"Nachtrag fuer den {tag.strftime('%d.%m.%Y')} "
+              f"(Aufnahmetag in PubMed, nur Archiv).")
+
     abstracts = fetch_pubmed()
     studies = pick_studies(abstracts)
     meta = fetch_meta([s["pmid"] for s in studies])
@@ -394,6 +441,13 @@ def main() -> int:
 
     for s in studies:
         s.pop("_sort", None)
+
+    if NACHTRAG_TAG:
+        # Kein Eingriff in index.html: Die Startseite zeigt weiter die Auswahl
+        # des heutigen Tages. Der Nachtrag fuellt den Ordner, nicht die Bühne.
+        update_archive(studies)
+        return 0
+
     block = build_block(studies, status)
     update_archive(studies)
 
