@@ -30,6 +30,14 @@ Ablauf:
 Aufruf:
     python scripts/mailchimp_entwurf.py            # Entwurf anlegen
     python scripts/mailchimp_entwurf.py --probe    # nur HTML nach _probe.html schreiben
+    python scripts/mailchimp_entwurf.py --neu      # Entwurf von heute verwerfen
+                                                   # und neu bauen
+
+--neu ist fuer den Tag gedacht, an dem der Torwaechter morgens gestoppt hat
+und die Ursache noch am selben Vormittag behoben wurde. Ohne den Schalter
+haelt der liegengebliebene Entwurf den Tag blockiert - sein Titel traegt das
+Datum, und Schritt 2 bricht daraufhin ab. Eine bereits **terminierte**
+Kampagne wird nie angetastet.
 
 Der Schluessel kommt aus der Umgebung (MAILCHIMP_API_KEY), niemals aus dem
 Quelltext. Sein Anhaengsel nach dem Bindestrich ist das Rechenzentrum.
@@ -549,6 +557,7 @@ def datum_aus_titel(titel: str) -> str | None:
 
 def main() -> int:
     probe = "--probe" in sys.argv
+    neu = "--neu" in sys.argv
     alle = load()                       # neueste zuerst
     heute = dt.datetime.now(TZ).date().isoformat()
 
@@ -595,8 +604,10 @@ def main() -> int:
     eigene = [(k, d) for k, d in entwuerfe if d]
     neu_heute = any(e["aufgenommen"] == heute for e in offen)
 
-    if not neu_heute and eigene:
+    if not neu_heute and eigene and not neu:
         # Nichts Neues, und der offene Bestand liegt bereits als Entwurf bereit.
+        # --neu geht auch hier weiter: Wer den Neubau ausdruecklich anfordert,
+        # will ihn gerade dann, wenn schon ein Entwurf liegt.
         print(f"Keine neuen Studien heute; {len(offen)} offene liegen im Entwurf "
               f"'{eigene[0][0]['settings']['title']}'.")
         return 0
@@ -621,6 +632,17 @@ def main() -> int:
 
     for k, d in eigene:
         if k["settings"]["title"] == titel:
+            # Mit --neu wird der bestehende Entwurf desselben Tages verworfen
+            # und die Ausgabe neu gebaut. Gedacht fuer den Fall, dass der
+            # Torwaechter morgens gestoppt hat und die Ursache am selben Tag
+            # behoben wurde: Ohne das haelt der liegengebliebene Entwurf den
+            # Tag blockiert, denn der Titel traegt das Datum. Ein terminierter
+            # Entwurf wird nicht angetastet - der geht ohnehin raus.
+            if neu and k.get("status") != "schedule":
+                mc.loeschen(k["id"])
+                print(f"Bestehenden Entwurf '{titel}' ({k['id']}) verworfen "
+                      f"- wird neu gebaut.")
+                continue
             print(f"Entwurf '{titel}' besteht bereits ({k['id']}) - nichts zu tun.")
             return 0
 

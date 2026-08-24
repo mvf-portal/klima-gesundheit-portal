@@ -1,0 +1,65 @@
+name: Newsletter neu bauen (von Hand)
+
+# Fuer den Tag, an dem der Torwaechter morgens gestoppt hat und die Ursache
+# noch am selben Vormittag behoben wurde - ein zu langer Titel etwa, korrigiert
+# in studien-archiv.json.
+#
+# Warum ein eigener Workflow und nicht einfach "Studien-Update" erneut starten:
+# Der taegliche Lauf fragt PubMed und die Claude-API neu an. Er wuerfelt damit
+# die Auswahl des Tages neu und kostet ein zweites Mal - obwohl die Studien
+# laengst feststehen und nur die Kampagne neu gebaut werden muss. Dieser
+# Workflow beruehrt die Auswahl nicht.
+#
+# Er verwirft den Entwurf von heute (--neu) und legt ihn neu an. Eine bereits
+# TERMINIERTE Kampagne wird nie angetastet - die geht ohnehin raus.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write           # fuer versand-status.json
+
+concurrency:
+  group: studien-update     # nie gleichzeitig mit dem taeglichen Lauf
+  cancel-in-progress: false
+
+jobs:
+  neubau:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Kein anthropic-Paket noetig: Dieser Lauf fragt kein Modell.
+      - name: Abhängigkeiten installieren
+        run: pip install --quiet requests tzdata python-docx
+
+      # Aus dem Archiv, damit eine dort korrigierte Studie auch in Feed und
+      # Download-Dateien ankommt.
+      - name: Newsletter-Feed & Downloads erzeugen
+        run: python scripts/build_newsletter.py
+
+      - name: Entwurf verwerfen, neu bauen, pruefen und terminieren
+        env:
+          MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
+        run: python scripts/mailchimp_entwurf.py --neu
+
+      - name: Committen & pushen (nur bei Änderung)
+        env:
+          DATEIEN: studien-feed.xml download versand-status.json
+        run: |
+          if [ -z "$(git status --porcelain $DATEIEN)" ]; then
+            echo "Keine Änderung – nichts zu committen."
+            exit 0
+          fi
+          git config user.name  "Klima-Portal Bot"
+          git config user.email "stegmaier@m-vf.de"
+          git add $DATEIEN
+          git commit -m "Newsletter neu gebaut $(TZ=Europe/Berlin date +%d.%m.%Y)"
+          git push
