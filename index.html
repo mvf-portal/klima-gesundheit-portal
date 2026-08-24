@@ -1051,71 +1051,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "23. Aug. 2026, 07:16 Uhr";
+const SNAP_DATE = "24. Aug. 2026, 07:59 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
     journal:"Nat Commun", year:"2026", pmid:"42624863",
     author:"Heil CS et al.", pubdate:"21.08.2026",
     added:"20.08.2026",
-    title:"Hitze­schwellen für Müttergesundheit und Geburtsausgänge – Systematische Übersicht und Meta-Analyse",
-    sum:"Metaregression aus 103 Studien (41,95 Millionen Teilnehmer) zur Bestimmung kritischer Temperatur­schwellen für Schwangerschafts- und Neugeborenen­komplikationen.",
-    result:"Schwellen für 5%, 10% und 20% Risikozunahme bei Tmax: 30,55°C, 34,11°C, 39,07°C (21 Studien, N=5,589,862). Heterogenität bestand in Indikatoren­auswahl; Befunde zeigen kontinuierlich steigende Risiken mit Temperaturanstieg.",
-    transfer:"Meta-Analyse international; Temperaturschwellen in Subtropen/Tropen höher als mitteleuropäisch zu erwartend – nur methodisch übertragbar"
+    title:"Hitzeschwellen für Schwangerschaft und Geburtsergebnisse: Systematische Übersicht und Metaanalyse",
+    sum:"Systematische Übersicht und Metaregression zu Hitze-Schwellenwerten für adverse Schwangerschafts- und Geburtsoutcomes.",
+    result:"Metaanalyse (21 Studien, N=5.589.862): Maximale Temperatur-Schwellen von 30,55°C (5% Risikoanstieg), 34,11°C (10% Anstieg) und 39,07°C (20% Anstieg) für adverse Schwangerschafts- und Geburtsergebnisse identifiziert. Narrative Synthese von 103 Studien (N=41.951.950) zeigt heterogene Indikatoren und Mangel an umfassenden Heat-Stress-Indizes.",
+    transfer:"Global - Schwellenwerte abhängig von Klimazone; Methodik robust"
   },
   {
     journal:"Int J Epidemiol", year:"2026", pmid:"42613027",
     author:"Park J et al.", pubdate:"18.08.2026",
     added:"18.08.2026",
-    title:"Temperaturempfindlichkeit von Nierenerkrankungen in Südkorea – alters­spezifische Hitze- und Kälterisiken",
-    sum:"Größte Fall-Crossover-Studie zu Temperaturextremen und Notaufnahmebesuchen wegen Nierenkrankheiten nach Altersgruppe und Erkrankungstyp.",
-    result:"Bei 1,9 Millionen ED-Besuchen: Hitze-assoziiert höchstes OR 1,28 (95%-KI: 1,22–1,34) bei 50–59-Jährigen; Kälte-assoziiert höchstes OR 1,13 (95%-KI: 1,05–1,20) bei 30–39-Jährigen. Akutes Nierenschädigungsrisiko bei Hitze-Exposition (40–49 Jahre): OR 2,29 (95%-KI: 1,52–3,44). Altersheterogene Risiken deuten auf Anpassungsbedarf in Klimastrategien hin.",
-    transfer:"Südkorea – gemäßigte bis subtropische Zone; Hitze­schwellen dort höher als in Mitteleuropa"
+    title:"Altersabhängige Nierenkrankheits-Suszeptibilität für Temperaturextreme in Südkorea",
+    sum:"Case-Crossover-Studie zu altersabhängigen Assoziationen zwischen Temperaturextremen und Nierenerkrankungen anhand von 1,9 Millionen Notaufnahmebesuchen.",
+    result:"Hitzerisiko (99. vs. 75. Perzentil) für Nierenerkrankungen war höchst bei 50-59-Jährigen (OR 1,28, 95%-KI 1,22-1,34), Kälterisiko (1. vs. 25. Perzentil) bei 30-39-Jährigen (OR 1,13, 95%-KI 1,05-1,20). Hitze-assoziiert: Harnwegsinfektionen bei 30-Jährigen (OR 1,37), akutes Nierenschaden bei 40-Jährigen (OR 2,29). Alters- und krankheitsspezifische Heterogenität dokumentiert.",
+    transfer:"Südkorea, gemäßigte Klimazone - vergleichbar für Hitzeschutzstrategien"
   },
   {
-    journal:"Environ Health", year:"2026", pmid:"42608705",
-    author:"Perera F et al.", pubdate:"15.08.2026",
-    added:"18.08.2026",
-    title:"Weniger Luftverschmutzung durch Klimapolitik verbessert die kognitiven Leistungen bei New Yorker Kindern",
-    sum:"Abwärtstrend bei Luftschadstoffbelastungen in aufeinanderfolgenden Geburtskohor­ten (1998–2020) wurde mit Verbesserungen der kognitiven Entwicklung assoziiert.",
-    result:"Pränatale PM2,5-, NO₂- und PAH-Expositionen nahmen deutlich ab; Mental Development Index-Scores stiegen signifikant an (N=1109). In der größten Kohorte (N&gt;700, 1998–2006) war inverse Assoziation zwischen pränataler Exposition und 3-Jahres-kognitiven Scores statistisch signifikant für PM2,5, NO₂ und PAH; in der späteren Kohorte (2008–2016) mit niedrigerer Exposition waren Assoziationen schwächer.",
-    transfer:"NYC, USA - gemäßigte Klimazone, Luftqualitätspolitik nicht direkt auf Deutschland übertragbar"
+    journal:"Lancet Healthy Longev", year:"2026", pmid:"42586104",
+    author:"Katz GM et al.", pubdate:"12.08.2026",
+    added:"12.08.2026",
+    title:"Alter und Klimawandelanpassung: Lücken in nationalen Klimaplänen für ältere Menschen",
+    sum:"Vergleichende Analyse von Klimaanpassungsplänen aus 204 Ländern auf Berücksichtigung von Bedürfnissen älterer Menschen.",
+    result:"Von 204 Ländern berücksichtigten 125 (61,3%) ein bis fünf für Ältere relevante Anpassungsthemen, 77 (37,7%) keine. Nur 47 (23%) beschrieben konkrete Maßnahmen mit Finanzierung. Häufigste Themen: Reaktionen auf Extremtemperaturen, Einbeziehung älterer Menschen in Entscheidungen, Katastrophenvorsorge. Substantielle Lücken in nationalen Klimaanpassungen für Alterungspopulationen dokumentiert.",
+    transfer:"Global - Befund zur Governance; Methodik auf Deutschland anwendbar"
   },
   {
     journal:"Nat Commun", year:"2026", pmid:"42575902",
     author:"Tomkins MD et al.", pubdate:"10.08.2026",
     added:"10.08.2026",
-    title:"Kanäle als urbane Kühlinfrastruktur in Großbritannien und Irland – nationale Energiebilanz­modellierung",
-    sum:"Quantifizierung des Kühleffekts von Kanälen auf Stadttemperaturen mittels Energiebilanzmodell für das gesamte Kanalnetz Großbritanniens und Irlands.",
-    result:"Kanäle zeigen mittlere jährliche Kühleffekte von ~0,8°C (0,7–1,0°C) in unmittelbarer Nähe; deutlichere Kühlwirkung im Frühling und Frühsommer (~1,2–1,4°C) sowie während Hitzewellen (~1,5–2,3°C). Thermische Effekte verbessern Wärmekomfort und reduzieren Hitzerisiken.",
-    transfer:"Großbritannien, Irland – gemäßigte Klimazone, urbane Infrastruktur; auf deutsche Städte übertragbar"
+    title:"Kanäle als Kühlinfrastruktur in urbanen Wärmeinseln: Nationale Bewertung Großbritannien und Irland",
+    sum:"Energiebilanz-Modellierung der thermischen Effekte von Kanalnetzen auf urbane Temperaturen in Großbritannien und Irland.",
+    result:"Kanäle erbringen durchschnittliche jährliche Tages-Kühleffekte von ~0,8°C (0,7-1,0°C) in unmittelbarer Nähe, stärkere Kühlwirkung im Frühling und Frühsommer (~1,2-1,4°C) sowie während Hitzewellen (~1,5-2,3°C). Thermische Vorteile für Wärmekompfort und Gesundheit nachgewiesen.",
+    transfer:"Großbritannien, Irland - übertragbar auf gemäßigte Klimazonen mit Blauraum-Infrastruktur"
   },
   {
     journal:"Front Public Health", year:"2026", pmid:"42630885",
     author:"Punzo O et al.", pubdate:"07.08.2026",
     added:"22.08.2026",
-    title:"Umweltverträglicher und klimaresilienter Gesundheitsbetrieb – Roadmap für Italien",
-    sum:"Partizipativ entwickelter nationaler Strategiemapplan für Nachhaltigkeit und Klimaresilienz des italienischen Gesundheitssystems mit Governance-, Finanzierungs- und Evaluationsempfehlungen.",
-    result:"Identifiziert vier strategische Ziele: Emissionsziele setzen, Nachhaltigkeit in Gesundheitssystem-Planung integrieren, Tools zur Messung von Umweltauswirkungen und Klimarisiken, health-environmental-benefit-Maßnahmen. Prioritätsaktionen umfassen Energieeffizienz, Abfallreduktion, Supply-Chain-Nachhaltigkeit, Personal­schulung und Accountability-Systeme. Lücken in aktueller Politik dokumentiert.",
-    transfer:"Italien, Europa – deutschsprachiger Raum strukturell vergleichbar, Governance­modelle hochgradig übertragbar"
+    title:"Nachhaltiges und klimaresilientes Gesundheitssystem Italien: Roadmap",
+    sum:"Partizipatives Prozess mit nationaler Netzwerk (SOSTERRETE) zur Definition von Strategien für umweltverträgliches, klimaresilientes italienisches Gesundheitswesen.",
+    result:"Roadmap identifiziert vier strategische Ziele: Ziele zur Emissionsreduktion im Gesundheitswesen setzen, Nachhaltigkeit in Planung/Governance integrieren, Messtools für Umweltauswirkungen und Klimarisiken verbessern, Maßnahmen mit Health-Co-Benefits fördern. Prioritäre Maßnahmen: Energie/Infrastruktur, Abfallreduktion, Lieferketten-Nachhaltigkeit, Katastrophenvorsorge, Personal-Training, Tracking-Systeme. Von isolierten Initiativen zu koordinierter Strategie mit Governance-, Finanz-, Evaluations-Integration.",
+    transfer:"Italien, deutschsprachiger Raum - hohe strukturelle Ähnlichkeit, direkt übertragbar"
   },
   {
     journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
     author:"Radici A et al.", pubdate:"Aug. 2026",
     added:"10.08.2026",
-    title:"Aedes albopictus und Dengue-Transmissionsrisiko in Frankreich bis 2085",
-    sum:"Mechanistisches Modell prognostiziert räumliche Ausbreitung der Tigermücke und autochthones Dengue-Transmissionsrisiko unter Klimawandel­szenarien bis Jahrhundert­ende.",
-    result:"Bei High-Pressure-Szenario (hohe Emissionen, hohes Bevölkerungswachstum) bis 2085: 89–96% Frankreichs klimatisch geeignet für Ae. albopictus-Etablierung (außer Bergregionen); autochthone Dengue-Transmission in 71–95% besiedelter Flächen möglich. Median-Druck-Szenario zeigt größere Varianz: 49–89% Geeignetheit, 31–82% Transmissionsrisiko.",
-    transfer:"Frankreich – Südeuropa, gemäßigte bis mediterrane Klimazone; Projektion auf Mitteleuropa bedingt, nördliche Grenzen relevant"
-  },
-  {
-    journal:"Euro Surveill", year:"2026", pmid:"42565263",
-    author:"Rise N et al.", pubdate:"Aug. 2026",
-    added:"07.08.2026",
-    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa – Rapid Review 2018–2025",
-    sum:"Systematische Schnellbewertung von 14 Studien zu Assoziationen zwischen Extremwetter­ereignissen und Infektionskrankheiten­inzidenzen in Europa.",
-    result:"Campylobacteriose und Leptospirose-Ausbrüche nach Starkregen und Überschwemmungen dokumentiert. Häufigste Präventionsmaßnahmen: öffentliche Gesundheitskommunikation und Hygiene­aufklärung; strukturelle Maßnahmen (Sanitärinfrastruktur, One-Health-Überwachung) unterrepräsentiert. Trotz breiter Suchstrategie nur 14 europäische Studien gefunden – Forschungslücke erkannt.",
-    transfer:"Europa – temperate Zonen; Methoden und Erkenntnisse direkt auf Deutschland übertragbar"
+    title:"Aedes albopictus und Denguefieberrisiko in Frankreich im 21. Jahrhundert",
+    sum:"Studie modelliert die Ausbreitung des Tigermückenvektors und des Denguefieberrisikos in Frankreich anhand von Klimaszenarien bis 2085.",
+    result:"Im Hochdruck-Szenario werden bis 2085 89-96% des französischen Territoriums klimatisch geeignet für Aedes albopictus-Ansiedlung sein, autochtone Dengue-Übertragung in 71-95% der kolonisierten Gebiete theoretisch möglich. Im mittleren Szenario zeigen Klimatauglichkeit (49-89%) und Übertragungsrisiko (31-82%) stärkere Variation. Überwinternungsmechanismen könnten an Mittelmeer- und Baskischenküsten entfallen.",
+    transfer:"Frankreich - direkt übertragbar auf Südeuropa und Mittelmeerregion"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
