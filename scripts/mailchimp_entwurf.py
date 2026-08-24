@@ -689,20 +689,39 @@ def main() -> int:
         mc.inhalt(kid, newsletter_html(
             offen, stopp_hinweis(offen, link, beanstandungen)
             + (montags_hinweis(offen) if montag else "")))
-        mc.testen(kid, FREIGABE_MAIL)
-        print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
-        # Und den Kasten sofort wieder aus der Kampagne nehmen.
+        try:
+            mc.testen(kid, FREIGABE_MAIL)
+            print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
+        except SystemExit as fehler:
+            # Kein Grund abzubrechen: Die Meldung steht ohnehin im
+            # Sammelbericht, und der Kasten muss trotzdem wieder heraus.
+            print(f"Testausgabe konnte nicht verschickt werden: {fehler}")
+
+        # Und den Kasten in jedem Fall wieder aus der Kampagne nehmen.
         #
         # Bis zum 24.08.2026 blieb er darin stehen. Der Kasten behauptete
         # "Dieser Kasten steht nur in dieser Testausgabe; die Leserschaft
         # sieht ihn nicht" - und bot im selben Atemzug an, den Entwurf von
-        # Hand zu senden. Wer das tat, verschickte an die Leserschaft die
-        # Zeile "Gestoppt - diese Ausgabe wird nicht versendet". Die
-        # Testausgabe ist eine Kopie des Kampagneninhalts, kein eigenes
-        # Dokument; nur diese Zeile macht die Behauptung wahr.
-        mc.inhalt(kid, sauber)
-        print("Entwurf auf die saubere Fassung zurueckgesetzt - "
-              "er kann unveraendert von Hand gesendet werden.")
+        # Hand zu senden. Am 24.08.2026 ist genau das passiert: Vier
+        # Abonnenten des Pflege-Hubs bekamen "Gestoppt - diese Ausgabe wird
+        # nicht versendet", die Beanstandung im Klartext und einen internen
+        # Mailchimp-Bearbeitungslink. Die Testausgabe ist eben eine Kopie des
+        # Kampagneninhalts, kein eigenes Dokument.
+        #
+        # Scheitert das Zurücksetzen, darf das NICHT still bleiben - dann
+        # liegt in Mailchimp wieder ein Entwurf, dessen Handversand die
+        # interne Notiz mitnimmt. Die Warnung geht deshalb in die
+        # Beanstandungen und damit in den Sammelbericht.
+        try:
+            mc.inhalt(kid, sauber)
+            print("Entwurf auf die saubere Fassung zurueckgesetzt - "
+                  "er kann unveraendert von Hand gesendet werden.")
+        except SystemExit as fehler:
+            print(f"WARNUNG: Entwurf nicht zurueckgesetzt ({fehler})")
+            beanstandungen = beanstandungen + [
+                "ACHTUNG: Der Entwurf traegt noch den internen Stopp-Kasten "
+                "- nicht von Hand senden, ohne ihn vorher zu entfernen"]
+
         schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen,
                         None, empfaenger, gesamt, aussortiert)
     else:
