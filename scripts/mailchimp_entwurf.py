@@ -90,9 +90,10 @@ FREIGABE_MAIL = "stegmaier@m-vf.de"
 # Zeitumstellung um eine Stunde, ohne dass es jemand bemerkt - aus 09:00 wuerde
 # im Winter 08:00. naechster_termin() rechnet deshalb von hier nach UTC um.
 #
-# Der naechtliche Lauf beginnt um 06:00 Ortszeit, die Sammelmeldung kommt um
-# 06:45. Es bleiben also gut drei Stunden, in denen sich die Terminierung mit
-# einem Klick absagen laesst. Dieses Fenster ist der ganze Sinn der Sache: Der
+# Der naechtliche Lauf beginnt um 05:00 Ortszeit, die Sammelmeldung kommt um
+# 05:45 (beides am 24.08.2026 um eine Stunde vorgezogen). Es bleiben also gut
+# vier Stunden, in denen sich die Terminierung mit einem Klick absagen
+# laesst. Dieses Fenster ist der ganze Sinn der Sache: Der
 # Torwaechter faengt mechanischen Unfug, das Fenster faengt den inhaltlichen.
 TERMIN_LOKAL = "10:00"
 
@@ -350,6 +351,14 @@ def stopp_hinweis(studien: list[dict], link: str, gruende: list[str]) -> str:
     Regelfall mitlief, behauptete er "Entwurf zur Freigabe", obwohl der
     Versand langst auf 10:00 Uhr stand - eine Meldung, die das Gegenteil
     dessen sagte, was geschah.
+
+    **Der erste Satz gilt erst seit dem 24.08.2026.** Die Testausgabe ist
+    eine Kopie des Kampagneninhalts; dieser Kasten muss also in die Kampagne
+    geschrieben werden, um in der Testmail zu landen. Vorher blieb er danach
+    darin stehen - und der Handversand, den der Kasten selbst anbietet,
+    haette ihn an die Leserschaft geschickt. Der Aufrufer setzt den Inhalt
+    unmittelbar nach dem Testversand wieder zurueck; wer diese Zeile
+    entfernt, macht den Satz erneut zur Unwahrheit.
     """
     anzahl = len(studien)
     t = tage(studien)
@@ -365,7 +374,8 @@ def stopp_hinweis(studien: list[dict], link: str, gruende: list[str]) -> str:
         Der Entwurf liegt in Mailchimp und ist nicht terminiert. Zum Ansehen,
         Bearbeiten und gegebenenfalls Senden von Hand:<br>
         <a href="{escape(link)}" style="color:#2A2207;"><strong>{escape(link)}</strong></a><br>
-        Dieser Kasten steht nur in dieser Testausgabe; die Leserschaft sieht ihn nicht.</p>
+        Dieser Kasten steht nur in dieser Testausgabe. Der Entwurf in Mailchimp
+        enth&auml;lt ihn nicht und kann unver&auml;ndert gesendet werden.</p>
     </td></tr>"""
 
 
@@ -681,6 +691,18 @@ def main() -> int:
             + (montags_hinweis(offen) if montag else "")))
         mc.testen(kid, FREIGABE_MAIL)
         print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
+        # Und den Kasten sofort wieder aus der Kampagne nehmen.
+        #
+        # Bis zum 24.08.2026 blieb er darin stehen. Der Kasten behauptete
+        # "Dieser Kasten steht nur in dieser Testausgabe; die Leserschaft
+        # sieht ihn nicht" - und bot im selben Atemzug an, den Entwurf von
+        # Hand zu senden. Wer das tat, verschickte an die Leserschaft die
+        # Zeile "Gestoppt - diese Ausgabe wird nicht versendet". Die
+        # Testausgabe ist eine Kopie des Kampagneninhalts, kein eigenes
+        # Dokument; nur diese Zeile macht die Behauptung wahr.
+        mc.inhalt(kid, sauber)
+        print("Entwurf auf die saubere Fassung zurueckgesetzt - "
+              "er kann unveraendert von Hand gesendet werden.")
         schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen,
                         None, empfaenger, gesamt, aussortiert)
     else:
