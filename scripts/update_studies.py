@@ -94,12 +94,22 @@ SCHEMA = {
 }
 
 def _get(path: str, params: dict, timeout: int) -> requests.Response:
-    """GET mit drei Versuchen - PubMed ist gelegentlich kurz nicht erreichbar."""
+    """Abfrage mit drei Versuchen - PubMed ist gelegentlich kurz nicht erreichbar.
+
+    **POST, nicht GET.** Die Abfrage steht im Rumpf, nicht in der Adresse. Als
+    GET scheitert ein langer Suchausdruck mit HTTP 414 (Request-URI Too Long),
+    und zwar erst dann, wenn das Portal schon gebaut ist: Am 25.08.2026 ist der
+    erste Lauf des Mental-Hubs genau daran gestorben - zwei Listen von
+    Majr-Begriffen plus NOT-Block plus Europa-Zusatz ergaben rund 3.000 Zeichen.
+    NCBI nimmt fuer esearch, efetch und esummary ausdruecklich POST entgegen;
+    die Antwort ist dieselbe. Der Name bleibt `_get`, damit die Aufrufstellen
+    unveraendert bleiben - was er tut, steht hier.
+    """
     params = {**params, "tool": NCBI_TOOL, "email": NCBI_EMAIL}
     last: Exception | None = None
     for attempt in range(3):
         try:
-            r = requests.get(f"{EUTILS}/{path}", params=params, timeout=timeout)
+            r = requests.post(f"{EUTILS}/{path}", data=params, timeout=timeout)
             r.raise_for_status()
             return r
         except requests.RequestException as exc:
