@@ -147,14 +147,40 @@ def _fenster(term: str) -> str:
     return f'({term}) AND ("{d}"[EDAT] : "{d}"[EDAT])'
 
 
-def _suche(term: str, anzahl: int) -> list[str]:
+def bekannte_pmids() -> set[str]:
+    """Was schon einmal ausgeliefert wurde - aus dem Archiv."""
+    try:
+        with open(ARCHIVE, encoding="utf-8") as f:
+            return {e["pmid"] for e in json.load(f)}
+    except FileNotFoundError:
+        return set()
+
+
+def _suche(term: str, anzahl: int, bekannt: set[str] | None = None) -> list[str]:
+    # **Mehr holen, als in den Pool passt, und das Bekannte herauswerfen.**
+    # Das Modell weiss nicht, was gestern schon erschienen ist; es waehlt aus
+    # dem Pool jedes Mal die staerksten Arbeiten - und das sind an ruhigen
+    # Tagen dieselben wie gestern. Anschliessend wirft das Archiv sie als
+    # Doppel weg, und uebrig bleibt eine duenne oder leere Ausgabe. Am
+    # 26.08.2026 im Gesundheitskompetenz-Hub gemessen: 34 der 51 Arbeiten im
+    # Pool waren neu, geliefert wurden trotzdem null - das Modell hatte
+    # sechsmal dieselben Bekannten gewaehlt. Seither sieht es nur noch, was
+    # es noch nie gesehen hat.
+    faktor = 4 if bekannt else 1
     r = _get(
         "esearch.fcgi",
         {"db": "pubmed", "term": f"({_fenster(term)}) {AUSSCHLUSS}", "sort": "date",
-         "retmax": str(anzahl), "retmode": "json"},
+         "retmax": str(min(anzahl * faktor, 200)), "retmode": "json"},
         timeout=30,
     )
-    return r.json().get("esearchresult", {}).get("idlist", [])
+    treffer = r.json().get("esearchresult", {}).get("idlist", [])
+    if bekannt:
+        frisch = [p for p in treffer if p not in bekannt]
+        if len(frisch) < anzahl and len(treffer) >= anzahl:
+            print(f"Nur {len(frisch)} unbekannte von {len(treffer)} Treffern - "
+                  f"der Pool faellt entsprechend kleiner aus.")
+        treffer = frisch
+    return treffer[:anzahl]
 
 
 def fetch_pubmed() -> str:
@@ -168,9 +194,14 @@ def fetch_pubmed() -> str:
     Deshalb stellt die Europa-Abfrage die MEHRHEIT des Pools und steht vorn:
     Ein Sprachmodell gewichtet, was es zuerst liest. Die Groessen stehen in
     thema.py (POOL_EUROPA, POOL_ALLGEMEIN).
+
+    Beide Abfragen liefern seit dem 26.08.2026 nur Arbeiten, die noch nicht im
+    Archiv stehen - siehe _suche(). Der Pool ist damit immer so gross wie
+    bestellt, aber garantiert frisch.
     """
-    europa = _suche(TERM_DE, POOL_EUROPA)
-    allgemein = _suche(TERM, POOL_ALLGEMEIN)
+    bekannt = bekannte_pmids()
+    europa = _suche(TERM_DE, POOL_EUROPA, bekannt)
+    allgemein = _suche(TERM, POOL_ALLGEMEIN, bekannt)
     # Reihenfolge: in der Regel erst Europa, dann der Rest der weltweit neuesten.
     # Wer das umdreht, bekommt eine Auswahl ohne Bezug zu hiesigen Verhaeltnissen
     # - im Klima-Portal nachgewiesen. EUROPA_ZUERST steht in thema.py, weil das
