@@ -55,6 +55,8 @@ NCBI_EMAIL = os.environ.get("NCBI_EMAIL", "stegmaier@m-vf.de")
 
 START = "// === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ==="
 END = "// === STUDIES-BLOCK-ENDE ==="
+POOLDATEI = "pool-status.json"   # Zwischenstand fuer mailchimp_entwurf.py im selben Lauf;
+                                 # bewusst NICHT im Repo, siehe .gitignore
 ARCHIVE = "studien-archiv.json"   # Vollstaendige Historie; die Seite laedt sie fuer den Ordner
                                   # "Aeltere Suchergebnisse" nach und blendet die aktuellen aus.
 
@@ -147,6 +149,24 @@ def _fenster(term: str) -> str:
     return f'({term}) AND ("{d}"[EDAT] : "{d}"[EDAT])'
 
 
+# Mitgezaehlt wird, was zwischen PubMed und Ausgabe verlorengeht. Ohne diese
+# Zahlen sah der Ausfall vom 26.08.2026 aus wie ein ruhiger Tag: Der Lauf war
+# erfolgreich, das Archiv bekam nichts, und niemand konnte sehen, woran es lag.
+POOLZAHLEN = {"geholt": 0, "bekannt": 0, "pool": 0, "gewaehlt": 0, "neu": 0}
+
+
+def schreibe_poolzahlen() -> None:
+    """Legt die Zahlen fuer mailchimp_entwurf.py im Arbeitsverzeichnis ab.
+
+    Bewusst eine eigene Datei und kein Rueckgabewert: Die beiden Skripte
+    laufen als getrennte Schritte desselben Workflows, teilen sich aber das
+    Verzeichnis. Die Datei wird nicht committet - sie gilt nur fuer diesen Lauf.
+    """
+    with open(POOLDATEI, "w", encoding="utf-8") as f:
+        json.dump({"datum": dt.datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat(),
+                   **POOLZAHLEN}, f, ensure_ascii=False, indent=1)
+
+
 def bekannte_pmids() -> set[str]:
     """Was schon einmal ausgeliefert wurde - aus dem Archiv."""
     try:
@@ -174,8 +194,10 @@ def _suche(term: str, anzahl: int, bekannt: set[str] | None = None) -> list[str]
         timeout=30,
     )
     treffer = r.json().get("esearchresult", {}).get("idlist", [])
+    POOLZAHLEN["geholt"] += len(treffer)
     if bekannt:
         frisch = [p for p in treffer if p not in bekannt]
+        POOLZAHLEN["bekannt"] += len(treffer) - len(frisch)
         if len(frisch) < anzahl and len(treffer) >= anzahl:
             print(f"Nur {len(frisch)} unbekannte von {len(treffer)} Treffern - "
                   f"der Pool faellt entsprechend kleiner aus.")
@@ -210,6 +232,7 @@ def fetch_pubmed() -> str:
         ids = europa + [p for p in allgemein if p not in europa]
     else:
         ids = allgemein + [p for p in europa if p not in allgemein]
+    POOLZAHLEN["pool"] = len(ids)
     if not ids:
         raise RuntimeError("esearch lieferte keine PMIDs")
     print(f"{len(europa)} mit Europa-/Deutschlandbezug, {len(allgemein)} weltweit, "
@@ -347,6 +370,7 @@ def pick_studies(abstracts: str) -> list[dict]:
     # lieber sichtbar scheitern als eine duenne Auswahl veroeffentlichen.
     if len(studies) < ANZAHL_MIN:
         raise RuntimeError(f"Unerwartete Studienanzahl: {len(studies)}")
+    POOLZAHLEN["gewaehlt"] = len(studies)
     return studies
 
 
@@ -434,7 +458,11 @@ def update_archive(studies: list[dict]) -> int:
     entries.sort(key=lambda e: (e["aufgenommen"], e["pmid"]), reverse=True)
     with open(ARCHIVE, "w", encoding="utf-8") as f:
         json.dump(entries, f, ensure_ascii=False, indent=1)
-    print(f"Archiv: {neu} neu, {len(entries)} gesamt.")
+    POOLZAHLEN["neu"] = neu
+    schreibe_poolzahlen()
+    print(f"Archiv: {neu} neu, {len(entries)} gesamt. "
+          f"(Pool {POOLZAHLEN['pool']} aus {POOLZAHLEN['geholt']} Treffern, "
+          f"{POOLZAHLEN['bekannt']} davon bereits im Archiv.)")
     return len(entries)
 
 

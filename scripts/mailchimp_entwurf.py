@@ -555,6 +555,23 @@ def naechster_termin() -> str:
     return ziel.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00")
 
 
+def poolzahlen() -> dict:
+    """Die Zahlen des heutigen Studienlaufs, falls er im selben Workflow lief.
+
+    Fehlt die Datei oder ist sie von gestern, bleibt das Feld leer - beim
+    Neubau von Hand (--neu) lief kein Studienlauf, und eine alte Zahl waere
+    schlimmer als keine.
+    """
+    try:
+        with open("pool-status.json", encoding="utf-8") as f:
+            z = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    if z.get("datum") != dt.datetime.now(TZ).date().isoformat():
+        return {}
+    return {k: z[k] for k in ("geholt", "bekannt", "pool", "gewaehlt", "neu") if k in z}
+
+
 def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
                     link: str, beanstandungen: list[str], termin: str | None,
                     empfaenger: int = 0, listengroesse: int = 0,
@@ -584,6 +601,10 @@ def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
             # still passiert: Der Sammelbericht zeigt es, und nur so faellt
             # auf, wenn taeglich eine Studie durchrutscht.
             "aussortiert": aussortiert or [],
+            # Was zwischen PubMed und Ausgabe verlorenging: geholt, davon schon
+            # bekannt, Poolgroesse, gewaehlt, davon neu im Archiv. Leer, wenn
+            # dieser Lauf keinen Studienlauf hatte.
+            "pool": poolzahlen(),
         }, f, ensure_ascii=False, indent=1)
 
 
