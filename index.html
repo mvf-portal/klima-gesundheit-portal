@@ -1051,71 +1051,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "25. Aug. 2026, 07:01 Uhr";
+const SNAP_DATE = "26. Aug. 2026, 07:04 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
     journal:"Nat Commun", year:"2026", pmid:"42624863",
     author:"Heil CS et al.", pubdate:"21.08.2026",
     added:"20.08.2026",
-    title:"Hitzeschwellen für Schwangerschaft und Geburtsausgänge: systematische Übersicht",
-    sum:"Systematische Übersichtsarbeit und Meta-Analyse zu Umgebungshitzeschwellen für Schwangerschafts- und Geburtsausgänge.",
-    result:"Meta-Analyse (21 Studien, n=5.589.862): Temperaturmaximum-Schwellen bei 30,55 °C (5% Risikoerhöhung), 34,11 °C (10%) und 39,07 °C (20%). Narrative Synthesen (103 Studien, n=41.951.950) dokumentieren heterogene Indikatoren und Mangel an umfassenden Hitzestreß-Indizes.",
-    transfer:"Globale Analyse, Schwellwerte bei klaren Temperaturen übertragbar auf Deutschland."
+    title:"Hitze und Schwangerschaft: Temperaturschwellen für Müttergesundheit und Geburtsfolgen",
+    sum:"Systematische Übersicht und Meta-Analyse zu Auswirkungen von Hitze auf Schwangerschaft und Geburtsergebnisse mit Identifikation von Temperaturschwellen.",
+    result:"Meta-Analyse zeigt Temperaturschwellen von 30,55 °C, 34,11 °C und 39,07 °C für 5%, 10% bzw. 20% erhöhtes Risiko für ungünstige Schwangerschafts- und Geburtsergebnisse (21 Studien, n=5.589.862). Risiko steigt kontinuierlich mit Hitze.",
+    transfer:"Gemäßigte Klimazonen, internationale Populationen, methodische Übertragbarkeit auf Deutschland"
   },
   {
     journal:"Int J Epidemiol", year:"2026", pmid:"42613027",
     author:"Park J et al.", pubdate:"18.08.2026",
     added:"18.08.2026",
-    title:"Temperaturabhängige Nierenschäden: Altersabhängige Vulnerabilität in Südkorea",
-    sum:"Fallkreuzungs-Studie zu Notaufnahmebesuchen wegen Nierenkrankheiten bei verschiedenen Temperaturen nach Alter und Subtyp.",
-    result:"Hitzeeffekt (99. vs. 75. Perzentil) höchst für Alter 50–59 Jahre (OR 1,28; 95% KI 1,22–1,34); Kälteeffekt (1. vs. 25. Perzentil) für Alter 30–39 Jahre (OR 1,13; 95% KI 1,05–1,20). Harnwegsinfektionen und akute Nierenschäden zeigten altersabhängige Unterschiede.",
-    transfer:"Südkorea, gemäßigte Klimazone, Nationale Daten."
+    title:"Temperaturempfindlichkeit von Nierenkrankheiten: altersabhängige Hitzeeffekte",
+    sum:"Landesweite Fallüberkreuzungsstudie zu Zusammenhang zwischen Temperaturextremen und Notaufnahmebesuchen wegen Nierenkrankheiten in Südkorea.",
+    result:"Bei 1,9 Millionen Notaufnahmebesuchen: Hitzeeffekt (99. vs. 75. Perzentile) höchst bei 50–59-Jährigen (OR: 1,28; 95%-KI: 1,22–1,34); Kälteeffekt bei 30–39-Jährigen (OR: 1,13; 95%-KI: 1,05–1,20). Größte Kostenlast durch Harnwegsinfektionen bei ≥70-Jährigen.",
+    transfer:"Gemäßigte und subtropische Zone; altersgestafferte Risikogruppen aber methodisch relevant für Deutschland"
   },
   {
-    journal:"Lancet Healthy Longev", year:"2026", pmid:"42586104",
-    author:"Katz GM et al.", pubdate:"12.08.2026",
-    added:"12.08.2026",
-    title:"Versorgungslücken bei älteren Erwachsenen in globalen Klimaanpassungsplänen",
-    sum:"Analyse von Klimaanpassungsplänen aus 204 Ländern zur Berücksichtigung von Bedürfnissen älterer Menschen (≥65 Jahre).",
-    result:"Nur 61,3% der Länder erwähnten eine bis fünf relevante Themen; 37,7% erwähnten keine. Nur 23% konkretisierten Maßnahmen. Häufigste Themen: Hitzereaktion (23,5%), Partizipation Älterer (20,1%), Katastrophenvorsorge (19,1%). Drastische Unterrepräsentation trotz erhöhter Vulnerabilität.",
-    transfer:"Nordamerikanische Analyse, Prinzipien sind klimazonenunabhängig."
+    journal:"Int J Biometeorol", year:"2026", pmid:"42606613",
+    author:"Yang J et al.", pubdate:"17.08.2026",
+    added:"17.08.2026",
+    title:"Hitzebelastung und Gebäudekühlung in heißfeuchten Städten: Szenarien bis 2100",
+    sum:"Simulationsgestützte Analyse zukünftiger Hitzewellen auf Außenthermalkomfort und Gebäudeenergiebedarf in fünf Wohngebietstypen Guangzhous.",
+    result:"Extreme Hitzewellenszenario (SSP5-8.5): Physiologisch-äquivalente Temperatur steigt &gt;11 °C; über 95% der Flächen mit geringem Grünflächenanteil stark hitzebelastet. Innenraumtemperaturen &gt;36,7 °C mittags, &gt;32 °C nachts (unzureichende nächtliche Auskühlung). Kühlenergiebedarf um 6,1–8,5% (SSP1-2.6), 26,0–26,8% (SSP2-4.5), 10,9–14,7% (SSP3-7.0) bis Jahrhundert­ende. Unterschiedliche urbane Formen zeigen divergente Wärmevulnerabilität.",
+    transfer:"Südchina (subtropisch) – Methodik übertragbar, Temperaturschwellen nicht, urbane Hitzeadaptation relevant"
   },
   {
-    journal:"Nat Commun", year:"2026", pmid:"42575902",
-    author:"Tomkins MD et al.", pubdate:"10.08.2026",
-    added:"10.08.2026",
-    title:"Kanäle als städtische Kühlungsinseln: Effekt auf Außentemperaturen",
-    sum:"Energiebilanzbilanzmodell zur Quantifizierung der thermischen Wirkung von Gewässern auf Stadttemperaturen in Großbritannien und Irland.",
-    result:"Blauräume bieten mittlere jährliche tagsüber Kühlungseffekte von etwa 0,8 °C (0,7–1,0 °C) in ihrer unmittelbaren Umgebung. Stärkere Effekte im Frühling/Frühsommer (1,2–1,4 °C) und während Hitzewellen (1,5–2,3 °C). Können Hitzerisiko reduzieren.",
-    transfer:"Großbritannien und Irland, gemäßigte Klimazone."
-  },
-  {
-    journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
-    author:"Radici A et al.", pubdate:"Aug. 2026",
-    added:"10.08.2026",
-    title:"Dengue-Übertragungsrisiko durch Aedes albopictus in Frankreich bis 2085",
-    sum:"Mechanistisches Modell der Auswirkungen von Klimawandel auf Mückenverbreitung und Dengue-Transmissionsrisiko.",
-    result:"Szenario hohe Emissionen (SSP5-8.5): 89–96% Frankreichs klimatisch geeignet für Aedes albopictus, 71–95% für autochthone Denguefälle. Median-Szenario (SSP2-4.5): 49–89% für Vektorestablierung, 31–82% für Transmission. Ganzjährige Aktivität möglich an Mittelmeer- und Baskischen Küsten.",
-    transfer:"Frankreich, südeuropäisch, direkt auf Deutschland übertragbar für Klimatrends und Methodik."
+    journal:"Front Public Health", year:"2026", pmid:"42630885",
+    author:"Punzo O et al.", pubdate:"07.08.2026",
+    added:"22.08.2026",
+    title:"Nachhaltige und klimaresiliente Gesundheitssysteme: Roadmap für Italien",
+    sum:"Partizipative Entwicklung einer nationalen Strategie zur Reduktion von Treibhausgasemissionen und Stärkung der Klimaresilienzen italienischer Gesundheitssysteme.",
+    result:"Identifizierte vier strategische Ziele: Emissionsziele setzen, Nachhaltigkeit in Governance integrieren, Messinstrumente für Umweltauswirkungen verbessern, Synergien zwischen Gesundheits- und Umweltnutzen fördern. Priorisierte Maßnahmen: Energieeffizienz, Abfallreduktion, Lieferkettenoptimierung, Klimaresilienz-Vorsorge, Personalschulung. Italien kann von fragmentierten zu koordinierter Strategie übergehen.",
+    transfer:"Südeuropa, deutschsprachiger Raum strukturell vergleichbar, Policy-Roadmap übertragbar"
   },
   {
     journal:"Euro Surveill", year:"2026", pmid:"42565263",
     author:"Rise N et al.", pubdate:"Aug. 2026",
     added:"07.08.2026",
-    title:"Starkregen und Überschwemmungen mit Infektionskrankheiten in Europa",
-    sum:"Schnelle Übersichtsarbeit zu Zusammenhängen zwischen Starkwetterereignissen und Infektionskrankheiten in Europa (2018–2025).",
-    result:"14 von 897 identifizierten Arbeiten eingeschlossen. Campylobacteriose und Leptospirose traten nach Starkrègenereignissen auf. Häufigste Reaktionen: Öffentlichkommunikation zu Hygiene (71%), strukturelle Maßnahmen seltener. Großes Forschungsdefizit: Tropfen starker Bedarf für Vorbereitung.",
-    transfer:"Europa, gemäßigte Klimazone, Public-Health-Kommunikation."
+    title:"Starkregen, Überschwemmungen und Infektionskrankheiten in Europa",
+    sum:"Rapid Review zu Assoziationen zwischen Extremwetterereignissen und Infektionskrankheitsausbrüchen in Europa 2018–2025.",
+    result:"Von 897 Datensätzen: 14 Studien eingeschlossen. Campylobacteriose und Leptospirose traten nach Starkregen und Überschwemmungen auf. Häufigste Maßnahmen: Public-Health-Kommunikation und Hygienepraktiken; strukturelle Maßnahmen wie Sanitärinfrastruktur unterrepräsentiert. Forschungslücke in Europa erkannt.",
+    transfer:"Europäische Länder und gemäßigte Klimazone, direkte Anwendbarkeit auf Deutschland"
   },
   {
-    journal:"Environ Health Perspect", year:"2026", pmid:"42564909",
-    author:"Cantuaria ML et al.", pubdate:"04.08.2026",
-    added:"07.08.2026",
-    title:"Quellspezifische Luftverschmutzung und COPD-Risiko in Dänemark",
-    sum:"Gepoolte Kohortenstudie zu langfristiger Exposition gegenüber PM2,5, NO₂, UFP und EC mit COPD-Risiko nach Quelle (lokaler Verkehr vs. andere).",
-    result:"Nach Vollumfang-Anpassung: PM2,5 (HR 1,11; 95% KI 1,05–1,17), NO₂ (HR 1,08; 95% KI 1,04–1,13), UFP (HR 1,05; 95% KI 0,99–1,11), EC (HR 1,02; 95% KI 1,00–1,05). PM2,5 aus anderen Quellen stärker als aus Verkehr; UFP und EC aus Verkehr am schädlichsten.",
-    transfer:"Dänemark, Skandinavien, gemäßigte Klimazone, vergleichbares System."
+    journal:"Glob Chang Biol", year:"2026", pmid:"42572830",
+    author:"Radici A et al.", pubdate:"Aug. 2026",
+    added:"10.08.2026",
+    title:"Aedes albopictus und Dengue-Transmissionsrisiko in Frankreich bis 2100",
+    sum:"Mechanistisches Modell zur Bewertung des Dengue-Übertragungsrisikos durch Aedes albopictus in Frankreich unter verschiedenen Klimaszenarien bis 2100.",
+    result:"Im hochdruck-Szenario (hohe Emissionen) werden bis 2085 89–96% Frankreichs klimatisch für Ae. albopictus geeignet; autochthone Dengue-Transmission in 71–95% der besiedelten Gebiete möglich. Im Median-Szenario: Etablierungsrisiko 49–89%, Transmissionsrisiko 31–82%. Mittelmeer- und Baskische Küsten können ganzjährig aktive Vektoren aufweisen.",
+    transfer:"Frankreich, Südeuropa – direkt übertragbar auf Süd- und Mitteldeutschland, vergleichbare Methodik"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
