@@ -31,6 +31,8 @@ Aufruf:
     python scripts/mailchimp_entwurf.py            # Entwurf anlegen
     python scripts/mailchimp_entwurf.py --probe    # nur HTML nach _probe.html schreiben
     python scripts/mailchimp_entwurf.py --neu      # Entwurf von heute verwerfen
+    python scripts/mailchimp_entwurf.py --neu --auch-terminierte
+                                                  # ... auch, wenn er schon terminiert ist
                                                    # und neu bauen
 
 --neu ist fuer den Tag gedacht, an dem der Torwaechter morgens gestoppt hat
@@ -59,6 +61,7 @@ import requests
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_newsletter import load, utm            # gemeinsame Basis, kein zweiter Datenpfad
+from thema import ANZAHL_SOLL                    # fuer den Hinweis an duennen Tagen
 
 TZ = ZoneInfo("Europe/Berlin")
 
@@ -344,6 +347,32 @@ def montags_hinweis(studien: list[dict]) -> str:
     </td></tr>"""
 
 
+def duenner_tag_hinweis(studien: list[dict]) -> str:
+    """Erklaert eine kurze Ausgabe - sonst wirkt sie wie ein Fehler.
+
+    Die Auswahl trifft taeglich SOLL Studien, aber was davon schon einmal im
+    Archiv stand, faellt heraus. An ruhigen Tagen bleiben davon ein bis vier
+    uebrig. Am 26.08.2026 gingen so neun Ausgaben mit ein bis vier Studien
+    hinaus, ohne dass ein Wort dazu darin stand - fuer die Leserschaft sieht
+    das nach einer kaputten Ausgabe aus, nicht nach einem ruhigen Tag in
+    PubMed.
+
+    Keine Studien heisst weiterhin: kein Newsletter. Das entscheidet der
+    Torwaechter ("keine Studien in der Ausgabe"), nicht dieser Kasten.
+    """
+    n = len(studien)
+    if n >= ANZAHL_SOLL:
+        return ""
+    wieviel = "nur eine Studie" if n == 1 else f"nur {n} Studien"
+    return f"""
+    <tr><td style="background:#F5F0E4;padding:14px 28px;">
+      <p style="margin:0;font:13px/1.6 {FONT};color:#4A3B18;">
+        <strong>Heute eine kurze Ausgabe.</strong> Die Ausbeute an neuen
+        PubMed-Zugängen war geringer als sonst &ndash; deshalb erhalten Sie
+        heute {wieviel}. Morgen früh geht es wie gewohnt weiter.</p>
+    </td></tr>"""
+
+
 def stopp_hinweis(studien: list[dict], link: str, gruende: list[str]) -> str:
     """Steht nur in der Testausgabe nach einer Beanstandung, nie im Versand.
 
@@ -492,6 +521,10 @@ class Mailchimp:
         d = self._ruf("GET", f"/lists/{LIST_ID}")
         return int(d.get("stats", {}).get("member_count", 0))
 
+    def termin_aufheben(self, kid: str) -> None:
+        """Hebt den Versandtermin auf. Danach ist die Kampagne wieder Entwurf."""
+        self._ruf("POST", f"/campaigns/{kid}/actions/unschedule")
+
     def terminieren(self, kid: str, zeitpunkt: str) -> None:
         # Mailchimp nimmt nur volle Viertelstunden an und lehnt alles in der
         # Vergangenheit ab. Absagen laesst sich das bis zur letzten Minute -
@@ -568,6 +601,9 @@ def datum_aus_titel(titel: str) -> str | None:
 def main() -> int:
     probe = "--probe" in sys.argv
     neu = "--neu" in sys.argv
+    # Nur zusammen mit --neu und nur von Hand: hebt den Termin einer bereits
+    # terminierten Kampagne auf, statt sie stehen zu lassen.
+    auch_terminierte = "--auch-terminierte" in sys.argv
     alle = load()                       # neueste zuerst
     heute = dt.datetime.now(TZ).date().isoformat()
 
@@ -653,6 +689,18 @@ def main() -> int:
             # behoben wurde: Ohne das haelt der liegengebliebene Entwurf den
             # Tag blockiert, denn der Titel traegt das Datum. Ein terminierter
             # Entwurf wird nicht angetastet - der geht ohnehin raus.
+            # Eine bereits TERMINIERTE Kampagne bleibt tabu - sie geht ohnehin
+            # raus, und sie versehentlich zu verwerfen hiesse, den Versand des
+            # Tages zu verlieren. Wer sie ausdruecklich ersetzen will, weil der
+            # Inhalt vor 10:00 noch falsch ist, sagt es mit
+            # --auch-terminierte; dann wird der Termin aufgehoben und die
+            # Ausgabe neu gebaut und neu terminiert.
+            if neu and k.get("status") == "schedule" and auch_terminierte:
+                mc.termin_aufheben(k["id"])
+                mc.loeschen(k["id"])
+                print(f"TERMINIERTE Kampagne '{titel}' ({k['id']}) aufgehoben "
+                      f"und verworfen - wird neu gebaut.")
+                continue
             if neu and k.get("status") != "schedule":
                 mc.loeschen(k["id"])
                 print(f"Bestehenden Entwurf '{titel}' ({k['id']}) verworfen "
@@ -672,7 +720,8 @@ def main() -> int:
     # wenn wirklich mehrere Tage darin stecken - sonst erklaert er nichts.
     montag = (WOCHENENDE_AUS and dt.date.fromisoformat(heute).weekday() == 0
               and len(t) > 1)
-    sauber = newsletter_html(offen, montags_hinweis(offen) if montag else "")
+    hinweise = (montags_hinweis(offen) if montag else "") + duenner_tag_hinweis(offen)
+    sauber = newsletter_html(offen, hinweise)
     mc.inhalt(kid, sauber)
 
     # ------------------------------------------------------------ Torwaechter
@@ -692,8 +741,7 @@ def main() -> int:
         for x in beanstandungen:
             print("  ! " + x)
         mc.inhalt(kid, newsletter_html(
-            offen, stopp_hinweis(offen, link, beanstandungen)
-            + (montags_hinweis(offen) if montag else "")))
+            offen, stopp_hinweis(offen, link, beanstandungen) + hinweise))
         try:
             mc.testen(kid, FREIGABE_MAIL)
             print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")

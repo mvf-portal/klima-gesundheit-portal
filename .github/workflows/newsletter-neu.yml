@@ -11,9 +11,16 @@ name: Newsletter neu bauen (von Hand)
 # Workflow beruehrt die Auswahl nicht.
 #
 # Er verwirft den Entwurf von heute (--neu) und legt ihn neu an. Eine bereits
-# TERMINIERTE Kampagne wird nie angetastet - die geht ohnehin raus.
+# TERMINIERTE Kampagne bleibt dabei unangetastet - die geht ohnehin raus.
+# Nur wer den Schalter 'auch_terminierte' setzt, hebt ihren Termin auf und
+# ersetzt sie. Das ist der Fall, wenn der Inhalt vor 10:00 noch falsch ist.
 on:
   workflow_dispatch:
+    inputs:
+      auch_terminierte:
+        description: "Auch eine bereits terminierte Kampagne ersetzen"
+        type: boolean
+        default: false
 
 permissions:
   contents: write           # fuer versand-status.json
@@ -48,7 +55,8 @@ jobs:
       - name: Entwurf verwerfen, neu bauen, pruefen und terminieren
         env:
           MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
-        run: python scripts/mailchimp_entwurf.py --neu
+        run: |
+          python scripts/mailchimp_entwurf.py --neu ${{ inputs.auch_terminierte && '--auch-terminierte' || '' }}
 
       - name: Committen & pushen (nur bei Änderung)
         env:
