@@ -21,6 +21,10 @@ on:
         description: "Auch eine bereits terminierte Kampagne ersetzen"
         type: boolean
         default: false
+      termin:
+        description: "Abweichende Versandzeit, volle Viertelstunde (z. B. 11:00)"
+        type: string
+        default: ""
 
 permissions:
   contents: write           # fuer versand-status.json
@@ -56,7 +60,7 @@ jobs:
         env:
           MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
         run: |
-          python scripts/mailchimp_entwurf.py --neu ${{ inputs.auch_terminierte && '--auch-terminierte' || '' }}
+          python scripts/mailchimp_entwurf.py --neu             ${{ inputs.auch_terminierte && '--auch-terminierte' || '' }}             ${{ inputs.termin && format('--termin {0}', inputs.termin) || '' }}
 
       - name: Committen & pushen (nur bei Änderung)
         env:

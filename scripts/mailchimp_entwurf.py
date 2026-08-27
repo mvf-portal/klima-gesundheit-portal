@@ -30,6 +30,7 @@ Ablauf:
 Aufruf:
     python scripts/mailchimp_entwurf.py            # Entwurf anlegen
     python scripts/mailchimp_entwurf.py --probe    # nur HTML nach _probe.html schreiben
+    python scripts/mailchimp_entwurf.py --termin 11:00   # einmalig spaeter versenden
     python scripts/mailchimp_entwurf.py --neu      # Entwurf von heute verwerfen
     python scripts/mailchimp_entwurf.py --neu --auch-terminierte
                                                   # ... auch, wenn er schon terminiert ist
@@ -535,14 +536,21 @@ class Mailchimp:
 
 # --------------------------------------------------------------------- main
 
-def naechster_termin() -> str:
+def naechster_termin(uhrzeit: str | None = None) -> str:
     """Der naechste TERMIN_LOKAL, der noch in der Zukunft liegt - als UTC-ISO.
 
     Gerechnet wird in Europe/Berlin und erst am Ende nach UTC gewandelt, damit
     der Versand sommers wie winters um dieselbe Ortszeit stattfindet.
+
+    `uhrzeit` weicht einmalig ab - fuer den Tag, an dem der Lauf spaeter kam als
+    sonst. Am 27.08.2026 hat GitHub die naechtlichen Laeufe verschluckt; die
+    Ausgabe war erst gegen 11:00 fertig, und statt sie auf den naechsten Morgen
+    zu schieben (wo sie mit der regulaeren Ausgabe kollidiert waere), ging sie
+    noch am selben Tag um 11:00 hinaus. Mailchimp nimmt nur volle
+    Viertelstunden.
     """
     jetzt = dt.datetime.now(TZ)
-    stunde, minute = (int(x) for x in TERMIN_LOKAL.split(":"))
+    stunde, minute = (int(x) for x in (uhrzeit or TERMIN_LOKAL).split(":"))
     ziel = jetzt.replace(hour=stunde, minute=minute, second=0, microsecond=0)
     if ziel <= jetzt + dt.timedelta(minutes=20):
         # Zu knapp oder schon vorbei: dann morgen. Ein Termin in zehn Minuten
@@ -625,6 +633,13 @@ def main() -> int:
     # Nur zusammen mit --neu und nur von Hand: hebt den Termin einer bereits
     # terminierten Kampagne auf, statt sie stehen zu lassen.
     auch_terminierte = "--auch-terminierte" in sys.argv
+    # --termin 11:00 verschiebt NUR diesen einen Versand; TERMIN_LOKAL bleibt.
+    termin_arg = None
+    if "--termin" in sys.argv:
+        termin_arg = sys.argv[sys.argv.index("--termin") + 1]
+        if len(termin_arg.split(":")) != 2 or int(termin_arg.split(":")[1]) % 15:
+            raise SystemExit(f"--termin {termin_arg}: Mailchimp nimmt nur volle "
+                             f"Viertelstunden, Form HH:MM.")
     alle = load()                       # neueste zuerst
     heute = dt.datetime.now(TZ).date().isoformat()
 
@@ -756,7 +771,7 @@ def main() -> int:
     print(f"Empfaengerzahl: {empfaenger} von {gesamt} in der Zielgruppe.")
     beanstandungen = torwaechter.pruefe(
         offen, html=sauber, empfaenger=empfaenger, listengroesse=gesamt)
-    termin = naechster_termin()
+    termin = naechster_termin(termin_arg)
     if beanstandungen:
         print(f"Torwaechter: {len(beanstandungen)} Beanstandung(en) - nicht terminiert.")
         for x in beanstandungen:
