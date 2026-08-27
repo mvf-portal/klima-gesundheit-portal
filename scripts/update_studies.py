@@ -167,6 +167,25 @@ def schreibe_poolzahlen() -> None:
                    **POOLZAHLEN}, f, ensure_ascii=False, indent=1)
 
 
+def schon_heute_gelaufen() -> bool:
+    """Steht im Archiv bereits eine Studie von heute?
+
+    Der zweite Zeitplan (05:30 UTC) ist nur ein Netz fuer den Fall, dass der
+    erste ausgefallen ist - am 27.08.2026 hat GitHub die geplanten Laeufe
+    aller dreizehn Repos verschluckt. An normalen Tagen soll er nichts tun:
+    weder PubMed fragen noch das Modell, und schon gar nicht die Auswahl des
+    Tages neu wuerfeln.
+    """
+    try:
+        with open(ARCHIVE, encoding="utf-8") as f:
+            eintraege = json.load(f)
+    except FileNotFoundError:
+        return False
+    heute = dt.datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
+    return any(e.get("aufgenommen") == heute and not e.get("nachtrag")
+               for e in eintraege)
+
+
 def bekannte_pmids() -> set[str]:
     """Was schon einmal ausgeliefert wurde - aus dem Archiv."""
     try:
@@ -486,6 +505,11 @@ def main() -> int:
         NACHTRAG_TAG = tag.isoformat()
         print(f"Nachtrag fuer den {tag.strftime('%d.%m.%Y')} "
               f"(Aufnahmetag in PubMed, nur Archiv).")
+
+    if not NACHTRAG_TAG and "--erzwingen" not in sys.argv and schon_heute_gelaufen():
+        print("Fuer heute stehen bereits Studien im Archiv - nichts zu tun. "
+              "(--erzwingen wuerfelt die Auswahl des Tages neu.)")
+        return 0
 
     abstracts = fetch_pubmed()
     studies = pick_studies(abstracts)

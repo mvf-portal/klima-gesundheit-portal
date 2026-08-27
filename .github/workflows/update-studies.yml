@@ -8,7 +8,23 @@ name: Studien-Update (täglich)
 on:
   schedule:
     - cron: "0 3 * * *"
+    # Netz fuer einen ausgefallenen ersten Lauf: Am 27.08.2026 hat GitHub die
+    # geplanten Laeufe aller dreizehn Repos verschluckt (zeitgleich mit einer
+    # Stoerung der Billing-Dienste), und es kam kein einziger Newsletter.
+    # 05:30 UTC liegt gut vier Stunden vor dem Versand um 10:00 Ortszeit. An
+    # normalen Tagen kostet dieser Lauf nichts: update_studies.py bricht sofort
+    # ab, wenn das Archiv fuer heute schon Studien hat.
+    - cron: "30 5 * * *"
   workflow_dispatch:        # erlaubt manuelles Starten über die Actions-Oberfläche
+    inputs:
+      nur_studien:
+        description: "Nur Studien holen, keine Kampagne anlegen"
+        type: boolean
+        default: false
+      erzwingen:
+        description: "Auswahl des Tages neu würfeln, auch wenn schon gelaufen"
+        type: boolean
+        default: false
 
 permissions:
   contents: write           # GITHUB_TOKEN darf index.html zurück ins Repo pushen
@@ -42,7 +58,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
           MODEL: claude-haiku-4-5          # günstiges Modell; z. B. claude-sonnet-5 für mehr Qualität
           # SEARCH_TERM: '...'   # optional: Standardabfrage ueberschreiben (siehe update_studies.py)
-        run: python scripts/update_studies.py
+        run: python scripts/update_studies.py ${{ inputs.erzwingen && '--erzwingen' || '' }}
 
       # Baut RSS-Feed (Mailchimp) und Download-Dateien aus dem Archiv.
       # Braucht weder API-Key noch Netz – liest nur studien-archiv.json.
@@ -63,6 +79,7 @@ jobs:
           # Mailchimp - nicht mit KLIMAHUB verwechseln, das ist der
           # Claude-Schluessel).
           MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
+        if: ${{ !inputs.nur_studien }}
         run: python scripts/mailchimp_entwurf.py
 
       - name: Committen & pushen (nur bei Änderung)
