@@ -40,5 +40,6 @@
   "N_RUBRIKEN": "9",
   "N_GLOSSAR": "237",
   "META_NEWSLETTER": "Newsletter von Monitor Versorgungsforschung bestellen: den täglichen Studien-Newsletter zu Hitze, Klima und Gesundheit, die Studienauswahl der Schwesterportale, den redaktionellen MVF-Newsletter — einzeln oder zusammen.",
-  "NL_STUDIEN_WAS": "Die Studienauswahl des Hubs jeden Morgen per E-Mail: neue Arbeiten zu Hitze, Extremwetter und Klimawandel mit deutschen Zusammenfassungen, den Ergebniszahlen und der Einordnung, was sich auf Deutschland übertragen lässt. Dazu die Word- und Excel-Datei zum Tag."
+  "NL_STUDIEN_WAS": "Die Studienauswahl des Hubs jeden Morgen per E-Mail: neue Arbeiten zu Hitze, Extremwetter und Klimawandel mit deutschen Zusammenfassungen, den Ergebniszahlen und der Einordnung, was sich auf Deutschland übertragen lässt. Dazu die Word- und Excel-Datei zum Tag.",
+  "CRON_MIN": "7"
 }

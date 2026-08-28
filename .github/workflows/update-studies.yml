@@ -7,14 +7,20 @@ name: Studien-Update (täglich)
 # nach diesem Lauf kommen, und beide deutlich vor dem Versand um 10:00 Ortszeit.
 on:
   schedule:
-    - cron: "0 3 * * *"
+    # Jedes Portal hat eine EIGENE Minute (7 aus portal.json).
+    # GitHubs Cron ist "best effort": Zur vollen Stunde stehen weltweit die
+    # meisten Zeitplaene an, und unter Last werden Laeufe verspaetet gestartet
+    # oder verworfen. Zwoelf Repos auf derselben Minute sind der unguenstigste
+    # Fall - am 26.08.2026 kam der Lauf zwei Stunden zu spaet, am 27. und
+    # 28.08. gar nicht.
+    - cron: "7 3 * * *"
     # Netz fuer einen ausgefallenen ersten Lauf: Am 27.08.2026 hat GitHub die
     # geplanten Laeufe aller dreizehn Repos verschluckt (zeitgleich mit einer
     # Stoerung der Billing-Dienste), und es kam kein einziger Newsletter.
     # 05:30 UTC liegt gut vier Stunden vor dem Versand um 10:00 Ortszeit. An
     # normalen Tagen kostet dieser Lauf nichts: update_studies.py bricht sofort
     # ab, wenn das Archiv fuer heute schon Studien hat.
-    - cron: "30 5 * * *"
+    - cron: "7 5 * * *"
   workflow_dispatch:        # erlaubt manuelles Starten über die Actions-Oberfläche
     inputs:
       nur_studien:
