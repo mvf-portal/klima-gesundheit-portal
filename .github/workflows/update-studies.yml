@@ -71,6 +71,39 @@ jobs:
       - name: Newsletter-Feed & Downloads erzeugen
         run: python scripts/build_newsletter.py
 
+      # ---- Ausschreibungsradar -------------------------------------------
+      # Der Radar laeuft EINMAL ZENTRAL im Versorgungsforschungs-Portal und
+      # teilt sein Ergebnis nach zwoelf Themengebieten auf; die elf
+      # Schwesterportale holen sich daraus nur ihre Zahl (naechster Schritt).
+      # Deshalb die Bedingung auf das Repository - die Datei selbst bleibt in
+      # allen zwoelf Portalen wortgleich und wird weiter aus der Vorlage
+      # gepflegt.
+      #
+      # Gesucht wird nur montags und donnerstags: Das Skript prueft LAUFTAGE
+      # selbst und beendet sich an anderen Tagen ohne Kosten. Der Zeitplan
+      # bleibt taeglich, damit ein ausgefallener Montag am Donnerstag nicht
+      # zusaetzlich fehlt.
+      #
+      # Ein Fehler hier darf das Studien-Update nicht scheitern lassen. Er
+      # bleibt trotzdem sichtbar: ausschreibungen.json behaelt dann den alten
+      # Stand, und der Sammelbericht meldet einen veralteten Radar.
+      - name: Ausschreibungsradar aktualisieren (nur Versorgungsforschung)
+        if: github.repository == 'mvf-portal/versorgungsforschung-portal'
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
+        run: python scripts/ausschreibungen.py
+
+      # Setzt in index.html die Fristen des eigenen Themengebiets. Laeuft in
+      # ALLEN zwoelf Portalen und jeden Tag: Der Abruf kostet nichts und kein
+      # Modell, und die Karte soll auch dann stimmen, wenn der zentrale Lauf
+      # aussetzt. Im Versorgungsforschungs-Portal liest das Skript die eben
+      # geschriebene Datei lokal, in den uebrigen holt es sie aus dem
+      # VF-Repository - dort also der Stand des letzten dortigen Pushes.
+      - name: Radar-Hinweis dieses Hubs setzen
+        continue-on-error: true
+        run: python scripts/radar_hinweis.py
+
       # Legt bei Mailchimp einen ENTWURF an und schickt eine Testausgabe zur
       # Entwurf anlegen, pruefen, terminieren. Verschickt wird hier noch nichts:
       # Die Kampagne wird auf TERMIN_UTC gesetzt und laesst sich bis dahin in
@@ -91,7 +124,7 @@ jobs:
       - name: Committen & pushen (nur bei Änderung)
         id: commit
         env:
-          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json
+          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json
         run: |
           if [ -z "$(git status --porcelain $DATEIEN)" ]; then
             echo "Keine Änderung – nichts zu committen."

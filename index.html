@@ -596,6 +596,26 @@
     background:var(--card); overflow:hidden;
     flex:0 0 auto;   /* darf nicht gestaucht werden - sonst verschwindet der Ordner */
   }
+  /* Der Radar sitzt IN der Kopfkarte, nicht daneben: kein zweiter Rahmen,
+     nur eine Trennlinie nach oben. Ein Kasten im Kasten sieht nach Versehen aus. */
+  /* ---------- Hinweis auf den Ausschreibungsradar ----------
+     Bis zum 28.08.2026 stand hier der Radar selbst. Seither laeuft er einmal
+     zentral im Versorgungsforschungs-Hub und ist dort nach zwoelf
+     Themengebieten gegliedert; diese Karte nennt nur noch die Zahl des
+     eigenen Gebiets und verweist dorthin. Zwoelf Gebiete haetten in dieser
+     236 px schmalen Spalte ohnehin keinen Platz. */
+  .radar-hinweis{
+    margin-top:12px; padding:11px 13px;
+    background:var(--card-2); border:1px solid var(--line); border-radius:6px;
+    font-size:12.5px; line-height:1.5; color:var(--ink-soft);
+  }
+  .radar-hinweis[hidden]{ display:none; }
+  .radar-hinweis b{ color:var(--ink); }
+  .radar-hinweis a{
+    display:inline-block; margin-top:6px;
+    font-weight:700; color:var(--brand); text-decoration:none;
+  }
+  .radar-hinweis a:hover{ text-decoration:underline; }
   .archive summary{
     cursor:pointer; padding:12px 14px; font-weight:600; font-size:13.5px; color:var(--ink-soft);
     list-style:none; display:flex; align-items:center; gap:9px;
@@ -712,6 +732,7 @@
     <a href="./" class="hier" aria-current="page">Knowledge-Hub</a>
     <a href="ueber.html" target="_blank" rel="noopener">Über den Hub</a>
     <a href="newsletter.html">Newsletter</a>
+    <a href="https://wissen.m-vf.de/ausschreibungen.html" target="_blank" rel="noopener">Ausschreibungen</a>
     <a href="#impressum" class="nur-breit">Impressum</a>
     <a href="#datenschutz" class="nur-breit">Datenschutz</a>
     <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=menu" target="_blank" rel="noopener" class="menu-extern">Monitor Versorgungsforschung</a>
@@ -747,6 +768,12 @@
         <a class="btn-nl" href="newsletter.html">Newsletter abonnieren</a>
         <span class="nl-mini">Die Studienauswahl jeden Morgen per E-Mail — kostenfrei und jederzeit kündbar.</span>
         <a class="btn-ueber" href="ueber.html" target="_blank" rel="noopener">Über den Hub <span aria-hidden="true">↗</span></a>
+        <!-- Hinweis auf den Ausschreibungsradar. Angeregt von einem Nutzer
+             der Hubs: Wer zu einem Thema forscht, sucht nicht nur Studien,
+             sondern auch Geld. Gesucht wird zentral im Versorgungsforschungs-
+             Hub; hier steht, wie viel davon dieses Themengebiet betrifft.
+             Gefuellt von scripts/radar_hinweis.py, verborgen bis dahin. -->
+        <div class="radar-hinweis" id="radarHinweis" hidden></div>
       </aside>
     </div>
 
@@ -1118,6 +1145,14 @@ const STUDIES = [
 ];
 // === STUDIES-BLOCK-ENDE ===
 
+// Offene Foerderausschreibungen zum Thema — taeglich von scripts/radar_hinweis.py
+// === RADAR-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
+const RADAR_STAND = "";
+const RADAR_URL = "https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit";
+const RADAR_ZUHAUSE = false;
+const RADAR_FRISTEN = [];
+// === RADAR-BLOCK-ENDE ===
+
 // === CHIPS-BLOCK-START (themenspezifisch) ===
 const CHIPS = [
   "Hitzewelle",
@@ -1282,6 +1317,56 @@ STUDIES.forEach(s=>{
     '<a class="study-src" href="'+url+'" target="_blank" rel="noopener">PubMed · PMID '+s.pmid+' ↗</a>';
   studiesList.appendChild(art);
 });
+
+// ---- Hinweis auf den Ausschreibungsradar ----
+// Der Block oben nennt die Fristen des eigenen Themengebiets, nicht eine
+// fertige Zahl: Zwischen dem naechtlichen Lauf und dem Seitenaufruf koennen
+// Tage liegen - faellt der zentrale Lauf einmal aus, sogar mehr. Eine
+// mitgeschriebene Zahl waere dann zu hoch und verspraeche Ausschreibungen, die
+// es nicht mehr gibt. Gezaehlt wird deshalb hier, beim Aufruf.
+(function(){
+  const karte = document.getElementById('radarHinweis');
+  if(!karte || typeof RADAR_FRISTEN === 'undefined') return;
+  // Vor dem ersten Lauf ist der Stand leer. Dann bleibt die Karte verborgen:
+  // Die Null-Ansage hiesse "gesucht und nichts gefunden", und gesucht wurde
+  // noch gar nicht.
+  if(typeof RADAR_STAND === 'undefined' || !RADAR_STAND) return;
+  const heute = new Date(); heute.setHours(0,0,0,0);
+  // Eine Zahl je Themengebiet. In den elf Schwesterhubs steht genau eine
+  // darin, im Versorgungsforschungs-Hub zwoelf - dort nennt die Karte auch,
+  // aus wie vielen Gebieten die Ausschreibungen kommen.
+  const jeGebiet = RADAR_FRISTEN.map(liste => liste.filter(f => {
+    const d = new Date(f + 'T00:00:00');
+    return !isNaN(d) && d >= heute;
+  }).length);
+  const offen = jeGebiet.reduce((a, b) => a + b, 0);
+  const gebiete = jeGebiet.filter(n => n > 0).length;
+  const url = (typeof RADAR_URL !== 'undefined') ? RADAR_URL : '';
+  const zuhause = (typeof RADAR_ZUHAUSE !== 'undefined') && RADAR_ZUHAUSE;
+
+  let text;
+  if(!offen){
+    // Die Null-Ansage ist eine Aussage, keine Fehlermeldung: Es wurde gesucht
+    // und nichts gefunden. Bei eng gefassten Gebieten ist das der Normalfall
+    // und darf nicht wie ein Ausfall aussehen. Der Wortlaut ist so vom
+    // Herausgeber vorgegeben und bleibt in allen zwoelf Hubs derselbe.
+    text = 'Derzeit gibt es keine von uns recherchierbaren '
+         + 'F\u00f6rderma\u00dfnahmen in diesem Themenbereich. '
+         + 'Der Radar sucht zweimal pro Woche neu.';
+  } else if(zuhause){
+    text = '<b>' + offen + '</b> laufende Ausschreibung' + (offen === 1 ? '' : 'en')
+         + ' aus <b>' + gebiete + '</b> Themengebiet' + (gebiete === 1 ? '' : 'en')
+         + '.';
+  } else {
+    text = '<b>' + offen + '</b> laufende Ausschreibung' + (offen === 1 ? '' : 'en')
+         + ' zu Ihrem Themengebiet.';
+  }
+  karte.innerHTML = '\ud83d\udce2 ' + text
+    + (url ? '<br><a href="' + url + '" target="_blank" rel="noopener">'
+             + (offen ? 'Zum Ausschreibungsradar' : 'Alle Gebiete im Ausschreibungsradar')
+             + ' \u2197</a>' : '');
+  karte.hidden = false;
+})();
 
 // ---- Download der Studienlisten (Word / Excel) ----
 // Bewusst ohne Fremdbibliothek: Word oeffnet HTML mit der Endung .doc,
