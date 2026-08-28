@@ -104,6 +104,16 @@ jobs:
         continue-on-error: true
         run: python scripts/radar_hinweis.py
 
+      # ---- Newsfeed aus dem eigenen Archiv --------------------------------
+      # Sucht ueber die WordPress-Suche von m-vf.de nach Beitraegen zum
+      # Themenfeld dieses Hubs - ohne Sprachmodell, ohne Schluessel, also
+      # taeglich und in allen zwoelf Portalen. Findet er nichts, bleibt der
+      # Block stehen, wie er ist: Eine leere Karte saehe aus wie ein Thema,
+      # ueber das nie etwas geschrieben wurde.
+      - name: Newsfeed aus dem MVF-Archiv setzen
+        continue-on-error: true
+        run: python scripts/newsfeed.py
+
       # Legt bei Mailchimp einen ENTWURF an und schickt eine Testausgabe zur
       # Entwurf anlegen, pruefen, terminieren. Verschickt wird hier noch nichts:
       # Die Kampagne wird auf TERMIN_UTC gesetzt und laesst sich bis dahin in

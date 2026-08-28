@@ -49,8 +49,11 @@ Quelltext. Sein Anhaengsel nach dem Bindestrich ist das Rechenzentrum.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 import os
+import pathlib
+import re
 import sys
 
 import sponsoren
@@ -220,8 +223,14 @@ def tagesbalken(datum: str) -> str:
     </td></tr>"""
 
 
-def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
-    """Die vollstaendige E-Mail. `hinweis` erscheint nur in der Testausgabe."""
+def newsletter_html(studien: list[dict], hinweis: str = "",
+                    rubriken: str = "") -> str:
+    """Die vollstaendige E-Mail.
+
+    `hinweis` erscheint nur in der Testausgabe, `rubriken` nur, wenn sich
+    an Ausschreibungen oder News seit der letzten Ausgabe etwas geaendert
+    hat (siehe rubriken_html).
+    """
     dl = "https://klima.m-vf.de/download"
     p = "utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=studien-entwurf"
     return f"""{SCHRIFT_EINBINDEN}
@@ -256,7 +265,7 @@ def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
         <a href="https://klima.m-vf.de/?{p}&amp;utm_content=intro" style="color:{BLAU};font-weight:bold;">Knowledge-Hub</a>.</p>
     </td></tr>
 {studienteil(studien)}
-
+{rubriken}
     <tr><td style="padding:30px 28px 0;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
              style="background:#F7FAFD;border:1px solid #D0D8E4;">
@@ -308,6 +317,145 @@ def newsletter_html(studien: list[dict], hinweis: str = "") -> str:
   </table>
 </td></tr>
 </table>"""
+
+
+# ------------------------------------------------------ Rubriken (Punkt C)
+# Beide erscheinen NUR, wenn sich seit der letzten versendeten Ausgabe etwas
+# geaendert hat - Entscheidung des Herausgebers vom 28.08.2026. Ausschreibungen
+# aendern sich im Wochen-, nicht im Tagesrhythmus; stuende die Rubrik jeden Tag
+# darin, waere sie nach drei Ausgaben unsichtbar. Verglichen wird ueber eine
+# Signatur der Adressen, die in versand-status.json mitgeschrieben wird.
+
+# Hoechstens so viele Zeilen je Rubrik. Der Newsletter ist die Studienauswahl;
+# die Rubriken sind Beiwerk und duerfen sie nicht ueberwachsen.
+RUBRIK_MAX = 3
+
+
+def signatur(adressen: list[str]) -> str:
+    """Ein kurzer Fingerabdruck einer Rubrik - unabhaengig von der Reihenfolge."""
+    if not adressen:
+        return ""
+    roh = "|".join(sorted(adressen))
+    return hashlib.sha1(roh.encode("utf-8")).hexdigest()[:16]
+
+
+def radar_eintraege() -> list[dict]:
+    """Die offenen Ausschreibungen des eigenen Themengebiets.
+
+    Geholt ueber `radar_hinweis.gliederung()` - dieselbe Quelle wie die Karte
+    auf der Seite, damit Newsletter und Hub nicht auseinanderlaufen. Faellt
+    der Abruf aus, entfaellt die Rubrik; sie ist Beiwerk, kein Grund, eine
+    Ausgabe zu verzoegern.
+    """
+    try:
+        import radar_hinweis
+        daten = radar_hinweis.gliederung()
+        slug = json.loads(pathlib.Path("portal.json").read_text(
+            encoding="utf-8")).get("SLUG")
+    except Exception as fehler:  # noqa: BLE001 - Beiwerk darf ausfallen
+        print(f"Radar-Rubrik entfaellt: {fehler}")
+        return []
+    heute = dt.datetime.now(TZ).date()
+    for gebiet in daten.get("themen") or []:
+        if gebiet.get("slug") != slug:
+            continue
+        # Im Browser rechnet die Seite die Fristen nach; hier muss es das
+        # Skript tun, sonst steht im Newsletter eine abgelaufene Frist.
+        return [e for e in gebiet.get("ausschreibungen") or []
+                if (e.get("frist") or "9999") >= heute.isoformat()][:RUBRIK_MAX]
+    return []
+
+
+def news_eintraege() -> list[dict]:
+    """Die Beitraege, die scharf vorher `newsfeed.py` in index.html gesetzt hat.
+
+    Aus der Seite gelesen und nicht neu gesucht: Newsletter und Hub sollen
+    dieselben Beitraege zeigen, und der Workflow hat den Block Minuten vorher
+    geschrieben.
+    """
+    try:
+        seite = pathlib.Path("index.html").read_text(encoding="utf-8")
+    except OSError:
+        return []
+    m = re.search(r"const NEWS = \[(.*?)\];", seite, re.S)
+    if not m:
+        return []
+    eintraege = []
+    for stueck in re.finditer(
+            r'\{titel:"(.*?)", datum:"(.*?)", url:"(.*?)"\}', m.group(1)):
+        eintraege.append({"titel": json.loads(f'"{stueck.group(1)}"'),
+                          "datum": stueck.group(2), "url": stueck.group(3)})
+    return eintraege[:RUBRIK_MAX]
+
+
+def rubrik_html(ueberschrift: str, unterzeile: str, zeilen: list[str],
+                knopf: tuple[str, str] | None = None) -> str:
+    """Ein Kasten im Stil des Download-Kastens - oder nichts."""
+    if not zeilen:
+        return ""
+    knopfzeile = ""
+    if knopf:
+        knopfzeile = (
+            f'\n          <p style="margin:12px 0 0;font:14px/1.7 {FONT};">'
+            f'<a href="{knopf[1]}" style="color:{GOLD_TIEF};font-weight:bold;">'
+            f'{knopf[0]} &#8599;</a></p>')
+    return f"""
+    <tr><td style="padding:26px 28px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+             style="background:#F7FAFD;border:1px solid #D0D8E4;">
+        <tr><td style="padding:18px 22px;">
+          <p style="margin:0 0 4px;font:bold 15px/1.4 {FONT};color:{BLAU};">
+            {ueberschrift}</p>
+          <p style="margin:0 0 12px;font:13px/1.6 {FONT};color:#545C63;">
+            {unterzeile}</p>
+          {"".join(zeilen)}{knopfzeile}
+        </td></tr>
+      </table>
+    </td></tr>"""
+
+
+def rubriken_html(radar: list[dict], news: list[dict]) -> str:
+    """Beide Rubriken, soweit sie heute etwas Neues zu sagen haben."""
+    p = "utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=rubriken"
+    teile = []
+
+    zeilen = []
+    for e in radar:
+        frist = dt.date.fromisoformat(e["frist"]).strftime("%d.%m.%Y")
+        zeilen.append(
+            f'<p style="margin:0 0 10px;font:14px/1.5 {FONT};color:#333;">'
+            f'<a href="{escape(e["url"])}" style="color:{BLAU};font-weight:bold;">'
+            f'{escape(e["titel"])}</a><br>'
+            f'<span style="font:12px/1.5 {FONT};color:#545C63;">'
+            f'Frist: {frist} &middot; {escape(e.get("quelle", ""))}</span></p>')
+    teile.append(rubrik_html(
+        "Neue Ausschreibungen zu diesem Themenfeld",
+        "Offene F&ouml;rderbekanntmachungen aus Bund, DFG und grants.gov. "
+        "Ma&szlig;geblich ist stets die Bekanntmachung selbst.",
+        zeilen,
+        ("Alle Ausschreibungen im Radar",
+         f"https://wissen.m-vf.de/ausschreibungen.html?{p}")))
+
+    zeilen = []
+    for e in news:
+        datum = ""
+        try:
+            datum = dt.date.fromisoformat(e["datum"]).strftime("%d.%m.%Y")
+        except ValueError:
+            pass
+        zeilen.append(
+            f'<p style="margin:0 0 10px;font:14px/1.5 {FONT};color:#333;">'
+            f'<a href="{escape(e["url"])}" style="color:{BLAU};font-weight:bold;">'
+            f'{escape(e["titel"])}</a>'
+            + (f'<br><span style="font:12px/1.5 {FONT};color:#545C63;">{datum}'
+               f'</span>' if datum else "") + "</p>")
+    teile.append(rubrik_html(
+        "Ausgesuchte News zu diesem Themenfeld",
+        "Beitr&auml;ge aus dem Portal von &bdquo;Monitor Versorgungsforschung&ldquo; "
+        "(www.m-vf.de).",
+        zeilen))
+
+    return "".join(teile)
 
 
 def sponsor_fuss() -> str:
@@ -580,10 +728,25 @@ def poolzahlen() -> dict:
     return {k: z[k] for k in ("geholt", "bekannt", "pool", "gewaehlt", "neu") if k in z}
 
 
+def alte_signaturen() -> dict:
+    """Die Rubrik-Signaturen der letzten Ausgabe - oder ein leeres Paar.
+
+    Sie stehen in versand-status.json, weil die Datei ohnehin bei jedem Lauf
+    geschrieben und mitcommittet wird. Eine eigene Datei waere eine weitere,
+    die jemand vergessen kann.
+    """
+    try:
+        with open(STATUSDATEI, encoding="utf-8") as f:
+            return (json.load(f).get("rubriken") or {})
+    except (OSError, ValueError):
+        return {}
+
+
 def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
                     link: str, beanstandungen: list[str], termin: str | None,
                     empfaenger: int = 0, listengroesse: int = 0,
-                    aussortiert: list[str] | None = None) -> None:
+                    aussortiert: list[str] | None = None,
+                    rubriken: dict | None = None) -> None:
     """Was heute geschah - fuer den Sammelbericht ueber alle Hubs.
 
     Die Datei wird vom Workflow mitcommittet; der Bericht im Repo
@@ -613,6 +776,10 @@ def schreibe_status(stand: str, titel: str, betreff: str, studien: list[dict],
             # bekannt, Poolgroesse, gewaehlt, davon neu im Archiv. Leer, wenn
             # dieser Lauf keinen Studienlauf hatte.
             "pool": poolzahlen(),
+            # Fingerabdruecke der zuletzt AUSGESPIELTEN Rubriken. Sie werden
+            # nur fortgeschrieben, wenn die Rubrik heute wirklich in der
+            # Ausgabe stand - sonst zeigte der naechste Lauf sie nie wieder.
+            "rubriken": rubriken or {},
         }, f, ensure_ascii=False, indent=1)
 
 
@@ -648,9 +815,13 @@ def main() -> int:
         # die mehrtaegige Fassung mit Tagesbalken ansehen.
         drei = tage(alle)[:3]
         studien = [e for e in alle if e["aufgenommen"] in drei][:MAX_STUDIEN]
+        # Die Probe zeigt beide Rubriken immer - ungeachtet der Signaturen.
+        # Wer die Vorschau aufruft, will sehen, wie die Ausgabe aussieht, wenn
+        # es etwas zu melden gibt, nicht ob heute zufaellig etwas neu ist.
         html = newsletter_html(studien, stopp_hinweis(
             studien, "https://beispiel.invalid/entwurf",
-            ["Beispielbeanstandung - so sieht der Stopp-Fall aus"]))
+            ["Beispielbeanstandung - so sieht der Stopp-Fall aus"]),
+            rubriken_html(radar_eintraege(), news_eintraege()))
         with open("_probe.html", "w", encoding="utf-8") as f:
             f.write(html)
         print(f"{len(studien)} Studien aus {len(tage(studien))} Tagen -> _probe.html")
@@ -757,7 +928,34 @@ def main() -> int:
     montag = (WOCHENENDE_AUS and dt.date.fromisoformat(heute).weekday() == 0
               and len(t) > 1)
     hinweise = (montags_hinweis(offen) if montag else "") + duenner_tag_hinweis(offen)
-    sauber = newsletter_html(offen, hinweise)
+
+    # ---- Rubriken: nur, wenn sich etwas geaendert hat ----------------------
+    # Der Vergleich laeuft gegen die letzte Ausgabe, nicht gegen gestern: Wurde
+    # gestern gestoppt, stand die Rubrik nicht drin, und sie soll heute
+    # erscheinen. Deshalb werden die Signaturen weiter unten nur bei
+    # tatsaechlich ausgespielten Rubriken fortgeschrieben.
+    vorher = alte_signaturen()
+    radar = radar_eintraege()
+    news = news_eintraege()
+    sig_radar = signatur([e["url"] for e in radar])
+    sig_news = signatur([e["url"] for e in news])
+    zeige_radar = bool(radar) and sig_radar != vorher.get("radar")
+    zeige_news = bool(news) and sig_news != vorher.get("news")
+    for name, zeigen, wieviel in (("Ausschreibungen", zeige_radar, len(radar)),
+                                  ("News", zeige_news, len(news))):
+        print(f"Rubrik {name}: "
+              + (f"{wieviel} Eintrag/Eintraege" if zeigen
+                 else "unveraendert seit der letzten Ausgabe - entfaellt"))
+    rubriken = rubriken_html(radar if zeige_radar else [],
+                             news if zeige_news else [])
+    # Fortgeschrieben wird nur, was heute auch wirklich in der Ausgabe stand.
+    signaturen = dict(vorher)
+    if zeige_radar:
+        signaturen["radar"] = sig_radar
+    if zeige_news:
+        signaturen["news"] = sig_news
+
+    sauber = newsletter_html(offen, hinweise, rubriken)
     mc.inhalt(kid, sauber)
 
     # ------------------------------------------------------------ Torwaechter
@@ -777,7 +975,8 @@ def main() -> int:
         for x in beanstandungen:
             print("  ! " + x)
         mc.inhalt(kid, newsletter_html(
-            offen, stopp_hinweis(offen, link, beanstandungen) + hinweise))
+            offen, stopp_hinweis(offen, link, beanstandungen) + hinweise,
+            rubriken))
         try:
             mc.testen(kid, FREIGABE_MAIL)
             print(f"Testausgabe mit Stopp-Kasten an {FREIGABE_MAIL} verschickt.")
@@ -811,13 +1010,16 @@ def main() -> int:
                 "ACHTUNG: Der Entwurf traegt noch den internen Stopp-Kasten "
                 "- nicht von Hand senden, ohne ihn vorher zu entfernen"]
 
+        # Bei einer gestoppten Ausgabe bleiben die alten Signaturen stehen:
+        # Versendet wurde nichts, also hat die Leserschaft die Rubrik nicht
+        # gesehen, und morgen soll sie es noch einmal versuchen.
         schreibe_status("gestoppt", titel, betreff, offen, link, beanstandungen,
-                        None, empfaenger, gesamt, aussortiert)
+                        None, empfaenger, gesamt, aussortiert, vorher)
     else:
         mc.terminieren(kid, termin)
         print(f"Torwaechter: nichts zu beanstanden - terminiert auf {termin}.")
         schreibe_status("terminiert", titel, betreff, offen, link, [], termin,
-                        empfaenger, gesamt, aussortiert)
+                        empfaenger, gesamt, aussortiert, signaturen)
 
     # Aeltere, nie versendete Entwuerfe sind jetzt ueberholt: Ihre Studien
     # stecken vollstaendig im neuen. Zwei Entwuerfe mit ueberlappendem Inhalt
