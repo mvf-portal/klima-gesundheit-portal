@@ -317,7 +317,39 @@ def presse_feed(name: str, adresse: str) -> list[dict]:
     return eintraege
 
 
-def presse(begriffe: list[str]) -> list[dict]:
+def kernwoerter(titel: str) -> set:
+    """Die aussagekraeftigen Woerter eines Titels - alles ab fuenf Zeichen.
+
+    Kurze Woerter (der, und, bei, neue) stehen in jedem zweiten Titel und
+    wuerden jede Meldung mit jeder verwandt erscheinen lassen.
+    """
+    return {w.casefold() for w in re.findall(r"\w{5,}", titel)}
+
+
+def schon_da(titel: str, eigene: list[str]) -> bool:
+    """Steht diese Fremdmeldung schon als eigener Beitrag in der Karte?
+
+    Monitor Versorgungsforschung uebernimmt selbst Meldungen von
+    presseportal.de - am 29.08.2026 gemessen: Von 100 Fremdmeldungen standen
+    fuenf wortgleich oder fast wortgleich auch im eigenen Archiv, darunter
+    "Gesundheitsversorgung bewegt Sachsen-Anhalt vor der Landtagswahl" und
+    "DiGA: AOK fordert Abschaffung der unregulierten Preise". In der Kopfkarte
+    stuende dann zweimal dieselbe Nachricht.
+
+    Verglichen wird ueber drei gemeinsame Woerter ab fuenf Zeichen. Weniger
+    trifft Zufaellige ("Studie", "Versorgung", "Patienten"), mehr laesst
+    umformulierte Ueberschriften durch - und die kommen vor: m-vf.de kuerzt
+    "Digitale Gesundheitsanwendungen: AOK fordert..." zu "DiGA: AOK fordert...".
+
+    Weggelassen wird immer die FREMDE Meldung, nie der eigene Beitrag: Der Hub
+    ist ein Angebot von Monitor Versorgungsforschung, die Fremdquellen sind die
+    Zugabe.
+    """
+    meine = kernwoerter(titel)
+    return any(len(meine & kernwoerter(e)) >= 3 for e in eigene)
+
+
+def presse(begriffe: list[str], eigene: list[str] | None = None) -> list[dict]:
     """Fremde Pressemeldungen zum Thema dieses Hubs.
 
     Die Feeds sind allgemein ("Medizin", "Gesundheit"), das Themengebiet ist
@@ -333,6 +365,8 @@ def presse(begriffe: list[str]) -> list[dict]:
         for e in presse_feed(name, adresse):
             if not e["titel"] or not e["url"] or e["url"] in gesehen:
                 continue
+            if schon_da(e["titel"], eigene or []):
+                continue      # steht schon oben als eigener Beitrag
             probe = {"title": {"rendered": e["titel"]},
                      "excerpt": {"rendered": "" if nur_titel else e["text"]}}
             if any(trifft(probe, b) for b in begriffe):
@@ -344,13 +378,16 @@ def presse(begriffe: list[str]) -> list[dict]:
     return gefunden[:PRESSE_MAX]
 
 
-def selbstverwaltung(begriffe: list[str], alles: bool) -> list[dict]:
+def selbstverwaltung(begriffe: list[str], alles: bool,
+                     eigene: list[str] | None = None) -> list[dict]:
     """Meldungen des G-BA - im Versorgungsforschungs-Hub alle, sonst gefiltert."""
     gefunden, gesehen = [], set()
     for name, adresse in SELBST_FEEDS:
         for e in presse_feed(name, adresse):
             if not e["titel"] or not e["url"] or e["url"] in gesehen:
                 continue
+            if schon_da(e["titel"], eigene or []):
+                continue      # steht schon oben als eigener Beitrag
             probe = {"title": {"rendered": e["titel"]},
                      "excerpt": {"rendered": e["text"]}}
             if alles or any(trifft(probe, b) for b in begriffe):
@@ -425,7 +462,10 @@ def main() -> int:
     for b in beitraege:
         print(f"  {(b.get('date') or '')[:10]}  "
               f"{unescape(b['title']['rendered'])[:78]}")
-    meldungen = presse(begriffe)
+    # Verglichen wird gegen die Beitraege, die WIRKLICH in der Karte stehen -
+    # ein Doppel mit einem Beitrag, den niemand sieht, ist keines.
+    eigene_titel = [unescape(b["title"]["rendered"]) for b in beitraege]
+    meldungen = presse(begriffe, eigene_titel)
     print(f"{len(meldungen)} fremde Pressemeldungen:")
     for m in meldungen:
         print(f"  {m['datum']}  [{m['quelle']}] {m['titel'][:64]}")
@@ -435,7 +475,8 @@ def main() -> int:
             encoding="utf-8")).get("SLUG", "")
     except (OSError, ValueError):
         slug = ""
-    amtlich = selbstverwaltung(begriffe, slug == SELBST_UNGEFILTERT)
+    amtlich = selbstverwaltung(begriffe, slug == SELBST_UNGEFILTERT,
+                               eigene_titel)
     print(f"{len(amtlich)} Meldungen aus der Selbstverwaltung:")
     for m in amtlich:
         print(f"  {m['datum']}  [{m['quelle']}] {m['titel'][:64]}")
