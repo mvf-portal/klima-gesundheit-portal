@@ -1209,8 +1209,9 @@ const STUDIES = [
 // === RADAR-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
 const RADAR_STAND = "28.08.2026";
 const RADAR_URL = "https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit";
+const RADAR_EIGENES = 1;
 const RADAR_ZUHAUSE = false;
-const RADAR_FRISTEN = [[]];
+const RADAR_FRISTEN = [["2026-10-20", "2026-10-20", "2026-09-22", "2026-09-02", "2026-09-02", "2026-09-14", "2026-09-23"], [], ["2026-09-14", "2026-09-23", "2026-10-28", "2026-10-06", "2026-10-02", "2026-10-09", "2026-10-19", "2026-10-19"], [], ["2026-09-29", "2026-10-15"], [], [], ["2026-10-06", "2026-09-30", "2026-09-30", "2026-09-02", "2026-10-05", "2026-10-14", "2026-09-18", "2026-09-18"], [], ["2026-10-09", "2026-10-09", "2026-10-20"], [], ["2026-09-07", "2026-09-07", "2026-09-07", "2026-09-07", "2026-08-31", "2026-10-15"]];
 // === RADAR-BLOCK-ENDE ===
 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
@@ -1442,18 +1443,30 @@ STUDIES.forEach(s=>{
     const d = new Date(f + 'T00:00:00');
     return !isNaN(d) && d >= heute;
   }).length);
-  const offen = jeGebiet.reduce((a, b) => a + b, 0);
-  const gebiete = jeGebiet.filter(n => n > 0).length;
   const zuhause = (typeof RADAR_ZUHAUSE !== 'undefined') && RADAR_ZUHAUSE;
+  const meines = (typeof RADAR_EIGENES !== 'undefined') ? RADAR_EIGENES : 0;
+  // Im Versorgungsforschungs-Hub zaehlt die Karte alles, in den uebrigen nur
+  // das eigene Gebiet - und daneben, in wie vielen anderen etwas laeuft.
+  const offen = zuhause ? jeGebiet.reduce((a, b) => a + b, 0)
+                        : (jeGebiet[meines] || 0);
+  const gebiete = jeGebiet.filter(n => n > 0).length;
+  const andere = jeGebiet.filter((n, i) => n > 0 && i !== meines).length;
 
   let text;
   if(!offen){
     // Die Null-Ansage ist eine Aussage, keine Fehlermeldung: Es wurde gesucht
     // und nichts gefunden. Bei eng gefassten Gebieten ist das der Normalfall
-    // und darf nicht wie ein Ausfall aussehen. Der Wortlaut ist so vom
-    // Herausgeber vorgegeben und bleibt in allen zwoelf Hubs derselbe.
+    // und darf nicht wie ein Ausfall aussehen. Der Wortlaut ist vom
+    // Herausgeber vorgegeben.
+    //
+    // Der Zusatz nennt die anderen Gebiete: Wer in seinem Thema nichts
+    // findet, soll wenigstens erfahren, dass der Radar arbeitet - und wo es
+    // gerade etwas zu holen gibt. Faellt die Zahl auf null, entfaellt der
+    // Satz; "Aber in 0 anderen" waere Hohn.
     text = 'Derzeit gibt es keine von uns recherchierbaren '
          + 'F\u00f6rderma\u00dfnahmen in diesem Themenbereich. '
+         + (andere ? 'Aber in ' + (andere === 1 ? 'einem' : andere)
+                     + ' anderen: ' : '')
          + 'Der Radar sucht zweimal pro Woche neu.';
   } else if(zuhause){
     text = '<b>' + offen + '</b> laufende Ausschreibung' + (offen === 1 ? '' : 'en')

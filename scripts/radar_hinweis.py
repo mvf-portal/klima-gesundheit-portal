@@ -66,22 +66,27 @@ def block(gebiete: list[dict], eigenes: dict, stand: str,
           zuhause: bool) -> str:
     """Der RADAR-Block fuer index.html.
 
-    `RADAR_FRISTEN` ist eine Liste je Themengebiet, nicht eine flache Liste:
-    Im Versorgungsforschungs-Hub steht der Radar selbst, und die Karte nennt
-    dort beides - wie viele Ausschreibungen laufen und aus wie vielen
-    Gebieten. Das laesst sich nur zaehlen, wenn die Gebiete getrennt bleiben.
-    In den elf anderen Hubs enthaelt die Liste genau einen Eintrag, den des
-    eigenen Gebiets.
+    `RADAR_FRISTEN` ist eine Liste je Themengebiet - und zwar ueber ALLE
+    zwoelf, auch in den elf Hubs, die nur eines davon zeigen. Der Grund steht
+    in der Karte: Findet der Radar zum eigenen Thema nichts, nennt sie, in wie
+    vielen anderen Gebieten etwas laeuft ("Aber in vier anderen"). Diese Zahl
+    muss im Browser aus den Fristen nachgerechnet werden, sonst waere sie nach
+    zwei Tagen falsch - also braucht die Seite die Fristen aller Gebiete.
+    `RADAR_EIGENES` sagt, welches davon das eigene ist.
+
+    Es kostet wenig: Am 29.08.2026 waren es 34 Datumsangaben.
     """
     def js(wert) -> str:
         return json.dumps(wert, ensure_ascii=False)
-    quelle = gebiete if zuhause else [eigenes]
     fristen = [[e["frist"] for e in g.get("ausschreibungen", [])]
-               for g in quelle]
+               for g in gebiete]
+    eigener_platz = next((i for i, g in enumerate(gebiete)
+                          if g["slug"] == eigenes["slug"]), 0)
     return "\n".join([
         START,
         f"const RADAR_STAND = {js(stand)};",
         f"const RADAR_URL = {js(ZENTRALE + '#' + eigenes['slug'])};",
+        f"const RADAR_EIGENES = {eigener_platz};",
         # Wahr nur im Versorgungsforschungs-Hub: Dort steht der Radar selbst,
         # und "Besuchen Sie den Hub Versorgungsforschung" waere eine Einladung
         # dorthin, wo der Leser schon ist.
