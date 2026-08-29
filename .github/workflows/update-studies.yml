@@ -136,14 +136,24 @@ jobs:
         env:
           DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json
         run: |
-          if [ -z "$(git status --porcelain $DATEIEN)" ]; then
+          # Nicht jedes Portal hat jede Datei: ausschreibungen.html/.json
+          # entstehen nur im Versorgungsforschungs-Portal, weil der Radar dort
+          # zentral laeuft. `git add` bricht an einem Pfad ab, den es nicht
+          # gibt (29.08.2026: elf Hubs scheiterten genau daran, nachdem die
+          # beiden Namen in die Liste kamen). Deshalb wird die Liste vorher auf
+          # das eingedampft, was wirklich im Arbeitsverzeichnis liegt.
+          VORHANDEN=""
+          for f in $DATEIEN; do
+            [ -e "$f" ] && VORHANDEN="$VORHANDEN $f"
+          done
+          if [ -z "$VORHANDEN" ] || [ -z "$(git status --porcelain $VORHANDEN)" ]; then
             echo "Keine Änderung – nichts zu committen."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name  "Klima-Portal Bot"
           git config user.email "stegmaier@m-vf.de"
-          git add $DATEIEN
+          git add $VORHANDEN
           git commit -m "Studien-Update $(TZ=Europe/Berlin date +%d.%m.%Y)"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
