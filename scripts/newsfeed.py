@@ -258,11 +258,22 @@ def eigen(beitrag: dict) -> bool:
 
 
 def sammle(begriffe: list[str], heute: dt.date) -> list[dict]:
-    """Zu allen Begriffen die besten Treffer - reihum, ohne Dubletten.
+    """Die neuesten Treffer zu den Begriffen dieses Hubs.
 
-    Reihum je ein Treffer pro Begriff, nicht erst alle zum ersten: Sonst
-    stammen bei sieben Begriffen alle sechs Beitraege vom ersten, und die
-    uebrigen Themenstraenge des Hubs kaemen gar nicht vor.
+    **Gesucht wird nach Relevanz, ausgewaehlt nach Datum.** Die WordPress-Suche
+    muss nach Relevanz sortieren, sonst liefert sie Beitraege, in denen der
+    Begriff nur am Rand vorkommt (siehe Kopf dieser Datei). Welche der Treffer
+    dann auf die Seite kommen, entscheidet aber das Datum - alles andere waere
+    kein Newsfeed.
+
+    Am 29.08.2026 im Versorgungsforschungs-Hub gemessen: Die alte Auswahl nahm
+    reihum den relevantesten Treffer je Begriff und zeigte damit Beitraege vom
+    20.07. und 23.04., obwohl vom 19.08., 18.08. und 13.08. welche vorlagen.
+
+    Hoechstens ein Beitrag je Suchbegriff, solange genug Begriffe etwas
+    gefunden haben: Sonst stellte ein ergiebiger Begriff beide Plaetze, und
+    der zweite Themenstrang des Hubs kaeme nicht vor. Reicht das nicht, wird
+    mit den naechstneuen aufgefuellt.
     """
     grenze = heute - dt.timedelta(days=MINDESTFENSTER)
     if NUR_LAUFENDES_JAHR:
@@ -270,22 +281,28 @@ def sammle(begriffe: list[str], heute: dt.date) -> list[dict]:
         # Fenster auf. Ab Mai ist das der 1. Januar, im Januar das Mindestfenster.
         grenze = min(dt.date(heute.year, 1, 1), grenze)
     ab = grenze.isoformat() + "T00:00:00"
-    listen = [[b for b in suche(begriff, ab)
-               if not eigen(b) and trifft(b, begriff)]
-              for begriff in begriffe]
+
+    treffer: list[tuple[str, dict]] = []
+    for begriff in begriffe:
+        for b in suche(begriff, ab):
+            if not eigen(b) and trifft(b, begriff):
+                treffer.append((begriff, b))
+    treffer.sort(key=lambda x: x[1].get("date") or "", reverse=True)
+
     gefunden: list[dict] = []
     gesehen: set[int] = set()
-    for runde in range(JE_BEGRIFF):
-        for liste in listen:
+    for nur_neue_begriffe in (True, False):
+        benutzt: set[str] = set()
+        for begriff, b in treffer:
             if len(gefunden) >= ANZEIGEN_MAX:
                 break
-            if runde < len(liste) and liste[runde]["id"] not in gesehen:
-                gesehen.add(liste[runde]["id"])
-                gefunden.append(liste[runde])
-    # Auf der Seite steht das Neueste oben - gesucht wurde nach Relevanz,
-    # angezeigt wird nach Datum. Beides zusammen ergibt einen Feed, der
-    # thematisch trifft und trotzdem aktuell aussieht.
-    gefunden.sort(key=lambda b: b.get("date") or "", reverse=True)
+            if b["id"] in gesehen:
+                continue
+            if nur_neue_begriffe and begriff in benutzt:
+                continue
+            benutzt.add(begriff)
+            gesehen.add(b["id"])
+            gefunden.append(b)
     return gefunden
 
 
