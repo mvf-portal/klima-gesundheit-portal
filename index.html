@@ -374,6 +374,12 @@
   }
   .magazin-list a:hover{ text-decoration:underline; }
   .magazin-datum{ display:block; font-size:10.5px; color:var(--ink-faint); margin-top:2px; }
+  /* Die Presserubrik steht optisch eine Stufe zurueck: Sie ist die Zugabe,
+     nicht der Inhalt. Die Quelle steht bei jedem Eintrag - wer eine
+     Pressemitteilung liest, soll wissen, von wem. */
+  .presse .magazin-list a{ font-weight:400; color:var(--ink); }
+  .presse .magazin-list a:hover{ color:var(--brand); }
+  .magazin-quelle{ color:var(--ink-faint); }
 
   .nl{
     margin-top:10px; border:1px solid var(--line); border-radius:6px;
@@ -912,6 +918,35 @@
             Versorgungsforschung“ (<a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=magazin" target="_blank" rel="noopener">www.m-vf.de</a>)</p>
           <ul class="magazin-list" id="magazinList"></ul>
         </section>
+
+        <!-- Weitere Pressemeldungen. Fremde Quellen, deshalb ausdruecklich
+             als solche gekennzeichnet und getrennt von den eigenen Beitraegen
+             darueber - Entscheidung des Herausgebers vom 29.08.2026. Quellen
+             sind der Informationsdienst Wissenschaft (Forschungsmeldungen aus
+             Hochschulen und Instituten) und presseportal.de, letzteres nur
+             als Auffuellung und nur bei Treffer im Titel.
+             Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
+        <section class="magazin presse" id="presse" hidden>
+          <div class="magazin-title">Weitere Pressemeldungen zum Thema</div>
+          <p class="magazin-sub">Pressemitteilungen Dritter, aus
+            <a href="https://idw-online.de/" target="_blank" rel="noopener">idw</a>
+            und
+            <a href="https://www.presseportal.de/" target="_blank" rel="noopener">presseportal.de</a></p>
+          <ul class="magazin-list" id="presseList"></ul>
+        </section>
+
+        <!-- Aus der Selbstverwaltung: Beschluesse, Methodenbewertungen und
+             Meldungen des Gemeinsamen Bundesausschusses. Amtlich, also
+             urheberrechtlich unbedenklich - und im Kern dessen, was die
+             Leserschaft betrifft. Im Versorgungsforschungs-Hub ungefiltert,
+             sonst nach dem Thema des Hubs ausgewaehlt.
+             Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
+        <section class="magazin presse" id="selbst" hidden>
+          <div class="magazin-title">Aus der Selbstverwaltung</div>
+          <p class="magazin-sub">Beschlüsse und Meldungen des
+            <a href="https://www.g-ba.de/" target="_blank" rel="noopener">Gemeinsamen Bundesausschusses</a></p>
+          <ul class="magazin-list" id="selbstList"></ul>
+        </section>
       </aside>
     </div>
 
@@ -1050,6 +1085,7 @@ const DB = [
   {c:"deutsch", n:"German Medical Science (GMS)", de:1, d:"Open-Access-Portal deutscher medizinischer Fachgesellschaften (AWMF/ZB MED).", t:"portal", u:"https://www.egms.de/"},
   {c:"deutsch", n:"Monitor Versorgungsforschung", de:1, d:"Deutsche Fachzeitschrift für Politik, Praxis & Forschung der Versorgung — durchsuchbares Facharchiv.", t:"live", u:"https://www.monitor-versorgungsforschung.de/?s=%s&utm_source=klima-hub&utm_medium=referral&utm_campaign=klima-portal", b:0},
   {c:"deutsch", n:"Knowledge-Hub Versorgungsforschung", de:1, d:"Das Schwesterportal von Monitor Versorgungsforschung — dieselbe Suche über alle Datenbanken der Versorgungsforschung.", t:"portal", u:"https://wissen.m-vf.de/"},
+  {c:"deutsch", n:"Gesundheitsinformation.de (IQWiG)", de:1, d:"Evidenzbasierte Patienteninformation des IQWiG und von Cochrane Deutschland – Krankheitsbilder, Behandlungen, Vorsorge, jeweils mit der Studienlage dahinter. Begriff nach Öffnen eingeben.", t:"portal", u:"https://www.gesundheitsinformation.de/"},
 
   // 2 — Bibliografisch international
   {c:"biblio", n:"PubMed / MEDLINE", d:"Die zentrale biomedizinische Datenbank der US-Nationalbibliothek (NLM). >37 Mio. Nachweise.", t:"live", u:"https://pubmed.ncbi.nlm.nih.gov/?term=%s", b:1},
@@ -1223,6 +1259,16 @@ const NEWS = [
   {titel:"BMG: Information zu den Musterhitzeschutzplänen", datum:"2025-06-03", url:"https://www.monitor-versorgungsforschung.de/news/bmg-information-zu-den-musterhitzeschutzplaenen/"},
 ];
 // === NEWS-BLOCK-ENDE ===
+
+// Fremde Pressemeldungen zum Thema — taeglich von scripts/newsfeed.py
+// === PRESSE-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
+const PRESSE = [];
+// === PRESSE-BLOCK-ENDE ===
+
+// Meldungen des G-BA — taeglich von scripts/newsfeed.py
+// === SELBST-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
+const SELBST = [];
+// === SELBST-BLOCK-ENDE ===
 
 // === CHIPS-BLOCK-START (themenspezifisch) ===
 const CHIPS = [
@@ -1421,6 +1467,39 @@ STUDIES.forEach(s=>{
   });
   kasten.hidden = false;
 })();
+
+// ---- Fremde Rubriken: Pressemeldungen und Selbstverwaltung ----
+// Beide zeigen dasselbe Muster - Titel, Datum, Quelle -, deshalb eine
+// Funktion. Bleibt eine Liste leer, bleibt ihr Kasten verborgen: Eine Rubrik,
+// die "nichts gefunden" meldet, waere hier nur Laerm.
+function fremdeRubrik(kastenId, listenId, eintraege){
+  const kasten = document.getElementById(kastenId);
+  const liste = document.getElementById(listenId);
+  if(!kasten || !liste || !eintraege || !eintraege.length) return;
+  eintraege.forEach(n => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = n.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = n.titel;
+    li.appendChild(a);
+    const span = document.createElement('span');
+    span.className = 'magazin-datum';
+    let zeile = '';
+    if(n.datum){
+      const d = new Date(n.datum + 'T00:00:00');
+      if(!isNaN(d)) zeile = d.toLocaleDateString('de-DE',
+        {day:'2-digit', month:'2-digit', year:'numeric'});
+    }
+    span.textContent = zeile + (zeile && n.quelle ? ' · ' : '') + (n.quelle || '');
+    li.appendChild(span);
+    liste.appendChild(li);
+  });
+  kasten.hidden = false;
+}
+if(typeof PRESSE !== 'undefined') fremdeRubrik('presse', 'presseList', PRESSE);
+if(typeof SELBST !== 'undefined') fremdeRubrik('selbst', 'selbstList', SELBST);
 
 // ---- Hinweis auf den Ausschreibungsradar ----
 // Der Block oben nennt die Fristen des eigenen Themengebiets, nicht eine
