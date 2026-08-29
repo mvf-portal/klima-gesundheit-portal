@@ -101,10 +101,8 @@ PRESSE_FEEDS = [
     ("presseportal.de",
      "https://www.presseportal.de/rss/gesundheit-medizin.rss2", True),
 ]
-# So viele Pressemeldungen stehen auf der Seite - weniger als eigene Beitraege.
-# Der Hub bleibt ein Angebot von Monitor Versorgungsforschung; Fremdmeldungen
-# sind die Zugabe, nicht der Inhalt.
-PRESSE_MAX = 3
+# Ebenso viele wie bei den eigenen Beitraegen - mehr traegt die Spalte nicht.
+PRESSE_MAX = 2
 
 START_SELBST = "// === SELBST-BLOCK-START (taeglich von GitHub Actions ersetzt) ==="
 ENDE_SELBST = "// === SELBST-BLOCK-ENDE ==="
@@ -120,7 +118,7 @@ SELBST_FEEDS = [
     ("G-BA",
      "https://www.g-ba.de/bewertungsverfahren/methodenbewertung/letzte-aenderungen/rss.xml"),
 ]
-SELBST_MAX = 3
+SELBST_MAX = 2
 # Im Versorgungsforschungs-Hub steht die Rubrik ungefiltert: Dort IST die
 # Selbstverwaltung das Thema. In den uebrigen wird gefiltert wie sonst auch.
 #
@@ -131,11 +129,11 @@ SELBST_MAX = 3
 # und die Rubrik saehe in elf Hubs nach Fuellmaterial aus. Lieber leer.
 SELBST_UNGEFILTERT = "versorgungsforschung"
 
-# So viele Beitraege stehen auf der Seite. Drei, weil der Kasten seit dem
-# 29.08.2026 in der Kopfkarte steht und die nur 236 px breit ist - sechs
-# Titel haetten daraus eine Bleiwueste gemacht. Es sind zugleich so viele,
-# wie der Newsletter je Rubrik zeigt (RUBRIK_MAX in mailchimp_entwurf.py).
-ANZEIGEN_MAX = 3
+# So viele Beitraege stehen je Rubrik auf der Seite. Zwei, seit die Kopfkarte
+# drei Rubriken traegt (eigene Beitraege, fremde Pressemeldungen,
+# Selbstverwaltung) - bei dreien wurde die Spalte laenger als die halbe Seite.
+# Unter jeder Rubrik steht stattdessen ein Verweis auf die Quelle.
+ANZEIGEN_MAX = 2
 # Je Suchbegriff so viele Treffer holen. Mehr braucht es nicht: Genommen wird
 # reihum, damit jeder Begriff vorkommt.
 JE_BEGRIFF = 4
@@ -362,11 +360,18 @@ def selbstverwaltung(begriffe: list[str], alles: bool) -> list[dict]:
     return gefunden[:SELBST_MAX]
 
 
-def block(beitraege: list[dict], stand: str) -> str:
-    """Der Marker-Block fuer index.html."""
+def block(beitraege: list[dict], stand: str, mehr: str = "") -> str:
+    """Der Marker-Block fuer index.html.
+
+    `mehr` ist die Adresse hinter "Weitere Beitraege": die Suche auf m-vf.de
+    nach dem ersten Begriff dieses Hubs. Am 29.08.2026 geprueft - die Suche
+    ist verlinkbar, verschiedene Begriffe liefern verschiedene Seiten.
+    """
     def js(s: str) -> str:
         return json.dumps(s or "", ensure_ascii=False)
-    zeilen = [START, f'const NEWS_STAND = "{stand}";', "const NEWS = ["]
+    zeilen = [START, f'const NEWS_STAND = "{stand}";',
+              f'const NEWS_MEHR = {js(mehr)};',
+              "const NEWS = ["]
     for b in beitraege:
         titel = unescape(b.get("title", {}).get("rendered", "")).strip()
         zeilen.append("  {titel:%s, datum:%s, url:%s}," %
@@ -449,7 +454,9 @@ def main() -> int:
     muster = re.compile(re.escape(START) + r".*?" + re.escape(ENDE), re.DOTALL)
     if not muster.search(text):
         raise SystemExit(f"Marker-Block fehlt in {SEITE} - nichts geaendert.")
-    neu = block(beitraege, heute.strftime("%d.%m.%Y"))
+    mehr = ("https://www.monitor-versorgungsforschung.de/?s="
+            + urllib.parse.quote(begriffe[0])) if begriffe else ""
+    neu = block(beitraege, heute.strftime("%d.%m.%Y"), mehr)
     text = muster.sub(lambda _: neu, text)
 
     # Die Presserubrik hat einen eigenen Block: Sie kann leer bleiben, waehrend

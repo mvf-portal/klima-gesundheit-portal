@@ -374,6 +374,13 @@
   }
   .magazin-list a:hover{ text-decoration:underline; }
   .magazin-datum{ display:block; font-size:10.5px; color:var(--ink-faint); margin-top:2px; }
+  /* Der Verweis unter jeder Rubrik: Zwei Eintraege sind eine Auswahl, kein
+     Bestand - wer mehr will, soll wissen, wohin. */
+  .magazin-mehr{
+    display:inline-block; margin-top:7px;
+    font-size:11px; font-weight:700; color:var(--brand); text-decoration:none;
+  }
+  .magazin-mehr:hover{ text-decoration:underline; }
   /* Die Presserubrik steht optisch eine Stufe zurueck: Sie ist die Zugabe,
      nicht der Inhalt. Die Quelle steht bei jedem Eintrag - wer eine
      Pressemitteilung liest, soll wissen, von wem. */
@@ -472,8 +479,12 @@
   .lede-links{ flex:1 1 auto; display:flex; flex-direction:column;
                gap:16px; padding-bottom:16px; min-width:0; }
   .lede-links .sponsor-block{ margin-top:auto; }
-  /* In der Saeule setzt der gap den Abstand nach oben. */
-  .lede-links .panel{ margin-top:0; }
+  /* In der Saeule setzt der gap den Abstand nach oben. Und der Kasten waechst
+     auf die volle Hoehe: Die Kopfkarte rechts ist mit Radar, News und den
+     beiden Fremdrubriken hoeher als das Suchfeld hoch ist - ohne flex bliebe
+     darunter eine Luecke, und die graue Kante braeche mitten auf der Seite ab.
+     So enden beide Spalten auf derselben Linie. */
+  .lede-links .panel{ margin-top:0; flex:1 1 auto; }
   .lede-nl{
     flex:0 0 auto; width:236px; padding:16px 18px;
     background:var(--card); border:1px solid var(--line);
@@ -1253,9 +1264,9 @@ const RADAR_FRISTEN = [["2026-10-20", "2026-10-20", "2026-09-22", "2026-09-02", 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
 const NEWS_STAND = "29.08.2026";
+const NEWS_MEHR = "https://www.monitor-versorgungsforschung.de/?s=Hitzewelle";
 const NEWS = [
   {titel:"Hitzewelle: Rekordanteil bei Ersteinschätzung über die 116117", datum:"2026-07-20", url:"https://www.monitor-versorgungsforschung.de/news/hitzewelle-rekordanteil-bei-ersteinschaetzung-ueber-die-116117/"},
-  {titel:"Zahl der Hitzetage mehr als verdoppelt: VDI gibt Kommunen praxisnahe Empfehlungen für Hitzeaktionspläne", datum:"2025-08-05", url:"https://www.monitor-versorgungsforschung.de/news/zahl-der-hitzetage-mehr-als-verdoppelt-vdi-gibt-kommunen-praxisnahe-empfehlungen-fuer-hitzeaktionsplaene/"},
   {titel:"BMG: Information zu den Musterhitzeschutzplänen", datum:"2025-06-03", url:"https://www.monitor-versorgungsforschung.de/news/bmg-information-zu-den-musterhitzeschutzplaenen/"},
 ];
 // === NEWS-BLOCK-ENDE ===
@@ -1465,6 +1476,15 @@ STUDIES.forEach(s=>{
     }
     liste.appendChild(li);
   });
+  if(typeof NEWS_MEHR !== 'undefined' && NEWS_MEHR){
+    const mehr = document.createElement('a');
+    mehr.className = 'magazin-mehr';
+    mehr.href = NEWS_MEHR;
+    mehr.target = '_blank';
+    mehr.rel = 'noopener';
+    mehr.textContent = 'Weitere Beitr\u00e4ge \u2197';
+    kasten.appendChild(mehr);
+  }
   kasten.hidden = false;
 })();
 
@@ -1472,7 +1492,7 @@ STUDIES.forEach(s=>{
 // Beide zeigen dasselbe Muster - Titel, Datum, Quelle -, deshalb eine
 // Funktion. Bleibt eine Liste leer, bleibt ihr Kasten verborgen: Eine Rubrik,
 // die "nichts gefunden" meldet, waere hier nur Laerm.
-function fremdeRubrik(kastenId, listenId, eintraege){
+function fremdeRubrik(kastenId, listenId, eintraege, mehr, mehrText){
   const kasten = document.getElementById(kastenId);
   const liste = document.getElementById(listenId);
   if(!kasten || !liste || !eintraege || !eintraege.length) return;
@@ -1496,10 +1516,82 @@ function fremdeRubrik(kastenId, listenId, eintraege){
     li.appendChild(span);
     liste.appendChild(li);
   });
+  if(mehr){
+    const a = document.createElement('a');
+    a.className = 'magazin-mehr';
+    a.href = mehr;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = mehrText + ' \u2197';
+    kasten.appendChild(a);
+  }
   kasten.hidden = false;
 }
-if(typeof PRESSE !== 'undefined') fremdeRubrik('presse', 'presseList', PRESSE);
-if(typeof SELBST !== 'undefined') fremdeRubrik('selbst', 'selbstList', SELBST);
+if(typeof PRESSE !== 'undefined')
+  fremdeRubrik('presse', 'presseList', PRESSE,
+               'https://idw-online.de/de/pressreleases', 'Mehr im idw');
+if(typeof SELBST !== 'undefined')
+  fremdeRubrik('selbst', 'selbstList', SELBST,
+               'https://www.g-ba.de/beschluesse/', 'Mehr beim G-BA');
+
+// ---- Die Kopfkarte auf die Hoehe des Suchkastens kuerzen ----
+// Wie viele Eintraege hineinpassen, laesst sich nicht vorher festlegen: Ein
+// G-BA-Beschluss traegt drei Zeilen Titel, eine Pressemeldung manchmal eine.
+// Deshalb wird gemessen, nicht geschaetzt - und von unten gekuerzt, bis die
+// Karte mit dem grauen Kasten abschliesst.
+//
+// Gekuerzt wird in dieser Reihenfolge: erst die Selbstverwaltung, dann die
+// fremden Pressemeldungen. Die eigenen Beitraege bleiben immer stehen; sie
+// sind der Grund, warum es die Karte gibt.
+//
+// Nur im zweispaltigen Layout: Gestapelt (unter 861 px) steht die Karte unter
+// dem Suchkasten, und es gibt nichts, womit sie buendig sein koennte.
+(function(){
+  const karte = document.querySelector('.lede-nl');
+  const kasten = document.querySelector('.lede-links .panel');
+  if(!karte || !kasten) return;
+
+  function passen(){
+    if(window.innerWidth <= 860) return;
+    // Zuerst alles wieder einblenden - beim Verkleinern des Fensters koennte
+    // vorher zu viel weggeschnitten worden sein.
+    document.querySelectorAll('#selbstList li, #presseList li')
+      .forEach(li => { li.hidden = false; });
+    ['selbst', 'presse'].forEach(id => {
+      const k = document.getElementById(id);
+      if(k && k.dataset.hatEintraege === 'ja') k.hidden = false;
+    });
+
+    // Von unten nach oben, und je Rubrik bleibt der erste Eintrag stehen:
+    // Eine Rubrik, von der nur die Ueberschrift uebrig ist, sagt nichts - und
+    // eine, die ganz verschwindet, verschweigt, dass es sie gibt. Was danach
+    // an Ueberhang bleibt, faengt der gewachsene Kasten links auf.
+    const reihen = [
+      ...[...document.querySelectorAll('#selbstList li')].slice(1).reverse(),
+      ...[...document.querySelectorAll('#presseList li')].slice(1).reverse(),
+    ];
+    // 12 px Luft: Genau auf den Pixel waere es Zufall, und die Kante des
+    // Kastens soll sichtbar bleiben, nicht mit der Karte verschmelzen.
+    for(const li of reihen){
+      if(karte.getBoundingClientRect().bottom
+         <= kasten.getBoundingClientRect().bottom + 12) break;
+      li.hidden = true;
+    }
+  }
+
+  ['presse', 'selbst'].forEach(id => {
+    const k = document.getElementById(id);
+    if(k && !k.hidden) k.dataset.hatEintraege = 'ja';
+  });
+  passen();
+  // Beim Drehen eines Tablets oder Ziehen des Fensters aendert sich die Hoehe
+  // des Kastens - dann noch einmal.
+  let wartet;
+  window.addEventListener('resize', () => {
+    clearTimeout(wartet);
+    wartet = setTimeout(passen, 150);
+  });
+})();
 
 // ---- Hinweis auf den Ausschreibungsradar ----
 // Der Block oben nennt die Fristen des eigenen Themengebiets, nicht eine
