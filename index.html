@@ -137,6 +137,9 @@
   .panel{
     margin-top:26px; background:var(--card-2); border:1px solid var(--line);
     border-radius:6px; padding:20px; box-shadow:var(--shadow);
+    /* Kein eigener Rand: Das Feld steht seit dem 29.08.2026 IN der linken
+       Saeule der lede-zeile und endet damit von selbst an der goldenen Kante
+       der Kopfkarte. */
   }
   .panel-label{
     font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);
@@ -343,31 +346,34 @@
   /* Die Anmeldung selbst liegt bei Monitor Versorgungsforschung; hier steht nur
      der Hinweis darauf. Wie .archive: flex:0 0 auto, sonst staucht die
      Studienliste den Kasten in der Sticky-Spalte weg. */
-  /* ---------- Aus dem Magazin ----------
-     Beitraege von m-vf.de zum Themenfeld dieses Hubs. Steht bewusst UNTER
-     den Studien und ueber dem Newsletter-Kasten: Die Studien sind das
-     Herzstueck, das Magazin ist die Einordnung dazu. */
+  /* ---------- Ausgesuchte News ----------
+     Beitraege von m-vf.de zum Themenfeld dieses Hubs, in der Kopfkarte unter
+     dem Ausschreibungsradar. Die Spalte ist 236 px schmal - deshalb drei
+     Titel, kurzes Datum und kein Auszug.
+
+     Nicht in der Studienspalte: Die ist ein eigener Scrollbereich, und hinter
+     Studienliste und Archivordner (zusammen ueber 3.000 px) faende den Kasten
+     niemand. Am 29.08.2026 genau daran gescheitert. */
   .magazin{
-    margin-top:10px; border:1px solid var(--line); border-radius:6px;
-    background:var(--card); padding:11px 13px; flex:0 0 auto;
+    margin-top:12px; padding-top:10px; border-top:1px solid var(--line);
   }
   .magazin[hidden]{ display:none; }
   .magazin-title{
-    display:flex; align-items:center; gap:8px;
-    font-weight:700; font-size:13.5px; color:var(--ink); margin-bottom:3px;
+    display:flex; align-items:center; gap:7px;
+    font-weight:700; font-size:12.5px; color:var(--ink); margin-bottom:3px;
   }
-  .magazin-title::before{ content:"\1F4F0"; font-size:15px; filter:grayscale(.3); }
-  .magazin-sub{ font-size:11px; line-height:1.45; color:var(--ink-faint); margin:0 0 8px; }
+  .magazin-title::before{ content:"\1F4F0"; font-size:14px; filter:grayscale(.3); }
+  .magazin-sub{ font-size:10.5px; line-height:1.4; color:var(--ink-faint); margin:0 0 6px; }
   .magazin-sub a{ color:var(--ink-faint); }
   .magazin-list{ list-style:none; margin:0; padding:0; }
-  .magazin-list li{ padding:7px 0; border-top:1px solid var(--line-soft); }
+  .magazin-list li{ padding:6px 0; border-top:1px solid var(--line-soft); }
   .magazin-list li:first-child{ border-top:none; }
   .magazin-list a{
-    font-size:12.5px; line-height:1.35; font-weight:600; color:var(--brand);
+    font-size:12px; line-height:1.35; font-weight:600; color:var(--brand);
     text-decoration:none; display:block; hyphens:auto;
   }
   .magazin-list a:hover{ text-decoration:underline; }
-  .magazin-datum{ display:block; font-size:11px; color:var(--ink-faint); margin-top:3px; }
+  .magazin-datum{ display:block; font-size:10.5px; color:var(--ink-faint); margin-top:2px; }
 
   .nl{
     margin-top:10px; border:1px solid var(--line); border-radius:6px;
@@ -448,13 +454,20 @@
      er darunter, weil zwei Spalten dort nur noch Silbentrennung erzeugen. */
   .lede-zeile{ display:flex; align-items:stretch; gap:30px; margin:.2em 0 0; }
   .lede-zeile .lede{ margin:0; }
-  /* Die linke Saeule waechst auf Kartenhoehe mit. Genau zwei Kinder - Text oben,
-     Sponsorblock unten -, damit space-between eindeutig ist.
-     padding-bottom ist die Hoehe der Fussnote: Ohne sie laege das Sternchen auf
-     der Knopfkante und das Logo schwebte darueber; mit ihr sitzt die
-     Sponsorzeile selbst auf einer Linie mit dem Knopf. */
+  /* Die linke Saeule: Einleitungstext, Suchfeld, Sponsorblock. Das Suchfeld
+     stand bis zum 29.08.2026 unter der ganzen Zeile - seit Radar und News die
+     Kopfkarte auf 468 px wachsen liessen, klaffte daneben eine Luecke von ueber
+     500 px. Jetzt fuellt es sie.
+
+     Kein space-between mehr: Mit drei Kindern verteilte es die Zwischenraeume
+     wieder ungleich. Der Sponsorblock haengt sich stattdessen selbst ans Ende
+     (margin-top:auto), damit die Sponsorzeile auf einer Linie mit dem Knopf
+     der Kopfkarte sitzt - padding-bottom ist die Hoehe der Fussnote. */
   .lede-links{ flex:1 1 auto; display:flex; flex-direction:column;
-               justify-content:space-between; gap:16px; padding-bottom:16px; }
+               gap:16px; padding-bottom:16px; min-width:0; }
+  .lede-links .sponsor-block{ margin-top:auto; }
+  /* In der Saeule setzt der gap den Abstand nach oben. */
+  .lede-links .panel{ margin-top:0; }
   .lede-nl{
     flex:0 0 auto; width:236px; padding:16px 18px;
     background:var(--card); border:1px solid var(--line);
@@ -780,6 +793,86 @@
     <div class="lede-zeile">
       <div class="lede-links">
         <p class="lede">Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.</p>
+
+        <div class="panel">
+          <label class="panel-label" for="q">Suchbegriff</label>
+          <div class="search-row">
+            <div class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input id="q" type="search" autocomplete="off" spellcheck="false" value="Hitzewelle" placeholder="z. B. Hitzewelle, Hitzeaktionsplan, heat mortality …">
+            </div>
+            <button class="btn-go" id="go" type="button" title="Stellt alle Datenbanken auf Ihren Suchbegriff ein (oder Eingabetaste drücken)">In allen Datenbanken suchen</button>
+            <button class="btn-clear" id="clear" type="button">Leeren</button>
+          </div>
+
+          <!-- Rueckmeldung nach dem Absenden. Vorher unsichtbar: Ohne Suche gibt
+               es nichts zu melden. -->
+          <div class="result-bar" id="resultBar" hidden></div>
+          <div class="leer-hinweis" id="leerHinweis" hidden></div>
+
+          <!-- Hinweis auf Boolesche Operatoren - erscheint nur, wenn welche
+               getippt werden. -->
+          <div class="bool-hint" id="boolHint" hidden></div>
+          <label class="uebersetzen"><input type="checkbox" id="uebersetzenAn" checked>
+            Deutsche Fachbegriffe für internationale Datenbanken übersetzen</label>
+          <div class="chips" id="chips">
+            <span class="chips-label">Schnellwahl:</span>
+          </div>
+
+          <details class="filters" id="filters">
+            <summary>
+              <svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+              <span class="f-titel">Filter</span>
+              <span class="f-dims">Zugang &middot; Suchart &middot; Operatoren &middot; Art der Quelle</span>
+              <span class="filter-badge" id="filterBadge" hidden></span>
+              <svg class="f-pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+            </summary>
+            <div class="filter-body">
+              <div class="filter-group" data-gruppe="zugang">
+                <span class="filter-label">Zugang</span>
+                <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
+                <button type="button" class="fchip" data-wert="frei" aria-pressed="false">Frei zugänglich</button>
+                <button type="button" class="fchip" data-wert="lizenz" aria-pressed="false">Lizenz nötig</button>
+              </div>
+              <div class="filter-group" data-gruppe="suchart">
+                <span class="filter-label">Suchart</span>
+                <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
+                <button type="button" class="fchip" data-wert="live" aria-pressed="false">Live-Suche</button>
+                <button type="button" class="fchip" data-wert="portal" aria-pressed="false">Portal</button>
+              </div>
+              <div class="filter-group" data-gruppe="bool">
+                <span class="filter-label">Operatoren</span>
+                <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
+                <button type="button" class="fchip" data-wert="ja" aria-pressed="false">Wertet AND/OR/NOT aus</button>
+              </div>
+              <div class="filter-group" data-gruppe="rubrik" id="filterRubrik">
+                <span class="filter-label">Art der Quelle</span>
+              </div>
+              <!-- Erscheint nur, wenn etwas zurueckzusetzen ist - sonst waere es
+                   ein Knopf ohne Wirkung. -->
+              <div class="filter-reset" id="filterResetZeile" hidden>
+                <button type="button" class="fchip reset" id="filterReset">Alle Filter zurücksetzen</button>
+              </div>
+            </div>
+          </details>
+          <div class="hints">
+            <p><b>So funktioniert die Suche.</b> Begriff eingeben, <b>Eingabetaste</b> drücken oder auf <b>„In allen Datenbanken suchen"</b> klicken — damit werden alle Kacheln auf Ihren Begriff eingestellt. Ein Klick auf eine Kachel öffnet dann <b>direkt die Trefferliste</b> dieser Datenbank in einem neuen Tab; ein zweites Mal suchen müssen Sie dort nicht. Die Kacheln bleiben eingestellt, Sie können also nacheinander mehrere Datenbanken öffnen, ohne den Begriff erneut einzugeben. Ausnahme sind die als <b>„Portal"</b> gekennzeichneten Anbieter — die erlauben technisch keine verlinkbare Trefferadresse.</p>
+            <p><b>Vollständigkeit.</b> Auch dieses Portal kann nicht sämtliche Artikel „aller Datenbanken" enthalten — das verhindern Lizenz- und Technikgrenzen. Es bündelt stattdessen die maßgeblichen Suchen, sodass eine Recherche systematisch über alle relevanten Datenbanken laufen kann.</p>
+            <!-- === THEMA-HINWEIS-START (themenspezifisch; aus dem Themenprofil) === -->
+            <p><b>Literatur und Daten getrennt.</b> Dieses Themenfeld lebt von zwei Sorten Quellen. Die Blöcke 01 bis 03 und 07 bis 09 führen zu <b>Publikationen</b>. Block 04 „Klima- &amp; Umweltdaten" führt zu <b>Messreihen, Modellen und Indikatoren</b> — dort landen Sie bei Datensätzen, nicht bei Studien. Und ein großer Teil des Wissens steht in diesem Feld nicht in Zeitschriften, sondern in Berichten von Behörden und Institutionen; dafür gibt es die Blöcke 05 und 06.</p>
+            <!-- === THEMA-HINWEIS-ENDE === -->
+            <p><b>Portal vs. Live-Suche.</b> Von den derzeit <b id="cntGesamt"></b> eingebundenen Datenbanken unterstützen <b id="cntLive"></b> die Live-Suche; sie sind entsprechend gekennzeichnet. Weitere <b id="cntPortal"></b> sind als „Portal" markiert: Angebote wie LIVIVO, das DRKS oder die WHO-Plattform ICTRP erlauben technisch keine verlinkbaren Ergebnisadressen. Der Klick führt dort auf die Startseite — der Suchbegriff ist anschließend von Hand einzugeben.</p>
+            <p><b>Suchoperatoren.</b> <b>AND</b>, <b>OR</b> und <b>NOT</b> funktionieren nicht überall gleich — wir haben es einzeln nachgemessen. <span class="boolmark ja">AND/OR ✓</span> heißt: geprüft, die Operatoren wirken (<b id="cntBoolJa"></b> Datenbanken). <span class="boolmark nein">AND/OR ✗</span> heißt: geprüft, sie wirken nicht — die Wörter werden einfach mitgesucht (<b id="cntBoolNein"></b>). <b>Ohne Zeichen ist es ungeprüft</b> (<b id="cntBoolOffen"></b>): Diese Anbieter liefern eine Bot-Sperre oder eine reine JavaScript-Oberfläche, aus der sich kein belastbares Ergebnis ablesen ließ — das heißt ausdrücklich <i>nicht</i>, dass sie es nicht können. Der Filter „Operatoren" zeigt auf Wunsch nur die geprüft tauglichen.</p>
+            <p><b>Deutsch suchen, international finden.</b> Internationale Datenbanken kennen keine deutschen Fachbegriffe — „Hitzeaktionsplan" liefert dort fast nichts. Der Hub übersetzt deshalb <b id="cntGlossar"></b> Fachbegriffe automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff, internationale bekommen den Ausdruck, unter dem sie tatsächlich indexieren („Hitzeaktionsplan" wird zu <i>heat health action plan</i>, „Wärmeinsel" zu <i>urban heat island</i>). Die Ergebnisleiste zeigt die verwendete Fassung; der Schalter unter dem Suchfeld stellt es ab.</p>
+            <p><b>Hinweis zu Lizenzen.</b> Mit <span style="color:var(--accent)">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
+            <p id="sponsorText" hidden><b>Sponsoren.</b> Unsere Sponsoren ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Sie nehmen dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
+          </div>
+          <div class="meta-row">
+            <span class="dot"></span>
+            <span id="statusText"><strong id="dbCount"></strong> Datenbanken · <span id="searchHint">Links aktualisieren sich live · öffnen in neuem Tab</span></span>
+          </div>
+        </div>
+
         <div class="sponsor-block" id="sponsorFeld" hidden>
           <div class="sponsor">
             <span class="sponsor-text">
@@ -794,93 +887,34 @@
         <a class="btn-nl" href="newsletter.html">Newsletter abonnieren</a>
         <span class="nl-mini">Die Studienauswahl jeden Morgen per E-Mail — kostenfrei und jederzeit kündbar.</span>
         <a class="btn-ueber" href="ueber.html" target="_blank" rel="noopener">Über den Hub <span aria-hidden="true">↗</span></a>
+        <a class="btn-ueber" href="https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit" target="_blank" rel="noopener">Ausschreibungsradar <span aria-hidden="true">↗</span></a>
         <!-- Hinweis auf den Ausschreibungsradar. Angeregt von einem Nutzer
              der Hubs: Wer zu einem Thema forscht, sucht nicht nur Studien,
              sondern auch Geld. Gesucht wird zentral im Versorgungsforschungs-
              Hub; hier steht, wie viel davon dieses Themengebiet betrifft.
              Gefuellt von scripts/radar_hinweis.py, verborgen bis dahin. -->
         <div class="radar-hinweis" id="radarHinweis" hidden></div>
+
+        <!-- Ausgesuchte News. Angeregt vom selben Nutzer wie der
+             Ausschreibungsradar: Wer sich fuer ein Thema interessiert, will
+             nicht nur die Studienlage, sondern auch, was dazu geschrieben
+             wurde. Quelle ist ausschliesslich das eigene Archiv (m-vf.de) -
+             Fremdmedien waeren presserechtlich heikel und verwaesserten das
+             Evidenz-Profil.
+
+             Steht hier und nicht in der Studienspalte: Die ist ein eigener
+             Scrollbereich (826 px hoch, 4.239 px Inhalt), und hinter
+             Studienliste und Archivordner faende den Kasten niemand.
+             Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
+        <section class="magazin" id="magazin" hidden>
+          <div class="magazin-title">Ausgesuchte News zu diesem Themenfeld</div>
+          <p class="magazin-sub">Beiträge aus dem Portal von „Monitor
+            Versorgungsforschung“ (<a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=magazin" target="_blank" rel="noopener">www.m-vf.de</a>)</p>
+          <ul class="magazin-list" id="magazinList"></ul>
+        </section>
       </aside>
     </div>
 
-    <div class="panel">
-      <label class="panel-label" for="q">Suchbegriff</label>
-      <div class="search-row">
-        <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" type="search" autocomplete="off" spellcheck="false" value="Hitzewelle" placeholder="z. B. Hitzewelle, Hitzeaktionsplan, heat mortality …">
-        </div>
-        <button class="btn-go" id="go" type="button" title="Stellt alle Datenbanken auf Ihren Suchbegriff ein (oder Eingabetaste drücken)">In allen Datenbanken suchen</button>
-        <button class="btn-clear" id="clear" type="button">Leeren</button>
-      </div>
-
-      <!-- Rueckmeldung nach dem Absenden. Vorher unsichtbar: Ohne Suche gibt
-           es nichts zu melden. -->
-      <div class="result-bar" id="resultBar" hidden></div>
-      <div class="leer-hinweis" id="leerHinweis" hidden></div>
-
-      <!-- Hinweis auf Boolesche Operatoren - erscheint nur, wenn welche
-           getippt werden. -->
-      <div class="bool-hint" id="boolHint" hidden></div>
-      <label class="uebersetzen"><input type="checkbox" id="uebersetzenAn" checked>
-        Deutsche Fachbegriffe für internationale Datenbanken übersetzen</label>
-      <div class="chips" id="chips">
-        <span class="chips-label">Schnellwahl:</span>
-      </div>
-
-      <details class="filters" id="filters">
-        <summary>
-          <svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
-          <span class="f-titel">Filter</span>
-          <span class="f-dims">Zugang &middot; Suchart &middot; Operatoren &middot; Art der Quelle</span>
-          <span class="filter-badge" id="filterBadge" hidden></span>
-          <svg class="f-pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
-        </summary>
-        <div class="filter-body">
-          <div class="filter-group" data-gruppe="zugang">
-            <span class="filter-label">Zugang</span>
-            <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
-            <button type="button" class="fchip" data-wert="frei" aria-pressed="false">Frei zugänglich</button>
-            <button type="button" class="fchip" data-wert="lizenz" aria-pressed="false">Lizenz nötig</button>
-          </div>
-          <div class="filter-group" data-gruppe="suchart">
-            <span class="filter-label">Suchart</span>
-            <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
-            <button type="button" class="fchip" data-wert="live" aria-pressed="false">Live-Suche</button>
-            <button type="button" class="fchip" data-wert="portal" aria-pressed="false">Portal</button>
-          </div>
-          <div class="filter-group" data-gruppe="bool">
-            <span class="filter-label">Operatoren</span>
-            <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
-            <button type="button" class="fchip" data-wert="ja" aria-pressed="false">Wertet AND/OR/NOT aus</button>
-          </div>
-          <div class="filter-group" data-gruppe="rubrik" id="filterRubrik">
-            <span class="filter-label">Art der Quelle</span>
-          </div>
-          <!-- Erscheint nur, wenn etwas zurueckzusetzen ist - sonst waere es
-               ein Knopf ohne Wirkung. -->
-          <div class="filter-reset" id="filterResetZeile" hidden>
-            <button type="button" class="fchip reset" id="filterReset">Alle Filter zurücksetzen</button>
-          </div>
-        </div>
-      </details>
-      <div class="hints">
-        <p><b>So funktioniert die Suche.</b> Begriff eingeben, <b>Eingabetaste</b> drücken oder auf <b>„In allen Datenbanken suchen"</b> klicken — damit werden alle Kacheln auf Ihren Begriff eingestellt. Ein Klick auf eine Kachel öffnet dann <b>direkt die Trefferliste</b> dieser Datenbank in einem neuen Tab; ein zweites Mal suchen müssen Sie dort nicht. Die Kacheln bleiben eingestellt, Sie können also nacheinander mehrere Datenbanken öffnen, ohne den Begriff erneut einzugeben. Ausnahme sind die als <b>„Portal"</b> gekennzeichneten Anbieter — die erlauben technisch keine verlinkbare Trefferadresse.</p>
-        <p><b>Vollständigkeit.</b> Auch dieses Portal kann nicht sämtliche Artikel „aller Datenbanken" enthalten — das verhindern Lizenz- und Technikgrenzen. Es bündelt stattdessen die maßgeblichen Suchen, sodass eine Recherche systematisch über alle relevanten Datenbanken laufen kann.</p>
-        <!-- === THEMA-HINWEIS-START (themenspezifisch; aus dem Themenprofil) === -->
-        <p><b>Literatur und Daten getrennt.</b> Dieses Themenfeld lebt von zwei Sorten Quellen. Die Blöcke 01 bis 03 und 07 bis 09 führen zu <b>Publikationen</b>. Block 04 „Klima- &amp; Umweltdaten" führt zu <b>Messreihen, Modellen und Indikatoren</b> — dort landen Sie bei Datensätzen, nicht bei Studien. Und ein großer Teil des Wissens steht in diesem Feld nicht in Zeitschriften, sondern in Berichten von Behörden und Institutionen; dafür gibt es die Blöcke 05 und 06.</p>
-        <!-- === THEMA-HINWEIS-ENDE === -->
-        <p><b>Portal vs. Live-Suche.</b> Von den derzeit <b id="cntGesamt"></b> eingebundenen Datenbanken unterstützen <b id="cntLive"></b> die Live-Suche; sie sind entsprechend gekennzeichnet. Weitere <b id="cntPortal"></b> sind als „Portal" markiert: Angebote wie LIVIVO, das DRKS oder die WHO-Plattform ICTRP erlauben technisch keine verlinkbaren Ergebnisadressen. Der Klick führt dort auf die Startseite — der Suchbegriff ist anschließend von Hand einzugeben.</p>
-        <p><b>Suchoperatoren.</b> <b>AND</b>, <b>OR</b> und <b>NOT</b> funktionieren nicht überall gleich — wir haben es einzeln nachgemessen. <span class="boolmark ja">AND/OR ✓</span> heißt: geprüft, die Operatoren wirken (<b id="cntBoolJa"></b> Datenbanken). <span class="boolmark nein">AND/OR ✗</span> heißt: geprüft, sie wirken nicht — die Wörter werden einfach mitgesucht (<b id="cntBoolNein"></b>). <b>Ohne Zeichen ist es ungeprüft</b> (<b id="cntBoolOffen"></b>): Diese Anbieter liefern eine Bot-Sperre oder eine reine JavaScript-Oberfläche, aus der sich kein belastbares Ergebnis ablesen ließ — das heißt ausdrücklich <i>nicht</i>, dass sie es nicht können. Der Filter „Operatoren" zeigt auf Wunsch nur die geprüft tauglichen.</p>
-        <p><b>Deutsch suchen, international finden.</b> Internationale Datenbanken kennen keine deutschen Fachbegriffe — „Hitzeaktionsplan" liefert dort fast nichts. Der Hub übersetzt deshalb <b id="cntGlossar"></b> Fachbegriffe automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff, internationale bekommen den Ausdruck, unter dem sie tatsächlich indexieren („Hitzeaktionsplan" wird zu <i>heat health action plan</i>, „Wärmeinsel" zu <i>urban heat island</i>). Die Ergebnisleiste zeigt die verwendete Fassung; der Schalter unter dem Suchfeld stellt es ab.</p>
-        <p><b>Hinweis zu Lizenzen.</b> Mit <span style="color:var(--accent)">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
-        <p id="sponsorText" hidden><b>Sponsoren.</b> Unsere Sponsoren ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Sie nehmen dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
-      </div>
-      <div class="meta-row">
-        <span class="dot"></span>
-        <span id="statusText"><strong id="dbCount"></strong> Datenbanken · <span id="searchHint">Links aktualisieren sich live · öffnen in neuem Tab</span></span>
-      </div>
-    </div>
   </div>
 </header>
 
@@ -917,19 +951,6 @@
         <p class="arch-status">Wird geladen …</p>
       </div>
     </details>
-    <!-- Aus dem Magazin. Angeregt vom selben Nutzer wie der
-         Ausschreibungsradar: Wer sich fuer ein Thema interessiert, will nicht
-         nur die Studienlage, sondern auch, was dazu geschrieben wurde.
-         Quelle ist ausschliesslich das eigene Archiv (m-vf.de) - Fremdmedien
-         waeren presserechtlich heikel und verwaesserten das Evidenz-Profil.
-         Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
-    <section class="magazin" id="magazin" hidden>
-      <div class="magazin-title">Ausgesuchte News zu diesem Themenfeld</div>
-      <p class="magazin-sub">Beiträge aus dem Portal von „Monitor
-        Versorgungsforschung“ (<a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=magazin" target="_blank" rel="noopener">www.m-vf.de</a>)</p>
-      <ul class="magazin-list" id="magazinList"></ul>
-    </section>
-
     <!-- Anmeldung bewusst NICHT hier: Der Hub erhebt keine personenbezogenen
          Daten. Das Formular liegt bei Monitor Versorgungsforschung, wo auch
          Double-Opt-in und Einwilligung verwaltet werden. -->
@@ -1196,12 +1217,9 @@ const RADAR_FRISTEN = [[]];
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
 const NEWS_STAND = "29.08.2026";
 const NEWS = [
-  {titel:"Thüringen stärkt Schutz vor Hitze", datum:"2026-08-17", url:"https://www.monitor-versorgungsforschung.de/news/thueringen-staerkt-schutz-vor-hitze/"},
   {titel:"Hitzewelle: Rekordanteil bei Ersteinschätzung über die 116117", datum:"2026-07-20", url:"https://www.monitor-versorgungsforschung.de/news/hitzewelle-rekordanteil-bei-ersteinschaetzung-ueber-die-116117/"},
-  {titel:"Deutschland ist für Winter gebaut – nicht für Hitzewellen", datum:"2026-07-20", url:"https://www.monitor-versorgungsforschung.de/news/deutschland-ist-fuer-winter-gebaut-nicht-fuer-hitzewellen/"},
   {titel:"Zahl der Hitzetage mehr als verdoppelt: VDI gibt Kommunen praxisnahe Empfehlungen für Hitzeaktionspläne", datum:"2025-08-05", url:"https://www.monitor-versorgungsforschung.de/news/zahl-der-hitzetage-mehr-als-verdoppelt-vdi-gibt-kommunen-praxisnahe-empfehlungen-fuer-hitzeaktionsplaene/"},
-  {titel:"Patientenschutz im Klimawandel: Lungenärzte zeigen mit neuem Positionspapier, wie Erkrankungen abgemildert und Gesundheitssysteme gestärkt werden", datum:"2025-04-09", url:"https://www.monitor-versorgungsforschung.de/news/patientenschutz-im-klimawandel-lungenaerzte-zeigen-mit-neuem-positionspapier-wie-erkrankungen-abgemildert-und-gesundheitssysteme-gestaerkt-werden/"},
-  {titel:"Macht der Klimawandel krank? Die Hälfte der Befragten sorgt sich um ihre Gesundheit", datum:"2024-12-06", url:"https://www.monitor-versorgungsforschung.de/news/macht-der-klimawandel-krank-die-haelfte-der-befragten-sorgt-sich-um-ihre-gesundheit/"},
+  {titel:"BMG: Information zu den Musterhitzeschutzplänen", datum:"2025-06-03", url:"https://www.monitor-versorgungsforschung.de/news/bmg-information-zu-den-musterhitzeschutzplaenen/"},
 ];
 // === NEWS-BLOCK-ENDE ===
 
@@ -1394,7 +1412,7 @@ STUDIES.forEach(s=>{
         const span = document.createElement('span');
         span.className = 'magazin-datum';
         span.textContent = d.toLocaleDateString('de-DE',
-          {day:'2-digit', month:'long', year:'numeric'});
+          {day:'2-digit', month:'2-digit', year:'numeric'});
         li.appendChild(span);
       }
     }
@@ -1426,7 +1444,6 @@ STUDIES.forEach(s=>{
   }).length);
   const offen = jeGebiet.reduce((a, b) => a + b, 0);
   const gebiete = jeGebiet.filter(n => n > 0).length;
-  const url = (typeof RADAR_URL !== 'undefined') ? RADAR_URL : '';
   const zuhause = (typeof RADAR_ZUHAUSE !== 'undefined') && RADAR_ZUHAUSE;
 
   let text;
@@ -1446,10 +1463,7 @@ STUDIES.forEach(s=>{
     text = '<b>' + offen + '</b> laufende Ausschreibung' + (offen === 1 ? '' : 'en')
          + ' zu Ihrem Themengebiet.';
   }
-  karte.innerHTML = '\ud83d\udce2 ' + text
-    + (url ? '<br><a href="' + url + '" target="_blank" rel="noopener">'
-             + (offen ? 'Zum Ausschreibungsradar' : 'Alle Gebiete im Ausschreibungsradar')
-             + ' \u2197</a>' : '');
+  karte.innerHTML = '\ud83d\udce2 ' + text;
   karte.hidden = false;
 })();
 
