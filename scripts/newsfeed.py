@@ -360,18 +360,17 @@ def selbstverwaltung(begriffe: list[str], alles: bool) -> list[dict]:
     return gefunden[:SELBST_MAX]
 
 
-def block(beitraege: list[dict], stand: str, mehr: str = "") -> str:
+def block(beitraege: list[dict], stand: str) -> str:
     """Der Marker-Block fuer index.html.
 
-    `mehr` ist die Adresse hinter "Weitere Beitraege": die Suche auf m-vf.de
-    nach dem ersten Begriff dieses Hubs. Am 29.08.2026 geprueft - die Suche
-    ist verlinkbar, verschiedene Begriffe liefern verschiedene Seiten.
+    Die Adresse hinter "Weitere Beitraege" steht NICHT hier, sondern fest im
+    Markup: Sie zeigt auf den Newsfeed von m-vf.de und ist damit in allen
+    zwoelf Hubs dieselbe. (Bis zum 29.08.2026 stand hier die Suche nach dem
+    ersten Hub-Begriff - gemeint war aber der Newsfeed.)
     """
     def js(s: str) -> str:
         return json.dumps(s or "", ensure_ascii=False)
-    zeilen = [START, f'const NEWS_STAND = "{stand}";',
-              f'const NEWS_MEHR = {js(mehr)};',
-              "const NEWS = ["]
+    zeilen = [START, f'const NEWS_STAND = "{stand}";', "const NEWS = ["]
     for b in beitraege:
         titel = unescape(b.get("title", {}).get("rendered", "")).strip()
         zeilen.append("  {titel:%s, datum:%s, url:%s}," %
@@ -454,9 +453,7 @@ def main() -> int:
     muster = re.compile(re.escape(START) + r".*?" + re.escape(ENDE), re.DOTALL)
     if not muster.search(text):
         raise SystemExit(f"Marker-Block fehlt in {SEITE} - nichts geaendert.")
-    mehr = ("https://www.monitor-versorgungsforschung.de/?s="
-            + urllib.parse.quote(begriffe[0])) if begriffe else ""
-    neu = block(beitraege, heute.strftime("%d.%m.%Y"), mehr)
+    neu = block(beitraege, heute.strftime("%d.%m.%Y"))
     text = muster.sub(lambda _: neu, text)
 
     # Die Presserubrik hat einen eigenen Block: Sie kann leer bleiben, waehrend

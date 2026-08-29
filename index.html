@@ -1264,7 +1264,6 @@ const RADAR_FRISTEN = [["2026-10-20", "2026-10-20", "2026-09-22", "2026-09-02", 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
 const NEWS_STAND = "29.08.2026";
-const NEWS_MEHR = "https://www.monitor-versorgungsforschung.de/?s=Hitzewelle";
 const NEWS = [
   {titel:"Hitzewelle: Rekordanteil bei Ersteinschätzung über die 116117", datum:"2026-07-20", url:"https://www.monitor-versorgungsforschung.de/news/hitzewelle-rekordanteil-bei-ersteinschaetzung-ueber-die-116117/"},
   {titel:"BMG: Information zu den Musterhitzeschutzplänen", datum:"2025-06-03", url:"https://www.monitor-versorgungsforschung.de/news/bmg-information-zu-den-musterhitzeschutzplaenen/"},
@@ -1476,15 +1475,14 @@ STUDIES.forEach(s=>{
     }
     liste.appendChild(li);
   });
-  if(typeof NEWS_MEHR !== 'undefined' && NEWS_MEHR){
-    const mehr = document.createElement('a');
-    mehr.className = 'magazin-mehr';
-    mehr.href = NEWS_MEHR;
-    mehr.target = '_blank';
-    mehr.rel = 'noopener';
-    mehr.textContent = 'Weitere Beitr\u00e4ge \u2197';
-    kasten.appendChild(mehr);
-  }
+  // Der Newsfeed von m-vf.de - dieselbe Adresse in allen zwoelf Hubs.
+  const mehr = document.createElement('a');
+  mehr.className = 'magazin-mehr';
+  mehr.href = 'https://www.monitor-versorgungsforschung.de/news/';
+  mehr.target = '_blank';
+  mehr.rel = 'noopener';
+  mehr.textContent = 'Weitere Beitr\u00e4ge \u2197';
+  kasten.appendChild(mehr);
   kasten.hidden = false;
 })();
 
