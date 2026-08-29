@@ -68,9 +68,11 @@ SEITE = "index.html"
 START = "// === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ==="
 ENDE = "// === NEWS-BLOCK-ENDE ==="
 
-# So viele Beitraege stehen auf der Seite. Sechs fuellen die Karte, ohne die
-# Studien zu verdraengen - die bleiben das Herzstueck des Hubs.
-ANZEIGEN_MAX = 6
+# So viele Beitraege stehen auf der Seite. Drei, weil der Kasten seit dem
+# 29.08.2026 in der Kopfkarte steht und die nur 236 px breit ist - sechs
+# Titel haetten daraus eine Bleiwueste gemacht. Es sind zugleich so viele,
+# wie der Newsletter je Rubrik zeigt (RUBRIK_MAX in mailchimp_entwurf.py).
+ANZEIGEN_MAX = 3
 # Je Suchbegriff so viele Treffer holen. Mehr braucht es nicht: Genommen wird
 # reihum, damit jeder Begriff vorkommt.
 JE_BEGRIFF = 4
