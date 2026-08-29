@@ -137,9 +137,15 @@ ANZEIGEN_MAX = 2
 # Je Suchbegriff so viele Treffer holen. Mehr braucht es nicht: Genommen wird
 # reihum, damit jeder Begriff vorkommt.
 JE_BEGRIFF = 4
-# Aelteres kommt nicht in einen Feed, der "aktuell" heisst. Zwei Jahre sind
-# grosszuegig genug, dass auch enge Themen etwas finden.
-NICHT_AELTER_ALS = 730
+# Nur das laufende Kalenderjahr - Entscheidung des Herausgebers vom
+# 29.08.2026. Vorher waren es zwei Jahre, und in mehreren Hubs stand ein
+# Beitrag vom 24.04.2025 unter "Ausgesuchte News".
+#
+# MINDESTFENSTER faengt den Januar ab: Am 3. Januar waere das laufende Jahr
+# drei Tage lang, und in allen zwoelf Hubs staende die Null-Ansage. Dann gilt
+# das Mindestfenster, und es reichen ein paar Wochen ins Vorjahr zurueck.
+NUR_LAUFENDES_JAHR = True
+MINDESTFENSTER = 120
 # Der feste Vorspann der eigenen Tagesmeldungen (tagesnews.py, WP_AUSZUG).
 EIGENE_MELDUNG = "Aus der Forschung frisch auf den Schreibtisch"
 
@@ -258,7 +264,12 @@ def sammle(begriffe: list[str], heute: dt.date) -> list[dict]:
     stammen bei sieben Begriffen alle sechs Beitraege vom ersten, und die
     uebrigen Themenstraenge des Hubs kaemen gar nicht vor.
     """
-    ab = (heute - dt.timedelta(days=NICHT_AELTER_ALS)).isoformat() + "T00:00:00"
+    grenze = heute - dt.timedelta(days=MINDESTFENSTER)
+    if NUR_LAUFENDES_JAHR:
+        # min, nicht max: Das frueheste der beiden Daten spannt das GROESSERE
+        # Fenster auf. Ab Mai ist das der 1. Januar, im Januar das Mindestfenster.
+        grenze = min(dt.date(heute.year, 1, 1), grenze)
+    ab = grenze.isoformat() + "T00:00:00"
     listen = [[b for b in suche(begriff, ab)
                if not eigen(b) and trifft(b, begriff)]
               for begriff in begriffe]
