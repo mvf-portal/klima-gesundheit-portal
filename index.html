@@ -145,7 +145,56 @@
     font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);
     font-weight:700; margin-bottom:10px; display:block;
   }
-  .search-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  /* Die Zeile ruecken, damit die Schrittziffern ueber den Knoepfen Platz
+     haben, ohne die Beschriftung des Suchfeldes zu beruehren. */
+  .search-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+
+  /* ---------- Schrittfolge 1 -> 2 ueber den Knoepfen ---------- */
+  /* Rot kommt sonst nirgends im Hub vor. Genau deshalb steht es hier: Die
+     Ziffern sollen nicht wie ein weiteres Gestaltungselement wirken, sondern
+     wie eine Anweisung. Die Ziffer selbst ist gold - die Handlungsfarbe des
+     Hauses - und in der dunklen Fassung entsprechend heller. */
+  :root{ --schritt:#C62828; }
+  :root[data-theme="dark"]{ --schritt:#FF6B6B; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --schritt:#FF6B6B; } }
+  :root[data-theme="light"]{ --schritt:#C62828; }
+
+  .schritt{ position:relative; display:flex; flex:0 1 auto; }
+  .schritt::before{
+    content:attr(data-nr);
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%);
+    width:24px; height:24px; border-radius:50%; box-sizing:border-box;
+    border:2px solid var(--schritt); background:var(--card);
+    font-size:13px; font-weight:700; line-height:20px; text-align:center;
+    color:var(--schritt); z-index:2;
+  }
+  /* Die Eins in Gold, wie vom Herausgeber vorgegeben. Bewusst der dunklere
+     Goldton: Der helle erreicht auf Weiss nur 3,0:1 und waere in einer
+     24-Pixel-Scheibe schwer zu lesen. */
+  .schritt[data-nr="1"]::before{ color:var(--action-deep); }
+  .schritt > button{ width:100%; }
+
+  /* Der Bogen legt sich UEBER die Luecke, statt Breite zu beanspruchen: Sonst
+     rutschte der Knopf "Leeren" in die naechste Zeile - eine Ziffernfolge,
+     die das Feld unordentlicher macht, hilft niemandem. */
+  .schritt-pfeil{
+    position:relative; flex:0 0 0; width:0;
+    color:var(--schritt); pointer-events:none;
+  }
+  .schritt-pfeil svg{
+    position:absolute; left:50%; transform:translateX(-50%);
+    top:-12px; width:34px; height:20px;
+  }
+
+  /* Brechen die Knoepfe untereinander, zeigt ein Bogen nach rechts ins
+     Leere - dann bleibt es bei den Ziffern. */
+  @media (max-width:640px){
+    .schritt{ flex:1 1 100%; }
+    .schritt-pfeil{ display:none; }
+    /* Untereinander braucht jede Ziffer eigenen Platz - sonst sitzt die Zwei
+       auf der Unterkante des Knopfes darueber. */
+    .search-row{ gap:24px; }
+  }
   .search-field{
     position:relative; flex:1 1 320px; display:flex; align-items:center;
   }
@@ -336,15 +385,15 @@
      und zeigt sie zusammengefuehrt auf der Seite - die uebrigen bleiben
      Kachel, das sagt der Hinweis unter der Liste auch. */
   .btn-meta{
-    background:var(--card); border:1.5px solid var(--brand); border-radius:6px;
-    color:var(--brand); font-family:inherit; font-size:14px; font-weight:600;
+    background:var(--card); border:1.5px solid var(--schritt); border-radius:6px;
+    color:var(--schritt); font-family:inherit; font-size:14px; font-weight:600;
     padding:0 20px; cursor:pointer; white-space:nowrap;
     display:flex; align-items:center; justify-content:center; gap:7px;
     min-height:46px; flex:0 1 auto; transition:background .15s, color .15s;
   }
-  .btn-meta:hover:not(:disabled){ background:var(--brand); color:var(--on-brand); }
+  .btn-meta:hover:not(:disabled){ background:var(--schritt); color:#FFFFFF; }
   .btn-meta:disabled{ opacity:.45; cursor:not-allowed; }
-  .btn-meta:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+  .btn-meta:focus-visible{ outline:2px solid var(--schritt); outline-offset:2px; }
   @media (max-width:640px){ .btn-meta{ white-space:normal; flex:1 1 100%; padding:10px 16px; } }
 
   .meta-wrap{ margin:22px auto 0; }
@@ -912,8 +961,21 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input id="q" type="search" autocomplete="off" spellcheck="false" value="Hitzewelle" placeholder="z. B. Hitzewelle, Hitzeaktionsplan, heat mortality …">
             </div>
-            <button class="btn-go" id="go" type="button" title="Stellt alle Datenbanken auf Ihren Suchbegriff ein (oder Eingabetaste drücken)">In allen Datenbanken suchen</button>
-            <button class="btn-meta" id="goMeta" type="button" title="Fragt vier Datenbanken unmittelbar ab und zeigt die Treffer hier auf der Seite">Treffer direkt anzeigen</button>
+            <!-- Die beiden Knoepfe stehen nebeneinander und sehen gleich wichtig
+                 aus - dabei ist der zweite der zweite Schritt. Die Ziffern und der
+                 Bogen dazwischen sagen die Reihenfolge, die die Anordnung allein
+                 nicht hergibt. -->
+            <span class="schritt" data-nr="1">
+              <button class="btn-go" id="go" type="button" title="Stellt alle Datenbanken auf Ihren Suchbegriff ein (oder Eingabetaste drücken)">In allen Datenbanken suchen</button>
+            </span>
+            <span class="schritt-pfeil" aria-hidden="true">
+              <svg viewBox="0 0 34 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 15C4 5 14 2 24 6"/><path d="m19 3 6 3-4 5"/>
+              </svg>
+            </span>
+            <span class="schritt" data-nr="2">
+              <button class="btn-meta" id="goMeta" type="button" title="Fragt sieben Datenbanken unmittelbar ab und zeigt die Treffer hier auf der Seite">Treffer direkt anzeigen</button>
+            </span>
             <button class="btn-clear" id="clear" type="button">Leeren</button>
           </div>
 
