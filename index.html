@@ -1031,7 +1031,7 @@
           </details>
           <div class="hints">
             <p><b>So funktioniert die Suche.</b> Begriff eingeben, <b>Eingabetaste</b> drücken oder auf <b>„In allen Datenbanken suchen"</b> klicken — damit werden alle Kacheln auf Ihren Begriff eingestellt. Ein Klick auf eine Kachel öffnet dann <b>direkt die Trefferliste</b> dieser Datenbank in einem neuen Tab; ein zweites Mal suchen müssen Sie dort nicht. Die Kacheln bleiben eingestellt, Sie können also nacheinander mehrere Datenbanken öffnen, ohne den Begriff erneut einzugeben. Ausnahme sind die als <b>„Portal"</b> gekennzeichneten Anbieter — die erlauben technisch keine verlinkbare Trefferadresse.</p>
-            <p><b>Treffer direkt auf dieser Seite.</b> Der Knopf <b>&bdquo;Treffer direkt anzeigen&ldquo;</b> fragt <b id="cntMeta"></b> Datenbanken unmittelbar ab und zeigt die Fundstellen zusammengef&uuml;hrt hier auf der Seite &mdash; jede mit Angabe der Datenbank, aus der sie stammt. Dubletten werden &uuml;ber die DOI zusammengelegt; erscheint eine Arbeit in mehreren Datenbanken, steht sie einmal in der Liste und tr&auml;gt mehrere Herkunftszeichen. Die Trefferliste zeigt <b>25 Treffer je Blatt</b>. Neben Zeitschriftenaufs&auml;tzen sind angemeldete Studien, Preprints und Repositorien darunter; der Filter <b>Art</b> trennt sie. Wo es eine legale frei zug&auml;ngliche Fassung gibt, steht ein Verweis <b>Volltext</b>. Die Liste l&auml;sst sich als Word, Excel, RIS oder BibTeX herunterladen und damit in Zotero, EndNote oder Citavi weiterverarbeiten. Nur diese Datenbanken erlauben eine Abfrage aus dem Browser heraus; alle &uuml;brigen bleiben &uuml;ber die Kacheln zu &ouml;ffnen. Dabei erf&auml;hrt der jeweilige Anbieter Ihren Suchbegriff &mdash; N&auml;heres in den <a href="#datenschutz">Datenschutzhinweisen</a>.</p>
+            <p><b>Treffer direkt auf dieser Seite.</b> Der Knopf <b>&bdquo;Treffer direkt anzeigen&ldquo;</b> fragt die Datenbanken unmittelbar ab, die einen direkten Zugriff auf ihre Inhalte erlauben (derzeit <b id="cntMeta"></b>), und zeigt die Fundstellen zusammengef&uuml;hrt hier auf der Seite &mdash; jede mit Angabe der Datenbank, aus der sie stammt. Dubletten werden &uuml;ber die DOI zusammengelegt; erscheint eine Arbeit in mehreren Datenbanken, steht sie einmal in der Liste und tr&auml;gt mehrere Herkunftszeichen. Die Trefferliste zeigt <b>25 Treffer je Blatt</b>. Neben Zeitschriftenaufs&auml;tzen sind angemeldete Studien, Preprints und Repositorien darunter; der Filter <b>Art</b> trennt sie. Wo es eine legale frei zug&auml;ngliche Fassung gibt, steht ein Verweis <b>Volltext</b>. Die Liste l&auml;sst sich als Word, Excel, RIS oder BibTeX herunterladen und damit in Zotero, EndNote oder Citavi weiterverarbeiten. Die &uuml;brigen halten ihre Inhalte f&uuml;r eine solche Abfrage verschlossen; sie bleiben &uuml;ber die Kacheln zu &ouml;ffnen. Dabei erf&auml;hrt der jeweilige Anbieter Ihren Suchbegriff &mdash; N&auml;heres in den <a href="#datenschutz">Datenschutzhinweisen</a>.</p>
             <p><b>Vollständigkeit.</b> Auch dieses Portal kann nicht sämtliche Artikel „aller Datenbanken" enthalten — das verhindern Lizenz- und Technikgrenzen. Es bündelt stattdessen die maßgeblichen Suchen, sodass eine Recherche systematisch über alle relevanten Datenbanken laufen kann.</p>
             <!-- === THEMA-HINWEIS-START (themenspezifisch; aus dem Themenprofil) === -->
             <p><b>Literatur und Daten getrennt.</b> Dieses Themenfeld lebt von zwei Sorten Quellen. Die Blöcke 01 bis 03 und 07 bis 09 führen zu <b>Publikationen</b>. Block 04 „Klima- &amp; Umweltdaten" führt zu <b>Messreihen, Modellen und Indikatoren</b> — dort landen Sie bei Datensätzen, nicht bei Studien. Und ein großer Teil des Wissens steht in diesem Feld nicht in Zeitschriften, sondern in Berichten von Behörden und Institutionen; dafür gibt es die Blöcke 05 und 06.</p>
@@ -3328,12 +3328,13 @@ metaBlaetterEl.addEventListener('click', function(e){
 
 input.addEventListener('input', function(){ goMetaBtn.disabled = !input.value.trim(); });
 
-metaFussEl.innerHTML = 'Abgefragt werden <b>' + MT_QUELLEN.length + '</b> der <b>'
-  + DB.length + '</b> eingebundenen Datenbanken — nur diese geben ihre '
-  + 'Schnittstelle für Abfragen aus dem Browser frei. Alle übrigen, darunter '
-  + 'Cochrane, LIVIVO und das DRKS, sind über die Kacheln unter dieser Liste zu '
-  + 'öffnen; der Suchbegriff ist dort bereits eingestellt. Diese Trefferliste ist '
-  + 'deshalb ein Einstieg, keine vollständige Recherche.'
+metaFussEl.innerHTML = 'Abgefragt werden die Datenbanken, die einen direkten '
+  + 'Zugriff auf ihre Inhalte erlauben — derzeit <b>' + MT_QUELLEN.length
+  + '</b> der <b>' + DB.length + '</b> eingebundenen. Die übrigen, darunter '
+  + 'Cochrane, LIVIVO und das DRKS, halten ihre Inhalte für eine solche Abfrage '
+  + 'verschlossen; sie sind über die Kacheln unter dieser Liste zu öffnen, der '
+  + 'Suchbegriff ist dort bereits eingestellt. Diese Trefferliste ist deshalb ein '
+  + 'Einstieg, keine vollständige Recherche.'
   + '<br>Die Reihenfolge fügt die Ordnungen der Quellen zusammen: Die meisten '
   + 'liefern nach ihrer eigenen Relevanz, Europe PMC nach Erscheinungsdatum. Je '
   + 'weiter vorn eine Arbeit in mehreren Listen steht, desto weiter oben steht '
