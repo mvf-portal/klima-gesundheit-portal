@@ -575,9 +575,28 @@ class Mailchimp:
         return r.json() if r.text else {}
 
     def entwuerfe(self) -> list[dict]:
-        d = self._ruf("GET", "/campaigns", params={
-            "status": "save", "count": 50, "sort_field": "create_time", "sort_dir": "DESC"})
-        return d.get("campaigns", [])
+        """Entwuerfe UND bereits terminierte Kampagnen.
+
+        Mailchimp filtert /campaigns nur nach EINEM Status, deshalb mehrere
+        Abrufe. Bis zum 31.08.2026 wurde nur "save" geholt, und das war teuer:
+        Eine bereits TERMINIERTE Kampagne war fuer die Doppelpruefung weiter
+        unten unsichtbar. Jeder weitere Lauf des Tages legte deshalb eine
+        zweite mit demselben Titel an und terminierte sie auf dieselbe Minute.
+        Am 31.08.2026 liefen drei Laeufe - GitHub-Cron, Reservecron und der
+        neue Weckruf vom MVF-Server - und die Leserschaft bekam jede Ausgabe
+        dreimal.
+
+        Versendete Kampagnen fehlen hier bewusst: Die faengt `seit` ab. Nach
+        einem Versand steht nichts Offenes mehr an, und das Skript endet
+        vorher mit "Nichts offen".
+        """
+        raus = []
+        for stand in ("save", "schedule", "sending"):
+            d = self._ruf("GET", "/campaigns", params={
+                "status": stand, "count": 50,
+                "sort_field": "create_time", "sort_dir": "DESC"})
+            raus.extend(d.get("campaigns", []))
+        return raus
 
     def gruppe_suchen(self, name: str) -> tuple[str, str] | None:
         """Kennung von Kategorie und Gruppe zum sichtbaren Namen - oder None."""
@@ -908,7 +927,7 @@ def main() -> int:
                 print(f"TERMINIERTE Kampagne '{titel}' ({k['id']}) aufgehoben "
                       f"und verworfen - wird neu gebaut.")
                 continue
-            if neu and k.get("status") != "schedule":
+            if neu and k.get("status") == "save":
                 mc.loeschen(k["id"])
                 print(f"Bestehenden Entwurf '{titel}' ({k['id']}) verworfen "
                       f"- wird neu gebaut.")
