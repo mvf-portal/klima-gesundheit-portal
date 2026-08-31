@@ -169,7 +169,8 @@ def vorpruefung(studien: list[dict]) -> tuple[list[dict], list[str]]:
 
 
 def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
-           gegen_pubmed: bool = True, listengroesse: int | None = None) -> list[str]:
+           gegen_pubmed: bool = True, listengroesse: int | None = None,
+           gleichnamige: list[tuple[str, str]] | None = None) -> list[str]:
     """Alle Beanstandungen als Liste. Leere Liste heisst: terminieren."""
     m: list[str] = []
     if not studien:
@@ -230,6 +231,25 @@ def pruefe(studien: list[dict], html: str = "", empfaenger: int | None = None,
     if empfaenger and listengroesse and empfaenger >= ANTEIL_MAX * listengroesse:
         m.append(f"das Empfaengersegment umfasst {empfaenger} von {listengroesse} "
                  f"Adressen der ganzen Zielgruppe - das ist kein Segment mehr")
+
+    # Hoechstens EINE Ausgabe je Hub und Tag - die haerteste Regel dieser
+    # Datei, denn ein Doppelversand trifft jeden Empfaenger unmittelbar.
+    #
+    # Am 31.08.2026 ist genau das passiert: Die Doppelpruefung in
+    # mailchimp_entwurf.py holte nur Kampagnen im Zustand "Entwurf", eine
+    # bereits TERMINIERTE war fuer sie unsichtbar, und drei Laeufe desselben
+    # Morgens legten drei Kampagnen mit demselben Titel an. Alle drei gingen
+    # um 10:00 hinaus. Jene Luecke ist geschlossen; diese Pruefung ist die
+    # zweite Linie dahinter und prueft nicht die Absicht, sondern den Zustand
+    # bei Mailchimp: Steht dort schon etwas fuer heute, wird nicht terminiert.
+    #
+    # Uebergeben wird (Kennung, Zustand) je gleichnamiger Kampagne, die
+    # terminiert ist, gerade hinausgeht oder schon draussen ist. Entwuerfe
+    # zaehlen nicht - die verschicken nichts.
+    if gleichnamige:
+        wo = ", ".join(f"{kid} ({stand})" for kid, stand in gleichnamige)
+        m.append(f"fuer heute liegt bei Mailchimp schon eine Ausgabe dieses Hubs "
+                 f"vor: {wo} - eine zweite waere ein Doppelversand")
 
     return m
 
