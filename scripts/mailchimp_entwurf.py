@@ -660,6 +660,24 @@ class Mailchimp:
             rumpf["recipients"]["segment_opts"] = {"saved_segment_id": TAG_ID}
             return self._ruf("POST", "/campaigns", json=rumpf)
 
+    def gleichnamige(self, titel: str, ausser: str) -> list[tuple[str, str]]:
+        """Kampagnen desselben Titels, die hinausgehen oder schon draussen sind.
+
+        Grundlage der Torwaechter-Pruefung gegen den Doppelversand. Entwuerfe
+        bleiben absichtlich aussen vor: Die verschicken nichts, und ein
+        liegengebliebener Entwurf desselben Tages ist ein normaler Zustand.
+        """
+        raus = []
+        for stand in ("schedule", "sending", "sent"):
+            d = self._ruf("GET", "/campaigns", params={
+                "status": stand, "count": 50,
+                "sort_field": "create_time", "sort_dir": "DESC"})
+            for k in d.get("campaigns", []):
+                if (k.get("id") != ausser
+                        and k.get("settings", {}).get("title") == titel):
+                    raus.append((k["id"], stand))
+        return raus
+
     def gesendet(self) -> list[dict]:
         d = self._ruf("GET", "/campaigns", params={
             "status": "sent", "count": 50, "sort_field": "send_time", "sort_dir": "DESC"})
@@ -986,8 +1004,15 @@ def main() -> int:
     empfaenger = mc.empfaengerzahl(kid)
     gesamt = mc.listengroesse()
     print(f"Empfaengerzahl: {empfaenger} von {gesamt} in der Zielgruppe.")
+    # Zweite Linie gegen den Doppelversand: Was zaehlt, ist nicht die Absicht
+    # dieses Laufs, sondern was bei Mailchimp fuer heute schon bereitliegt.
+    doppelt = mc.gleichnamige(titel, kid)
+    if doppelt:
+        print(f"Gleichnamige Kampagne(n) fuer heute: "
+              f"{', '.join(k for k, _ in doppelt)}")
     beanstandungen = torwaechter.pruefe(
-        offen, html=sauber, empfaenger=empfaenger, listengroesse=gesamt)
+        offen, html=sauber, empfaenger=empfaenger, listengroesse=gesamt,
+        gleichnamige=doppelt)
     termin = naechster_termin(termin_arg)
     if beanstandungen:
         print(f"Torwaechter: {len(beanstandungen)} Beanstandung(en) - nicht terminiert.")
