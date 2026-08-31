@@ -394,7 +394,9 @@
     <p>Wie oft die Seiten aufgerufen werden, zählen wir selbst, auf einem eigenen Server. Dabei
     wird nichts auf Ihrem Gerät gespeichert und keine IP-Adresse abgelegt; wiederkehrende Leser
     werden nur innerhalb eines Tages erkannt, und auch das über eine Zufallszahl, die jede Nacht
-    ersetzt wird. Näheres steht in den <a href="index.html#datenschutz">Datenschutzhinweisen</a>.</p>
+    ersetzt wird. Mitgezählt wird außerdem, wie oft die Suche benutzt wird; der eingegebene
+    Begriff wird nur monatsweise und ohne jeden Bezug zum Aufruf gespeichert, und Krankheits-
+    oder Diagnosebegriffe gar nicht — sie dienen der Pflege der Suchvorschläge. Näheres steht in den <a href="index.html#datenschutz">Datenschutzhinweisen</a>.</p>
     <p>Wird dieser Hub gesponsert, ist das auf der Startseite gekennzeichnet. Sponsoren
     ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting; auf die
     Auswahl der Datenbanken, der Studien und deren Darstellung haben sie
@@ -437,6 +439,11 @@
      Gegenstueck: /zaehler/z.php auf monitor-versorgungsforschung.de -->
 <script>
 (function () {
+  // Die Seite meldet Suchen ueber window.mvfZ. Die Funktion steht ab sofort
+  // immer bereit und tut im Zweifel nichts - sonst muesste jede Aufrufstelle
+  // pruefen, ob es sie ueberhaupt gibt, und eine vergessene Pruefung waere
+  // ein Skriptfehler mitten in der Suche.
+  window.mvfZ = function () {};
   try {
     if (navigator.doNotTrack === '1' || window.doNotTrack === '1'
         || navigator.globalPrivacyControl === true) return;
@@ -462,8 +469,39 @@
           + '&g=' + (Math.min(screen.width, screen.height) < 768 ? 'm' : 'd')
           + '&b=' + stufe
           + '&c=' + Date.now();
-    new Image(1, 1).src =
-      'https://www.monitor-versorgungsforschung.de/zaehler/z.php?' + q;
+    var ziel = 'https://www.monitor-versorgungsforschung.de/zaehler/z.php?';
+    new Image(1, 1).src = ziel + q;
+
+    // Ein Begriff wird nur mitgeschickt, wenn er wie ein Fachbegriff aussieht.
+    // Ziffern, Klammern, Anfuehrungszeichen, @ und mehr als drei Woerter
+    // deuten auf Freitext oder eine Kennung - so etwas verlaesst den Browser
+    // gar nicht erst. Was uebrig bleibt, prueft der Server noch einmal und
+    // wirft dort zusaetzlich alle Krankheitsbegriffe weg.
+    function sauber(v) {
+      if (typeof v !== 'string') return '';
+      var t = v.toLowerCase().replace(/\s+/g, ' ').trim();
+      if (t.length < 3 || t.length > 40) return '';
+      if (t.split(' ').length > 3) return '';
+      if (/[^a-zßà-öø-ÿ \-]/.test(t)) return '';
+      if (t.charAt(0) === '-') return '';
+      if (/(^| )(and|or|not)( |$)/.test(t)) return '';   // Formel, kein Begriff
+      return t;
+    }
+
+    // Eine abgesendete Suche zaehlen. Kein Seitenaufruf: z.php fuehrt beides
+    // getrennt. sendBeacon ueberlebt einen Seitenwechsel, ein Bild nicht -
+    // wer sucht und sofort auf eine Kachel klickt, wird sonst nicht gezaehlt.
+    window.mvfZ = function (art, begriff) {
+      try {
+        var f = 'h=' + encodeURIComponent(location.hostname)
+              + '&e=' + encodeURIComponent(art)
+              + '&c=' + Date.now();
+        var t = sauber(begriff);
+        if (t) f += '&t=' + encodeURIComponent(t);
+        if (navigator.sendBeacon) navigator.sendBeacon(ziel + f);
+        else new Image(1, 1).src = ziel + f;
+      } catch (e) { /* eine ungezaehlte Suche ist kein Grund, etwas kaputtzumachen */ }
+    };
   } catch (e) { /* Zaehlung ist nie wichtiger als die Seite */ }
 })();
 </script>
