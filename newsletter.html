@@ -195,12 +195,6 @@
   }
   footer p{ margin:0 0 8px; max-width:70ch; }
   footer a{ color:var(--ink-soft); }
-  .stoerung{ background:var(--card); border:1px solid var(--line);
-    border-left:4px solid var(--action); border-radius:8px; padding:22px 24px;
-    box-shadow:var(--shadow); }
-  .stoerung h2{ margin:0 0 10px; }
-  .stoerung p{ margin:0 0 12px; max-width:64ch; }
-  .stoerung .btn-gold{ text-decoration:none; display:inline-block; }
 </style>
 
 <nav class="hauptmenu">
@@ -232,46 +226,71 @@
 
 <main class="wrap">
 
-  <!-- ABGESCHALTET am 31.08.2026 --------------------------------------------
-       Hier stand ein Formular, das unmittelbar an Mailchimps Formularadresse
-       /subscribe/post sendete. Das funktioniert nicht mehr: Mailchimp schuetzt
-       diese Adresse inzwischen mit reCAPTCHA und Akamais Bot Manager. Eine
-       Einsendung von fremder Domain bringt weder das eine noch das andere mit,
-       wird mit HTTP 200 angenommen - und verworfen. Keine Anmeldung, keine
-       Bestaetigungsmail, kein Hinweis.
+  <form id="anmeldung" novalidate>
+    <fieldset>
+      <legend>Was möchten Sie erhalten?</legend>
+      <div class="wahl">
+        <label class="karte">
+          <input type="checkbox" id="wahlStudien" checked>
+          <span class="takt">täglich</span>
+          <!-- Der eigene Newsletter traegt seinen Themennamen wie die Karten der
+               Schwesterportale auch. Ohne ihn stand hier als einziger ein
+               namenloser "Studien-Newsletter" - auf einer Seite, die daneben
+               elf benannte anbietet. -->
+          <b>Studien-Newsletter Klima</b>
+          <span class="was">Die Studienauswahl des Hubs jeden Morgen per E-Mail: neue Arbeiten zu Hitze, Extremwetter und Klimawandel mit deutschen Zusammenfassungen, den Ergebniszahlen und der Einordnung, was sich auf Deutschland übertragen lässt. Dazu die Word- und Excel-Datei zum Tag.</span>
+        </label>
+        <label class="karte">
+          <input type="checkbox" id="wahlMvf">
+          <span class="takt">regelmäßig</span>
+          <b>MVF-Newsletter</b>
+          <span class="was">Der redaktionelle Newsletter von „Monitor Versorgungsforschung":
+          Beiträge aus der Fachzeitschrift, Nachrichten aus Politik und Selbstverwaltung,
+          Veranstaltungen und Ausgabenhinweise.</span>
+        </label>
+      </div>
+    </fieldset>
 
-       Belegt am 31.08.2026 an der Gewinnspielseite: zwei echte Adressen
-       angemeldet, keine Bestaetigungsmail, der zugehoerige Tag zaehlte null
-       Kontakte. Der Endpunkt selbst antwortet einwandfrei - auf eine ungueltige
-       Adresse kommt die richtige Fehlermeldung. Es liegt am Botschutz.
+    <!-- Die Schwesterportale. Der Abschnitt wird aus REIHE (siehe Skript) erzeugt
+         und bleibt verborgen, solange die Reihe ausser diesem Portal nichts
+         Bereites enthaelt - eine leere Ueberschrift waere schlimmer als keine. -->
+    <fieldset id="feldReihe" hidden>
+      <legend>Auch aus den Schwesterportalen</legend>
+      <p class="fein reihe-vor">Dieselbe Machart, anderes Thema — jeder dieser Newsletter kommt
+      aus einem eigenen Rechercheportal von „Monitor Versorgungsforschung" und ist einzeln
+      abbestellbar.</p>
+      <div class="wahl" id="wahlReihe"></div>
+    </fieldset>
 
-       Schlimmer als der Ausfall war die Anzeige: Das Formular sendete in einen
-       unsichtbaren Rahmen, dessen Inhalt es nicht lesen darf, und meldete
-       deshalb nach vier Sekunden in JEDEM Fall "Bitte pruefen Sie Ihr
-       Postfach". Eine Seite, die Bestellungen quittiert, die es nicht gibt,
-       ist schlimmer als eine Seite ohne Formular.
+    <div>
+      <label class="feld" for="email">E-Mail-Adresse</label>
+      <input type="email" id="email" name="EMAIL" autocomplete="email" required
+             placeholder="name@einrichtung.de" spellcheck="false">
+    </div>
 
-       Der Ersatz ist gebaut, aber noch nicht in Betrieb: ein eigener Endpunkt
-       auf dem MVF-Server, der die Mailchimp-API anspricht (mvf-server/anmeldung
-       im Repo knowledge-hubs). Bis dahin fuehrt der Weg ueber Mailchimps eigene
-       Anmeldeseite - die traegt den Botschutz selbst und funktioniert. Dort
-       stehen alle Studien-Newsletter zur Auswahl.
+    <!-- Honigtopf: Menschen sehen dieses Feld nicht, automatische Formularausfueller
+         schon. Ist es gefuellt, antwortet der Endpunkt freundlich und traegt nichts ein. -->
+    <div class="falle" aria-hidden="true"><input type="text" id="falle" tabindex="-1" autocomplete="off"></div>
 
-       Der alte Stand liegt im Commit davor. -->
-  <section class="stoerung">
-    <h2>Die Anmeldung ist zurzeit gestört</h2>
-    <p>An dieser Stelle stand ein Bestellformular. Es hat Anmeldungen
-    entgegengenommen, ohne sie weiterzugeben — ein Fehler bei der Übergabe an
-    unseren Versanddienstleister. <strong>Wir beheben ihn gerade</strong>;
-    solange ist eine Bestellung über diese Seite nicht möglich.</p>
-    <p>Wenn Sie sich in der Zwischenzeit vor einer Anmeldung wähnten: Es tut uns
-    leid. Bitte bestellen Sie noch einmal — der Weg darunter funktioniert.</p>
-    <p><a class="btn-gold" href="https://monitor-versorgungsforschung.us6.list-manage.com/subscribe?u=f4c91757bc7d8c740641acb50&amp;id=1c8fc10ec7"
-       target="_blank" rel="noopener">Zur Anmeldeseite von Monitor Versorgungsforschung</a></p>
-    <p class="fein">Dort finden Sie alle Studien-Newsletter der Knowledge-Hubs und den
-    redaktionellen MVF-Newsletter zur Auswahl. Kostenfrei, mit Bestätigungslink
-    (Double-Opt-in) und jederzeit einzeln abbestellbar.</p>
-  </section>
+    <label class="einwilligung">
+      <input type="checkbox" id="einwilligung" required>
+      <span>Ich möchte die ausgewählten Newsletter per E-Mail erhalten. Meine E-Mail-Adresse wird
+      dafür an unseren Versanddienstleister übermittelt und dort gespeichert. Die Einwilligung
+      kann ich jederzeit über den Abmeldelink am Ende jeder E-Mail widerrufen — die Rechtmäßigkeit
+      der bis dahin erfolgten Verarbeitung bleibt davon unberührt. Näheres in den
+      <a href="./#datenschutz">Datenschutzhinweisen</a>.</span>
+    </label>
+
+    <button type="submit" class="btn-gold" id="absenden">Newsletter bestellen</button>
+
+    <p class="meldung" id="meldung" role="status" aria-live="polite"></p>
+  </form>
+
+  <p class="fein">Die Anmeldung wird an unseren Versanddienstleister Mailchimp übermittelt.
+  Anschließend erhalten Sie eine E-Mail mit einem Bestätigungslink; erst mit dem Klick darauf
+  beginnt der Versand (Double-Opt-in) — so kann niemand fremde Adressen eintragen. Alle
+  Newsletter sind kostenfrei und jederzeit einzeln abbestellbar; Ihre Auswahl können Sie
+  später über den Link „Einstellungen ändern" am Ende jeder E-Mail anpassen.</p>
 
 </main>
 
@@ -283,6 +302,250 @@
   </div>
 </footer>
 
+<script>
+// ---------------------------------------------------------------------------
+// Die Anmeldung geht an den eigenen Endpunkt auf dem MVF-Server, der sie ueber
+// die Mailchimp-API eintraegt. Der Hub selbst speichert nichts.
+//
+// Warum nicht mehr unmittelbar an Mailchimp: Bis zum 31.08.2026 sendete diese
+// Seite an die Formularadresse /subscribe/post. Die ist inzwischen mit
+// reCAPTCHA und Akamais Bot Manager geschuetzt. Eine Einsendung von fremder
+// Domain bringt weder ein reCAPTCHA-Zeichen noch die Akamai-Telemetrie mit -
+// Mailchimp nimmt sie mit HTTP 200 an und verwirft sie. Am 31.08.2026 mit zwei
+// echten Adressen belegt: keine Bestaetigungsmail, null Kontakte im Tag.
+//
+// Der Endpunkt heilt zwei weitere Dinge mit:
+//   - Wer schon Abonnent war, kann jetzt einen weiteren Newsletter dazunehmen.
+//     Die Formularadresse verwarf bei bekannten Adressen alles Mitgeschickte.
+//   - Die Rueckmeldung ist echt. Frueher sendete das Formular in einen
+//     unsichtbaren Rahmen, dessen Inhalt es nicht lesen darf, und meldete
+//     deshalb nach vier Sekunden in JEDEM Fall Erfolg.
+//
+// Beschreibung der Schnittstelle: mvf-server/anmeldung/LIESMICH.md im Repo
+// knowledge-hubs.
+// ---------------------------------------------------------------------------
+const ZIEL = "https://www.monitor-versorgungsforschung.de/anmeldung/anmeldung.php";
+
+// Der Schluessel dieses Hubs beim Endpunkt. Er entspricht der Vorsilbe der
+// Domain und steht dort in der Zulassungsliste INTERESSEN - was nicht darin
+// steht, weist der Endpunkt ab. Das ist Absicht: Ein Endpunkt im offenen Netz
+// darf nur in ausdruecklich benannte Gruppen eintragen.
+const HUB = "klima";
+
+// Der redaktionelle MVF-Newsletter ist beim Endpunkt ein Schluessel wie jeder
+// andere. Welche Mailchimp-Gruppe dahinter steht, weiss nur der Server.
+const HUB_MVF = "mvf";
+
+// ---------------------------------------------------------------------------
+// Alle Studien-Newsletter der Reihe - in JEDEM Portal dieselbe Liste. Das
+// eigene Portal wird unten anhand von HUB herausgenommen, sodass niemand
+// seinen eigenen Newsletter zweimal angeboten bekommt.
+//
+// Kommt ein Portal hinzu, wird hier EINE Zeile ergaenzt und die Aenderung mit
+// `py vorlage-abgleich.py --alle --uebernehmen` in alle Portale gezogen. Genau
+// dafuer ist newsletter.html seit dem 18.08.2026 eine neutrale Datei.
+//
+// `bereit: false` hiesse: Die Gruppe steht in Mailchimp, das Portal versendet
+// aber noch nicht. Solche Zeilen werden nicht angeboten - man kann niemanden
+// auf einen Newsletter setzen, den es noch nicht gibt. Am 01.09.2026 antwortet
+// jedes der zwoelf Portale ueber HTTPS und hat einen terminierten Versand.
+// ---------------------------------------------------------------------------
+const REIHE = [
+  { hub:"wissen",         titel:"Versorgungsforschung",
+    url:"https://wissen.m-vf.de", domain:"wissen.m-vf.de", bereit:true,
+    was:"Versorgungsforschung und Health Services Research: Versorgungsformen, "
+      + "Qualitaet, Steuerung und Nutzenbewertung." },
+  { hub:"klima",          titel:"Hitze, Klima &amp; Gesundheit",
+    url:"https://klima.m-vf.de",  domain:"klima.m-vf.de",  bereit:true,
+    was:"Hitze, Extremwetter und Klimawandel und was sie fuer Versorgung, "
+      + "Praxis und Bevoelkerungsgesundheit bedeuten." },
+  { hub:"ki",             titel:"Digitalisierung, KI &amp; Gesundheit",
+    url:"https://ki.m-vf.de",      domain:"ki.m-vf.de",     bereit:true,
+    was:"Digitale Anwendungen und Kuenstliche Intelligenz in der Versorgung - "
+      + "vom Entscheidungsassistenten bis zur Regulierung." },
+  { hub:"pflege",         titel:"Pflege &amp; Langzeitversorgung",
+    url:"https://pflege.m-vf.de",  domain:"pflege.m-vf.de", bereit:true,
+    was:"Pflegerische Versorgung, Langzeitpflege und die Lage der Pflegenden - "
+      + "Personal, Qualitaet, Angehoerige." },
+  { hub:"longevity",      titel:"Gesundes Altern &amp; Longevity",
+    url:"https://longevity.m-vf.de", domain:"longevity.m-vf.de", bereit:true,
+    was:"Lebensspanne und gesunde Lebensjahre: Praevention, Geriatrie, "
+      + "Alternskohorten und die Biologie des Alterns." },
+  { hub:"healthliteracy", titel:"Gesundheitskompetenz",
+    url:"https://healthliteracy.m-vf.de", domain:"healthliteracy.m-vf.de", bereit:true,
+    was:"Verstaendliche Gesundheitsinformation, Entscheidungshilfen und "
+      + "Patientenbeteiligung - und wer davon nicht erreicht wird." },
+  { hub:"impfen",         titel:"Impfen &amp; Impfpraevention",
+    url:"https://impfen.m-vf.de", domain:"impfen.m-vf.de", bereit:true,
+    was:"Impfungen in der Versorgung: Impfquoten, Impfbereitschaft, "
+      + "Impfstoffsicherheit und was die Durchimpfung hebt." },
+  { hub:"ncd",            titel:"Nicht uebertragbare Krankheiten",
+    url:"https://ncd.m-vf.de", domain:"ncd.m-vf.de", bereit:true,
+    was:"Die Versorgung chronisch Kranker: Diabetes, Herz-Kreislauf, Krebs "
+      + "und Mehrfacherkrankung - Programme, Leitlinien, Ergebnisse." },
+  { hub:"gender",         titel:"Geschlechtersensible Medizin",
+    url:"https://gender.m-vf.de", domain:"gender.m-vf.de", bereit:true,
+    was:"Geschlecht als Einflussgroesse in der Versorgung: Diagnostik, "
+      + "Dosierung, Zugang - und woran der Unterschied jeweils haengt." },
+  { hub:"adipositas",     titel:"Adipositas",
+    url:"https://adipositas.m-vf.de", domain:"adipositas.m-vf.de", bereit:true,
+    was:"Adipositas in der Versorgung: Gewichtsmanagement, Arzneimittel, "
+      + "Chirurgie, Praevention - und wer die Behandlung bezahlt." },
+  { hub:"safety",         titel:"Patientensicherheit",
+    url:"https://safety.m-vf.de", domain:"safety.m-vf.de", bereit:true,
+    was:"Vermeidbarer Schaden in der Versorgung: Behandlungs- und "
+      + "Medikationsfehler, Krankenhausinfektionen, Sepsis - und was dagegen wirkt." },
+  { hub:"mental",         titel:"Psychische Gesundheit",
+    url:"https://mental.m-vf.de", domain:"mental.m-vf.de", bereit:true,
+    was:"Die Versorgung psychisch erkrankter Menschen: Zugang, Wartezeiten, "
+      + "gemeindenahe Angebote, Krisenversorgung, Zwang und Praevention." }
+];
+
+// Faellt der Endpunkt aus, bleibt Mailchimps eigene Anmeldeseite. Sie traegt
+// den Botschutz selbst und funktioniert - nur ist sie fremd gestaltet und
+// kennt die Auswahl von hier nicht. Deshalb nur als Notausgang.
+const MC_SEITE = "https://monitor-versorgungsforschung.us6.list-manage.com/subscribe?u=f4c91757bc7d8c740641acb50&id=1c8fc10ec7";
+
+const form         = document.getElementById('anmeldung');
+const feldReihe    = document.getElementById('feldReihe');
+const wahlReihe    = document.getElementById('wahlReihe');
+const feldMail     = document.getElementById('email');
+const feldFalle    = document.getElementById('falle');
+const wahlStudien  = document.getElementById('wahlStudien');
+const wahlMvf      = document.getElementById('wahlMvf');
+const einwilligung = document.getElementById('einwilligung');
+const knopf        = document.getElementById('absenden');
+const meldung      = document.getElementById('meldung');
+
+// Die Karten der Schwesterportale entstehen erst hier - so steht die Liste nur
+// einmal im Dokument und kein Portal traegt handgeschriebene Kacheln mit sich
+// herum, die beim naechsten Abgleich auseinanderlaufen.
+const andere = REIHE.filter(x => x.bereit && x.hub !== HUB);
+if(andere.length){
+  wahlReihe.innerHTML = andere.map(x => (
+    '<label class="karte">'
+    + '<input type="checkbox" class="wahlAnderes" data-hub="' + x.hub + '">'
+    + '<span class="takt">täglich</span>'
+    + '<b>Studien-Newsletter ' + x.titel + '</b>'
+    + '<span class="was">' + x.was + '</span>'
+    + '<span class="wo"><a href="' + x.url + '/?utm_source=klima-hub&amp;utm_medium=referral'
+    + '&amp;utm_campaign=newsletter" target="_blank" rel="noopener">' + x.domain + '</a></span>'
+    + '</label>'
+  )).join('');
+  feldReihe.hidden = false;
+}
+
+function sage(text, art){
+  meldung.className = 'meldung ' + (art || '');
+  meldung.innerHTML = text;
+}
+
+// Der Notausgang steht in jeder Meldung, die der Besucher nicht selbst beheben
+// kann - eine Sackgasse waere schlimmer als ein fremd gestaltetes Formular.
+const NOTAUSGANG = ' Bitte versuchen Sie es später noch einmal oder bestellen Sie über die '
+  + '<a href="' + MC_SEITE + '" target="_blank" rel="noopener">Anmeldeseite von '
+  + 'Monitor Versorgungsforschung</a>.';
+
+// Der Knopf sperrt sich beim Absenden, die Eingabetaste umgeht ihn aber -
+// ohne diesen Riegel liesse sich zweimal senden.
+let laeuft = false;
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(laeuft) return;
+
+  const gewaehlteAndere = [...document.querySelectorAll('.wahlAnderes:checked')];
+  if(!wahlStudien.checked && !wahlMvf.checked && !gewaehlteAndere.length){
+    sage('Bitte wählen Sie mindestens einen Newsletter aus.', 'fehler');
+    wahlStudien.focus(); return;
+  }
+  if(!feldMail.value.trim() || !feldMail.checkValidity()){
+    sage('Bitte geben Sie eine gültige E-Mail-Adresse ein.', 'fehler');
+    feldMail.focus(); return;
+  }
+  if(!einwilligung.checked){
+    sage('Ohne Ihre Einwilligung dürfen wir Ihnen nichts schicken. Bitte setzen Sie das Häkchen.', 'fehler');
+    einwilligung.focus(); return;
+  }
+
+  const hubs = [];
+  if(wahlStudien.checked) hubs.push(HUB);
+  if(wahlMvf.checked)     hubs.push(HUB_MVF);
+  gewaehlteAndere.forEach(el => hubs.push(el.dataset.hub));
+
+  laeuft = true;
+  knopf.disabled = true;
+  sage('Wird gesendet …', '');
+
+  let daten = null;
+  try {
+    const antwort = await fetch(ZIEL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: feldMail.value.trim(),
+        hubs:  hubs,
+        falle: feldFalle.value
+      })
+    });
+    daten = await antwort.json();
+  } catch (err) {
+    // Netz weg, Endpunkt weg oder die Freigabe im Kopf fehlt. In allen drei
+    // Faellen weiss die Seite nichts - und sagt genau das, statt Erfolg zu
+    // melden. Das Formular bleibt bedienbar, damit ein zweiter Versuch geht.
+    laeuft = false; knopf.disabled = false;
+    sage('<b>Die Bestellung ist nicht angekommen.</b> Wir konnten unseren Server nicht '
+       + 'erreichen.' + NOTAUSGANG, 'fehler');
+    return;
+  }
+
+  if (daten && daten.ok) {
+    form.querySelectorAll('input').forEach(i=>{ i.disabled = true; });
+    if (daten.zustand === 'eingetragen') {
+      sage('<b>Ihre Auswahl ist eingetragen.</b> Ihre Adresse war bereits bei uns bekannt, '
+         + 'deshalb entfällt die Bestätigungsmail — die neu gewählten Newsletter kommen ab '
+         + 'der nächsten Ausgabe. Ändern können Sie die Auswahl jederzeit über den Link '
+         + '„Einstellungen ändern" am Ende jeder unserer E-Mails.', 'ok');
+    } else {
+      sage('<b>Bitte prüfen Sie Ihr Postfach.</b> Sie finden dort gleich eine E-Mail mit '
+         + 'einem Bestätigungslink — erst mit dem Klick darauf beginnt der Versand. Sehen '
+         + 'Sie notfalls im Spam-Ordner nach.', 'ok');
+    }
+    return;
+  }
+
+  // Ab hier hat der Endpunkt abgelehnt. Jeder Grund bekommt den Satz, der dem
+  // Besucher tatsaechlich weiterhilft; das Formular bleibt offen, damit ein
+  // zweiter Versuch moeglich ist.
+  const grund = (daten && daten.grund) || '';
+  laeuft = false; knopf.disabled = false;
+
+  if (grund === 'email') {
+    sage('Diese E-Mail-Adresse konnten wir nicht annehmen. Bitte prüfen Sie die Schreibweise.', 'fehler');
+    feldMail.focus();
+  } else if (grund === 'abgemeldet') {
+    sage('<b>Diese Adresse hat sich früher von unseren E-Mails abgemeldet.</b> Aus rechtlichen '
+       + 'Gründen dürfen wir sie nicht selbst wieder eintragen — das können nur Sie, über die '
+       + '<a href="' + MC_SEITE + '" target="_blank" rel="noopener">Anmeldeseite von '
+       + 'Monitor Versorgungsforschung</a>.', 'fehler');
+  } else if (grund === 'unzustellbar') {
+    sage('An diese Adresse war eine frühere E-Mail nicht zustellbar. Bitte prüfen Sie die '
+       + 'Schreibweise oder verwenden Sie eine andere Adresse.', 'fehler');
+    feldMail.focus();
+  } else if (grund === 'zu-oft') {
+    sage('Von diesem Anschluss sind heute schon ungewöhnlich viele Bestellungen gekommen. '
+       + 'Bitte versuchen Sie es morgen wieder oder bestellen Sie über die '
+       + '<a href="' + MC_SEITE + '" target="_blank" rel="noopener">Anmeldeseite von '
+       + 'Monitor Versorgungsforschung</a>.', 'fehler');
+  } else {
+    // nichts-gewaehlt, unbekannter-hub, mailchimp, nicht-eingerichtet: alles
+    // Faelle, an denen der Besucher nichts aendern kann. Der Grund steht mit
+    // in der Meldung, damit eine Rueckfrage in der Redaktion ankommt.
+    sage('<b>Die Bestellung ist nicht durchgegangen.</b> Unser Versanddienstleister hat sie '
+       + 'abgelehnt (' + (grund || 'unbekannt') + ').' + NOTAUSGANG, 'fehler');
+  }
+});
+</script>
 </html>
 
 <!-- ZAEHLER-START --------------------------------------------------------

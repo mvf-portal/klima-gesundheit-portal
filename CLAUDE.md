@@ -133,99 +133,89 @@ Das Logo war dabei nur das Sichtbarste. Betroffen waren ebenso die Schriften und
 ## Newsletter-Anmeldung (`newsletter.html`)
 
 Zwei Newsletter, eine Seite: Studien-Newsletter (taeglich, aus dem Hub) und MVF-Newsletter
-(redaktionell). Gesendet wird **direkt an Mailchimp**, nicht an WordPress — das WPForms-Formular
-auf m-vf.de minted sein Token je Seitenaufruf und liegt auf fremder Domain.
+(redaktionell). Dazu die Studien-Newsletter der Schwesterportale.
+
+### Der Weg der Anmeldung — seit dem 01.09.2026 ueber den eigenen Server
+
+Die Seite sendet **nicht mehr unmittelbar an Mailchimp**, sondern per `fetch` als JSON an den
+Anmelde-Endpunkt auf dem MVF-Server:
+
+```
+POST https://www.monitor-versorgungsforschung.de/anmeldung/anmeldung.php
+{ "email": "...", "hubs": ["klima", "mvf"], "falle": "" }
+```
+
+Der Endpunkt traegt ueber die **Mailchimp-API** ein. Er steht mit Quelltext und Einbauanleitung
+in `mvf-server/anmeldung/` im Repo `knowledge-hubs`; der API-Schluessel liegt auf dem Server, nicht
+in dieser Seite.
+
+**Warum der Umweg:** Mailchimps Formularadresse `/subscribe/post` ist mit reCAPTCHA und Akamais
+Bot Manager geschuetzt. Eine Einsendung von fremder Domain bringt weder ein reCAPTCHA-Zeichen noch
+die Akamai-Telemetrie mit — Mailchimp nimmt sie mit **HTTP 200 an und verwirft sie**. Am
+31.08.2026 mit zwei echten Adressen belegt: keine Bestaetigungsmail, null Kontakte im Tag.
+Vom 31.08. bis 01.09.2026 stand deshalb ein Stoerungshinweis an der Stelle des Formulars.
+
+Der Endpunkt heilt zwei weitere Dinge mit:
+
+- **Bestehende Kontakte.** Die Formularadresse verwarf bei einer bereits eingetragenen Adresse
+  alles Mitgeschickte. Wer schon Abonnent war, konnte ueber eine Hub-Seite nie einen weiteren
+  Newsletter dazunehmen. Die API kann das, und die Seite meldet es als `zustand: "eingetragen"`.
+- **Ehrliche Rueckmeldung.** Frueher sendete das Formular in ein verstecktes `<iframe>`, dessen
+  Inhalt es nicht lesen darf, und meldete deshalb nach vier Sekunden in *jedem* Fall Erfolg.
+  Jetzt kommt eine echte Antwort zurueck, und jeder Grund bekommt seinen eigenen Satz.
+  **Keine Erfolgsmeldung fuer etwas, das nicht stattfand.**
+
+### Der Schluessel dieses Hubs
+
+Die Seite nennt dem Endpunkt nur `const HUB = "klima"`. Welche Mailchimp-Gruppe dahintersteht,
+weiss allein der Server — die Zulassungsliste `INTERESSEN` in `anmeldung-zugang.php`. **Was nicht
+darin steht, wird mit `unbekannter-hub` abgewiesen**; das ist Absicht, denn der Endpunkt steht im
+offenen Netz. Ein neuer Hub braucht drei Eintragungen in dieser Reihenfolge: Gruppe in Mailchimp,
+Kennung in `anmeldung-zugang.php`, Schluessel in der Vorlage.
 
 ### Die Schwesterportale stehen mit auf der Seite
 
 Seit dem 18.08.2026 bietet die Anmeldung auch die Studien-Newsletter der anderen Portale an.
 Die Liste heisst `REIHE` und steht im Skriptteil von `newsletter.html` — **in jedem Portal
-gleich**; das eigene Portal filtert sich anhand von `MC.gruppeStudien` selbst heraus. Gepflegt
-wird sie in `portal-vorlage/vorlage/newsletter.html`, nicht hier: Die Datei ist seit demselben
-Tag **neutral** und laeuft beim Abgleich mit. Portaleigen sind nur noch vier Platzhalter
-(`META_NEWSLETTER`, `NL_STUDIEN_WAS`, `MC_GRUPPE_FELD`, `MC_TAG_STUDIEN`) aus `portal.json`.
+gleich**; das eigene Portal filtert sich anhand von `HUB` selbst heraus. Gepflegt wird sie in
+`portal-vorlage/vorlage/newsletter.html`, nicht hier: Die Datei ist **neutral** und laeuft beim
+Abgleich mit. Portaleigen sind nur noch drei Platzhalter (`META_NEWSLETTER`, `NL_STUDIEN_WAS`,
+`HUB`) aus `portal.json`.
 
-Zwei Regeln dazu: `bereit: false` haelt ein Portal aus dem Angebot heraus, solange es noch nicht
-versendet. Und `MC.tagStudien` darf **nie** `"0"` enthalten — in JavaScript ist die Zeichenkette
-`"0"` wahr, und die Anmeldung schickte Mailchimp `tags=0`. Wo es keinen Tag gibt, bleibt das
-Feld leer.
+`bereit: false` haelt ein Portal aus dem Angebot heraus, solange es noch nicht versendet. Seit dem
+01.09.2026 steht kein Portal mehr auf `false`.
 
-### Die drei Fallen, die uns je einen Anlauf gekostet haben
+### Kennzeichen in Mailchimp
 
-| Falle | Symptom | Loesung |
-|---|---|---|
-| Host ohne Kontovorsilbe | `us6.list-manage.com` → 404 | `monitor-versorgungsforschung.us6.list-manage.com` |
-| `/subscribe/post-json` | 404 mit GET wie POST — JSONP ist abgeschaltet | gewoehnliches Formular-POST |
-| Fehlendes `f_id` | Mailchimp nimmt an, **verwirft still** und leitet trotzdem auf die Dankeseite | Kennungen in die Adresszeile plus `f_id` |
+Der Endpunkt setzt die Interessengruppe des jeweiligen Newsletters und zusaetzlich immer die
+Gruppe *Datenschutzerklaerung gelesen* — so sind Anmeldungen von den Hubs genauso dokumentiert wie
+die vom Formular auf m-vf.de. Tags setzt er nur, wenn die Seite einen nennt, und nur solche aus
+`TAGS_ERLAUBT`.
 
-**Die dritte ist die gemeinste:** Ohne `f_id` verlangt Mailchimp das Token `ht`, das nur die
-gehostete Seite erzeugt. Fehlt beides, sieht alles nach Erfolg aus — Weiterleitung inklusive —,
-und in der Zielgruppe kommt nichts an. **Eine Weiterleitung ist kein Beweis. Beweis ist der
-Kontakt in Mailchimp.**
-
-### Kennzeichen
-
-```
-tags=<noch einzutragen>  Studien-Newsletter Klima
-group[16136][1024]=1     Studien Newsletter Klima  (Gruppe der Mailchimp-Anmeldeseite)
-group[5629][4]=1         Monitor Versorgungsforschung Newsletter
-group[5629][64]=1        Datenschutzerklaerung gelesen
-```
-
-**Die drei Studien-Newsletter liegen in je eigenen Gruppenmengen** (Stand 17.08.2026, auf der
-gehosteten Anmeldeseite ausgelesen):
-
-| Kennung | Gruppe | Portal |
-|---|---|---|
-| `group[16135][512]` | Studien Newsletter VF | wissen.m-vf.de |
-| `group[16136][1024]` | Studien Newsletter Klima | **dieses Portal** |
-| `group[16137][2048]` | Studien Newsletter KI | noch kein Portal |
-
-> **Falle beim Nachschlagen:** Auf Mailchimps Anmeldeseite steht die Beschriftung **vor** dem
-> Ankreuzfeld, nicht dahinter. Wer den HTML-Quelltext mit einem Suchfenster hinter dem `<input>`
-> auswertet, ordnet alle drei Gruppen um eine Position verschoben zu — und traegt Anmeldungen in
-> die falsche Liste ein. Beim Nachschlagen immer den vollstaendigen `<label>`-Block ansehen.
-
-**Die Tag-Nummer fehlt noch.** Sie steht in der Adresszeile, wenn man den Tag „Studien-Newsletter
-Klima" in Mailchimp anklickt (dort als `static_segment`). Einzutragen an **zwei** Stellen:
-`newsletter.html` (`MC.tagStudien`) und `scripts/mailchimp_entwurf.py` (`TAG_ID`). Solange sie
-fehlt, laeuft alles ueber die Gruppe — der Versand funktioniert, ist aber weniger fein steuerbar.
-Beide Stellen sind gegen die fehlende Nummer abgesichert: Das Formular schickt dann kein leeres
-`tags`-Feld, und das Entwurfsskript setzt keine ungueltige Segmentbedingung.
-
-**Der Studien-Newsletter traegt zwei Kennzeichen, und das mit Absicht:** Mailchimps eigene
-Anmeldeseite kann nur Gruppen setzen, nicht Tags. Wer sich dort eintraegt, haette ohne die
-Gruppe kein Kennzeichen; wer sich hier eintraegt, ohne den Tag keines im anderen Segment.
-Beide Wege setzen darum beides.
+Davon zu trennen ist der **Tag des Versands**: `scripts/mailchimp_entwurf.py` filtert die
+RSS-Kampagne ueber `TAG_ID` und faellt auf `GRUPPE_NAME` zurueck, wenn keine Nummer eingetragen
+ist. Diese Nummer hat mit der Anmeldung nichts zu tun und wird weiterhin dort gepflegt — die
+Anmeldeseite kennt sie seit dem 01.09.2026 nicht mehr.
 
 > **Vorsicht bei Gruppen:** Am 17.08.2026 wurde `group[5629][1]` — bis dahin „Pharma Relations
 > Newsletter" — in „Studien Newsletter VF" **umbenannt** statt neu angelegt. Damit trug schlagartig
 > jeder Alt-Abonnent von Pharma Relations das Kennzeichen des Studien-Newsletters. Zurueckbenannt
-> und als eigene Gruppenmenge 16135 neu angelegt. **Gruppen-Nummern sind Identitaeten, keine
+> und als eigene Gruppenmenge neu angelegt. **Gruppen-Nummern sind Identitaeten, keine
 > Beschriftungen** — wer eine umbenennt, verschiebt Menschen, nicht Woerter.
 
-Der MVF-Newsletter bleibt bei der **Gruppe**, weil seine Abonnenten sie seit jeher tragen und das
-Formular auf m-vf.de sie weiter setzt; ein zusaetzlicher Tag waere nur bei Neuzugaengen vom Hub
-gesetzt. Der Studien-Newsletter ist neu und kommt nur von hier — dort ist der **Tag** von Anfang
-an vollstaendig. In derselben Gruppenmenge stehen noch Pharma Relations, MarketAccess&HealthPolicy
-und Monitor Pflege: **Altlasten, die es im Verlag nicht mehr gibt.** Nicht anbieten.
-
-### Warum ein unsichtbarer Rahmen
-
-Mailchimp leitet nach der Anmeldung auf die zielgruppenweite Dankeseite — bei MVF auf m-vf.de.
-Der Besucher landete also auf einer fremden Seite. Deshalb geht das Formular in ein verstecktes
-`<iframe>`; die Bestaetigung steht im MVF-Design auf der Seite. Was im Rahmen passiert, ist nicht
-lesbar (fremde Domain), **darum ist die Bestaetigung so formuliert, dass sie auch dann stimmt,
-wenn die Adresse schon eingetragen war.** Keine Erfolgsmeldung fuer etwas, das nicht stattfand.
+In derselben Gruppenmenge stehen noch Pharma Relations, MarketAccess&HealthPolicy und Monitor
+Pflege: **Altlasten, die es im Verlag nicht mehr gibt.** Nicht anbieten.
 
 ### Was ausserhalb des Codes liegt
 
 - Double-Opt-in ist aktiv; die Bestaetigungsmail landete bei Gmail zunaechst **im Spam** (englischer
   Betreff, Domain nicht authentifiziert). Beides in Mailchimp zu pflegen, nicht hier.
-- Die RSS-Kampagne muss auf die Gruppe *Studien Newsletter Klima* (bzw. spaeter den gleichnamigen Tag) gefiltert sein — sonst bekaemen
-  alle 5.905 Abonnenten taeglich die Studienauswahl.
-- Die Datenschutzhinweise in `index.html` (Abschnitte 3 und 4) beschreiben genau dieses Verfahren.
-  **Wer den Anmeldeweg aendert, muss sie mitaendern.**
+- Die RSS-Kampagne muss auf das Kennzeichen des Studien-Newsletters gefiltert sein — sonst bekaemen
+  alle Abonnenten taeglich die Studienauswahl.
+- Der Abschnitt „Versanddienstleister (Mailchimp)" in den Datenschutzhinweisen von
+  `index.html` beschreibt genau diesen Weg,
+  einschliesslich der Taktbremse auf dem eigenen Server. **Wer den Anmeldeweg aendert, muss sie
+  mitaendern.**
 
 ## Gestaltung: das Erscheinungsbild von m-vf.de
 

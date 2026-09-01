@@ -1,6 +1,7 @@
 {
   "SLUG": "klima-gesundheit",
   "DOMAIN": "klima.m-vf.de",
+  "HUB": "klima",
   "REPO": "mvf-portal/klima-gesundheit-portal",
   "TITEL": "Knowledge-Hub Hitze, Klima & Gesundheit",
   "TITEL_HTML": "Knowledge-Hub Hitze, Klima &amp; Gesundheit",
