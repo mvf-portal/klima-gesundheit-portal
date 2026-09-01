@@ -1,39 +1,32 @@
 {
  "hub": "Knowledge-Hub Hitze, Klima & Gesundheit",
  "domain": "klima.m-vf.de",
- "datum": "2026-08-31",
+ "datum": "2026-09-01",
  "stand": "terminiert",
- "titel": "MVF Klima-Newsletter 31.08.2026",
- "betreff": "Neueste Studien - Hitze, Klima und Gesundheit – 29. August 2026 bis 31. August 2026",
- "anzahl": 18,
+ "titel": "MVF Klima-Newsletter 01.09.2026",
+ "betreff": "Neueste Studien - Hitze, Klima und Gesundheit – 1. September 2026",
+ "anzahl": 5,
  "pmids": [
-  "42558606",
-  "42538457",
-  "42465630",
-  "42447085",
-  "42417425",
-  "42415109",
-  "42666960",
-  "42644138",
-  "42643558",
-  "42629451",
-  "42625798",
-  "42420931",
-  "42652388",
-  "42652386",
-  "42652289",
-  "42646609",
-  "42616745",
-  "42499991"
+  "42671351",
+  "42670663",
+  "42669523",
+  "42656414",
+  "42413849"
  ],
- "kampagne": "https://us6.admin.mailchimp.com/campaigns/edit?id=9098647",
- "termin_utc": "2026-08-31T08:00:00+00:00",
+ "kampagne": "https://us6.admin.mailchimp.com/campaigns/edit?id=9098659",
+ "termin_utc": "2026-09-01T08:00:00+00:00",
  "empfaenger": 4,
  "listengroesse": 5904,
  "beanstandungen": [],
  "aussortiert": [],
- "pool": {},
+ "pool": {
+  "geholt": 220,
+  "bekannt": 71,
+  "pool": 50,
+  "gewaehlt": 6,
+  "neu": 5
+ },
  "rubriken": {
-  "news": "82292b5863c1572c"
+  "news": "9dd9bf81875fda57"
  }
 }
