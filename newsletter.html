@@ -248,6 +248,20 @@
           Beiträge aus der Fachzeitschrift, Nachrichten aus Politik und Selbstverwaltung,
           Veranstaltungen und Ausgabenhinweise.</span>
         </label>
+        <!-- Die Sonderaussendungen loesen den bisherigen eBlast ab. Sie sind das
+             einzige Angebot auf dieser Seite, das WERBUNG enthaelt - deshalb steht
+             das hier so deutlich und nicht im Kleingedruckten. Wer eine Zustimmung
+             zu werblicher Post einholt, muss sie benennen (§ 7 UWG); ein Haekchen
+             neben "Newsletter" traegt sie nicht mit. -->
+        <label class="karte">
+          <input type="checkbox" id="wahlSonder">
+          <span class="takt">gelegentlich</span>
+          <b>Sonderaussendungen der Verlagspartner</b>
+          <span class="was"><b>Werbliche Informationen</b> von Partnern aus dem Gesundheitswesen —
+          Produkte, Studien, Veranstaltungen. Versendet ausschließlich von uns;
+          Ihre Adresse wird nicht an Dritte weitergegeben. Löst den bisherigen
+          eBlast ab.</span>
+        </label>
       </div>
     </fieldset>
 
@@ -274,7 +288,9 @@
 
     <label class="einwilligung">
       <input type="checkbox" id="einwilligung" required>
-      <span>Ich möchte die ausgewählten Newsletter per E-Mail erhalten. Meine E-Mail-Adresse wird
+      <span>Ich möchte die ausgewählten Newsletter per E-Mail erhalten. Habe ich die
+      Sonderaussendungen gewählt, willige ich zugleich in den Erhalt werblicher Informationen
+      unserer Verlagspartner ein. Meine E-Mail-Adresse wird
       dafür an unseren Versanddienstleister übermittelt und dort gespeichert. Die Einwilligung
       kann ich jederzeit über den Abmeldelink am Ende jeder E-Mail widerrufen — die Rechtmäßigkeit
       der bis dahin erfolgten Verarbeitung bleibt davon unberührt. Näheres in den
@@ -335,6 +351,11 @@ const HUB = "klima";
 // Der redaktionelle MVF-Newsletter ist beim Endpunkt ein Schluessel wie jeder
 // andere. Welche Mailchimp-Gruppe dahinter steht, weiss nur der Server.
 const HUB_MVF = "mvf";
+
+// Die Sonderaussendungen der Verlagspartner - der Nachfolger des eBlast. Eigener
+// Schluessel, weil es eine eigene Einwilligung ist: Wer den Studien-Newsletter
+// bestellt, hat damit nicht in Werbung eingewilligt.
+const HUB_SONDER = "sonderaussendungen";
 
 // ---------------------------------------------------------------------------
 // Alle Studien-Newsletter der Reihe - in JEDEM Portal dieselbe Liste. Das
@@ -413,6 +434,7 @@ const feldMail     = document.getElementById('email');
 const feldFalle    = document.getElementById('falle');
 const wahlStudien  = document.getElementById('wahlStudien');
 const wahlMvf      = document.getElementById('wahlMvf');
+const wahlSonder   = document.getElementById('wahlSonder');
 const einwilligung = document.getElementById('einwilligung');
 const knopf        = document.getElementById('absenden');
 const meldung      = document.getElementById('meldung');
@@ -455,7 +477,7 @@ form.addEventListener('submit', async (e)=>{
   if(laeuft) return;
 
   const gewaehlteAndere = [...document.querySelectorAll('.wahlAnderes:checked')];
-  if(!wahlStudien.checked && !wahlMvf.checked && !gewaehlteAndere.length){
+  if(!wahlStudien.checked && !wahlMvf.checked && !wahlSonder.checked && !gewaehlteAndere.length){
     sage('Bitte wählen Sie mindestens einen Newsletter aus.', 'fehler');
     wahlStudien.focus(); return;
   }
@@ -471,6 +493,7 @@ form.addEventListener('submit', async (e)=>{
   const hubs = [];
   if(wahlStudien.checked) hubs.push(HUB);
   if(wahlMvf.checked)     hubs.push(HUB_MVF);
+  if(wahlSonder.checked)  hubs.push(HUB_SONDER);
   gewaehlteAndere.forEach(el => hubs.push(el.dataset.hub));
 
   laeuft = true;
