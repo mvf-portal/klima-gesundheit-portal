@@ -425,7 +425,19 @@ const REIHE = [
 // Faellt der Endpunkt aus, bleibt Mailchimps eigene Anmeldeseite. Sie traegt
 // den Botschutz selbst und funktioniert - nur ist sie fremd gestaltet und
 // kennt die Auswahl von hier nicht. Deshalb nur als Notausgang.
-const MC_SEITE = "https://monitor-versorgungsforschung.us6.list-manage.com/subscribe?u=f4c91757bc7d8c740641acb50&id=1c8fc10ec7";
+// Faellt der Endpunkt aus oder hat sich jemand frueher abgemeldet, fuehrt der
+// Weg auf diese Anmeldeseite. Sie liegt bei Mailchimp und traegt deshalb den
+// Botschutz mit - vor allem aber ist sie die EINZIGE Stelle, an der eine
+// abgemeldete Adresse zurueckkommen kann: Das darf nach Art. 7 Abs. 3 DSGVO
+// nur die Person selbst, und die Mailchimp-API weist uns dabei hart ab.
+//
+// Bis zum 02.09.2026 zeigte der Link auf Mailchimps klassisches Formular. Das
+// hatte unsichtbare Ankreuzfelder (weisses Kaestchen, Rahmen #D0D0D0, 1,5:1)
+// und liess sich nicht gestalten - weder ueber die API noch im Baukasten.
+// Diese Landingpage kann es: echte Bedienelemente, deutsche Beschriftungen,
+// alle Gruppen zur Auswahl. Am 02.09.2026 an einer abgemeldeten Adresse
+// geprueft: unsubscribed -> pending -> subscribed.
+const MC_SEITE = "https://mailchi.mp/erelation/newsletter-von-monitor-versorgungsforschung";
 
 const form         = document.getElementById('anmeldung');
 const feldReihe    = document.getElementById('feldReihe');
