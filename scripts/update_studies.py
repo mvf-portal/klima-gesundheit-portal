@@ -367,13 +367,41 @@ def pick_studies(abstracts: str) -> list[dict]:
     # Nur strukturierte Ausgabe erzwingen (kein effort/thinking), damit es auch
     # mit guenstigen Modellen wie claude-haiku-4-5 laeuft (die effort/thinking
     # nicht unterstuetzen).
-    resp = client.messages.create(
-        model=MODEL,
-        max_tokens=8000,
-        output_config={"format": {"type": "json_schema", "schema": SCHEMA}},
-        system=SYSTEM,
-        messages=[{"role": "user", "content": USER_TEMPLATE.format(abstracts=abstracts)}],
-    )
+    # Drei Versuche - wie der PubMed-Abruf in _get(), und aus demselben Grund.
+    #
+    # Ein einziger Aussetzer hat hier zweimal einen ganzen Lauf beendet: am
+    # 30.08.2026 im NCD-Hub mit einem 500er, am 03.09.2026 im Impf-Hub mit
+    # einem 400er ("Invalid request data"). Beide Male lief derselbe Zuschnitt
+    # kurz darauf anstandslos durch - beim Impf-Hub sogar mit genau denselben
+    # 53 Kandidaten. Es war also kein Fehler in der Anfrage.
+    #
+    # Wiederholt wird deshalb bei JEDEM API-Fehler, auch bei 400. Das SDK
+    # selbst nimmt nur 5xx und 429 noch einmal; ein 400 gilt ihm als Schuld des
+    # Aufrufers, und normalerweise ist das richtig. Hier ist die Erfahrung eine
+    # andere, und der Preis liegt bei fuenfzehn Sekunden: Ist die Anfrage
+    # wirklich fehlerhaft, scheitern alle drei Versuche und der Fehler steht
+    # unveraendert im Protokoll.
+    letzter: Exception | None = None
+    resp = None
+    for versuch in range(3):
+        try:
+            resp = client.messages.create(
+                model=MODEL,
+                max_tokens=8000,
+                output_config={"format": {"type": "json_schema", "schema": SCHEMA}},
+                system=SYSTEM,
+                messages=[{"role": "user",
+                           "content": USER_TEMPLATE.format(abstracts=abstracts)}],
+            )
+            break
+        except anthropic.APIError as exc:
+            letzter = exc
+            if versuch < 2:
+                wart = 5 * (versuch + 1)
+                print(f"Modellaufruf fehlgeschlagen ({exc}); neuer Versuch in {wart}s ...")
+                time.sleep(wart)
+    if resp is None:
+        raise RuntimeError(f"Modell nicht erreichbar: {letzter}") from letzter
     text = next(b.text for b in resp.content if b.type == "text")
     studies = json.loads(text)["studies"]
     # Zu viele ist kein Grund abzubrechen: Die Auswahl ist nach Relevanz
