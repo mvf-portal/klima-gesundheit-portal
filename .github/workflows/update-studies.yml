@@ -87,7 +87,7 @@ jobs:
       # Baut RSS-Feed (Mailchimp) und Download-Dateien aus dem Archiv.
       # Braucht weder API-Key noch Netz – liest nur studien-archiv.json.
       - name: Newsletter-Feed & Downloads erzeugen
-        run: python scripts/build_newsletter.py
+        run: python scripts/gemeinsam/build_newsletter.py
 
       # ---- Ausschreibungsradar -------------------------------------------
       # Der Radar laeuft EINMAL ZENTRAL im Versorgungsforschungs-Portal und
@@ -147,7 +147,7 @@ jobs:
           # Claude-Schluessel).
           MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
         if: ${{ !inputs.nur_studien }}
-        run: python scripts/mailchimp_entwurf.py
+        run: python scripts/gemeinsam/mailchimp_entwurf.py
 
       - name: Committen & pushen (nur bei Änderung)
         id: commit

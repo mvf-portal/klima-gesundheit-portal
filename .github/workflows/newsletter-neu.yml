@@ -72,13 +72,13 @@ jobs:
       # Aus dem Archiv, damit eine dort korrigierte Studie auch in Feed und
       # Download-Dateien ankommt.
       - name: Newsletter-Feed & Downloads erzeugen
-        run: python scripts/build_newsletter.py
+        run: python scripts/gemeinsam/build_newsletter.py
 
       - name: Entwurf verwerfen, neu bauen, pruefen und terminieren
         env:
           MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
         run: |
-          python scripts/mailchimp_entwurf.py --neu             ${{ inputs.auch_terminierte && '--auch-terminierte' || '' }}             ${{ inputs.termin && format('--termin {0}', inputs.termin) || '' }}
+          python scripts/gemeinsam/mailchimp_entwurf.py --neu             ${{ inputs.auch_terminierte && '--auch-terminierte' || '' }}             ${{ inputs.termin && format('--termin {0}', inputs.termin) || '' }}
 
       - name: Committen & pushen (nur bei Änderung)
         env:
