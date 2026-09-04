@@ -45,10 +45,28 @@ jobs:
   nachtragen:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      # thema.py liegt weiterhin in scripts/, die gemeinsamen Skripte in
+      # scripts/gemeinsam/. Beide muessen importierbar sein: update_studies.py
+      # laeuft drueben und importiert thema von hier, mailchimp_entwurf.py
+      # laeuft hier und importiert torwaechter und sponsoren von drueben.
+      PYTHONPATH: scripts:scripts/gemeinsam
 
     steps:
       - name: Repo auschecken
         uses: actions/checkout@v4
+
+      # Die gemeinsamen Skripte liegen seit dem 04.09.2026 nicht mehr in jedem
+      # Portal, sondern einmal in mvf-portal/hub-scripts. Geholt wird der Zweig
+      # `stabil` - nicht `main`: Auf main wird entwickelt, und ein Commit dort
+      # soll nicht am naechsten Morgen ungeprueft in zwoelf Portalen laufen.
+      # Ausgerollt wird mit `git push origin main:stabil` im Skript-Repo.
+      - name: Gemeinsame Skripte auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: mvf-portal/hub-scripts
+          ref: stabil
+          path: scripts/gemeinsam
 
       - name: Python einrichten
         uses: actions/setup-python@v5
@@ -108,7 +126,7 @@ jobs:
             echo "::group::$tag"
             # Ein Tag ohne brauchbare Kandidaten darf den Lauf nicht abbrechen -
             # in einem engen Themenfeld gibt es solche Tage.
-            python scripts/update_studies.py --nachtrag "$tag" || echo "$tag uebersprungen."
+            python scripts/gemeinsam/update_studies.py --nachtrag "$tag" || echo "$tag uebersprungen."
             echo "::endgroup::"
             sleep 2
           done < tage.txt

@@ -44,10 +44,28 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # thema.py liegt weiterhin in scripts/, die gemeinsamen Skripte in
+      # scripts/gemeinsam/. Beide muessen importierbar sein: update_studies.py
+      # laeuft drueben und importiert thema von hier, mailchimp_entwurf.py
+      # laeuft hier und importiert torwaechter und sponsoren von drueben.
+      PYTHONPATH: scripts:scripts/gemeinsam
 
     steps:
       - name: Repo auschecken
         uses: actions/checkout@v4
+
+      # Die gemeinsamen Skripte liegen seit dem 04.09.2026 nicht mehr in jedem
+      # Portal, sondern einmal in mvf-portal/hub-scripts. Geholt wird der Zweig
+      # `stabil` - nicht `main`: Auf main wird entwickelt, und ein Commit dort
+      # soll nicht am naechsten Morgen ungeprueft in zwoelf Portalen laufen.
+      # Ausgerollt wird mit `git push origin main:stabil` im Skript-Repo.
+      - name: Gemeinsame Skripte auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: mvf-portal/hub-scripts
+          ref: stabil
+          path: scripts/gemeinsam
 
       - name: Python einrichten
         uses: actions/setup-python@v5
@@ -64,7 +82,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
           MODEL: claude-haiku-4-5          # günstiges Modell; z. B. claude-sonnet-5 für mehr Qualität
           # SEARCH_TERM: '...'   # optional: Standardabfrage ueberschreiben (siehe update_studies.py)
-        run: python scripts/update_studies.py ${{ inputs.erzwingen && '--erzwingen' || '' }}
+        run: python scripts/gemeinsam/update_studies.py ${{ inputs.erzwingen && '--erzwingen' || '' }}
 
       # Baut RSS-Feed (Mailchimp) und Download-Dateien aus dem Archiv.
       # Braucht weder API-Key noch Netz – liest nur studien-archiv.json.
@@ -102,7 +120,7 @@ jobs:
       # VF-Repository - dort also der Stand des letzten dortigen Pushes.
       - name: Radar-Hinweis dieses Hubs setzen
         continue-on-error: true
-        run: python scripts/radar_hinweis.py
+        run: python scripts/gemeinsam/radar_hinweis.py
 
       # ---- Newsfeed aus dem eigenen Archiv --------------------------------
       # Sucht ueber die WordPress-Suche von m-vf.de nach Beitraegen zum
@@ -112,7 +130,7 @@ jobs:
       # ueber das nie etwas geschrieben wurde.
       - name: Newsfeed aus dem MVF-Archiv setzen
         continue-on-error: true
-        run: python scripts/newsfeed.py
+        run: python scripts/gemeinsam/newsfeed.py
 
       # Legt bei Mailchimp einen ENTWURF an und schickt eine Testausgabe zur
       # Entwurf anlegen, pruefen, terminieren. Verschickt wird hier noch nichts:

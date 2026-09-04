@@ -3,3 +3,9 @@ __pycache__/
 .claude/
 *.vor-anschluss
 pool-status.json
+
+# Die gemeinsamen Skripte holt der Workflow zur Laufzeit aus
+# mvf-portal/hub-scripts (Zweig stabil) hierher. Sie gehoeren nicht in dieses
+# Repo - und der Checkout legt dort ein verschachteltes .git an, das ein
+# unbedachtes "git add ." als embedded repository einchecken wuerde.
+scripts/gemeinsam/
