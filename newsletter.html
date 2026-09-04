@@ -372,51 +372,53 @@ const HUB_SONDER = "sonderaussendungen";
 // jedes der zwoelf Portale ueber HTTPS und hat einen terminierten Versand.
 // ---------------------------------------------------------------------------
 const REIHE = [
-  { hub:"wissen",         titel:"Versorgungsforschung",
+  // erzeugt aus portale.json von portale_pflegen.py - nicht von Hand aendern
+  { hub:"wissen",          titel:"Versorgungsforschung",
     url:"https://wissen.m-vf.de", domain:"wissen.m-vf.de", bereit:true,
-    was:"Versorgungsforschung und Health Services Research: Versorgungsformen, "
-      + "Qualitaet, Steuerung und Nutzenbewertung." },
-  { hub:"klima",          titel:"Hitze, Klima &amp; Gesundheit",
-    url:"https://klima.m-vf.de",  domain:"klima.m-vf.de",  bereit:true,
+    was:"Versorgungsforschung und Health Services Research: "
+      + "Versorgungsformen, Qualitaet, Steuerung und Nutzenbewertung." },
+  { hub:"klima",           titel:"Hitze, Klima &amp; Gesundheit",
+    url:"https://klima.m-vf.de", domain:"klima.m-vf.de", bereit:true,
     was:"Hitze, Extremwetter und Klimawandel und was sie fuer Versorgung, "
       + "Praxis und Bevoelkerungsgesundheit bedeuten." },
-  { hub:"ki",             titel:"Digitalisierung, KI &amp; Gesundheit",
-    url:"https://ki.m-vf.de",      domain:"ki.m-vf.de",     bereit:true,
+  { hub:"ki",              titel:"Digitalisierung, KI &amp; Gesundheit",
+    url:"https://ki.m-vf.de", domain:"ki.m-vf.de", bereit:true,
     was:"Digitale Anwendungen und Kuenstliche Intelligenz in der Versorgung - "
       + "vom Entscheidungsassistenten bis zur Regulierung." },
-  { hub:"pflege",         titel:"Pflege &amp; Langzeitversorgung",
-    url:"https://pflege.m-vf.de",  domain:"pflege.m-vf.de", bereit:true,
-    was:"Pflegerische Versorgung, Langzeitpflege und die Lage der Pflegenden - "
-      + "Personal, Qualitaet, Angehoerige." },
-  { hub:"longevity",      titel:"Gesundes Altern &amp; Longevity",
+  { hub:"pflege",          titel:"Pflege &amp; Langzeitversorgung",
+    url:"https://pflege.m-vf.de", domain:"pflege.m-vf.de", bereit:true,
+    was:"Pflegerische Versorgung, Langzeitpflege und die Lage der Pflegenden "
+      + "- Personal, Qualitaet, Angehoerige." },
+  { hub:"longevity",       titel:"Gesundes Altern &amp; Longevity",
     url:"https://longevity.m-vf.de", domain:"longevity.m-vf.de", bereit:true,
     was:"Lebensspanne und gesunde Lebensjahre: Praevention, Geriatrie, "
       + "Alternskohorten und die Biologie des Alterns." },
-  { hub:"healthliteracy", titel:"Gesundheitskompetenz",
+  { hub:"healthliteracy",  titel:"Gesundheitskompetenz",
     url:"https://healthliteracy.m-vf.de", domain:"healthliteracy.m-vf.de", bereit:true,
     was:"Verstaendliche Gesundheitsinformation, Entscheidungshilfen und "
       + "Patientenbeteiligung - und wer davon nicht erreicht wird." },
-  { hub:"impfen",         titel:"Impfen &amp; Impfpraevention",
+  { hub:"impfen",          titel:"Impfen &amp; Impfpraevention",
     url:"https://impfen.m-vf.de", domain:"impfen.m-vf.de", bereit:true,
     was:"Impfungen in der Versorgung: Impfquoten, Impfbereitschaft, "
       + "Impfstoffsicherheit und was die Durchimpfung hebt." },
-  { hub:"ncd",            titel:"Nicht uebertragbare Krankheiten",
+  { hub:"ncd",             titel:"Nicht uebertragbare Krankheiten",
     url:"https://ncd.m-vf.de", domain:"ncd.m-vf.de", bereit:true,
     was:"Die Versorgung chronisch Kranker: Diabetes, Herz-Kreislauf, Krebs "
       + "und Mehrfacherkrankung - Programme, Leitlinien, Ergebnisse." },
-  { hub:"gender",         titel:"Geschlechtersensible Medizin",
-    url:"https://gender.m-vf.de", domain:"gender.m-vf.de", bereit:true,
+  { hub:"gender",          titel:"Geschlechtersensible Medizin",
+    url:"http://gender.m-vf.de", domain:"gender.m-vf.de", bereit:true,
     was:"Geschlecht als Einflussgroesse in der Versorgung: Diagnostik, "
       + "Dosierung, Zugang - und woran der Unterschied jeweils haengt." },
-  { hub:"adipositas",     titel:"Adipositas",
+  { hub:"adipositas",      titel:"Adipositas",
     url:"https://adipositas.m-vf.de", domain:"adipositas.m-vf.de", bereit:true,
     was:"Adipositas in der Versorgung: Gewichtsmanagement, Arzneimittel, "
       + "Chirurgie, Praevention - und wer die Behandlung bezahlt." },
-  { hub:"safety",         titel:"Patientensicherheit",
+  { hub:"safety",          titel:"Patientensicherheit",
     url:"https://safety.m-vf.de", domain:"safety.m-vf.de", bereit:true,
     was:"Vermeidbarer Schaden in der Versorgung: Behandlungs- und "
-      + "Medikationsfehler, Krankenhausinfektionen, Sepsis - und was dagegen wirkt." },
-  { hub:"mental",         titel:"Psychische Gesundheit",
+      + "Medikationsfehler, Krankenhausinfektionen, Sepsis - und was dagegen "
+      + "wirkt." },
+  { hub:"mental",          titel:"Psychische Gesundheit",
     url:"https://mental.m-vf.de", domain:"mental.m-vf.de", bereit:true,
     was:"Die Versorgung psychisch erkrankter Menschen: Zugang, Wartezeiten, "
       + "gemeindenahe Angebote, Krisenversorgung, Zwang und Praevention." }
