@@ -1398,71 +1398,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "8. Sept. 2026, 05:21 Uhr";
+const SNAP_DATE = "9. Sept. 2026, 05:20 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
-    journal:"Int J Chron Obstruct Pulmon Dis", year:"2026", pmid:"42699267",
-    author:"Dinh CT et al.", pubdate:"31.08.2026",
-    added:"05.09.2026",
-    title:"Luftverschmutzung, Metalle und Immunantwort bei COPD-Patienten",
-    sum:"Querschnittsstudie untersucht Assoziationen zwischen Luftschadstoff-Exposition, Schwermetallen in Zellen und Immungenexpression bei COPD-Patienten mit Anämie.",
-    result:"PM₂.₅-Exposition assoziiert mit höherer Rote-Blutköper-Zahl (β=0,0314×10⁶/µL; 95%-KI: 0,0066–0,0561) und erhöhtem Cr in PBMCs (β=0,0632; 95%-KI: 0,0124–0,1139); Cd und Pb in Erythrozyten korreliert mit Hämoglobin und Hämatokrit.",
-    transfer:"Taiwan, asiatische Megastadt – andere Schadstoff-Profile und Anpassung; nur Mechanismus-Aspekte relevant"
+    journal:"Med Care", year:"2026", pmid:"42709616",
+    author:"Ghosh AK et al.", pubdate:"01.10.2026",
+    added:"08.09.2026",
+    title:"Datenintegration zur Hitzevulnerabilität: Ältere mit Herzerkrankungen",
+    sum:"Konzept einer modularen Datenarchitektur zur Integration von Wearables, Temperatursensoren und EHR-Daten für individualisierte Risikobewertung von Extremhitzeereignissen bei älteren Patienten mit Herzerkrankungen.",
+    result:"Architektur demonstriert, wie personalisierte digitale Gesundheitsdaten (Herzfrequenz, Schlafmuster) mit Innen-/Außentemperaturen gekoppelt werden können, um hitzeabhängige Schwellenwerte, Medikamenteninteraktionen und Komorbiditäten zu identifizieren – System noch präklinisch, zeigt aber Machbarkeit.",
+    transfer:"USA (Cornell); Konzept modular übertragbar auf Deutschland für Etablierung von Hitzevorhersage-Warnsystemen."
   },
   {
-    journal:"Front Public Health", year:"2026", pmid:"42666260",
-    author:"Huang Y et al.", pubdate:"14.08.2026",
-    added:"29.08.2026",
-    title:"Landnutzungswandel und urbane Wärmeinsel-Exposition in China",
-    sum:"Analyse von Landbedeckungswechsel und Oberflächentemperaturen (2000–2020) zur Quantifizierung der Hitzeexposition durch Urbanisierung.",
-    result:"Impermeabilisierte Flächen stiegen um 137,94%; neu versiegelte Flächen zeigten stärkste Erwärmung (+4,57 °C) mit 90,36 % Hitzeexpositionsrate; NDVI-Reduktion korrelierte mit Temperaturanstieg (R²=0,81).",
-    transfer:"Nur Methodik übertragbar; südlich von China – höhere Baseline-Temperaturen und andere Anpassungsniveaus"
+    journal:"Front Public Health", year:"2026", pmid:"42707945",
+    author:"Mueller K et al.", pubdate:"24.08.2026",
+    added:"08.09.2026",
+    title:"Klimawandel und nachhaltige Arzneimittelverordnung: Scoping-Review und Rahmenwerk",
+    sum:"Scoping-Review (28 Studien, 2088–2025) zu Integration von Klimabewusstsein, Pharmazeutika und Verordnungspraxis in Gesundheitsberufeausbildung und Klinik.",
+    result:"Meiste Studien aus USA (n=6), UK (n=5), Australien (n=5), Kanada (n=4). Stärkste Evidenz in Anästhesie (n=8) mit Emissionsreduktionen. Keine Studie operationalisierte alle drei Domänen (Klima–Pharmazeutika–Verordnung) bidirektional; Bedarf für integrierte Outcome-fokussierte Rahmenwerke.",
+    transfer:"Mehrländer-Evidenz; Anwendbar auf deutsche Ausbildungsreformen, aber begrenzte klinische Implementierungsdaten."
   },
   {
-    journal:"Sci Rep", year:"2026", pmid:"42471319",
-    author:"Mbaoma OC et al.", pubdate:"18.07.2026",
-    added:"18.07.2026",
-    title:"West-Nil-Virus-Modellierung und Moskitokontrolle in Deutschland",
-    sum:"Mechanistische Modellierung der West-Nil-Virus-Transmission durch Culex-Mücken in Deutschland unter Berücksichtigung von Klimavariablen und vertikaler Transmission.",
-    result:"Biologische Kontrolle war wirksamste Kontrollmethode vor mechanischen und chemischen Maßnahmen; vertikale Transmission zeigte marginal verstärkte Effekte in endemischen Regionen.",
-    transfer:"Deutschland, native Vektor-Ökologie; Klimawandel als Treiber der Ausbreitung"
+    journal:"Int J Epidemiol", year:"2026", pmid:"42696274",
+    author:"Wei Q et al.", pubdate:"18.08.2026",
+    added:"04.09.2026",
+    title:"Fetalentwicklung und PM2,5-Komponenten: Kritische Gestationsfenster",
+    sum:"Prospektive Geburtskohorte (2680 Mutter-Kind-Paare, 9339 Ultraschallmessungen) in Guangzhou zu Effekten spezifischer PM2,5-Komponenten auf fetale Wachstumsmesswerte.",
+    result:"Kritische Fenster identifiziert: Femural-Länge sensitiv gegenüber Rußkohlenstoff in Woche 12–15; Kopfumfang empfindlich gegenüber Nitraten (Wochen 5–12, 22–24); geschätztes fetales Gewicht reduziert bei Nitratexposition (Wochen 6–8). BC und NO₃⁻ als Hauptkomponenten.",
+    transfer:"China, ähnliche Klimazone wie Süddeutschland; Komponenten-Spezifität methodisch relevant, aber chinesische Pollutantsmischung unterscheidet sich."
   },
   {
-    journal:"Environ Sci Pollut Res Int", year:"2026", pmid:"42414827",
-    author:"Górka-Kostrubiec B et al.", pubdate:"08.07.2026",
-    added:"07.07.2026",
-    title:"Feinstaub-Exposition und Atemwegslast bei Kindern in Warschau",
-    sum:"Echtzeit-Messung von Feinstaub-Konzentrationen entlang Verkehrsrouten und Modellierung der altersspezifischen Atemwegsdeposition.",
-    result:"PM₁₀-Massendeposition in 3-Jährigen 37× höher als bei Erwachsenen (0,78 μg/m²); Verkehrsbehinderungen (nicht Umweltzonen-Lage) Haupttreiber von PM-Spitzen; Größenverteilung: PM₁₀-PM₂.₅ trug 3× mehr zu Peak-Konzentrationen bei.",
-    transfer:"Polen, gemäßigte Klimazone, europäische Verkehrssituation; methodisch und bevölkerungsstrukturell übertragbar"
+    journal:"Health Policy", year:"2026", pmid:"42579956",
+    author:"Robinson S et al.", pubdate:"28.07.2026",
+    added:"11.08.2026",
+    title:"NHS-Klimastrategie im Gesundheitswesen: Governance-Analyse",
+    sum:"Qualitative Studie mit 14 Interviews in Londoner NHS-Trusts zu Umsetzung von Klima-Anpassungs- und Minderungsmaßnahmen sowie Governance-Strukturen.",
+    result:"Mitigation im Fokus, Adaptation unterrepräsentiert. Enabler: starke Führung, zentrale Anleitung, Daten. Barrieren: unklare Priorisierung, komplexe Finanzierung, Infrastruktur-Rückstau, Organisationsapathie. NHS-Governance-Modell zeigte Erfolge und ist Vorbild für andere Hocheinkommensländer.",
+    transfer:"Großbritannien/NHS-System; Governance-Lessons für deutsches Gesundheitssystem, aber Strukturen unterscheiden sich."
   },
   {
-    journal:"Adv Ther", year:"2026", pmid:"42377741",
-    author:"Pascual P et al.", pubdate:"30.06.2026",
-    added:"30.06.2026",
-    title:"Selbstbehandlung von Allergien reduziert Gesundheitssektor-Emissionen im UK",
-    sum:"Gesundheitsökonomische Analyse der Treibhausgasemissionen durch Substitution von ärztlichen Konsultationen durch Selbstbehandlung von Allergien.",
-    result:"Szenario 1 (alle Selbstbehandlungs-Fälle): 2030–3930 kt CO₂-Äquivalent Reduktion (8–16 % NHS-Emissionen); Allergie-Szenario heute: 330–1000 kt (1–4 %); Allergien-Vollselbstbehandlung: 100–200 kt (0,5–1 %).",
-    transfer:"UK, vergleichbares Gesundheitssystem; Struktur ähnlich deutschem System"
+    journal:"Environ Res", year:"2026", pmid:"42342017",
+    author:"Khreis H et al.", pubdate:"15.09.2026",
+    added:"24.06.2026",
+    title:"Verkehrsberuhigungsgebiete und Luftqualität: Londoner Modellstudie",
+    sum:"Modellierung von Verkehrs- und Luftschadstoffänderungen (NO₂, PM2,5) in fünf Low-Traffic-Neighbourhoods (LTNs) in London mit gesundheitlichen Follow-up-Analysen.",
+    result:"Innerhalb LTNs: NO₂ -0,87%, PM2,5 -0,33%; an Umgebungsstraßen durchschnittlich kein Anstieg (-0,18% NO₂, -0,06% PM2,5). Geschätzte Mortalitätsreduktion: -0,01% (Gesamt), -0,05% (innerhalb LTN); Asthmaprävention: -0,02 bis -0,04%.",
+    transfer:"London, städtische Umgebung; Methodik auf deutsche Innenstädte übertragbar, absolute Reduktionen gering."
   },
   {
-    journal:"JMIR Res Protoc", year:"2026", pmid:"42348875",
-    author:"Heimrath K et al.", pubdate:"25.06.2026",
-    added:"25.06.2026",
-    title:"Klimawandel und Notaufnahmen: KlimaNot-Studie in Deutschland",
-    sum:"Prospektive Kohortenstudie untersucht Assoziationen zwischen klimabedingten Wetterereignissen und Notaufnahme-Nutzung in deutschen Krankenhäusern.",
-    result:"Studie in Planung; retrospektive Analyse von 6,35 Mio. Notaufnahmen (2019–2024) mit Nonlinear-Modellen für Hitzeeffekte; Identifikation von Risikogruppen und syndromaler Überwachung angestrebt.",
-    transfer:"Deutschland, Notaufnahmen-Register, gemäßigte Klimazone mit hoher Relevanz"
-  },
-  {
-    journal:"Int J Environ Res Public Health", year:"2026", pmid:"42354314",
-    author:"Sadykanova G et al.", pubdate:"11.06.2026",
-    added:"26.06.2026",
-    title:"Luftverschmutzung und Krebsinzidenz bei Kindern in Kasachstan",
-    sum:"Ökologische Analyse der räumlich-zeitlichen Assoziationen zwischen Luftschadstoff-Konzentrationen und Neoplasma-Morbidität bei Kindern über 2014–2024.",
-    result:"Neoplasma-Morbidität um Faktor 1,3–2,0 über Nationalwert; SO₂ stärkster Prädiktor (ρ=0,791 bei Kindern in Ust-Kamenogorsk, p&lt;0,05); NO₂ und CO assoziiert bei Adoleszenten.",
-    transfer:"Nur Methodik und Risikogruppen-Prinzip; Kasachstan – Industrieregion mit extremer Belastung, nicht auf Deutschland übertragbar"
+    journal:"BMJ Open", year:"2026", pmid:"42336790",
+    author:"Flower G et al.", pubdate:"23.06.2026",
+    added:"23.06.2026",
+    title:"Hitze und Notaufnahmen: Fünf Krankheitsgruppen mit erhöhtem Krankenhauseinweisungsrisiko",
+    sum:"Fallzeitserie mit über 4 Millionen Krankenhausaufnahmen in England (2008–2019) zur Erfassung kausaler Zusammenhänge zwischen sommerlichen Extremtemperaturen und Krankenhauseinweisungen für verschiedene Erkrankungen.",
+    result:"Bei 99. Temperaturpercentil versus 50. Perzentil erhöhtes Einweisungsrisiko für: akutes Nierenversagen (RR 1,37), Stoffwechselstörungen (1,28), Infektionen (1,06), Pneumonie (1,07), COPD (1,08). Über 42% der 3,7 Millionen erfassten Aufnahmen betrafen über 75-Jährige; klarer Altersgradienten.",
+    transfer:"England, gemäßigte Klimazone, NHS-Daten; Ergebnisse auf Deutschland übertragbar für Hitzeplanungskriterien."
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
@@ -1478,7 +1469,7 @@ const RADAR_FRISTEN = [["2026-09-22", "2026-10-20", "2026-10-20", "2026-09-07", 
 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
-const NEWS_STAND = "08.09.2026";
+const NEWS_STAND = "09.09.2026";
 const NEWS = [
   {titel:"83 Prozent der Deutschen spüren gesundheitliche Folgen der Hitze – Mehrheit fordert mehr Einsatz von der Bundesregierung", datum:"2026-09-07", url:"https://www.monitor-versorgungsforschung.de/news/83-prozent-der-deutschen-spueren-gesundheitliche-folgen-der-hitze-mehrheit-fordert-mehr-einsatz-von-der-bundesregierung/"},
   {titel:"Berliner Gesundheitspreis zeichnet innovative Projekte zum Schutz vor Extremtemperaturen aus", datum:"2026-09-07", url:"https://www.monitor-versorgungsforschung.de/news/berliner-gesundheitspreis-zeichnet-innovative-projekte-zum-schutz-vor-extremtemperaturen-aus/"},
