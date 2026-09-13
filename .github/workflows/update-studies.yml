@@ -173,8 +173,37 @@ jobs:
           git config user.email "stegmaier@m-vf.de"
           git add $VORHANDEN
           git commit -m "Studien-Update $(TZ=Europe/Berlin date +%d.%m.%Y)"
-          git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
+          # Zwei Laeufe zugleich sind moeglich. Am 13.09.2026 liess GitHub den
+          # Dirigenten zwei Stunden auf einen Runner warten; die Laufwache hielt
+          # ihn fuer ausgefallen und stiess dieselben drei Portale an - fuenf
+          # Sekunden bevor er es selbst tat. Wer als Zweiter pusht, faellt sonst
+          # auf "! [rejected] main -> main", und der Lauf gilt als gescheitert,
+          # obwohl er alles richtig gemacht hat.
+          #
+          # Zusammengefuehrt wird nichts: index.html und studien-archiv.json
+          # sind erzeugte Dateien, ein zeilenweiser Merge ergaebe dort Unsinn.
+          # Stattdessen wird unser Stand auf den fremden obendraufgesetzt -
+          # beide stammen aus einem vollstaendigen Lauf desselben Tages, und
+          # `git add $VORHANDEN` fasst nur die erzeugten Dateien an. Was der
+          # andere Lauf sonst noch gepusht haben mag, bleibt unberuehrt.
+          for VERSUCH in 1 2 3; do
+            if git push; then
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Push abgelehnt (Versuch $VERSUCH) - fremder Stand wird geholt."
+            git fetch origin main
+            git reset --mixed origin/main
+            if [ -z "$(git status --porcelain $VORHANDEN)" ]; then
+              echo "Der andere Lauf hat dasselbe geschrieben - nichts mehr zu tun."
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            git add $VORHANDEN
+            git commit -m "Studien-Update $(TZ=Europe/Berlin date +%d.%m.%Y)"
+          done
+          echo "Push auch nach drei Versuchen abgelehnt."
+          exit 1
 
       # Pushes mit dem GITHUB_TOKEN lösen nicht zuverlässig einen Pages-Build aus.
       # Deshalb stoßen wir ihn explizit an; schlägt das fehl, ist der Lauf trotzdem OK
