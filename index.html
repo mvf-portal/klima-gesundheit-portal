@@ -671,6 +671,28 @@
      aus der Linie mit dem Knopf, und das Sternchen stuende weit von seinem
      Bezugswort entfernt. */
   .sponsor-text{ display:flex; flex-direction:column; gap:2px; }
+
+  /* ---------- Medienkooperation ----------
+     Dieselbe Flaeche, anderer Wortlaut: Zwei Zeilen statt einer fuehren hin
+     ("In einer Medienkooperation" / "praesentiert von"), und der Satz zur
+     Unabhaengigkeit rueckt aus der Sternchenfussnote in einen eigenen Absatz
+     darunter. Als Randbemerkung neben dem Logo war er eine Hoeflichkeit; bei
+     einer Kooperation ist er die Aussage, auf die es ankommt.
+     Eingeschaltet wird die Klasse von der Sponsorenliste selbst (art:"koop"),
+     nicht von Hand - sonst stuende irgendwann der falsche Wortlaut neben dem
+     Logo. */
+  .koop .sponsor{ align-items:center; }
+  .koop .sponsor-vor{ font-size:12.5px; }
+  .sponsor-vor-stark{ font-weight:700; color:var(--ink-soft); font-size:13.5px; }
+  .koop-fuss{ margin:11px 0 0; max-width:62ch; }
+  /* 60 statt 42 Pixel: Eine Kooperation wird gezeigt, nicht beilaeufig
+     erwaehnt. */
+  .koop .sponsor-logos img{ height:60px; max-width:220px; }
+  /* Der Verweis umschliesst das Logo. Ohne eigenen Rahmen, aber mit sichtbarem
+     Fokus - ein Bildlink ohne Tastaturkennzeichnung ist fuer Screenreader- und
+     Tastaturnutzung eine Sackgasse. */
+  .koop .sponsor-logos a{ display:inline-block; border-radius:4px; }
+  .koop .sponsor-logos a:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
   .sponsor-fuss{ margin:0; font-size:11px; line-height:1.35; color:var(--ink-faint); }
   /* Wie beim MVF-Logo: im Dark Mode nicht umfaerben, sondern auf eine weisse
      Flaeche stellen. Ein filter:invert wuerde jede Hausfarbe zerstoeren -
@@ -1041,6 +1063,7 @@
             <p><b>Deutsch suchen, international finden.</b> Internationale Datenbanken kennen keine deutschen Fachbegriffe — „Hitzeaktionsplan" liefert dort fast nichts. Der Hub übersetzt deshalb <b id="cntGlossar"></b> Fachbegriffe automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff, internationale bekommen den Ausdruck, unter dem sie tatsächlich indexieren („Hitzeaktionsplan" wird zu <i>heat health action plan</i>, „Wärmeinsel" zu <i>urban heat island</i>). Die Ergebnisleiste zeigt die verwendete Fassung; der Schalter unter dem Suchfeld stellt es ab.</p>
             <p><b>Hinweis zu Lizenzen.</b> Mit <span style="color:var(--accent)">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
             <p id="sponsorText" hidden><b>Sponsoren.</b> Unsere Sponsoren ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Sie nehmen dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
+            <p id="koopText" hidden><b>Medienpartnerschaft.</b> Dieser Hub wird in einer Medienkooperation präsentiert. Der Medienpartner ermöglicht mit seiner finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Er nimmt dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
           </div>
           <div class="meta-row">
             <span class="dot"></span>
@@ -1048,14 +1071,23 @@
           </div>
         </div>
 
+        <!-- Zwei Anreden, eine Flaeche: Welche erscheint, entscheidet die
+             Sponsorenliste weiter unten (art:"koop"). Beide stehen fertig hier,
+             damit der Wortlaut im Markup nachlesbar ist und nicht in einer
+             Zeichenkette im Skript steckt. -->
         <div class="sponsor-block" id="sponsorFeld" hidden>
           <div class="sponsor">
             <span class="sponsor-text">
-              <span class="sponsor-vor">Gesponsert<sup>*</sup> von:</span>
-              <span class="sponsor-fuss"><sup>*</sup> ohne Einfluss auf die Inhalte zu nehmen</span>
+              <span class="sponsor-vor" id="sponsorAnrede">Gesponsert<sup>*</sup> von:</span>
+              <span class="sponsor-fuss" id="sponsorStern"><sup>*</sup> ohne Einfluss auf die Inhalte zu nehmen</span>
+              <span class="sponsor-vor" id="koopAnrede" hidden>In einer Medienkooperation</span>
+              <span class="sponsor-vor sponsor-vor-stark" id="koopAnredeStark" hidden>präsentiert von</span>
             </span>
             <span class="sponsor-logos" id="sponsorLogos"></span>
           </div>
+          <p class="sponsor-fuss koop-fuss" id="koopFuss" hidden>Auswahl und Darstellung der Studien, der
+          Datenbanken und aller weiteren Inhalte erfolgen redaktionell unabhängig.
+          Der Medienpartner nimmt darauf keinen Einfluss.</p>
         </div>
       </div>
       <aside class="lede-nl">
@@ -1518,12 +1550,24 @@ const SPONSOREN = [
 if (Array.isArray(SPONSOREN) && SPONSOREN.length) {
   document.getElementById('sponsorLogos').innerHTML = SPONSOREN.map(function (s) {
     // rel="sponsored" ist die von Suchmaschinen erwartete Kennzeichnung eines
-    // bezahlten Verweises; ohne sie kann er als Linkkauf gewertet werden.
+    // bezahlten Verweises; ohne sie kann er als Linkkauf gewertet werden. Eine
+    // Medienkooperation ist ebenso eine bezahlte Platzierung - dieselbe
+    // Kennzeichnung, dieselbe Ehrlichkeit gegenueber der Suchmaschine.
     return '<a href="' + s.u + '" target="_blank" rel="sponsored noopener" title="'
       + s.n + '"><img src="' + s.logo + '" alt="' + s.n + '" loading="lazy"></a>';
   }).join('');
   document.getElementById('sponsorFeld').hidden = false;
-  document.getElementById('sponsorText').hidden = false;
+  // Die Anrede richtet sich nach der Liste: Sobald ein Eintrag als
+  // Medienkooperation gefuehrt wird, gilt deren Wortlaut fuer das ganze Feld -
+  // zwei Anreden nebeneinander waeren im selben Kasten nicht zu lesen.
+  var koop = SPONSOREN.some(function (s) { return s.art === 'koop'; });
+  ['koopAnrede', 'koopAnredeStark', 'koopFuss'].forEach(function (id) {
+    document.getElementById(id).hidden = !koop;
+  });
+  document.getElementById('sponsorAnrede').hidden = koop;
+  document.getElementById('sponsorStern').hidden = koop;
+  document.getElementById('sponsorFeld').classList.toggle('koop', koop);
+  document.getElementById(koop ? 'koopText' : 'sponsorText').hidden = false;
 }
 
 function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ""; } }
