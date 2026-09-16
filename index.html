@@ -897,6 +897,12 @@
   }
   .shub-knopf:hover{ border-color:var(--brand); color:var(--brand); }
   .shub-status{ font-size:12px; color:var(--ink-faint); margin:7px 2px 0; }
+  .shub-tipp{ font-size:12px; line-height:1.5; color:var(--ink-faint); margin:7px 2px 0; }
+  .shub-tipp b{ color:var(--ink); font-weight:700; }
+  .shub-tipp i{ font-style:italic; }
+  /* In der schmalen Studienspalte wuerde das Beispiel sonst umbrechen und
+     die Zeile zerreissen. */
+  .shub-tipp-beispiel{ display:block; }
   .shub-treffer{ margin-top:10px; }
   /* Die Treffer sehen aus wie die Eintraege im Archivordner - es sind
      dieselben Studien, nur anders zusammengestellt. */
@@ -1275,6 +1281,19 @@
                placeholder="Begriff, Journal, Autor oder PMID …">
         <button type="button" class="shub-knopf" id="shubLeeren" hidden>Zurücksetzen</button>
       </div>
+      <!-- Derselbe Bedienungshinweis wie in der Suche auf m-vf.de: Jedes Wort
+           muss vorkommen, also finden wenige Woerter mehr. Steht klein und
+           unter dem Feld - lesbar, wenn die Trefferliste enttaeuscht, sonst
+           nicht im Weg.
+
+           BEWUSST OHNE KONKRETE SUCHWOERTER. Der erste Entwurf nannte
+           "Pflege Demenz" als gutes Beispiel - im Versorgungsforschungs-Hub
+           findet das nichts. Diese Vorlage laeuft in 15 Hubs mit 15
+           verschiedenen Bestaenden; ein Beispiel, das ueberall trifft, gibt es
+           nicht, und eines das ins Leere laeuft lehrt das Gegenteil. -->
+      <p class="shub-tipp">Tipp: ein bis drei Wörter, die alle vorkommen sollen.
+        <span class="shub-tipp-beispiel">Zwei Stichwörter finden mehr als ein
+        ganzer Satz.</span></p>
       <p class="shub-status" id="shubStatus" hidden></p>
     </div>
 
