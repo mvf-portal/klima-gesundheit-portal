@@ -868,6 +868,53 @@
   .arch-result{ font-size:12px; color:var(--ink-soft); line-height:1.45; margin:4px 0 0; }
   .arch-status{ font-size:12px; color:var(--ink-faint); padding:10px 2px; }
 
+  /* Suche in den Studien dieses Hubs */
+
+  /* Zuerst das Unscheinbare, das es aber braucht: `.studies-list` und
+     `.archive` setzen weiter oben ein eigenes `display`. Das ueberstimmt das
+     hidden-Attribut, und waehrend einer Suche staenden Treffer und normale
+     Liste untereinander. Gemessen am 15.09.2026: hidden gesetzt, Element
+     trotzdem sichtbar. */
+  .studies-list[hidden], .archive[hidden], .shub-treffer[hidden],
+  .shub-status[hidden], .shub-knopf[hidden]{ display:none !important; }
+
+  .shub-suche{ margin:14px 0 4px; }
+  .shub-label{
+    display:block; font-size:11px; font-weight:700; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--ink-faint); margin-bottom:6px;
+  }
+  .shub-zeile{ display:flex; gap:7px; }
+  .shub-feld{
+    flex:1 1 auto; min-width:0; font:inherit; font-size:14px;
+    padding:9px 12px; border:1px solid var(--line); border-radius:6px;
+    background:var(--card); color:var(--ink);
+  }
+  .shub-feld:focus{ outline:2px solid var(--brand); outline-offset:1px; border-color:var(--brand); }
+  .shub-knopf{
+    flex:0 0 auto; font:inherit; font-size:13px; cursor:pointer;
+    padding:0 13px; border:1px solid var(--line); border-radius:6px;
+    background:var(--card); color:var(--ink);
+  }
+  .shub-knopf:hover{ border-color:var(--brand); color:var(--brand); }
+  .shub-status{ font-size:12px; color:var(--ink-faint); margin:7px 2px 0; }
+  .shub-treffer{ margin-top:10px; }
+  /* Die Treffer sehen aus wie die Eintraege im Archivordner - es sind
+     dieselben Studien, nur anders zusammengestellt. */
+  .shub-treffer .arch-item{ margin-bottom:12px; }
+  /* Die Schriftfarbe MUSS hier stehen. Mit `color:inherit` erbt die Markierung
+     in der Dunkelansicht die helle Schrift und steht dann hellgrau auf
+     hellgelb - gemessen Kontrast 1,81, also praktisch unlesbar. */
+  /* Kein seitlicher Innenabstand: Die Markierung sitzt meist mitten im Wort
+     ("Pflegekraefte"), und ein Abstand reisst es optisch auseinander. */
+  .shub-treffer mark{ background:#fff2b8; color:#1b1b1b; padding:0; border-radius:2px; }
+  @media (prefers-color-scheme: dark){
+    .shub-treffer mark{ background:#6b5613; color:#ffe9a3; }
+  }
+  .shub-quelle{
+    font-size:11px; color:var(--ink-faint); text-transform:uppercase;
+    letter-spacing:.04em; margin-bottom:3px;
+  }
+
   /* ---------- Sections ---------- */
   .cat{ scroll-margin-top:64px; margin-top:0; }
   .cat + .cat{ margin-top:34px; }
@@ -1218,6 +1265,21 @@
         <button class="dl-btn" id="dlAktuellCsv" type="button" title="Als Tabelle für Excel herunterladen">⤓ Excel</button>
       </div>
     </div>
+    <!-- Suche in den Studien dieses Hubs. Kostet keinen zusaetzlichen Abruf:
+         Die aktuelle Auswahl steht ohnehin in STUDIES, das Vollarchiv laedt der
+         Ordner darunter bereits beim Seitenaufruf. Gesucht wird in beidem. -->
+    <div class="shub-suche">
+      <label class="shub-label" for="shubFeld">Studien aus diesem Hub durchsuchen</label>
+      <div class="shub-zeile">
+        <input type="search" id="shubFeld" class="shub-feld" autocomplete="off"
+               placeholder="Begriff, Journal, Autor oder PMID …">
+        <button type="button" class="shub-knopf" id="shubLeeren" hidden>Zurücksetzen</button>
+      </div>
+      <p class="shub-status" id="shubStatus" hidden></p>
+    </div>
+
+    <div class="shub-treffer" id="shubTreffer" hidden></div>
+
     <div class="studies-list" id="studiesList"></div>
 
     <details class="archive" id="archive" open>
@@ -2023,10 +2085,14 @@ function datumLang(iso){
   return parseInt(p[2],10)+'. '+MONATE[parseInt(p[1],10)-1]+' '+p[0];
 }
 
+// Das laufende Laden festhalten, damit die Suche darauf warten kann, statt
+// auf einem halb gefuellten Archiv zu arbeiten.
+let archivWartet = null;
+
 function ladeArchiv(){
-  if(archivGeladen) return;
+  if(archivGeladen) return archivWartet || Promise.resolve();
   archivGeladen = true;
-  fetch('studien-archiv.json', {cache:'no-cache'})
+  return (archivWartet = fetch('studien-archiv.json', {cache:'no-cache'})
     .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(alle=>{
       const aktuell = new Set(STUDIES.map(s=>s.pmid));
@@ -2057,9 +2123,10 @@ function ladeArchiv(){
     })
     .catch(()=>{
       archivGeladen = false;   // beim naechsten Aufklappen erneut versuchen
+      archivWartet = null;
       archiveBody.innerHTML = '<p class="arch-status">Archiv konnte nicht geladen werden. '
         + 'Bitte später erneut versuchen.</p>';
-    });
+    }));
 }
 
 // Beim Laden holen (der Ordner ist offen); zusaetzlich beim Aufklappen,
@@ -2078,6 +2145,158 @@ document.getElementById('dlArchivCsv').addEventListener('click', ()=>{
   speichern('MVF-Klima-Hub_Aeltere-Suchergebnisse_'+dateiStempel()+'.csv',
     baueCSV(archivListe, true), CSV_MIME);
 });
+
+// ---- Suche in den Studien dieses Hubs ----
+// Gesucht wird in dem, was ohnehin schon im Browser liegt: der aktuellen
+// Auswahl (STUDIES) und dem Vollarchiv (archivListe). Kein zusaetzlicher
+// Abruf, keine zweite Datei.
+//
+// Mehrere Woerter werden mit UND verknuepft. Bei 200 Studien je Hub waere
+// ODER bequemer, bei 3.000 in einem Jahr waere es unbrauchbar - dieselbe
+// Ueberlegung wie bei der Suche auf m-vf.de.
+const shubFeld    = document.getElementById('shubFeld');
+const shubLeeren  = document.getElementById('shubLeeren');
+const shubStatus  = document.getElementById('shubStatus');
+const shubTreffer = document.getElementById('shubTreffer');
+
+// Umlaute auf zwei Arten mitnehmen, weil es zwei Gewohnheiten gibt: Die einen
+// schreiben "Lebensqualitaet", die anderen "Lebensqualitat". Eine einzige
+// Faltung kann nur eine davon bedienen - mit ae->ae fiel "Lebensqualitat"
+// durch, mit ae->a fiele "Lebensqualitaet" durch. Also beide bilden und
+// gelten lassen, wenn eine von beiden passt.
+function shubFalten(text){          // ä -> ae   (deutsche Ersatzschreibweise)
+  return String(text == null ? '' : text).toLowerCase()
+    .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
+}
+function shubFaltenKnapp(text){     // ä -> a    (Umlautpunkte einfach weg)
+  return String(text == null ? '' : text).toLowerCase()
+    .replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'s');
+}
+
+// Beide Fassungen einmal je Studie bilden und am Objekt behalten. Sonst
+// entsteht bei jedem Tastendruck der gesamte Suchtext neu - bei 3.000 Studien
+// im Jahr waere das spuerbar.
+function shubText(s){
+  if(!s._shub){
+    const roh = [s.title, s.sum, s.result, s.transfer, s.journal,
+                 s.author, s.year, s.pmid].join(' ');
+    s._shub = { lang: shubFalten(roh), knapp: shubFaltenKnapp(roh) };
+  }
+  return s._shub;
+}
+
+// Markiert wird ueber die knappe Faltung, und zwar aus einem bestimmten Grund:
+// Sie aendert die LAENGE nicht (ein Zeichen bleibt ein Zeichen). Mit der langen
+// Faltung (ä -> ae) verschoeben sich die Stellen, und die Markierung saesse
+// daneben.
+//
+// Folge: Wer "lebensqualitaet" tippt, findet die Studie - dafuer sorgt die
+// lange Faltung beim Suchen -, sieht das Wort aber nicht markiert. Lieber eine
+// fehlende Markierung als eine falsch gesetzte.
+function shubHervorheben(text, rohWoerter){
+  const roh = String(text == null ? '' : text);
+  const nadeln = rohWoerter.map(shubFaltenKnapp).filter(w=>w.length > 1);
+  if(!nadeln.length || !roh) return htmlEsc(roh);
+
+  // Auf dem ROHTEXT markieren und erst beim Zusammenbauen maskieren. Wer im
+  // bereits maskierten HTML sucht, findet irgendwann "amp" in "&amp;" und
+  // zerlegt die Entitaet.
+  const heu = shubFaltenKnapp(roh);
+  const markiert = new Array(roh.length).fill(false);
+  nadeln.forEach(w=>{
+    let ab = 0, stelle;
+    while((stelle = heu.indexOf(w, ab)) !== -1){
+      for(let i = stelle; i < stelle + w.length; i++) markiert[i] = true;
+      ab = stelle + w.length;
+    }
+  });
+
+  let aus = '', offen = false;
+  for(let i = 0; i < roh.length; i++){
+    if(markiert[i] && !offen){ aus += '<mark>'; offen = true; }
+    if(!markiert[i] && offen){ aus += '</mark>'; offen = false; }
+    aus += htmlEsc(roh[i]);
+  }
+  return aus + (offen ? '</mark>' : '');
+}
+
+function shubKarte(s, rohWoerter, herkunft){
+  const url = 'https://pubmed.ncbi.nlm.nih.gov/' + s.pmid + '/';
+  return '<div class="arch-item">'
+       + '<p class="shub-quelle">' + htmlEsc(herkunft) + '</p>'
+       + '<div class="arch-top"><span class="arch-journal">' + htmlEsc(s.journal) + '</span>'
+       + '<span class="arch-year">' + htmlEsc(s.year) + '</span></div>'
+       + '<a class="arch-title" href="' + url + '" target="_blank" rel="noopener">'
+       + shubHervorheben(s.title, rohWoerter) + '</a>'
+       + '<p class="arch-result">' + shubHervorheben(s.result, rohWoerter) + '</p></div>';
+}
+
+function shubSuchen(){
+  const frage = shubFeld.value.trim();
+  shubLeeren.hidden = !frage;
+
+  if(!frage){
+    shubTreffer.hidden = true;
+    shubTreffer.innerHTML = '';
+    shubStatus.hidden = true;
+    studiesList.hidden = false;
+    archiveEl.hidden = false;
+    return;
+  }
+
+  // Erst suchen, wenn das Archiv wirklich da ist - sonst fände man nur die
+  // sechs aktuellen und hielte das für das Ergebnis.
+  ladeArchiv().then(()=>{
+    // Drei Fassungen derselben Woerter: zwei zum Finden (beide Umlaut-
+    // Gewohnheiten), die unveraenderte zum Markieren.
+    const rohWoerter = frage.split(/\s+/).filter(w=>w.length > 1);
+    const woerter    = shubFalten(frage).split(/\s+/).filter(w=>w.length > 1);
+    const knapp      = shubFaltenKnapp(frage).split(/\s+/).filter(w=>w.length > 1);
+    if(!woerter.length){
+      shubStatus.hidden = false;
+      shubStatus.textContent = 'Bitte mindestens zwei Zeichen eingeben.';
+      return;
+    }
+
+    // Jedes Wort muss vorkommen (UND) - jedes fuer sich darf dabei ueber die
+    // eine oder die andere Umlaut-Fassung treffen.
+    const passt = s => {
+      const t = shubText(s);
+      return woerter.every((w, i) =>
+        t.lang.indexOf(w) !== -1 || t.knapp.indexOf(knapp[i]) !== -1);
+    };
+    const aktuell = STUDIES.filter(passt);
+    const aeltere = archivListe.filter(passt);
+    const anzahl  = aktuell.length + aeltere.length;
+
+    studiesList.hidden = true;
+    archiveEl.hidden = true;
+    shubTreffer.hidden = false;
+    shubStatus.hidden = false;
+
+    if(!anzahl){
+      shubStatus.textContent = 'Kein Treffer in diesem Hub für „' + frage + '".';
+      shubTreffer.innerHTML = '<p class="arch-status">Alle Wörter müssen vorkommen. '
+        + 'Mit einem Wort weniger finden Sie meist mehr.</p>';
+      return;
+    }
+
+    const gesamt = STUDIES.length + archivListe.length;
+    shubStatus.textContent = anzahl + (anzahl === 1 ? ' Studie' : ' Studien')
+      + ' von ' + gesamt + ' in diesem Hub.';
+    shubTreffer.innerHTML =
+        aktuell.map(s=>shubKarte(s, rohWoerter, 'Aktuelle Auswahl')).join('')
+      + aeltere.map(s=>shubKarte(s, rohWoerter, 'Aufgenommen am ' + datumLang(s.aufgenommen))).join('');
+  });
+}
+
+let shubTakt = null;
+shubFeld.addEventListener('input', ()=>{
+  clearTimeout(shubTakt);
+  shubTakt = setTimeout(shubSuchen, 220);
+});
+shubFeld.addEventListener('keydown', e=>{ if(e.key === 'Enter'){ e.preventDefault(); clearTimeout(shubTakt); shubSuchen(); } });
+shubLeeren.addEventListener('click', ()=>{ shubFeld.value = ''; shubSuchen(); shubFeld.focus(); });
 
 // ---- Suchglossar: deutsche Fachbegriffe -> der Ausdruck, unter dem
 // internationale Datenbanken sie fuehren. Redaktionell gepflegt, kein
