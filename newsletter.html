@@ -598,6 +598,31 @@ form.addEventListener('submit', async (e)=>{
 </script>
 </html>
 
+<!-- ADRESSZEILE-START -----------------------------------------------
+     Wer aus einem Newsletter kommt, sieht sonst eine Adresse voller
+     Anhaengsel und fragt sich, was da mitgesendet wird. Ausgewertet
+     wird davon nichts, der Zaehler misst ueber den Referrer. Also
+     raeumt die Seite ihre eigene Adresszeile auf, sobald sie geladen
+     ist. Der Anker bleibt stehen, er zeigt auf einen Abschnitt. -->
+<script>
+(function () {
+  if (!location.search || !history.replaceState) return;
+  try {
+    var p = new URLSearchParams(location.search);
+    var weg = false;
+    Array.from(p.keys()).forEach(function (k) {
+      if (/^utm_/i.test(k) || k === 'fbclid' || k === 'gclid'
+          || k === 'mc_cid' || k === 'mc_eid') { p.delete(k); weg = true; }
+    });
+    if (!weg) return;
+    var rest = p.toString();
+    history.replaceState(null, '',
+      location.pathname + (rest ? '?' + rest : '') + location.hash);
+  } catch (e) { /* eine unleserliche Adresse bleibt, wie sie ist */ }
+})();
+</script>
+<!-- ADRESSZEILE-ENDE ------------------------------------------------- -->
+
 <!-- ZAEHLER-START --------------------------------------------------------
      Zaehlt den Aufruf auf dem eigenen Server von Monitor Versorgungsforschung.
      Kein Cookie, keine Kennung auf dem Geraet, keine fremde Firma. Wer Do Not
