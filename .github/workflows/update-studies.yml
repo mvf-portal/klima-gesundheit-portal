@@ -140,6 +140,23 @@ jobs:
       # Fehler hier darf das Studien-Update nicht scheitern lassen - und er
       # faellt in die sichere Richtung, weil dann eben nichts terminiert ist.
       - name: Newsletter-Entwurf anlegen, pruefen und terminieren
+        id: newsletter
+        # Scheitert dieser Schritt, laufen die folgenden trotzdem: Startseite,
+        # Archiv und Feed sind dann laengst gebaut, und eine Stoerung bei
+        # Mailchimp soll nicht auch noch die Portalseite auf dem Stand des
+        # Vortags stehen lassen.
+        #
+        # Der Preis war bis zum 22.09.2026, dass der Lauf GRUEN blieb. An
+        # diesem Morgen fielen drei Hubs in Mailchimps Grenze von zehn
+        # gleichzeitigen Verbindungen und verloren ihre Ausgabe - sichtbar war
+        # das nirgends. Die Laufwache liest den Lauf-Status und meldete "OK
+        # Pflege: 06:20 Uhr gelaufen". Aufgefallen ist es der Versandkontrolle,
+        # eine Stunde NACH dem Versandtermin.
+        #
+        # Deshalb der letzte Schritt dieses Workflows: Er macht den Lauf
+        # nachtraeglich rot. Erst wird committet und die Seite gebaut, dann
+        # faellt der Lauf um. Die Laufwache sieht "fehlgeschlagen", stoesst
+        # erneut an und meldet es.
         continue-on-error: true
         env:
           # Das Geheimnis heisst in diesem Repository KLIMAHUBMC ("MC" fuer
@@ -214,3 +231,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
+
+      # Muss der LETZTE Schritt bleiben: Alles, was noch geschehen soll, ist
+      # bis hierher geschehen. Siehe die Begruendung beim Schritt
+      # "Newsletter-Entwurf anlegen" - dort steht, warum er gruen scheitern
+      # darf und warum der Lauf es hier trotzdem sagen muss.
+      - name: Ausgefallenen Newsletter-Schritt melden
+        if: steps.newsletter.outcome == 'failure'
+        run: |
+          echo "::error::Der Newsletter-Schritt ist gescheitert - fuer heute" \
+               "liegt womoeglich KEINE terminierte Ausgabe vor. Startseite," \
+               "Archiv und Feed sind aktualisiert; nachzusehen ist allein der" \
+               "Schritt 'Newsletter-Entwurf anlegen, pruefen und terminieren'."
+          exit 1
