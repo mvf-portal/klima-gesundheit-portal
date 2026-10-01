@@ -837,6 +837,23 @@
     font-weight:700; color:var(--brand); text-decoration:none;
   }
   .radar-hinweis a:hover{ text-decoration:underline; }
+
+  /* Befristeter Hinweis aufs Gewinnspiel. Gold statt Blau, damit er sich vom
+     Radar-Hinweis darunter unterscheidet - zwei gleich aussehende Kaesten
+     untereinander liest niemand als zwei Angebote. Er entfernt sich nach dem
+     Stichtag selbst; das Skript steht gleich hinter dem Kasten. */
+  .gewinn-hinweis{
+    margin-top:12px; padding:11px 13px;
+    background:var(--card-2); border:1px solid var(--line);
+    border-left:4px solid var(--action); border-radius:6px;
+    font-size:12.5px; line-height:1.5; color:var(--ink-soft);
+  }
+  .gewinn-hinweis b{ display:block; color:var(--ink); margin-bottom:3px; }
+  .gewinn-hinweis a{
+    display:inline-block; margin-top:6px;
+    font-weight:700; color:var(--brand); text-decoration:none;
+  }
+  .gewinn-hinweis a:hover{ text-decoration:underline; }
   .archive summary{
     cursor:pointer; padding:12px 14px; font-weight:600; font-size:13.5px; color:var(--ink-soft);
     list-style:none; display:flex; align-items:center; gap:9px;
@@ -1153,6 +1170,33 @@
              sondern auch Geld. Gesucht wird zentral im Versorgungsforschungs-
              Hub; hier steht, wie viel davon dieses Themengebiet betrifft.
              Gefuellt von scripts/radar_hinweis.py, verborgen bis dahin. -->
+        <!-- Befristeter Hinweis aufs Gewinnspiel. Er steht VOR dem
+             Radar-Hinweis, weil er eine Frist hat und der Radar nicht.
+             Doppelt abgesichert wie das Band auf der Vorschaltseite: Hier
+             raeumt er sich per Skript selbst weg, sobald die Frist um ist.
+             Ohne das stuende im Dezember auf fuenfzehn Seiten noch eine
+             Einladung zu einer Verlosung, die im November endete - und
+             niemand faende den Grund.
+
+             ACHTUNG beim Datum: Der 11. November liegt nach der Umstellung
+             am 25.10., also +01:00 und nicht +02:00. Mit dem Sommerversatz
+             verschwaende der Kasten eine Stunde zu frueh. -->
+        <div class="gewinn-hinweis" id="gewinnHinweis">
+          <b>Ein Kongressticket gewinnen</b>
+          Bis zu 10 Tickets für den 15. MVF-Fachkongress am 27. November in Berlin.
+          Teilnahme bis zum 11. November.
+          <a href="https://knowledge-hubs.m-vf.de/gewinnspiel/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=gewinnspiel" target="_blank" rel="noopener">Zum Gewinnspiel <span aria-hidden="true">↗</span></a>
+        </div>
+        <script>
+        (function(){
+          var ende = new Date("2026-11-11T23:59:59+01:00");
+          if (new Date() > ende) {
+            var k = document.getElementById("gewinnHinweis");
+            if (k) k.remove();
+          }
+        })();
+        </script>
+
         <div class="radar-hinweis" id="radarHinweis" hidden></div>
 
         <!-- Ausgesuchte News. Angeregt vom selben Nutzer wie der
