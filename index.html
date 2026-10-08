@@ -73,7 +73,7 @@
   }
 
   *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
+  html{-webkit-text-size-adjust:100%; scroll-padding-top:72px}
   body{
     margin:0; background:var(--paper); color:var(--ink);
     font-family:"Lato", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -94,7 +94,31 @@
       var(--card);
     border-bottom:1px solid var(--line);
   }
-  .masthead-inner{ padding:34px 0 30px; }
+  /* Nur oben und unten: Der seitliche Rand kommt von .wrap. Bis Oktober
+     2026 stand hier "padding:28px 0 30px" - das nahm .wrap den Seitenrand,
+     und der Inhalt stand 22 px weiter aussen als Kopfband und Leisten. */
+  .masthead-inner{ padding-top:28px; padding-bottom:30px; }
+  header.masthead{ background:var(--paper); border-bottom:1px solid var(--line); }
+  .kopfband{ --kb-1:#0A3F7E; --kb-2:#0051A1; color:#FFFFFF;
+    background:radial-gradient(110% 150% at 85% -30%, var(--kb-2) 0%, transparent 60%), var(--kb-1); }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .kopfband{ --kb-1:#0B2547; --kb-2:#123A6B; } }
+  :root[data-theme="dark"] .kopfband{ --kb-1:#0B2547; --kb-2:#123A6B; }
+  :root[data-theme="light"] .kopfband{ --kb-1:#0A3F7E; --kb-2:#0051A1; }
+  .kopfband .wrap{ padding-top:40px; padding-bottom:34px; }
+  .kopf-eyebrow{ margin:0 0 8px; font-size:12px; font-weight:700; letter-spacing:.14em; color:#C9D8EC; }
+  .kopfband h1{ color:#FFFFFF; font-size:clamp(28px,4.2vw,42px); line-height:1.15; margin:0; }
+  .kopfband h1 .sub{ color:#E2EBF6; font-size:.46em; margin-top:.5em; max-width:60ch; }
+  .kopfband .lede{ color:#DCE6F3; max-width:78ch; font-size:16.5px; margin:16px 0 0; }
+  /* Auf dem Telefon schob der Einleitungstext die Suche bis zu 600 px nach
+     unten. Dort drei Zeilen und „Weiterlesen" - der Text selbst bleibt. */
+  .lede-mehr{ display:none; margin-top:6px; background:none; border:0; padding:4px 0; cursor:pointer;
+    font:inherit; font-size:14px; font-weight:700; color:#FFFFFF; text-decoration:underline; }
+  @media (max-width:560px){
+    .kopfband .wrap{ padding-top:28px; padding-bottom:26px; }
+    .kopfband .lede{ font-size:15.5px; }
+    .kopfband .lede.kurz{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    .lede-mehr:not([hidden]){ display:inline-block; }
+  }
   /* Kopfzeile: Titelblock links, MVF-Logo rechts. Ab 760 px untereinander. */
   .masthead-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:26px; }
   .masthead-text{ min-width:0; }
@@ -196,7 +220,10 @@
     .search-row{ gap:24px; }
   }
   .search-field{
-    position:relative; flex:1 1 320px; display:flex; align-items:center;
+    /* 200 statt 320 px: Seit der Inhalt den Seitenrand von .wrap hat
+       (Oktober 2026), ist die Zeile 44 px schmaler - mit 320 rutschte
+       „Leeren" auf dem Desktop in eine eigene Zeile. */
+    position:relative; flex:1 1 200px; display:flex; align-items:center;
   }
   .search-field svg{ position:absolute; left:15px; width:19px; height:19px; color:var(--ink-faint); pointer-events:none; }
   #q{
@@ -268,10 +295,11 @@
 
   /* ---------- Category nav ---------- */
   nav.jump{
-    position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--paper) 88%, transparent);
+    position:sticky; top:var(--ort-h,0px); z-index:20; background:color-mix(in srgb, var(--paper) 88%, transparent);
+    transition:top .22s ease;
     backdrop-filter:saturate(180%) blur(8px); border-bottom:1px solid var(--line);
   }
-  .jump-inner{ display:flex; gap:6px; overflow-x:auto; padding:11px 0; scrollbar-width:thin; }
+  .jump-inner{ display:flex; gap:6px; overflow-x:auto; padding-top:11px; padding-bottom:11px; scrollbar-width:thin; }
   .jump a{
     flex:0 0 auto; font-size:13px; color:var(--ink-soft); text-decoration:none; font-weight:500;
     padding:6px 12px; border-radius:6px; border:1px solid transparent; white-space:nowrap; transition:all .14s;
@@ -279,7 +307,7 @@
   .jump a:hover{ background:var(--card); border-color:var(--line); color:var(--brand); }
 
   /* ---------- Layout (Datenbanken + Studien-Frame) ---------- */
-  .layout{ padding:26px 0 40px; display:grid; grid-template-columns:minmax(0,1fr); gap:28px; align-items:start; }
+  .layout{ padding-top:26px; padding-bottom:40px; display:grid; grid-template-columns:minmax(0,1fr); gap:28px; align-items:start; }
   @media (min-width:1000px){ .layout{ grid-template-columns:minmax(0,1fr) 358px; } }
   .col-main{ min-width:0; }
 
@@ -323,6 +351,7 @@
        Gescrollt wird stattdessen die Spalte als Ganzes (siehe aside.studies). */
     flex:0 0 auto;
   }
+  .sprungziel{ outline:2px solid var(--action); outline-offset:4px; border-radius:6px; }
   article.study{
     background:var(--card); border:1px solid var(--line); border-radius:6px;
     padding:11px 13px; display:flex; flex-direction:column; gap:5px;
@@ -561,50 +590,6 @@
   /* Bewusst zurueckgenommen: die Aussage ist wahr, aber kein Verkaufsargument. */
   .boolmark.nein{ color:var(--ink-faint); border:1px solid var(--line); }
 
-  /* ---------- Menueleiste ---------- */
-  nav.hauptmenu{ background:var(--card); border-bottom:1px solid var(--line); }
-  .menu-inner{
-    display:flex; align-items:center; gap:2px;
-    overflow-x:auto; scrollbar-width:none;
-  }
-  .menu-inner::-webkit-scrollbar{ display:none; }
-  .menu-inner a{
-    flex:0 0 auto; padding:11px 13px; font-size:13px; font-weight:700;
-    color:var(--ink-soft); text-decoration:none; white-space:nowrap;
-    border-bottom:2px solid transparent; transition:color .14s, border-color .14s;
-  }
-  .menu-inner a:hover{ color:var(--brand); border-bottom-color:var(--brand); }
-  .menu-inner a.hier{ color:var(--brand); border-bottom-color:var(--brand); }
-  .menu-inner a:focus-visible{ outline:2px solid var(--brand); outline-offset:-2px; }
-  .menu-extern::after{ content:" ↗"; font-size:.85em; }
-
-  /* Auf schmalen Bildschirmen passt das Menue nicht in eine Zeile und rollt
-     waagerecht. Ohne Andeutung bleibt das unbemerkt - die hinteren Punkte
-     (Impressum, Datenschutz) waeren praktisch unsichtbar. Der weiche Rand
-     rechts zeigt, dass es weitergeht. */
-  /* Bis 860 px passen die sechs Punkte nicht in eine Zeile - gemessen: bei
-     768 px liegen 54 px hinter dem Rand. Der weiche Rand zeigt, dass es
-     weitergeht. Darunter (620 px) bricht das Menue ohnehin um. */
-  @media (max-width:860px){
-    nav.hauptmenu{ position:relative; }
-    nav.hauptmenu::after{
-      content:""; position:absolute; top:0; right:0; bottom:0; width:36px;
-      background:linear-gradient(to right, transparent, var(--card));
-      pointer-events:none;
-    }
-  }
-  /* Auf dem Telefon waren von sechs Punkten nur zwei sichtbar, der Rest lag
-     487 px hinter dem Rand. Deshalb dort umbrechen statt rollen - und
-     Impressum und Datenschutz ausblenden, die ohnehin im Fussbereich stehen
-     und dort die gesetzlich geforderte staendige Erreichbarkeit erfuellen. */
-  @media (max-width:620px){
-    .menu-inner{ flex-wrap:wrap; padding:3px 0; gap:0; }
-    /* Kleiner gesetzt, damit vier Punkte in zwei Reihen passen statt in drei -
-       drei Reihen kosteten 131 px Hoehe ueber dem eigentlichen Inhalt. */
-    .menu-inner a{ padding:12px 9px; font-size:12px; }   /* 44 px Tippflaeche */
-    .menu-inner a.nur-breit{ display:none; }
-    nav.hauptmenu::after{ display:none; }
-  }
   /* Einleitung und Newsletter-Knopf nebeneinander. Der Knopf steht damit
      im ersten Blickfeld, ohne den Text zu unterbrechen; unter 860 px rutscht
      er darunter, weil zwei Spalten dort nur noch Silbentrennung erzeugen. */
@@ -976,8 +961,23 @@
   .empty{ grid-column:1/-1; text-align:center; color:var(--ink-faint); padding:30px; font-size:14px; }
 
   /* ---------- Footer ---------- */
-  footer{ border-top:1px solid var(--line); margin-top:44px; }
-  .foot-inner{ padding:26px 0 40px; color:var(--ink-faint); font-size:13px; display:grid; gap:10px; }
+  /* Dunkler Fussbereich wie auf der Uebersicht. Das Logo in der Negativ-
+     fassung (Blau wird Weiss, Gold bleibt) - logo/mvf-logo-negativ.png. */
+  footer{ margin-top:44px; background:#14202E; color:#C3CFDD; }
+  footer .foot-inner{ color:#C3CFDD; padding-top:28px; padding-bottom:36px; }
+  footer .foot-inner a{ color:#9CC6F4; }
+  .absender{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; text-decoration:none !important; }
+  .absender span{ font-size:12px; letter-spacing:.06em; color:#9FB0C4; }
+  .absender img{ width:150px; height:auto; display:block; }
+  .absender small{ color:#9FB0C4; font-size:13px; }
+  footer .legal details{ background:#1B2A3C; border-color:#2E3D52; }
+  footer .legal summary{ color:#E3EAF3; }
+  footer .legal summary::before{ color:#9FB0C4; }
+  footer .legal details[open] summary{ border-bottom-color:#2E3D52; }
+  footer .legal .legal-body{ color:#C3CFDD; }
+  footer .legal .legal-body h4{ color:#FFFFFF; }
+  footer .legal .legal-body a{ color:#9CC6F4; }
+  .foot-inner{ padding-top:26px; padding-bottom:40px; color:var(--ink-faint); font-size:13px; display:grid; gap:10px; }
   .foot-inner strong{ color:var(--ink-soft); font-weight:600; }
   .foot-inner a{ color:var(--brand); text-decoration:none; }
   .foot-inner a:hover{ text-decoration:underline; }
@@ -996,41 +996,364 @@
   .legal .legal-body a{ color:var(--brand); word-break:break-word; }
 
   @media (max-width:560px){
-    .masthead-inner{ padding:26px 0 22px; }
+    .masthead-inner{ padding-top:26px; padding-bottom:22px; }
     .panel{ padding:16px; }
     .cat-count{ display:none; }
   }
 </style>
 
-<nav class="hauptmenu">
-  <div class="wrap menu-inner">
-    <a href="./" class="hier" aria-current="page">Knowledge-Hub</a>
-    <a href="ueber.html" target="_blank" rel="noopener">Über den Hub</a>
-    <a href="newsletter.html">Newsletter</a>
-    <a href="https://wissen.m-vf.de/ausschreibungen.html" target="_blank" rel="noopener">Ausschreibungen</a>
-    <a href="#impressum" class="nur-breit">Impressum</a>
-    <a href="#datenschutz" class="nur-breit">Datenschutz</a>
-    <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=menu" target="_blank" rel="noopener" class="menu-extern">Monitor Versorgungsforschung</a>
+<!-- NETZLEISTE-START (wird von netzleiste_einsetzen.py gefuellt) -->
+<style>
+  .netz{ --nz-grund:#14202E; --nz-text:#D3DCE8; --nz-leise:#9FB0C4; --nz-gold:#BE9E53;
+         --nz-petrol:#0E6E71; --nz-blau:var(--brand,#0051A1);
+         --nz-karte:var(--card,#FFFFFF); --nz-ink:var(--ink,#111); --nz-soft:var(--ink-soft,#444A50);
+         --nz-linie:var(--line,#D0D8E4); --nz-tint:var(--brand-tint,#E1EAF6);
+         position:relative; z-index:60; background:var(--nz-grund); color:var(--nz-text);
+         font-size:13px; line-height:1.3; }
+  :root[data-theme="dark"] .netz{ --nz-petrol:#4FC2C4; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz{ --nz-petrol:#4FC2C4; } }
+  .netz *{ box-sizing:border-box; }
+  /* Breite und Seitenrand kommen von .wrap der jeweiligen Seite - Hubs und
+     Uebersicht setzen den Rand verschieden, die Leiste soll buendig mit dem
+     Inhalt darunter stehen. */
+  .netz-innen{ display:flex; align-items:center; gap:4px; min-height:44px; }
+  .netz a, .netz button{ font:inherit; color:inherit; }
+  .netz a:focus-visible, .netz button:focus-visible{ outline:2px solid var(--nz-gold); outline-offset:2px; border-radius:4px; }
+  .netz-marke{ display:flex; align-items:center; gap:9px; text-decoration:none; padding:8px 14px 8px 0;
+               margin-right:6px; border-right:1px solid #2E3D52; font-weight:700; letter-spacing:.09em; font-size:12.5px; color:#FFF; white-space:nowrap; }
+  .netz-marke img{ width:20px; height:20px; display:block; }
+  .netz-marke b{ color:var(--nz-gold); font-weight:700; }
+  .netz-knopf, .netz-link{ background:none; border:0; cursor:pointer; padding:13px 11px; text-decoration:none;
+               white-space:nowrap; font-weight:700; color:var(--nz-text); }
+  .netz-knopf:hover, .netz-link:hover{ color:#FFF; }
+  .netz-knopf[aria-expanded="true"]{ background:var(--nz-karte); color:var(--nz-ink); border-radius:6px 6px 0 0; }
+  .netz-knopf .pfeil{ display:inline-block; margin-left:5px; font-size:10px; transition:transform .15s; }
+  .netz-knopf[aria-expanded="true"] .pfeil{ transform:rotate(180deg); }
+  .netz-rechts{ margin-left:auto; display:flex; align-items:center; gap:14px; }
+  .netz-sprache{ display:flex; border:1px solid #3A4A60; border-radius:5px; overflow:hidden; font-size:11.5px; font-weight:700; }
+  .netz-sprache a, .netz-sprache span{ padding:3px 8px; text-decoration:none; }
+  .netz-sprache [aria-current]{ background:var(--nz-blau); color:#FFF; }
+  :root[data-theme="dark"] .netz-sprache [aria-current]{ background:#2C5C93; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-sprache [aria-current]{ background:#2C5C93; } }
+  .netz-mvf{ color:var(--nz-leise); text-decoration:none; white-space:nowrap; font-size:12px; }
+  .netz-mvf b{ color:var(--nz-text); }
+  .netz-mvf:hover b{ color:#FFF; text-decoration:underline; }
+
+  /* Mega-Menue: eine Ebene, drei Gruppen. Oeffnet per Klick, nie per Hover. */
+  .netz-mega{ position:absolute; left:0; right:0; top:100%; }
+  .netz-mega[hidden]{ display:none; }
+  .netz-mega-karte{ background:var(--nz-karte); color:var(--nz-ink);
+               border:1px solid var(--nz-linie); border-radius:0 0 12px 12px;
+               box-shadow:0 22px 50px -18px rgba(10,20,40,.45); padding:22px 26px 0; }
+  .netz-spalten{ display:grid; grid-template-columns:1.25fr 1fr 1.15fr; gap:30px; }
+  .netz-gruppe h3{ margin:0 0 9px; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--nz-soft); font-weight:700; }
+  .netz-gruppe ul{ list-style:none; margin:0; padding:0; }
+  .netz-gruppe li a{ display:flex; align-items:center; gap:9px; padding:5px 8px; margin:0 -8px; border-radius:6px;
+               text-decoration:none; color:var(--nz-ink); font-size:14px; line-height:1.3; }
+  .netz-gruppe li a::before{ content:""; flex:0 0 7px; height:7px; border-radius:50%; background:var(--nz-blau); opacity:.55; }
+  .netz-gruppe.krank li a::before{ background:var(--nz-petrol); }
+  .netz-gruppe li a:hover{ background:var(--nz-tint); }
+  .netz-gruppe li a[aria-current]{ background:var(--nz-tint); color:var(--nz-blau); font-weight:700; }
+  .netz-gruppe li a[aria-current]::before{ opacity:1; }
+  .netz-gruppe.krank li a[aria-current]{ color:var(--nz-petrol); }
+  .netz-angebote li a{ align-items:flex-start; padding:7px 8px; }
+  .netz-angebote li a::before{ display:none; }
+  .netz-angebote svg{ flex:0 0 22px; width:22px; height:22px; color:#8A6E28; margin-top:1px; }
+  :root[data-theme="dark"] .netz-angebote svg{ color:var(--nz-gold); }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-angebote svg{ color:var(--nz-gold); } }
+  .netz-angebote b{ display:block; font-size:14px; }
+  .netz-angebote small{ display:block; font-size:12.5px; color:var(--nz-soft); margin-top:2px; }
+  .netz-fuss{ display:flex; justify-content:space-between; gap:16px; margin-top:16px; padding:13px 0 15px;
+               border-top:1px solid var(--nz-linie); font-size:13.5px; font-weight:700; }
+  .netz-fuss a{ color:var(--nz-blau); text-decoration:none; }
+  .netz-fuss a:hover{ text-decoration:underline; }
+
+  /* Die weisse Leiste des Hubs (bzw. die Sprunglinks der Uebersicht).
+     Klebt oben, verschwindet beim Herunterscrollen und kommt beim
+     Hochscrollen wieder. */
+  .ortsleiste{ position:sticky; top:0; z-index:50; background:var(--nz-karte,var(--card,#fff));
+               border-bottom:1px solid var(--line,#D0D8E4); transition:transform .22s ease; }
+  .ortsleiste.weg{ transform:translateY(-102%); }
+  @media (prefers-reduced-motion:reduce){ .ortsleiste{ transition:none; } }
+  .ortsleiste-innen{ display:flex; align-items:center; gap:6px; min-height:58px; }
+  .ort-name{ display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--ink,#111); margin-right:18px; min-width:0; }
+  .ort-name img{ width:34px; height:34px; flex:0 0 34px; display:block; }
+  .ort-name small{ display:block; font-size:10.5px; letter-spacing:.12em; font-weight:700; color:var(--ink-soft,#444A50); }
+  .ort-name b{ display:block; font-size:14.5px; color:var(--brand,#0051A1); line-height:1.2; }
+  .ort-links{ display:flex; gap:2px; }
+  .ort-links a{ padding:18px 11px 17px; font-size:13.5px; font-weight:700; color:var(--ink-soft,#444A50);
+               text-decoration:none; border-bottom:2px solid transparent; white-space:nowrap; }
+  .ort-links a:hover, .ort-links a[aria-current]{ color:var(--brand,#0051A1); border-bottom-color:var(--brand,#0051A1); }
+  .ort-nl{ margin-left:auto; background:var(--action,#BE9E53); color:var(--on-action,#2A2207); font-weight:700;
+               font-size:13.5px; padding:9px 16px; border-radius:7px; text-decoration:none; white-space:nowrap; }
+  .ort-nl:hover{ background:var(--action-deep,#A5873F); }
+  .ort-menue{ display:none; margin-left:8px; align-items:center; gap:7px; background:none; cursor:pointer;
+               border:1px solid var(--line,#D0D8E4); border-radius:7px; padding:8px 12px;
+               font:inherit; font-size:13.5px; font-weight:700; color:var(--ink,#111); }
+  .ort-menue svg{ width:18px; height:18px; }
+  .netz a:focus-visible, .ortsleiste a:focus-visible, .ort-menue:focus-visible{ outline:2px solid var(--brand,#0051A1); outline-offset:2px; }
+
+  /* Smartphone-Menue: alles untereinander, nichts weiter aufzuklappen. */
+  .netz-handy{ --nz-petrol:#0E6E71; --nz-blau:var(--brand,#0051A1); --nz-ink:var(--ink,#111); --nz-soft:var(--ink-soft,#444A50);
+               --nz-tint:var(--brand-tint,#E1EAF6); --nz-gold:#BE9E53; }
+  :root[data-theme="dark"] .netz-handy{ --nz-petrol:#4FC2C4; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-handy{ --nz-petrol:#4FC2C4; } }
+  .netz-handy{ position:fixed; inset:0; z-index:90; background:var(--nz-karte,#fff); color:var(--ink,#111);
+               overflow-y:auto; padding:0 0 30px; }
+  .netz-handy[hidden]{ display:none; }
+  .netz-handy-kopf{ position:sticky; top:0; display:flex; justify-content:space-between; align-items:center;
+               padding:12px 18px; background:var(--nz-karte,#fff); border-bottom:1px solid var(--line,#D0D8E4); font-weight:700; }
+  .netz-handy-kopf button{ font:inherit; font-size:14px; font-weight:700; background:none; border:1px solid var(--line,#D0D8E4);
+               border-radius:7px; padding:7px 12px; cursor:pointer; color:inherit; }
+  .netz-handy section{ padding:14px 18px 6px; border-bottom:1px solid var(--line-soft,#E3EAF3); }
+  .netz-handy h3{ margin:0 0 6px; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-soft,#444A50); }
+  .netz-handy .netz-gruppe h3{ margin-top:10px; font-size:10.5px; }
+  .netz-handy ul{ list-style:none; margin:0; padding:0; }
+  .netz-handy li a, .netz-handy .handy-zeile{ display:flex; justify-content:space-between; align-items:center;
+               padding:10px 0; min-height:44px; text-decoration:none; color:var(--ink,#111); font-size:15px; }
+  /* Die Hubliste ist aus dem Mega-Menue geklont; dort stehen Punkt und Name
+     linksbuendig nebeneinander, nicht auf Abstand wie die Zeilen oben. */
+  .netz-handy .netz-gruppe li a{ margin:0; padding:9px 6px; justify-content:flex-start; gap:10px; min-height:42px; }
+  .netz-handy .netz-angebote li a{ align-items:flex-start; }
+  .netz-handy .netz-gruppe li a[aria-current]::after{ content:"✓"; margin-left:auto; color:var(--brand,#0051A1); }
+  .netz-handy .netz-sprache span[aria-current]{ background:var(--brand,#0051A1); color:#FFF; }
+  .netz-handy .netz-sprache a{ color:var(--ink,#111); }
+  .netz-handy .handy-nl{ display:block; text-align:center; margin:16px 18px; background:var(--action,#BE9E53);
+               color:var(--on-action,#2A2207); font-weight:700; padding:13px; border-radius:8px; text-decoration:none; }
+  .netz-handy .handy-unten{ display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center; padding:16px 18px; font-size:13.5px; }
+  .netz-handy .handy-unten a{ color:var(--ink-soft,#444A50); }
+  .netz-handy .netz-sprache{ border-color:var(--line,#D0D8E4); }
+
+  @media (max-width:980px){ .netz-mvf .lang{ display:none; } }
+  @media (max-width:860px){
+    .netz-rechts, .netz-link{ display:none; }
+    .netz-spalten{ grid-template-columns:1fr 1fr; }
+    .netz-angebote{ grid-column:1 / -1; }
+    .ort-links, .ort-nl{ display:none; }
+    .ort-menue{ display:inline-flex; margin-left:auto; }
+    .ortsleiste-innen{ min-height:56px; }
+  }
+  @media (max-width:560px){
+    .netz-mega-karte{ border-radius:0 0 10px 10px; padding:16px 16px 0; max-height:calc(100vh - 60px); overflow-y:auto; }
+    .netz-spalten{ grid-template-columns:1fr; gap:14px; }
+    .netz-marke{ border-right:0; padding-right:4px; letter-spacing:.06em; }
+    .ort-name b{ font-size:13.5px; }
+  }
+  @media print{ .netz, .ortsleiste, .netz-handy{ display:none !important; } }
+</style>
+
+<nav class="netz" aria-label="Alle Knowledge-Hubs" data-hier="klima.m-vf.de">
+  <div class="netz-innen wrap">
+    <a class="netz-marke" href="https://knowledge-hubs.m-vf.de/" title="Zur Übersicht aller Knowledge-Hubs">
+      <img src="logo/hub-icon.svg" alt="" width="20" height="20">
+      <span>KNOWLEDGE<b>-HUBS</b></span>
+    </a>
+    <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Hubs<span class="pfeil" aria-hidden="true">▼</span></button>
+    <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs</a>
+    <div class="netz-rechts">
+      <div class="netz-sprache" role="group" aria-label="Sprache">
+        <span aria-current="true" lang="de" title="Deutsch" aria-label="Deutsch">DE</span>
+        <a href="https://knowledge-hubs.m-vf.de/en/" lang="en" hreflang="en" aria-label="English" title="English overview of all hubs">EN</a>
+      </div>
+      <a class="netz-mvf" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=netzleiste" target="_blank" rel="noopener"><span class="lang">ein Angebot von </span><b>Monitor Versorgungsforschung</b> ↗</a>
+    </div>
+  </div>
+
+  <div class="netz-mega" id="netzMega" hidden>
+    <div class="wrap"><div class="netz-mega-karte">
+      <div class="netz-spalten">
+        <div class="netz-gruppe">
+          <h3>Versorgungsthemen · 11</h3>
+          <ul>
+            <li><a data-domain="wissen.m-vf.de" href="https://wissen.m-vf.de/">Versorgungsforschung</a></li>
+            <li><a data-domain="ncd.m-vf.de" href="https://ncd.m-vf.de/">Chronische Erkrankungen</a></li>
+            <li><a data-domain="ki.m-vf.de" href="https://ki.m-vf.de/">Digitalisierung, KI &amp; Gesundheit</a></li>
+            <li><a data-domain="gender.m-vf.de" href="https://gender.m-vf.de/">Geschlechtersensible Medizin</a></li>
+            <li><a data-domain="longevity.m-vf.de" href="https://longevity.m-vf.de/">Gesundes Altern &amp; Longevity</a></li>
+            <li><a data-domain="healthliteracy.m-vf.de" href="https://healthliteracy.m-vf.de/">Gesundheitskompetenz</a></li>
+            <li><a data-domain="klima.m-vf.de" href="https://klima.m-vf.de/">Hitze, Klima &amp; Gesundheit</a></li>
+            <li><a data-domain="impfen.m-vf.de" href="https://impfen.m-vf.de/">Impfen</a></li>
+            <li><a data-domain="safety.m-vf.de" href="https://safety.m-vf.de/">Patientensicherheit</a></li>
+            <li><a data-domain="pflege.m-vf.de" href="https://pflege.m-vf.de/">Pflege &amp; Langzeitversorgung</a></li>
+            <li><a data-domain="mental.m-vf.de" href="https://mental.m-vf.de/">Psychische Gesundheit</a></li>
+          </ul>
+        </div>
+        <div class="netz-gruppe krank">
+          <h3>Krankheitsgebiete · 4</h3>
+          <ul>
+            <li><a data-domain="adipositas.m-vf.de" href="https://adipositas.m-vf.de/">Adipositas</a></li>
+            <li><a data-domain="diabetes.m-vf.de" href="https://diabetes.m-vf.de/">Diabetes</a></li>
+            <li><a data-domain="kardio.m-vf.de" href="https://kardio.m-vf.de/">Kardiologie</a></li>
+            <li><a data-domain="onkologie.m-vf.de" href="https://onkologie.m-vf.de/">Onkologie</a></li>
+          </ul>
+        </div>
+        <div class="netz-gruppe netz-angebote">
+          <h3>Weitere Angebote</h3>
+          <ul>
+            <li><a href="https://innofonds.m-vf.de/">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 4l9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg>
+              <span><b>Innovationsfonds-Wissen</b><small>Projekte und Beschlüsse des GBA-Innovationsfonds</small></span></a></li>
+            <li><a href="https://wissen.m-vf.de/ausschreibungen.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><path d="M12 12l6-6"/></svg>
+              <span><b>Ausschreibungsradar</b><small>Offene Förderausschreibungen, zweimal pro Woche aktualisiert</small></span></a></li>
+            <li><a href="https://knowledge-hubs.m-vf.de/curatiohub.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7.5" width="18" height="12.5" rx="2"/><path d="M9 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5.5v2"/><path d="M3 13h18"/></svg>
+              <span><b>CuratioHub</b><small>Jobs in Versorgungsforschung, Public Health und Medizin</small></span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="netz-fuss">
+        <a href="newsletter.html" data-netz-nl>Newsletter dieses Hubs ›</a>
+        <a href="https://knowledge-hubs.m-vf.de/">Zur Übersicht aller Hubs →</a>
+      </div>
+    </div></div>
+  </div>
+</nav>
+<script>
+// Laeuft erst, wenn das Dokument steht: Die weisse Leiste und das
+// Smartphone-Menue folgen erst NACH diesem Baustein.
+(function (los) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', los);
+  else los();
+})(function () {
+  var netz = document.querySelector('.netz');
+  if (!netz) return;
+  var hier = netz.getAttribute('data-hier');
+  var knopf = document.getElementById('netzKnopf');
+  var mega = document.getElementById('netzMega');
+
+  // „Hier bin ich": der eigene Hub im Menue.
+  Array.prototype.forEach.call(netz.querySelectorAll('a[data-domain]'), function (a) {
+    if (a.getAttribute('data-domain') === hier) a.setAttribute('aria-current', 'page');
+  });
+
+  function zu(fokus) {
+    mega.hidden = true; knopf.setAttribute('aria-expanded', 'false');
+    if (fokus) knopf.focus();
+  }
+  knopf.addEventListener('click', function () {
+    var auf = knopf.getAttribute('aria-expanded') === 'true';
+    if (auf) { zu(false); return; }
+    mega.hidden = false; knopf.setAttribute('aria-expanded', 'true');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !mega.hidden) zu(true);
+  });
+  document.addEventListener('click', function (e) {
+    if (!mega.hidden && !netz.contains(e.target)) zu(false);
+  });
+
+  // Die weisse Leiste: weg beim Herunterscrollen, zurueck beim Hochscrollen.
+  // Die Sprungleiste darunter rueckt mit (--ort-h), sonst klebte sie unter
+  // einer Leiste, die gerade nicht da ist.
+  var ort = document.querySelector('.ortsleiste');
+  if (ort) {
+    var zuletzt = window.scrollY, hoehe = ort.offsetHeight;
+    var setze = function (weg) {
+      ort.classList.toggle('weg', weg);
+      document.documentElement.style.setProperty('--ort-h', weg ? '0px' : hoehe + 'px');
+    };
+    setze(false);
+    window.addEventListener('resize', function () { hoehe = ort.offsetHeight; setze(ort.classList.contains('weg')); });
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY;
+      if (Math.abs(y - zuletzt) < 6) return;
+      setze(y > zuletzt && y > 240);
+      zuletzt = y;
+    }, { passive: true });
+  }
+
+  // Smartphone: „Menue" oeffnet eine Seite mit allem. Die Hubliste wird aus
+  // dem Mega-Menue uebernommen, damit sie nur an einer Stelle steht.
+  var menueKnopf = document.getElementById('ortMenue');
+  var handy = document.getElementById('netzHandy');
+  if (menueKnopf && handy) {
+    var platz = handy.querySelector('[data-netz-hubs]');
+    if (platz) Array.prototype.forEach.call(mega.querySelectorAll('.netz-gruppe'), function (g) {
+      platz.appendChild(g.cloneNode(true));
+    });
+    var schliessen = handy.querySelector('[data-netz-zu]');
+    var oeffne = function () { handy.hidden = false; menueKnopf.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; schliessen.focus(); };
+    var schliesse = function () { handy.hidden = true; menueKnopf.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; menueKnopf.focus(); };
+    menueKnopf.addEventListener('click', oeffne);
+    schliessen.addEventListener('click', schliesse);
+    handy.addEventListener('click', function (e) { if (e.target.closest('a')) schliesse(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !handy.hidden) schliesse(); });
+  }
+});
+</script>
+<!-- NETZLEISTE-ENDE -->
+
+<!-- Die weisse Leiste dieses Hubs. Hub-Zeichen und Name fuehren zum Anfang
+     des Hubs; die Wortmarke der Reihe steht nur einmal, in der schwarzen
+     Leiste darueber. Impressum und Datenschutz stehen im Fussbereich - im
+     Menue stehen nur Wege zu Inhalten. -->
+<nav class="ortsleiste" aria-label="Dieser Hub">
+  <div class="ortsleiste-innen wrap">
+    <a class="ort-name" href="./">
+      <img src="logo/hub-icon.svg" alt="" width="34" height="34">
+      <span><small>KNOWLEDGE-HUB</small><b>Hitze, Klima &amp; Gesundheit</b></span>
+    </a>
+    <div class="ort-links">
+      <a href="#suche">Suche</a>
+      <a href="#main">Datenbanken</a>
+      <a href="#studien">Neue Studien</a>
+      <a href="ueber.html">Themen &amp; Quellen</a>
+    </div>
+    <a class="ort-nl" href="newsletter.html">Newsletter</a>
+    <button class="ort-menue" id="ortMenue" type="button" aria-expanded="false" aria-controls="netzHandy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menü</button>
   </div>
 </nav>
 
+<div class="netz-handy" id="netzHandy" role="dialog" aria-modal="true" aria-label="Menü" hidden>
+  <div class="netz-handy-kopf"><span>Menü</span><button type="button" data-netz-zu>Schließen ✕</button></div>
+  <section>
+    <h3>Dieser Hub</h3>
+    <ul>
+      <li><a href="#suche">Suche <span aria-hidden="true">›</span></a></li>
+      <li><a href="#main">Datenbanken <span aria-hidden="true">›</span></a></li>
+      <li><a href="#studien">Neue Studien <span aria-hidden="true">›</span></a></li>
+      <li><a href="ueber.html">Themen &amp; Quellen <span aria-hidden="true">›</span></a></li>
+    </ul>
+  </section>
+  <section data-netz-hubs><h3>Alle Hubs</h3></section>
+  <section>
+    <h3>Knowledge-Hubs</h3>
+    <ul>
+      <li><a href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs <span aria-hidden="true">›</span></a></li>
+      <li><a href="https://knowledge-hubs.m-vf.de/">Zur Übersicht <span aria-hidden="true">›</span></a></li>
+    </ul>
+  </section>
+  <a class="handy-nl" href="newsletter.html">Newsletter dieses Hubs</a>
+  <div class="handy-unten">
+    <div class="netz-sprache" role="group" aria-label="Sprache"><span aria-current="true" lang="de" aria-label="Deutsch">DE</span><a href="https://knowledge-hubs.m-vf.de/en/" lang="en" hreflang="en" aria-label="English">EN</a></div>
+    <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=netzleiste" target="_blank" rel="noopener">ein Angebot von Monitor Versorgungsforschung ↗</a>
+    <a href="#impressum">Impressum</a>
+    <a href="#datenschutz">Datenschutz</a>
+  </div>
+</div>
+
+<!-- Kopfband wie auf der Uebersicht knowledge-hubs.m-vf.de: dunkelblau,
+     Name des Hubs als Titel. „Knowledge-Hub" steht klein darueber statt im
+     Titel - es steht ohnehin schon in der weissen Leiste. Das MVF-Logo ist
+     von hier in den Fussbereich gewandert (Entwurf Mariann Stegmaier, S. 6). -->
 <header class="masthead">
-  <div class="wrap masthead-inner">
-    <div class="masthead-top">
-      <div class="masthead-text">
-        <h1 class="serif">Knowledge-Hub Hitze, Klima &amp; Gesundheit
-          <span class="sub">Ein Zugang zu Studien, Daten und Praxiswissen</span>
-        </h1>
-      </div>
-      <a class="brand-link" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=logo" target="_blank" rel="noopener" title="Monitor Versorgungsforschung — Herausgeber dieses Portals">
-        <img src="logo/mvf-logo.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
-      </a>
+  <div class="kopfband">
+    <div class="wrap">
+      <p class="kopf-eyebrow">KNOWLEDGE-HUB</p>
+      <h1 class="serif">Hitze, Klima &amp; Gesundheit
+        <span class="sub">Ein Zugang zu Studien, Daten und Praxiswissen</span>
+      </h1>
+      <p class="lede" id="kopfLede">Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.</p>
+      <button class="lede-mehr" id="ledeMehr" type="button" aria-controls="kopfLede" aria-expanded="false" hidden>Weiterlesen</button>
     </div>
+  </div>
+  <div class="wrap masthead-inner">
     <div class="lede-zeile">
       <div class="lede-links">
-        <p class="lede">Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.</p>
 
-        <div class="panel">
+        <div class="panel" id="suche">
           <label class="panel-label" for="q">Suchbegriff</label>
           <div class="search-row">
             <div class="search-field">
@@ -1259,7 +1582,7 @@
 <div class="wrap layout">
   <main class="col-main" id="main"></main>
 
-  <aside class="studies">
+  <aside class="studies" id="studien">
     <div class="studies-head">
       <div class="studies-title"><span class="dot"></span>Neu in PubMed</div>
       <div class="studies-claim">Hitze, Klima &amp; Gesundheit — mit Bezug zu Deutschland ausgewählt</div>
@@ -1327,7 +1650,15 @@
 
 <footer>
   <div class="wrap foot-inner">
-    <div class="attrib">Ein Angebot von „Monitor Versorgungsforschung" · eRelation AG – Content in Health</div>
+    <a class="absender" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=fuss" target="_blank" rel="noopener">
+      <span>Ein Angebot von</span>
+      <img src="logo/mvf-logo-negativ.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
+      <small>· eRelation AG – Content in Health</small>
+    </a>
+    <!-- Das farbige Logo fuer den Word-Kopf der Downloads (logoDataUri). Stand
+         bis Oktober 2026 sichtbar im Seitenkopf; ohne dieses Bild kaemen die
+         Word-Dateien ohne Logo heraus. -->
+    <img id="wordLogo" src="logo/mvf-logo.png" width="1236" height="327" alt="" hidden>
 
     <div class="legal">
       <details id="impressum">
@@ -1769,6 +2100,7 @@ const studiesList = document.getElementById('studiesList');
 STUDIES.forEach(s=>{
   const art = document.createElement('article');
   art.className = 'study';
+  art.id = 'studie-' + s.pmid;   // Sprungziel fuer die Uebersicht (#studie-<PMID>)
   const url = 'https://pubmed.ncbi.nlm.nih.gov/' + s.pmid + '/';
   art.innerHTML =
     '<div class="study-top"><span class="study-journal">'+s.journal+'</span>'+
@@ -2024,7 +2356,7 @@ function speichern(dateiname, inhalt, mime){
 // ueber die Leinwand, weil das Logo je nach Fassung als Datei oder bereits als
 // data:-URI vorliegt.
 function logoDataUri(){
-  const img = document.querySelector('.brand-link img');
+  const img = document.getElementById('wordLogo');
   if(!img || !img.complete || !img.naturalWidth) return '';
   if(img.src.startsWith('data:')) return img.src;
   try{
@@ -2135,7 +2467,7 @@ function ladeArchiv(){
       archiveBody.innerHTML = Object.keys(tage).sort().reverse().map(tag=>{
         const items = tage[tag].map(e=>{
           const url = 'https://pubmed.ncbi.nlm.nih.gov/'+e.pmid+'/';
-          return '<div class="arch-item">'
+          return '<div class="arch-item" id="studie-'+e.pmid+'">'
                + '<div class="arch-top"><span class="arch-journal">'+e.journal+'</span>'
                + '<span class="arch-year">'+e.year+'</span></div>'
                + '<a class="arch-title" href="'+url+'" target="_blank" rel="noopener">'+e.title+'</a>'
@@ -3665,6 +3997,51 @@ verdrahte('');
 filtern();
 goBtn.disabled = !input.value.trim();
 goMetaBtn.disabled = !input.value.trim();
+
+// ---- Einleitung auf dem Telefon: drei Zeilen, dann „Weiterlesen" ----------
+(function(){
+  const p = document.getElementById('kopfLede'), b = document.getElementById('ledeMehr');
+  if(!p || !b) return;
+  p.classList.add('kurz');
+  const pruefe = ()=>{ b.hidden = !p.classList.contains('kurz') || p.scrollHeight <= p.clientHeight + 2; };
+  b.addEventListener('click', ()=>{
+    const auf = p.classList.toggle('kurz') === false;
+    b.textContent = auf ? 'Weniger anzeigen' : 'Weiterlesen';
+    b.setAttribute('aria-expanded', auf ? 'true' : 'false');
+    if(!auf) pruefe();
+  });
+  window.addEventListener('resize', ()=>{ if(p.classList.contains('kurz')) pruefe(); });
+  pruefe();
+})();
+
+// ---- Einstieg von aussen -------------------------------------------------
+// Zwei Wege, auf denen die Uebersicht knowledge-hubs.m-vf.de in einen Hub
+// fuehrt: mit einem Suchbegriff (?q=Sepsis - der Hub-Vorschlag der Suche
+// dort) und auf eine bestimmte Studie (#studie-<PMID> - der Link
+// „Zusammenfassung" im Studienstrom). Steht die Studie nicht mehr in der
+// Tagesauswahl, liegt sie im Archiv; das wird dann erst geladen.
+window.addEventListener('load', ()=>{
+  let q = '';
+  try { q = (new URLSearchParams(location.search).get('q') || '').trim(); } catch(e){}
+  if(q && q.length <= 120){
+    input.value = q;
+    goBtn.disabled = goMetaBtn.disabled = false;
+    goBtn.click();
+  }
+  const m = /^#studie-(\d+)$/.exec(location.hash);
+  if(!m) return;
+  const zeige = el=>{
+    el.classList.add('sprungziel');
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+  };
+  const el = document.getElementById('studie-' + m[1]);
+  if(el){ zeige(el); return; }
+  archiveEl.open = true;
+  ladeArchiv().then(()=>{
+    const spaeter = document.getElementById('studie-' + m[1]);
+    if(spaeter) zeige(spaeter);
+  });
+});
 </script>
 
 <!-- ADRESSZEILE-START -----------------------------------------------
