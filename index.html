@@ -1843,71 +1843,53 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "8. Okt. 2026, 06:00 Uhr";
+const SNAP_DATE = "9. Okt. 2026, 06:00 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
-    journal:"J Allergy Clin Immunol Pract", year:"2026", pmid:"42843930",
-    author:"Pacheco SE et al.", pubdate:"Okt. 2026",
-    added:"07.10.2026",
-    title:"Gesundheitswesen als Klimaverschärfer: Emissionen und Maßnahmen zur Reduktion",
-    sum:"Übersichtsarbeit zur Analyse, wie der Gesundheitssektor durch fossile Brennstoffe, Energieverbrauch, Lieferketten und Müllproduktion zum Klimawandel beiträgt und umgekehrt von seinen Folgen betroffen ist.",
-    result:"Der Gesundheitssektor verursacht ca. 4,6 % globaler Nettoemissionen und trägt damit zu Hitzewellen, Luftverschmutzung, Trockenheit, Extremwetterereignissen und verstärkten Infektionskrankheiten bei – genau den Erkrankungen, die er behandeln soll. Vulnerable Gruppen (Kinder, ältere Menschen, chronisch Kranke, ethnische Minderheiten, sozioökonomisch marginalisierte Gemeinschaften) tragen eine disproportional hohe Last dieser klimainduzierten Gesundheitsfolgen. Der Artikel skizziert Emissionsquellen im Sektor und konkrete Beschaffungsmaßnahmen zur Reduktion des CO₂-Fußabdrucks.",
-    transfer:"USA-basiert, aber Systemkritik für alle Länder relevant; deutsche Kliniken mit gleichen Strukturproblemen"
+    journal:"PLoS Negl Trop Dis", year:"2026", pmid:"42832561",
+    author:"Wang D et al.", pubdate:"05.10.2026",
+    added:"05.10.2026",
+    title:"Leishmaniasis in Südeuropa: Sozioökonomie und Immunstatus als Haupttreiber",
+    sum:"Studie untersuchte Risikofaktoren für humane Leishmaniasis in fünf südeuropäischen Ländern mittels multivariater Analyse von Sozioökonomie, Immunstatus, Klima, Landnutzung und Ökologie.",
+    result:"Sozioökonomische Faktoren (Demografie, Beruf, Wohnbedingungen) waren stark mit Leishmaniasis-Inzidenz assoziiert, humane Immunsuppression hochkorreliert mit Risiko in Spanien und Italien. Klima grenzte leishmaniosefreie von endemischen Regionen ab. Klimawandel allein könnte die Ausbreitung in diesem Jahrhundert nicht vorantreiben.",
+    transfer:"Südeuropa, vergleichbare Klimazone, strukturell ähnlich; Methodologie zu Risikogruppen übertragbar"
   },
   {
-    journal:"Aust Occup Ther J", year:"2026", pmid:"42841710",
-    author:"Huppatz E et al.", pubdate:"Okt. 2026",
-    added:"07.10.2026",
-    title:"Occupational Justice und Klimakatastrophen: Lernziele aus Bushfire-Recovery in Australien",
-    sum:"Qualitative phänomenologische-hermeneutische Studie mit Gemeindenarrativen aus dem Conjola-Bushfire 2019 in Australien zur Analyse von Occupational, Epistemic und Hermeneutic Justice im Katastrophenkontext.",
-    result:"Die Gemeindeerzählungen zeigten miteinander verflochtene Ungerechtigkeit: Occupational Justice entstand durch eingeschränkten Ressourcenzugang während Response und Recovery, wobei gemeindegetriebene Initiativen kritisch für Wiederherstellung waren. Epistemic Justice war durch Regierungsmissachtung der Klimawissenschaft und indigener Wissenssysteme kompromittiert; die Gemeinde schuf Gegennarrative durch Filme. Hermeneutic Justice fehlte, als Identitätsaspekte ausgelöscht wurden; künstlerischer Ausdruck half der Gemeinde, die Kontrolle zurückzuerobern und systembezogene Ausfälle zu kommunizieren. Das Occupational Justice PLUS-Modell erwies sich als anwendbar für Katastrophenkontexte.",
-    transfer:"Australien (subtropisch), Methodik und Gerechtigkeitsprinzipien übertragbar; Hitzeextreme dort extremer als Deutschland"
+    journal:"Front Public Health", year:"2026", pmid:"42845914",
+    author:"Bajrai LH et al.", pubdate:"23.09.2026",
+    added:"08.10.2026",
+    title:"Von El-Niño-Vorhersagen zu Gesundheitsmaßnahmen: ein Forecast-to-Action-Rahmen",
+    sum:"Perspektive-Artikel schlägt ein adaptives Rahmenwerk vor, das ENSO-Vorhersagen (El Niño) mit regionalen Klimaprognosen und lokalem Gesundheitsrisikomanagement verknüpft.",
+    result:"Drei-Ebenen-Modell: ENSO-Vorhersage, regionale Klimaprognose, Gesundheitsrisikoprognose. Zentrale Empfehlung: El-Niño-Vorhersage sollte strukturierte Risikobewertung einleiten, nicht automatisch Interventionen triggern. Entscheidungen sollten Vorhersagewahrscheinlichkeit, regionale Epidemiologie, Verwundbarkeit und Interventionswirksamkeit integrieren.",
+    transfer:"Prinzipien für Klimafrühwarnsysteme und Adaptation prinzipiell übertragbar, aber auf tropische/subtropische Systeme fokussiert"
   },
   {
-    journal:"Front Immunol", year:"2026", pmid:"42798601",
-    author:"Bıçakcıoğlu G et al.", pubdate:"11.09.2026",
-    added:"26.09.2026",
-    title:"Hitze-induzierte trainierte Immunität verbessert Tumorbekämpfung bei behandlungsresistenten Patienten",
-    sum:"Laborexperimentelle Studie zur Untersuchung, ob hitzegetötete Mykobakterien die Antitumorimmunität in Blutproben von Kolonkrebspatienten verstärken können, die auf Anti-PD-1-Blockade nicht ansprechen.",
-    result:"Hitzegetötete Mykobakterien induzierten in Blutproben von Kolonkrebspatienten trainierte Immunität mit erhöhten TNF- und IFN-γ-Spiegeln und geringeren IL-10-Spiegeln (vergleichbar mit gesunden Kontrollen). Die Training verstärkte die Tumorbekämpfungskapazität der Blutzellen erheblich. Während Anti-PD-1 allein bei Patienten keine signifikante Antitumor-Reaktion auslöste, überwand die induzierte Immunität diese Resistenz mit erhöhtem IL-12p70 und IP-10-Profil – ein prinzipieller Nachweis für ein neues immunmodulatorisches Konzept.",
-    transfer:"Grundlagenforschung mit humanem In-vitro-Material; Mechanismus-Hypothese, nicht Patientenversorgung relevant"
+    journal:"BMC Public Health", year:"2026", pmid:"42844605",
+    author:"Wen Y et al.", pubdate:"07.09.2026",
+    added:"08.10.2026",
+    title:"Innenraum-PM2.5 und Sterblichkeit bei älteren Erwachsenen in China: Kohortenstudie mit Komponentenanalyse",
+    sum:"Prospektive Kohortenstudie mit 12.607 älteren Teilnehmern (Alter ≥75 Jahre) zur Assoziation zwischen Innenraum-PM2.5, seinen Bestandteilen und Gesamt-Mortalität über medianen 4,14-Jahre Follow-up.",
+    result:"8.643 Todesfälle dokumentiert. PM2.5 um 1 µg/m³ erhöht Mortalitätsrisiko um 0,3% (HR = 1,003; 95%-KI: 1,001–1,005). Schwarzkohlenstoff (BC) zeigte stärksten Effekt: +7,2% pro 1 µg/m³ (HR = 1,072; 95%-KI: 1,035–1,111). Organische Stoffe und Sulfate ebenfalls signifikant. Nichtlineares Konzentrations-Risiko-Verhältnis.",
+    transfer:"China, andere Klimazone; aber Indoor-Exposition und Alter relevant für Deutschland, Methodik (nicht Schwellenwerte) übertragbar"
   },
   {
-    journal:"Geriatr Psychol Neuropsychiatr Vieil", year:"2026", pmid:"42842818",
-    author:"Annweiler C et al.", pubdate:"01.09.2026",
-    added:"07.10.2026",
-    title:"Hitzewellen und Resilienz geriatrischer Versorgungspfade in französischen Krankenhäusern",
-    sum:"Nationale Umfrage in französischen Akutkliniken während und eine Woche nach einer Hitzewelle 2026 zur Erfassung von Belastung, Betriebsbelastung und Anpassungen in der geriatrischen Versorgung.",
-    result:"In Phase 1 (während Hitzewelle): 45,5 % der Stationen berichteten von unerträglichen Patientenzimmertemperaturen, 71,4 % von betrieblichen Schwierigkeiten, 88,4 % von Mitarbeitermüdigkeit, 64,3 % von Kapazitätsengpässen. Eine Woche später verbesserten sich die Werte deutlich: Tolerierbare Temperaturen stiegen von 53,6 % auf 100 % (p &lt; 0,001), Notaufnahmebelastung sank von 91,1 % auf 63,3 % (p &lt; 0,001), Mitarbeitermüdigkeit von 88,4 % auf 50,0 % (p &lt; 0,001). In Rehabilitationseinrichtungen berichteten 65,4 % von intoleranten Temperaturen, 73,1 % verweigerten Aufnahmen. Einheiten mit Klimaanlage zeigten weniger hitzebezogene Komplikationen.",
-    transfer:"Frankreich, gemäßigte Klimazone, direkt übertragbar auf deutsches Gesundheitssystem"
-  },
-  {
-    journal:"Schizophr Bull", year:"2026", pmid:"42842776",
-    author:"Cattarinussi G et al.", pubdate:"20.08.2026",
-    added:"07.10.2026",
-    title:"Luftverschmutzung, genetisches Schizophrenie-Risiko und Hirnentwicklung bei Adoleszenten",
-    sum:"Querschnittsstudie mit 1.580 US-amerikanischen Adoleszenten (ABCD-Studie) zur Untersuchung, wie Feinstoffbelastung (PM₂.₅, NO₂, O₃) im Alter von 9–10 Jahren die Gehirnstruktur und -funktion im Alter von 13–14 Jahren verändert und ob genetisches Schizophrenie-Risiko diese Effekte verstärkt.",
-    result:"Höheres PM₂.₅ war assoziiert mit kleinerer rechter Stirnpolerfläche (p-FDR = 0,039). Bei Personen mit niedrigem genetischem Schizophrenie-Risiko korrelierte mittleres PM₂.₅ mit kleineren linken Caudatvolumina (p-FDR = 0,019). Höheres NO₂ korrelierte mit schwächerer negativer funktionaler Konnektivität zwischen Default Mode und dorsaler Aufmerksamkeitsnetzwerke (p-FDR = 0,034) und schwächerer positiver Konnektivität zwischen dorsal-Attention und frontoparietal-Netzwerken (p-FDR = 0,034). Ergebnisse unterstreichen die Bedeutung von Luftqualität während kritischer neuronaler Entwicklungsphasen.",
-    transfer:"USA, gemäßigte Klimazone, vergleichbare Luftqualitätsprobleme, Methodik übertragbar"
-  },
-  {
-    journal:"J Hosp Infect", year:"2026", pmid:"42492844",
-    author:"D'Elia D et al.", pubdate:"23.07.2026",
-    added:"23.07.2026",
-    title:"Luftqualität in ungeschützten Krankenhausbereichen als Determinante nosokomialer Infektionen",
-    sum:"Narrative Übersichtsarbeit zur Bewertung von Raumluftqualität in ungeschützten Krankenhausbereichen und Empfehlungen zur Reduktion luftgestützter Infektionen, insbesondere bei immunsupprimierten Patienten.",
-    result:"Die vorhandenen Evidenzen zeigen eine erhebliche Lücke bei der Luftqualität in ungeschützten Krankenhausbereichen – Empfehlungen existieren nur für geschützte Zonen. Luftgestützte nosokominale Infektionen stellen besonders für immunsupprimierte Patienten ein hohes Risiko dar. Die Autoren schlagen vor, dass die Europäische Gesellschaft für Klinische Mikrobiologie eine Pilot-Multizenterstudie koordiniert, um Richtlinien zu entwickeln. Umsetzung könnte Inzidenz luftgestützter Infektionen reduzieren und die Pandemieberechtschaft stärken.",
-    transfer:"Europäische Expertenmeinung, Deutschland direkt betroffen, Gesundheitssystem-Resilienz"
-  },
-  {
-    journal:"Epidemiol Prev", year:"2026", pmid:"42836292",
-    author:"Bisceglia L et al.", pubdate:"Juli 2026",
+    journal:"Epidemiol Prev", year:"2026", pmid:"42836289",
+    author:"Davoli E et al.", pubdate:"Juli 2026",
     added:"06.10.2026",
-    title:"Luftqualität und Gesundheit: Konzeptioneller Rahmen für italienische Fallstudien",
-    sum:"Methodische Studie zur Anwendung des DPSEEA-Modells (Driving forces-Pressures-State-Exposure-Effects-Actions) auf neun Fallstudien aus sechs italienischen Regionen zur Validierung eines Atlanten für Luft und Gesundheit.",
-    result:"Das DPSEEA-Modell wurde erfolgreich auf alle neun Fallstudien angewendet und ermöglichte eine konsistente Strukturierung von Informationen entlang der Umwelt-Gesundheits-Kausalitätskette. Der Rahmen unterstützte die Identifikation von Indikatoren, die Vergleichbarkeit zwischen Kontexten, die Definition von Interventionsszenarien und die Bewertung neuer feinteilig aufgelöster Expositionsmetriken und Gesundheitsergebnisse. Die Anwendung erwies sich als machbar und nützlich für die Unterstützung von Entscheidungsprozessen.",
-    transfer:"Italien, Mitteleuropa, vergleichbare Versorgungsstruktur zu Deutschland"
+    title:"Kokreation zur Entwicklung des Italienischen Atlante Aria und Salute",
+    sum:"Qualitative Studie: Delphi-Prozess mit Experten zur Festlegung von Inhalten eines nationalen Atlases für Luftverschmutzungs- und Gesundheitseffekte in Italien.",
+    result:"16–22 Experten über zwei Delphi-Runden. Konsens auf: PM2.5 und NO2 als Exposures, kommunale Auflösung, Mortalität und Krankenhausaufnahmen (natürlich, kardiovaskulär, zerebrovaskular, respiratorisch, Lungenkrebs) als Outcomes. Attributable Fraktionen gegen WHO-Guideline-Werte (5 µg/m³ PM2.5, 10 µg/m³ NO2) berechnet. Kokreativer Prozess sicherte breite Beteiligung bei wissenschaftlicher Evidenzkonsistenz.",
+    transfer:"Italien, Mitteleuropa, sehr hohes Übertragungspotential für deutsche Atlas-Entwicklung und Gesundheitsfolgenabschätzung"
+  },
+  {
+    journal:"Ann Behav Med", year:"2026", pmid:"42847353",
+    author:"Chan FHF et al.", pubdate:"07.01.2026",
+    added:"08.10.2026",
+    title:"Gesundheitsframing bei Klimakommunikation: systematische Übersicht von 54 Studien",
+    sum:"Systematische Übersicht mit qualitativer Synthese von 46 Studien (54 Studiendesigns) zu Wirksamkeit von gesundheitsgerahmten Umweltbotschaften auf Wahrnehmung und Verhalten.",
+    result:"Gesundheitsgerahmte Botschaften (Gewinnframing, Mitigation-Nutzen) wurden als klar und hilfreich wahrgenommen, erhöhten Bedrohungswahrnehmung, Politikunterstützung und schützende Absichten. Effekte auf nachhaltige Lebensstiländerungen und Advocacy-Verhalten waren weniger konsistent. Über 180.000 Teilnehmer: Botschaften steigerten Sorge und Politikunterstützung, führten aber selten zu konkreten Verhaltensänderungen.",
+    transfer:"Überwiegend englischsprachige Hocheinkommensländer, Methodik zur Risikokommunikation in Deutschland relevant"
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
@@ -1923,10 +1905,10 @@ const RADAR_FRISTEN = [["2026-10-20", "2026-10-20", "2026-12-31", "2026-10-28"],
 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
-const NEWS_STAND = "08.10.2026";
+const NEWS_STAND = "09.10.2026";
 const NEWS = [
   {titel:"Klimawandel verändert Hautkrankheiten: Studie aus 136 Ländern", datum:"2026-09-30", url:"https://www.monitor-versorgungsforschung.de/news/klimawandel-veraendert-hautkrankheiten-studie-aus-136-laendern/"},
-  {titel:"Berliner Gesundheitspreis zeichnet innovative Projekte zum Schutz vor Extremtemperaturen aus", datum:"2026-09-07", url:"https://www.monitor-versorgungsforschung.de/news/berliner-gesundheitspreis-zeichnet-innovative-projekte-zum-schutz-vor-extremtemperaturen-aus/"},
+  {titel:"Hitzeschutz-Erklärung für Europa: IKK classic unterzeichnet", datum:"2026-08-31", url:"https://www.monitor-versorgungsforschung.de/news/hitzeschutz-erklaerung-fuer-europa-ikk-classic-unterzeichnet/"},
 ];
 // === NEWS-BLOCK-ENDE ===
 
