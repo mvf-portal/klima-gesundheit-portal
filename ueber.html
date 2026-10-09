@@ -568,9 +568,6 @@
       zugleich: in der medizinischen Literatur und in den Daten der Klimaforschung. Dieses Portal
       bündelt beide an einer Stelle — kostenfrei, ohne Anmeldung und ohne Tracking.</p>
     </div>
-    <a class="marke" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=logo" target="_blank" rel="noopener" title="Monitor Versorgungsforschung — Herausgeber dieses Portals">
-      <img src="logo/mvf-logo.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
-    </a>
   </div>
 </header>
 
@@ -793,16 +790,51 @@
 
 </main>
 
-<footer>
+<!-- FUSSLEISTE-START (wird von netzleiste_einsetzen.py gefuellt) -->
+<style>
+  /* Volle Breite auch dann, wenn der Fuss in einem schmalen Container steht
+     (Innofonds): die Flaeche reicht per Schatten bis an den Rand. */
+  footer.nf{ background:#14202E; color:#C3CFDD; box-shadow:0 0 0 100vmax #14202E; clip-path:inset(0 -100vmax);
+             border-top:0; margin-top:44px; font-size:14px; }
+  footer.nf > .wrap, footer.nf{ padding-top:26px; padding-bottom:30px; }
+  /* Breite wie die Leiste oben, auch wo die Seite selbst schmaler ist (820 px). */
+  footer.nf > .wrap{ max-width:1180px; margin-left:auto; margin-right:auto; padding-left:22px; padding-right:22px; box-sizing:border-box; }
+  footer.nf p, footer.nf .attrib, footer.nf .stand{ color:#C3CFDD; }
+  footer.nf a{ color:#9CC6F4; }
+  footer.nf strong, footer.nf b{ color:#FFFFFF; }
+  footer.nf details{ background:#1B2A3C; border:1px solid #2E3D52; border-radius:6px; margin-top:8px; }
+  footer.nf summary{ color:#E3EAF3; cursor:pointer; padding:10px 13px; font-weight:700; }
+  footer.nf .legal-body{ color:#C3CFDD; padding:6px 14px 12px; font-size:12.5px; line-height:1.55; }
+  footer.nf .legal-body h4{ color:#FFFFFF; }
+  .nf-kopf{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 24px; margin-bottom:6px; }
+  .nf-absender{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; text-decoration:none !important; }
+  .nf-absender span{ font-size:12px; letter-spacing:.06em; color:#9FB0C4; }
+  .nf-absender img{ width:150px; height:auto; display:block; }
+  .nf-absender small{ color:#9FB0C4; font-size:13px; }
+  /* margin/padding/max-width zuruecksetzen: Innofonds stylt jedes <nav> pauschal. */
+  .nf-links{ display:flex; flex-wrap:wrap; gap:8px 20px; font-weight:700; margin:0; padding:0; max-width:none; }
+  footer.nf .nf-links a{ color:#E3EAF3; text-decoration:none; }
+  footer.nf .nf-links a:hover{ text-decoration:underline; }
+  footer.nf .nf-links .nf-mail{ font-weight:400; color:#C3CFDD; }
+  footer.nf .nf-links .nf-mail a{ color:#9CC6F4; font-weight:700; }
+</style>
+<footer class="nf">
   <div class="wrap">
-    <p><strong>Knowledge-Hub Hitze, Klima &amp; Gesundheit</strong> — ein Angebot von „Monitor
-    Versorgungsforschung", eRelation AG – Content in Health, Johannes-von-Hanstein-Str. 2,
-    53113 Bonn.</p>
-    <p><a href="./">Zur Suche</a> · <a href="./#impressum">Impressum</a> ·
-    <a href="./#datenschutz">Datenschutz</a> ·
-    <a href="https://www.monitor-versorgungsforschung.de/" target="_blank" rel="noopener">monitor-versorgungsforschung.de</a></p>
+<div class="nf-kopf">
+  <a class="nf-absender" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=fuss" target="_blank" rel="noopener">
+    <span>Ein Angebot von</span>
+    <img src="logo/mvf-logo-negativ.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
+    <small>· eRelation AG – Content in Health</small>
+  </a>
+  <nav class="nf-links" aria-label="Rechtliches">
+    <a href="./#impressum">Impressum</a>
+    <a href="./#datenschutz">Datenschutz</a>
+    <span class="nf-mail">Kontakt: <a href="mailto:info@m-vf.de">info@m-vf.de</a></span>
+  </nav>
+</div>
   </div>
 </footer>
+<!-- FUSSLEISTE-ENDE -->
 </html>
 
 <!-- ZAEHLER-START --------------------------------------------------------
