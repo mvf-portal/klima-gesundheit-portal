@@ -1902,53 +1902,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "9. Okt. 2026, 06:00 Uhr";
+const SNAP_DATE = "10. Okt. 2026, 06:00 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
-    journal:"PLoS Negl Trop Dis", year:"2026", pmid:"42832561",
-    author:"Wang D et al.", pubdate:"05.10.2026",
-    added:"05.10.2026",
-    title:"Leishmaniasis in Südeuropa: Sozioökonomie und Immunstatus als Haupttreiber",
-    sum:"Studie untersuchte Risikofaktoren für humane Leishmaniasis in fünf südeuropäischen Ländern mittels multivariater Analyse von Sozioökonomie, Immunstatus, Klima, Landnutzung und Ökologie.",
-    result:"Sozioökonomische Faktoren (Demografie, Beruf, Wohnbedingungen) waren stark mit Leishmaniasis-Inzidenz assoziiert, humane Immunsuppression hochkorreliert mit Risiko in Spanien und Italien. Klima grenzte leishmaniosefreie von endemischen Regionen ab. Klimawandel allein könnte die Ausbreitung in diesem Jahrhundert nicht vorantreiben.",
-    transfer:"Südeuropa, vergleichbare Klimazone, strukturell ähnlich; Methodologie zu Risikogruppen übertragbar"
+    journal:"Int J Biometeorol", year:"2026", pmid:"42853465",
+    author:"Yavar ME et al.", pubdate:"09.10.2026",
+    added:"09.10.2026",
+    title:"Temperaturvariabilität und Frühgeburtsrisiko in Teheran",
+    sum:"Ökologische Zeitreihenstudie zur Auswirkung des Physiological Equivalent Temperature (PET)-Index auf das Frühgeburtsrisiko in Teheran (2018–2024) mit Daten von täglichen Frühgeburten und meteorologischen Parametern.",
+    result:"Extreme Kälte (1. Perzentil PET = -1,7 °C) über 0–30 Tage Lag erhöhte das kumulative relative Risiko für Frühgeburten signifikant (RR = 1,25; 95%-KI: 1,02–1,52), mit Effekt hauptsächlich bei 20–30 Tagen Verzögerung. Extreme Hitze (99. Perzentil = 39,1 °C) zeigte keinen signifikanten Effekt (RR = 0,94; 95%-KI: 0,81–1,10).",
+    transfer:"Tropen/Subtropen – Methodik (Lag-Modellierung) übertragbar; Temperaturschwellen nicht direkt für Deutschland relevant."
   },
   {
-    journal:"Front Public Health", year:"2026", pmid:"42845914",
-    author:"Bajrai LH et al.", pubdate:"23.09.2026",
+    journal:"BMC Health Serv Res", year:"2026", pmid:"42850626",
+    author:"Özdemir T et al.", pubdate:"01.10.2026",
+    added:"09.10.2026",
+    title:"Klimabewusstsein und Öko-Angst von Gesundheitsprofessionals",
+    sum:"Querschnittsstudie mit 460 Gesundheitsfachleuten in klinischen Einrichtungen zur Beziehung zwischen Klimawandel-Bewusstsein, Öko-Angst-Niveau und Umweltsensibilität.",
+    result:"Gesundheitsfachleute zeigten moderate Niveaus von Klimabewusstsein und Umweltsensibilität sowie moderate Öko-Angst. Regression ergab signifikante Prädiktoren für Umweltsensibilität: Klimabewusstsein, Krankenpflege-Beruf, Alter ≥45 Jahre und Umweltorganisationsmitgliedschaft. Rumination-Subdimension der Öko-Angst marginal, nicht signifikant (p = 0,064).",
+    transfer:"Türkei, vergleichbarer Versorgungskontext – Personalressourcen und Professionalisierung ähnlich; Befunde zur Capacity-Bildung relevant für Deutschland."
+  },
+  {
+    journal:"Environ Health Perspect", year:"2026", pmid:"42852343",
+    author:"Pan Z et al.", pubdate:"06.10.2026",
+    added:"09.10.2026",
+    title:"Temperaturvariabilität und Schlaganfallrisiko unter Klimawandel",
+    sum:"Case-Crossover-Studie mit 1,6 Mio. individuellen Schlaganfall-Fallereignissen (2015–2022) zur Assoziation zwischen kurzfristiger Temperaturvariabilität (TV) und ischämischem Schlaganfall unter Berücksichtigung Langzeit-TV-Adaptation.",
+    result:"Kurzfristige TV-Exposition signifikant positiv assoziiert mit Schlaganfallrisiko; Langzeit-TV modifizierte Effekt – Populationen in persistently-high-TV-Regionen vulnerabler. Schlaganfälle zurechenbar zu TV verdoppelten sich 2000–2020. Unter Emissions-Szenario SSP5-8.5 prognostiziert: Attributable Fraktion des ischämischen Schlaganfalls +19–58 % bis Jahrhundertende, besonders SW- und Südchina.",
+    transfer:"China – Temperaturvariabilität und Adaptationsniveaus nicht direkt übertragbar; Methodik und Konzept (Klimawandel-Impact auf CVD) relevant für Deutschland."
+  },
+  {
+    journal:"Front Public Health", year:"2026", pmid:"42845995",
+    author:"Zhang X et al.", pubdate:"23.09.2026",
     added:"08.10.2026",
-    title:"Von El-Niño-Vorhersagen zu Gesundheitsmaßnahmen: ein Forecast-to-Action-Rahmen",
-    sum:"Perspektive-Artikel schlägt ein adaptives Rahmenwerk vor, das ENSO-Vorhersagen (El Niño) mit regionalen Klimaprognosen und lokalem Gesundheitsrisikomanagement verknüpft.",
-    result:"Drei-Ebenen-Modell: ENSO-Vorhersage, regionale Klimaprognose, Gesundheitsrisikoprognose. Zentrale Empfehlung: El-Niño-Vorhersage sollte strukturierte Risikobewertung einleiten, nicht automatisch Interventionen triggern. Entscheidungen sollten Vorhersagewahrscheinlichkeit, regionale Epidemiologie, Verwundbarkeit und Interventionswirksamkeit integrieren.",
-    transfer:"Prinzipien für Klimafrühwarnsysteme und Adaptation prinzipiell übertragbar, aber auf tropische/subtropische Systeme fokussiert"
+    title:"Luftschadstoffe und Konjunktivitis-Ambulanzbesuche in Hefei, China",
+    sum:"Zeitreihenstudie mit 73.043 Konjunktivitis-Ambulanzbesuchen (2014–2023) zur Assoziation zwischen fünf Luftschadstoffen (PM2,5, PM10, O3, NO2, SO2) und Erkrankungsrisiko.",
+    result:"Alle fünf Luftschadstoffe zeigten positive Assoziationen mit erhöhtem Konjunktivitis-Risiko; SO2 zeigte den stärksten Same-Day-Effekt (Lag 0), gefolgt von NO2. Effektgröße variierte zwischen Schadstoffen; Subgruppeneffekte nach Geschlecht, Alter und Jahreszeit beobachtet.",
+    transfer:"China – gemäßigte bis subtropische Klimazone; Methodik übertragbar, aber Pollutant-Mix unterscheidet sich regional von Deutschland."
   },
   {
-    journal:"BMC Public Health", year:"2026", pmid:"42844605",
-    author:"Wen Y et al.", pubdate:"07.09.2026",
+    journal:"Nat Commun", year:"2026", pmid:"42850264",
+    author:"Liang C et al.", pubdate:"09.09.2026",
     added:"08.10.2026",
-    title:"Innenraum-PM2.5 und Sterblichkeit bei älteren Erwachsenen in China: Kohortenstudie mit Komponentenanalyse",
-    sum:"Prospektive Kohortenstudie mit 12.607 älteren Teilnehmern (Alter ≥75 Jahre) zur Assoziation zwischen Innenraum-PM2.5, seinen Bestandteilen und Gesamt-Mortalität über medianen 4,14-Jahre Follow-up.",
-    result:"8.643 Todesfälle dokumentiert. PM2.5 um 1 µg/m³ erhöht Mortalitätsrisiko um 0,3% (HR = 1,003; 95%-KI: 1,001–1,005). Schwarzkohlenstoff (BC) zeigte stärksten Effekt: +7,2% pro 1 µg/m³ (HR = 1,072; 95%-KI: 1,035–1,111). Organische Stoffe und Sulfate ebenfalls signifikant. Nichtlineares Konzentrations-Risiko-Verhältnis.",
-    transfer:"China, andere Klimazone; aber Indoor-Exposition und Alter relevant für Deutschland, Methodik (nicht Schwellenwerte) übertragbar"
+    title:"Luftverschmutzung und angeborene Herzfehler via Blutproteine",
+    sum:"Verschachtelte Fall-Kontroll-Studie zum Zusammenhang zwischen pränataler PM2,5-/PM10-/NO2-Exposition und angeborenen Herzfehlern (CHD) über Protein-Signaturen in Mutter- und Nabelschnurserum.",
+    result:"Mütterliche Exposition gegenüber PM2,5, PM10 und NO2 signifikant assoziiert mit erhöhtem CHD-Risiko in der Perikonzeptionsphase; NO2 zeigte stärksten Effekt. Spezifische Proteine (FGF-4, VEGF-D, MSP, Angiogenin) identifiziert als möglicherweise in Luftverschmutzungs-assoziierten Herzmalformationen beteiligt.",
+    transfer:"China, großstädtischer Kontext – Schadstoff-Mix und Pollutant-Niveaus unterscheiden sich von Deutschland deutlich."
   },
   {
-    journal:"Epidemiol Prev", year:"2026", pmid:"42836289",
-    author:"Davoli E et al.", pubdate:"Juli 2026",
-    added:"06.10.2026",
-    title:"Kokreation zur Entwicklung des Italienischen Atlante Aria und Salute",
-    sum:"Qualitative Studie: Delphi-Prozess mit Experten zur Festlegung von Inhalten eines nationalen Atlases für Luftverschmutzungs- und Gesundheitseffekte in Italien.",
-    result:"16–22 Experten über zwei Delphi-Runden. Konsens auf: PM2.5 und NO2 als Exposures, kommunale Auflösung, Mortalität und Krankenhausaufnahmen (natürlich, kardiovaskulär, zerebrovaskular, respiratorisch, Lungenkrebs) als Outcomes. Attributable Fraktionen gegen WHO-Guideline-Werte (5 µg/m³ PM2.5, 10 µg/m³ NO2) berechnet. Kokreativer Prozess sicherte breite Beteiligung bei wissenschaftlicher Evidenzkonsistenz.",
-    transfer:"Italien, Mitteleuropa, sehr hohes Übertragungspotential für deutsche Atlas-Entwicklung und Gesundheitsfolgenabschätzung"
-  },
-  {
-    journal:"Ann Behav Med", year:"2026", pmid:"42847353",
-    author:"Chan FHF et al.", pubdate:"07.01.2026",
-    added:"08.10.2026",
-    title:"Gesundheitsframing bei Klimakommunikation: systematische Übersicht von 54 Studien",
-    sum:"Systematische Übersicht mit qualitativer Synthese von 46 Studien (54 Studiendesigns) zu Wirksamkeit von gesundheitsgerahmten Umweltbotschaften auf Wahrnehmung und Verhalten.",
-    result:"Gesundheitsgerahmte Botschaften (Gewinnframing, Mitigation-Nutzen) wurden als klar und hilfreich wahrgenommen, erhöhten Bedrohungswahrnehmung, Politikunterstützung und schützende Absichten. Effekte auf nachhaltige Lebensstiländerungen und Advocacy-Verhalten waren weniger konsistent. Über 180.000 Teilnehmer: Botschaften steigerten Sorge und Politikunterstützung, führten aber selten zu konkreten Verhaltensänderungen.",
-    transfer:"Überwiegend englischsprachige Hocheinkommensländer, Methodik zur Risikokommunikation in Deutschland relevant"
+    journal:"Environ Health Perspect", year:"2026", pmid:"42852352",
+    author:"Ma G et al.", pubdate:"06.10.2026",
+    added:"09.10.2026",
+    title:"Grünflächen und Luftverschmutzung schützen vor biologischer Alterung",
+    sum:"Beschleunigte Längsschnittstudie mit 11.760 Erwachsenen (20–65 Jahre) in einer hochbelasteten chinesischen Stadt zum Effekt von Grünflächen und Luftschadstoff-Mischung auf biologische Alter-Beschleunigung (BAA).",
+    result:"Höhere Grünflächen (500 m NDVI) assoziiert mit niedrigerem Risiko für beschleunigtes Altern (OR: 0,84; 95%-KI: 0,75–0,95). Luftschadstoff-Mischung zeigte positive Assoziation mit beschleunigtem Altern (OR: 1,16; 95%-KI: 1,08–1,24), getrieben durch O3 und PM10. 25,0% des protektiven Effekts von Grünflächen war durch Pollutant-Reduktion mediiert.",
+    transfer:"China, hochverschmutzt – nur Prinzip übertragbar; biologische Alterungsmarker und Schwellwerte klimazonenabhängig."
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
@@ -1964,7 +1973,7 @@ const RADAR_FRISTEN = [["2026-10-20", "2026-10-20", "2026-12-31", "2026-10-28"],
 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
-const NEWS_STAND = "09.10.2026";
+const NEWS_STAND = "10.10.2026";
 const NEWS = [
   {titel:"Klimawandel verändert Hautkrankheiten: Studie aus 136 Ländern", datum:"2026-09-30", url:"https://www.monitor-versorgungsforschung.de/news/klimawandel-veraendert-hautkrankheiten-studie-aus-136-laendern/"},
   {titel:"Hitzeschutz-Erklärung für Europa: IKK classic unterzeichnet", datum:"2026-08-31", url:"https://www.monitor-versorgungsforschung.de/news/hitzeschutz-erklaerung-fuer-europa-ikk-classic-unterzeichnet/"},
