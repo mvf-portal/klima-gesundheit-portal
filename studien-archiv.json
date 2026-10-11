@@ -910,19 +910,6 @@
   "aufgenommen": "2026-09-30"
  },
  {
-  "pmid": "42705444",
-  "journal": "Environ Res",
-  "year": "2026",
-  "author": "Aretaki MA et al.",
-  "pubdate": "01.11.2026",
-  "added": "07.09.2026",
-  "transfer": "Deutschland, TwinLife-Kohorte, gemäßigte Klimazone, psychosoziale Effekte von Luftqualität",
-  "title": "Feinstaub und Lebenszufriedenheit: Genetische und Umweltfaktoren in Zwillingspaaren",
-  "sum": "Analyse von 4.504 jungen Erwachsenen Zwillingspaaren (TwinLife-Studie 2014–2022) zur Aufteilung der PM2.5/PM10-Effekte auf Lebenszufriedenheit in familiengebundene versus individuelle Faktoren.",
-  "result": "PM2.5- und PM10-Effekt auf Lebenszufriedenheit lief zwischen Familien (b=−0,05 bis −0,06, SE=0,01, p<0,001), nicht innerhalb; deutet auf gemeinsame Faktoren (SES, Nachbarschaft). Effekt von PM10 verstärkte sich mit Alter und Messjahr. Innerhalb monozygotischer Zwillinge marginal signifikant für PM10 (b=−0,09, SE=0,04, p=0,04), nicht für PM2.5.",
-  "aufgenommen": "2026-09-30"
- },
- {
   "pmid": "42600830",
   "journal": "Environ Pollut",
   "year": "2026",
@@ -3910,19 +3897,6 @@
   "sum": "Multizentrische Zeitreihenanalyse, die ambulante Asthma-Notfallbehandlungen der KV Bayerns in Augsburg, München und Nürnberg mit automatisch gemessenen Tageswerten für Erlen-, Birken-, Hasel- und Gräserpollen verknüpft.",
   "result": "Hohe Birkenpollenwerte erhöhten das Risiko einer Asthma-Notfallbehandlung deutlich (RR 1,64; 95%-KI 1,41–1,90), Gräserpollen bei mittlerer (RR 1,19; 1,03–1,38) und hoher Belastung (RR 1,41; 1,17–1,70). Birke wirkte am Expositionstag selbst, Gräser erst am zweiten Tag danach. Während der Saison waren 10,2 % (Augsburg) bis 17,8 % (Nürnberg) der Behandlungen der Birke zuzurechnen, 14,3 % (München) bis 18,8 % (Augsburg) den Gräsern. Damit ist ein erheblicher Teil der Asthma-Notfälle im Frühjahr rechnerisch vermeidbar — die Pollensaison verschiebt und verlängert sich mit dem Klimawandel.",
   "transfer": "Deutsche KV-Abrechnungsdaten, unmittelbar übertragbar",
-  "aufgenommen": "2026-08-17"
- },
- {
-  "pmid": "42486136",
-  "journal": "Lancet Planet Health",
-  "year": "2026",
-  "author": "Leal Filho W et al.",
-  "pubdate": "22.07.2026",
-  "added": "22.07.2026",
-  "transfer": "Tropische/subtropische Länder - Methodik zur Überwachung von Vektorkrankheiten übertragbar",
-  "title": "Dengue-Übertragungsrisiko durch Klimawandel und Städtebau in Ländern mit niedrigem und mittlerem Einkommen",
-  "sum": "Rapid Review zu Auswirkungen von Temperaturanstieg und Urbanisierung auf Dengue-Transmission: 65 % der Studien zeigten positive Assoziation zwischen Temperaturanstieg und Dengue-Übertragung, Urbanisierung war in 35 % der Studien untersucht, fragmentierte Surveillance und fehlende Integration von Klimadaten in Public Health-Planung.",
-  "result": "65 % der Studien berichten positive Assoziation zwischen Temperaturanstieg und erhöhter Dengue-Transmission; Urbanisierung in 35 % der Studien als Risikofaktor dokumentiert; nur 29 % der Studien zeigen dokumentierte staatliche Reaktionen. Unzureichende Surveillance und Cross-Sector-Koordination als Haupthindernisse identifiziert.",
   "aufgenommen": "2026-08-17"
  },
  {
