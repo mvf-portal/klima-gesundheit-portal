@@ -43,7 +43,9 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 30 statt 15 seit dem 21.10.2026: Platz fuer den zweiten Versuch des
+    # Studienlaufs nach zehn Minuten Pause (siehe unten).
+    timeout-minutes: 30
     env:
       # thema.py liegt weiterhin in scripts/, die gemeinsamen Skripte in
       # scripts/gemeinsam/. Beide muessen importierbar sein: update_studies.py
@@ -75,7 +77,16 @@ jobs:
       - name: Abhängigkeiten installieren
         run: pip install --quiet "anthropic>=0.40" requests tzdata python-docx
 
+      # Zwei Versuche, zehn Minuten auseinander. Die meisten Ausfaelle sind
+      # Aussetzer - PubMed mit 500, eine leere oder abgeschnittene
+      # Modellantwort -, und zehn Minuten spaeter laeuft derselbe Lauf durch.
+      # Bis zum 21.10.2026 holte das nur die Laufwache auf dem
+      # Redaktionsrechner nach; war der aus, fiel der Hub fuer den Tag aus
+      # (Impfen, 15.10.2026). Scheitert auch der zweite Versuch, scheitert
+      # der Lauf wie bisher, und die Schritte danach entfallen.
       - name: Studienliste aktualisieren
+        id: studien
+        continue-on-error: true
         env:
           # Das Geheimnis heisst in diesem Repository KLIMAHUB. Fehlt es, bricht der
           # Lauf ab - bewusst ohne Rueckfallweg, damit ein falscher Name auffaellt.
@@ -83,6 +94,16 @@ jobs:
           MODEL: claude-haiku-4-5          # günstiges Modell; z. B. claude-sonnet-5 für mehr Qualität
           # SEARCH_TERM: '...'   # optional: Standardabfrage ueberschreiben (siehe update_studies.py)
         run: python scripts/gemeinsam/update_studies.py ${{ inputs.erzwingen && '--erzwingen' || '' }}
+
+      - name: Studienliste aktualisieren - zweiter Versuch nach 10 Minuten
+        if: steps.studien.outcome == 'failure'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
+          MODEL: claude-haiku-4-5
+        run: |
+          echo "::warning::Erster Versuch gescheitert - zweiter Versuch in 10 Minuten."
+          sleep 600
+          python scripts/gemeinsam/update_studies.py ${{ inputs.erzwingen && '--erzwingen' || '' }}
 
       # Baut RSS-Feed (Mailchimp) und Download-Dateien aus dem Archiv.
       # Braucht weder API-Key noch Netz – liest nur studien-archiv.json.
