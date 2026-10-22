@@ -816,6 +816,22 @@
     font-size:12.5px; line-height:1.5; color:var(--ink-soft);
   }
   .radar-hinweis[hidden]{ display:none; }
+  /* Gleiche Form wie der Radar-Hinweis, aber eine eigene Kante links:
+     Zwei gleich aussehende Kaesten untereinander liest niemand als zwei
+     Angebote - dieselbe Ueberlegung wie seinerzeit beim Gewinnspiel. */
+  .zulassung-hinweis{
+    margin-top:10px; padding:11px 13px;
+    background:var(--card-2); border:1px solid var(--line);
+    border-left:3px solid var(--brand); border-radius:6px;
+    font-size:12.5px; line-height:1.5; color:var(--ink-soft);
+  }
+  .zulassung-hinweis[hidden]{ display:none; }
+  .zulassung-hinweis b{ color:var(--ink); }
+  .zulassung-hinweis a{
+    display:inline-block; margin-top:6px;
+    font-weight:700; color:var(--brand); text-decoration:none;
+  }
+  .zulassung-hinweis a:hover{ text-decoration:underline; }
   .radar-hinweis b{ color:var(--ink); }
   .radar-hinweis a{
     display:inline-block; margin-top:6px;
@@ -1538,6 +1554,17 @@
              Gefuellt von scripts/radar_hinweis.py, verborgen bis dahin. -->
         <div class="radar-hinweis" id="radarHinweis" hidden></div>
 
+        <!-- Zulassungsradar. Steht UNTER dem Ausschreibungsradar, weil
+             dieser eine Frist hat und jener nicht: Wer Geld beantragen
+             will, hat es eilig; wer wissen will, was neu zugelassen ist,
+             nicht. Gefuellt von hub-scripts/zulassungen_hinweis.py,
+             verborgen bis dahin - und in den acht Hubs ohne
+             Krankheitsbild (Pflege, Gesundheitskompetenz, Klima, KI,
+             Gender, Patientensicherheit, Versorgungsforschung) bleibt er
+             dauerhaft leer. Das ist kein Ausfall, sondern der Zuschnitt:
+             Auf diese Themen zeigt keine Arzneimittelzulassung. -->
+        <div class="zulassung-hinweis" id="zulassungHinweis" hidden></div>
+
         <!-- Ausgesuchte News. Angeregt vom selben Nutzer wie der
              Ausschreibungsradar: Wer sich fuer ein Thema interessiert, will
              nicht nur die Studienlage, sondern auch, was dazu geschrieben
@@ -1971,6 +1998,12 @@ const RADAR_ZUHAUSE = false;
 const RADAR_FRISTEN = [["2026-12-31", "2027-01-07", "2027-01-07", "2027-01-07", "2026-10-28"], [], ["2026-10-28", "2027-01-07"], [], ["2026-11-19"], [], [], ["2026-10-22", "2026-10-30", "2026-11-18"], [], [], [], ["2027-01-07", "2027-01-26", "2027-01-26"], ["2027-01-07", "2027-01-07", "2027-01-11", "2027-01-07", "2027-01-25", "2026-11-18", "2026-11-18", "2026-11-18"], ["2026-11-19", "2027-02-03", "2027-02-03"], ["2027-01-27", "2026-11-09"]];
 // === RADAR-BLOCK-ENDE ===
 
+// === ZULASSUNG-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
+const ZUL_STAND = "";
+const ZUL_EIGENE = 0;
+const ZUL_GUTACHTEN = 0;
+// === ZULASSUNG-BLOCK-ENDE ===
+
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
 const NEWS_STAND = "22.10.2026";
@@ -2371,6 +2404,42 @@ if(typeof SELBST !== 'undefined')
          + ' zu Ihrem Themengebiet.';
   }
   karte.innerHTML = '\ud83d\udce2 ' + text;
+  karte.hidden = false;
+})();
+
+// ---- Hinweis auf den Zulassungsradar ----
+// Anders als beim Ausschreibungsradar wird hier NICHT im Browser nachgerechnet:
+// Eine Zulassung laeuft nicht ab. Die Zahl aus dem Block bleibt deshalb
+// richtig, bis der naechste Lauf sie fortschreibt - und genau deshalb steht
+// hier eine Zahl und keine Fristenliste.
+//
+// Verborgen bleibt der Kasten in zwei Faellen, die nicht verwechselt werden
+// duerfen: vor dem ersten Lauf (ZUL_STAND leer - es wurde noch nicht gesucht)
+// und in den acht Hubs ohne Krankheitsbild (ZUL_EIGENE 0 - dort gibt es
+// nichts zu zeigen, und eine Null-Ansage waere eine Antwort auf eine Frage,
+// die niemand gestellt hat).
+(function(){
+  const karte = document.getElementById('zulassungHinweis');
+  if(!karte || typeof ZUL_STAND === 'undefined' || !ZUL_STAND) return;
+  const eigene = (typeof ZUL_EIGENE !== 'undefined') ? ZUL_EIGENE : 0;
+  if(!eigene) return;
+  const gut = (typeof ZUL_GUTACHTEN !== 'undefined') ? ZUL_GUTACHTEN : 0;
+  const zul = eigene - gut;
+
+  let text = '<b>' + eigene + ' neue Arzneimittel zu Ihrem Themengebiet</b>';
+  if(zul && gut){
+    text += zul + (zul === 1 ? ' Zulassung' : ' Zulassungen') + ' und '
+          + gut + (gut === 1 ? ' Empfehlung' : ' Empfehlungen') + ' des CHMP.';
+  } else if(gut){
+    text += gut + (gut === 1 ? ' Empfehlung' : ' Empfehlungen')
+          + ' des CHMP, noch ohne Beschluss der EU-Kommission.';
+  } else {
+    text += zul + (zul === 1 ? ' neue Zulassung' : ' neue Zulassungen')
+          + ' der vergangenen sechs Monate.';
+  }
+  text += '<a href="https://wissen.m-vf.de/zulassungen.html#klima-gesundheit" '
+        + 'target="_blank" rel="noopener">Zum Zulassungsradar \u2197</a>';
+  karte.innerHTML = '\ud83d\udc8a ' + text;
   karte.hidden = false;
 })();
 
