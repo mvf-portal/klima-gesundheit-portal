@@ -143,6 +143,30 @@ jobs:
         continue-on-error: true
         run: python scripts/gemeinsam/radar_hinweis.py
 
+      # ---- Zulassungsradar (EMA) ------------------------------------------
+      # Laeuft wie der Ausschreibungsradar nur zentral, aber TAEGLICH: Die
+      # EMA aktualisiert ihre Tabelle jede Nacht, und ein CHMP-Gutachten ist
+      # genau so lange eine Neuigkeit, wie es noch keiner gemeldet hat.
+      #
+      # Der Lauf kostet wenig: Zugeordnet wird ohne Modell ueber den
+      # MeSH-Begriff, und der deutsche Satz wird je Mittel nur einmal
+      # geschrieben und danach aus zulassungen.json uebernommen. An einem Tag
+      # ohne neue Zulassung faellt also gar kein Modellaufruf an.
+      - name: Zulassungsradar aktualisieren (nur Versorgungsforschung)
+        if: github.repository == 'mvf-portal/versorgungsforschung-portal'
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.KLIMAHUB }}
+        run: python scripts/zulassungen.py
+
+      # Setzt in index.html die Zahl des eigenen Themengebiets. Laeuft in
+      # ALLEN Portalen - auch in den acht ohne Krankheitsbild, wo es dann eine
+      # Null schreibt und die Karte verborgen bleibt. So muss der Workflow
+      # nicht wissen, welcher Hub welchen Zuschnitt hat.
+      - name: Zulassungshinweis dieses Hubs setzen
+        continue-on-error: true
+        run: python scripts/gemeinsam/zulassungen_hinweis.py
+
       # ---- Newsfeed aus dem eigenen Archiv --------------------------------
       # Sucht ueber die WordPress-Suche von m-vf.de nach Beitraegen zum
       # Themenfeld dieses Hubs - ohne Sprachmodell, ohne Schluessel, also
@@ -190,7 +214,7 @@ jobs:
       - name: Committen & pushen (nur bei Änderung)
         id: commit
         env:
-          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json
+          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json zulassungen.html zulassungen.json
         run: |
           # Nicht jedes Portal hat jede Datei: ausschreibungen.html/.json
           # entstehen nur im Versorgungsforschungs-Portal, weil der Radar dort

@@ -2424,21 +2424,64 @@ if(typeof SELBST !== 'undefined')
   const eigene = (typeof ZUL_EIGENE !== 'undefined') ? ZUL_EIGENE : 0;
   if(!eigene) return;
   const gut = (typeof ZUL_GUTACHTEN !== 'undefined') ? ZUL_GUTACHTEN : 0;
-  const zul = eigene - gut;
+  // **Jede Stufe hat ihre eigene Zahl.** Bis zum 22.10.2026 stand hier
+  // `eigene - gut` und hiess "Zulassungen". Mit der DiGA- und der FDA-Stufe
+  // wurde das falsch: Eine Aufnahme ins DiGA-Verzeichnis und eine
+  // amerikanische Erstzulassung erschienen in einem deutschen Hub als
+  // EU-Zulassung. Eine Restmenge behauptet, alles Unbekannte gehoere in die
+  // bekannteste Schublade - bei Stufen ist das immer falsch.
+  //
+  // Der `typeof`-Vorbehalt haelt Portale am Leben, deren Block noch aus der
+  // Zeit davor stammt: Sie fallen auf die alte Rechnung zurueck, statt eine
+  // leere Karte zu zeigen. Nach dem naechsten naechtlichen Lauf erledigt
+  // sich das von selbst.
+  const hatNeu = (typeof ZUL_ZULASSUNG !== 'undefined');
+  const zul = hatNeu ? ZUL_ZULASSUNG : (eigene - gut);
+  const fda = (typeof ZUL_FDA !== 'undefined') ? ZUL_FDA : 0;
+  const diga = (typeof ZUL_DIGA !== 'undefined') ? ZUL_DIGA : 0;
 
-  let text = '<b>' + eigene + ' neue Arzneimittel zu Ihrem Themengebiet</b>';
-  if(zul && gut){
-    text += zul + (zul === 1 ? ' Zulassung' : ' Zulassungen') + ' und '
-          + gut + (gut === 1 ? ' Empfehlung' : ' Empfehlungen') + ' des CHMP.';
-  } else if(gut){
-    text += gut + (gut === 1 ? ' Empfehlung' : ' Empfehlungen')
-          + ' des CHMP, noch ohne Beschluss der EU-Kommission.';
+  // Gebaut als Aufzaehlung, nicht als Satzschablone: Bei vier Stufen gaebe
+  // es sonst fuenfzehn Faelle, und einer davon waere vergessen.
+  const teile = [];
+  if(zul)  teile.push(zul + (zul === 1 ? ' EU-Zulassung' : ' EU-Zulassungen'));
+  if(gut)  teile.push(gut + (gut === 1 ? ' CHMP-Empfehlung' : ' CHMP-Empfehlungen'));
+  if(fda)  teile.push(fda + (fda === 1 ? ' FDA-Zulassung' : ' FDA-Zulassungen'));
+  // DiGA ist im Plural unveraenderlich - aber wenn sie allein die
+  // Ueberschrift traegt, muss sie ausgeschrieben werden, und dort zaehlt der
+  // Numerus: "1 digitale Gesundheitsanwendung", nicht "...anwendungen".
+  if(diga) teile.push(diga + (teile.length === 0 && !zul && !gut && !fda
+    ? (diga === 1 ? ' digitale Gesundheitsanwendung'
+                  : ' digitale Gesundheitsanwendungen')
+    : ' DiGA'));
+  const liste = teile.length > 1
+    ? teile.slice(0, -1).join(', ') + ' und ' + teile[teile.length - 1]
+    : (teile[0] || '');
+
+  // Steht nur EINE Stufe da, traegt sie die Ueberschrift selbst - sonst
+  // staende die Zahl zweimal ("5 digitale Gesundheitsanwendungen ... 5 DiGA").
+  // Bei mehreren nennt die Ueberschrift die Summe und die Aufzaehlung die
+  // Aufteilung.
+  //
+  // "Arzneimittel" stimmt nicht, sobald eine DiGA dabei ist: Eine DiGA ist
+  // kein Arzneimittel, sondern ein Medizinprodukt.
+  let text;
+  if(teile.length === 1){
+    text = '<b>' + liste + ' zu Ihrem Themengebiet</b>'
+         + ((gut && !zul && !fda && !diga)
+            ? ', noch ohne Beschluss der EU-Kommission.' : '.');
   } else {
-    text += zul + (zul === 1 ? ' neue Zulassung' : ' neue Zulassungen')
-          + ' der vergangenen sechs Monate.';
+    const was = diga ? ' Eintr\u00e4ge' : ' neue Arzneimittel';
+    // Der Doppelpunkt fehlte bis zum 22.10.2026 - der Text lief ohne
+    // Trennung weiter ("...Themengebiet4 Zulassungen"). Im Code sieht man
+    // das nicht, erst in der ausgegebenen Zeile.
+    text = '<b>' + eigene + was + ' zu Ihrem Themengebiet</b>: ' + liste + '.';
   }
-  text += '<a href="https://wissen.m-vf.de/zulassungen.html#klima-gesundheit" '
-        + 'target="_blank" rel="noopener">Zum Zulassungsradar \u2197</a>';
+  // **Kein Anker mehr.** Die Seite hatte bis zum 22.10.2026 je Themengebiet
+  // einen eigenen Abschnitt mit `id="<slug>"`; seit dem Umbau gibt es die
+  // nicht mehr, und `#<slug>` fuehrte ins Leere. Der Hub waehlt sein Gebiet
+  // jetzt ueber `?gebiet=` vor.
+  text += '<a href="https://wissen.m-vf.de/zulassungen.html?gebiet=klima-gesundheit" '
+        + 'target="_blank" rel="noopener">Zum Zulassungs-/DiGA-Radar \u2197</a>';
   karte.innerHTML = '\ud83d\udc8a ' + text;
   karte.hidden = false;
 })();
