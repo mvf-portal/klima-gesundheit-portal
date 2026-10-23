@@ -1,31 +1,30 @@
 {
  "hub": "Knowledge-Hub Hitze, Klima & Gesundheit",
  "domain": "klima.m-vf.de",
- "datum": "2026-10-22",
+ "datum": "2026-10-23",
  "stand": "terminiert",
- "titel": "MVF Klima-Newsletter 22.10.2026",
- "betreff": "Neueste Studien - Hitze, Klima und Gesundheit – 22. Oktober 2026",
- "anzahl": 6,
+ "titel": "MVF Klima-Newsletter 23.10.2026",
+ "betreff": "Neueste Studien - Hitze, Klima und Gesundheit – 23. Oktober 2026",
+ "anzahl": 5,
  "pmids": [
-  "42902042",
-  "42901192",
-  "42900914",
-  "42835745",
-  "42834014",
-  "42625490"
+  "42907183",
+  "42905761",
+  "42904486",
+  "42838200",
+  "42838195"
  ],
- "kampagne": "https://us6.admin.mailchimp.com/campaigns/edit?id=9099495",
- "termin_utc": "2026-10-22T08:00:00+00:00",
+ "kampagne": "https://us6.admin.mailchimp.com/campaigns/edit?id=9099516",
+ "termin_utc": "2026-10-23T08:00:00+00:00",
  "empfaenger": 10,
- "listengroesse": 5886,
+ "listengroesse": 5887,
  "beanstandungen": [],
  "aussortiert": [],
  "pool": {
   "geholt": 220,
-  "bekannt": 200,
-  "pool": 19,
-  "gewaehlt": 6,
-  "neu": 6
+  "bekannt": 188,
+  "pool": 27,
+  "gewaehlt": 5,
+  "neu": 5
  },
  "rubriken": {
   "news": "1120f5e4724ccb72"
