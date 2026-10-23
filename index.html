@@ -461,6 +461,90 @@
     line-height:1.35; letter-spacing:-.005em; display:inline-block;
   }
   .mt-titel:hover{ color:var(--brand); text-decoration:underline; }
+
+  /* ---------- Stufe 1 des Entwurfs „Hub-Seiten" (Mariann Stegmaier, Okt. 2026) ---------- */
+  /* Titel in der Trefferliste blau, unterstrichen, mit Pfeil: klar als Link. */
+  .mt-titel{ color:var(--brand); text-decoration:underline; text-underline-offset:2px; text-decoration-thickness:1px; }
+  .mt-titel::after{ content:" ↗"; font-weight:400; }
+  /* Blauer Kopf setzt die Trefferliste vom Suchfeld ab. */
+  #metaWrap{ margin:16px 0 4px; }
+  .meta-card{ overflow:hidden; }
+  .meta-head{ margin:-18px -20px 0; padding:13px 20px 12px; background:var(--brand); align-items:center; }
+  .meta-head h2{ color:var(--on-brand); }
+  .meta-head .meta-fuer{ font-weight:400; }
+  .meta-head .meta-zu{ color:var(--on-brand); border-color:color-mix(in srgb, var(--on-brand) 55%, transparent); }
+  .meta-head .meta-zu:hover{ color:var(--on-brand); border-color:var(--on-brand); }
+  .meta-sub{ margin-top:12px; }
+  /* Kleines i mit Erklaerung beim Darueberfahren oder Antippen. */
+  .info-i{
+    position:relative; display:inline-flex; align-items:center; justify-content:center;
+    width:17px; height:17px; border-radius:50%; border:1px solid var(--ink-faint);
+    font-size:11px; font-weight:700; font-style:normal; color:var(--ink-faint); cursor:help;
+  }
+  .info-i:hover, .info-i:focus{ color:var(--brand); border-color:var(--brand); outline:none; }
+  .info-i:hover::after, .info-i:focus::after{
+    content:attr(data-info); position:absolute; z-index:30; left:50%; top:24px; transform:translateX(-50%);
+    width:min(320px, 80vw); padding:10px 12px; border-radius:6px; background:var(--card);
+    border:1px solid var(--line); box-shadow:var(--shadow-hover);
+    font-size:12.5px; font-weight:400; line-height:1.45; color:var(--ink-soft); text-align:left;
+  }
+  /* Je ein Satz unter den beiden Knoepfen. */
+  .schritt{ flex-direction:column; gap:6px; }
+  .schritt > button{ min-height:46px; }
+  .schritt-erkl{ font-size:11.5px; line-height:1.35; color:var(--ink-faint); max-width:230px; }
+  .schritt-erkl b{ color:var(--ink-soft); }
+  .search-row{ align-items:flex-start; }
+  /* Leeren als x im Suchfeld. */
+  #q{ padding-right:42px; }
+  #q::-webkit-search-cancel-button{ display:none; }
+  .feld-x{
+    position:absolute; right:8px; top:50%; transform:translateY(-50%);
+    width:30px; height:30px; border:none; border-radius:50%; background:transparent;
+    font-size:22px; line-height:1; color:var(--ink-faint); cursor:pointer;
+  }
+  .feld-x:hover{ background:var(--brand-tint); color:var(--brand); }
+  .feld-x:focus-visible{ outline:2px solid var(--brand); outline-offset:1px; }
+  .feld-x[hidden]{ display:none; }
+  /* Ueber den Kacheln: Statuszeile nach der Suche und die Kennzeichen-Legende. */
+  .db-status{
+    scroll-margin-top:130px; margin:0 0 12px; padding:12px 16px; border-radius:8px;
+    background:color-mix(in srgb, var(--action) 18%, var(--card));
+    border:1px solid color-mix(in srgb, var(--action) 55%, var(--line));
+    font-size:13.5px; line-height:1.5; color:var(--ink);
+  }
+  .db-status span{ display:block; color:var(--ink-soft); font-size:12.5px; margin-top:2px; }
+  .kennz-legende{ margin:0 0 18px; font-size:12px; line-height:2; color:var(--ink-faint); }
+  .kennz-legende .badge, .kennz-legende .boolmark{ margin:0 2px; }
+  /* Kennzeichen immer oben rechts, untereinander, gleich gross. */
+  .card-kennz{ flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
+  .card-kennz .badge{ margin-top:2px; }
+  /* Lizenz grau statt gold: Gold heisst jetzt „Begriff eingetragen". */
+  .badge.badge.lic{ color:var(--ink-soft); border-color:var(--line); background:var(--card-2); }
+  /* Fusszeile als fliessender Text: Mit dem Begriff darin wird sie lang, als
+     Flexzeile brach sie bei langen Namen in drei schmale Spalten. */
+  .card .card-foot{ display:block; line-height:1.45; }
+  /* Nach der Suche pulsiert ein goldener Rahmen zwei-, dreimal um die Kacheln. */
+  @keyframes kachel-puls{
+    0%,100%{ box-shadow:var(--shadow); }
+    50%{ box-shadow:0 0 0 3px var(--action), var(--shadow); }
+  }
+  body.puls a.card:not(.aus){ animation:kachel-puls 1.2s ease-in-out 3; }
+  @media (prefers-reduced-motion:reduce){ body.puls a.card{ animation:none; } }
+  /* Hinweis „kopiert" bei Portal-Kacheln. */
+  .kopiert-hinweis{
+    position:fixed; left:50%; bottom:22px; transform:translate(-50%, 20px); z-index:200;
+    background:var(--ink); color:var(--paper); padding:10px 16px; border-radius:8px;
+    font-size:13.5px; box-shadow:var(--shadow-hover); opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .2s; max-width:calc(100vw - 32px);
+  }
+  .kopiert-hinweis.an{ opacity:1; transform:translate(-50%, 0); }
+  /* Leiste „Art der Quelle" bricht um, statt seitlich zu scrollen - auf
+     schmalen Schirmen bleibt sie eine Zeile zum Wischen, sonst fraesse die
+     klebende Leiste ein Drittel des Bildschirms. */
+  .jump-label{ flex:0 0 auto; align-self:center; font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-right:4px; }
+  @media (min-width:761px){ .jump-inner{ flex-wrap:wrap; overflow-x:visible; } }
+  /* „Knowledge-Hub" ueber dem Titel weiss wie im Logo. */
+  .kopf-eyebrow{ color:#FFFFFF; }
   .mt-meta{ font-size:12.5px; color:var(--ink-faint); margin-top:4px; line-height:1.45; }
   .mt-meta i{ color:var(--ink-soft); }
   .mt-quellen{ margin-top:6px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
@@ -1434,29 +1518,76 @@
             <div class="search-field">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input id="q" type="search" autocomplete="off" spellcheck="false" value="Hitzewelle" placeholder="z. B. Hitzewelle, Hitzeaktionsplan, heat mortality …">
+              <!-- Leeren als x im Feld, sichtbar nur, wenn dort etwas steht
+                   (Entwurf Mariann Stegmaier, Hub-Seiten S. 2, Okt. 2026).
+                   Vorher ein eigener Knopf „Leeren" neben den beiden Wegen. -->
+              <button class="feld-x" id="clear" type="button" aria-label="Suchbegriff leeren" title="Suchbegriff leeren" hidden>&times;</button>
             </div>
-            <!-- Die beiden Knoepfe stehen nebeneinander und sehen gleich wichtig
-                 aus - dabei ist der zweite der zweite Schritt. Die Ziffern und der
-                 Bogen dazwischen sagen die Reihenfolge, die die Anordnung allein
-                 nicht hergibt. -->
+            <!-- Zwei Wege zur Wahl, keine zwei Schritte nacheinander - deshalb
+                 seit Oktober 2026 ohne Bogen dazwischen, dafuer mit einem Satz
+                 unter jedem Knopf. Die Ziffern bleiben, damit Hilfetexte und
+                 Newsletter weiter von „Knopf 1" und „Knopf 2" sprechen koennen. -->
             <span class="schritt" data-nr="1">
               <button class="btn-go" id="go" type="button" title="Stellt alle Datenbanken auf Ihren Suchbegriff ein (oder Eingabetaste drücken)">In allen Datenbanken suchen</button>
-            </span>
-            <span class="schritt-pfeil" aria-hidden="true">
-              <svg viewBox="0 0 34 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 15C4 5 14 2 24 6"/><path d="m19 3 6 3-4 5"/>
-              </svg>
+              <span class="schritt-erkl"><b>Gezielt recherchieren:</b> Begriff in alle Datenbank-Kacheln eintragen, dann einzeln öffnen</span>
             </span>
             <span class="schritt" data-nr="2">
               <button class="btn-meta" id="goMeta" type="button" title="Fragt sieben Datenbanken unmittelbar ab und zeigt die Treffer hier auf der Seite">Treffer direkt anzeigen</button>
+              <span class="schritt-erkl"><b>Schnellüberblick:</b> Treffer aus sieben Datenbanken hier auf der Seite, mit Download</span>
             </span>
-            <button class="btn-clear" id="clear" type="button">Leeren</button>
           </div>
 
           <!-- Rueckmeldung nach dem Absenden. Vorher unsichtbar: Ohne Suche gibt
                es nichts zu melden. -->
           <div class="result-bar" id="resultBar" hidden></div>
           <div class="leer-hinweis" id="leerHinweis" hidden></div>
+
+          <!-- Trefferliste ueber mehrere Datenbanken (Schnellueberblick). Steht
+               direkt unter den Knoepfen: Sie ist die Antwort auf die Suche. Bis
+               Oktober 2026 stand sie unter Erklaertexten und rechter Spalte - nach
+               dem Klick sah man nichts (Entwurf Mariann Stegmaier, S. 5).
+               Verborgen, bis jemand sie ausdruecklich anfordert - vorher geht kein
+               Datum an einen Dritten. -->
+          <div class="meta-wrap" id="metaWrap" hidden>
+            <section class="meta-card" aria-labelledby="metaTitel">
+              <div class="meta-head">
+                <div>
+                  <h2 class="serif" id="metaTitel">Schnellüberblick</h2>
+                  <p class="meta-sub" id="metaSub"></p>
+                </div>
+                <button class="meta-zu" id="metaZu" type="button">Schlie&szlig;en</button>
+              </div>
+              <div class="meta-quellen" id="metaQuellen"></div>
+              <!-- Die Schaltflaechen f&uuml;r &bdquo;Art&ldquo; entstehen aus den Quellen selbst,
+                   damit beides nie auseinanderl&auml;uft. -->
+              <div class="meta-leiste">
+                <div class="meta-sort" id="metaArt">
+                  <span class="dl-label">Art:</span>
+                </div>
+              </div>
+              <div class="meta-leiste">
+                <div class="meta-sort" id="metaSort">
+                  <span class="dl-label">Sortierung:</span>
+                  <button type="button" class="fchip" data-sort="rang" aria-pressed="true">Relevanz</button>
+                  <span class="info-i" tabindex="0" role="note" aria-label="So wird sortiert" data-info="Jede Datenbank liefert ihre Treffer nach ihrer eigenen Relevanz. Der Hub führt die Listen zusammen: Ein Treffer steht weiter oben, je weiter vorn er in den einzelnen Listen steht und je mehr Datenbanken ihn liefern. Studienregister, Preprints und Repositorien zählen dabei etwas weniger als Fachzeitschriften. Eine Sortierung nach Zitationen wie bei Google Scholar gibt es nicht.">i</span>
+                  <button type="button" class="fchip" data-sort="jahr" aria-pressed="false">Jahr</button>
+                </div>
+                <div class="dl-row">
+                  <span class="dl-label">Download:</span>
+                  <button class="dl-btn" id="mtWord" type="button" disabled title="Als Word-Dokument herunterladen">&#10515; Word</button>
+                  <button class="dl-btn" id="mtCsv" type="button" disabled title="Als Tabelle f&uuml;r Excel herunterladen">&#10515; Excel</button>
+                  <button class="dl-btn" id="mtRis" type="button" disabled title="Literaturverwaltung: Zotero, EndNote, Citavi">&#10515; RIS</button>
+                  <button class="dl-btn" id="mtBib" type="button" disabled title="Literaturverwaltung: BibTeX, LaTeX">&#10515; BibTeX</button>
+                </div>
+              </div>
+              <div class="meta-liste" id="metaListe"></div>
+              <div class="meta-blaetter" id="metaBlaetter"></div>
+              <div class="meta-fuss">
+                <button class="btn-clear" id="metaMehr" type="button" hidden>Weitere Treffer laden</button>
+                <p class="meta-hinweis" id="metaFuss"></p>
+              </div>
+            </section>
+          </div>
 
           <!-- Hinweis auf Boolesche Operatoren - erscheint nur, wenn welche
                getippt werden. -->
@@ -1471,7 +1602,7 @@
             <summary>
               <svg class="f-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
               <span class="f-titel">Filter</span>
-              <span class="f-dims">Zugang &middot; Suchart &middot; Operatoren &middot; Art der Quelle</span>
+              <span class="f-dims">Zugang &middot; Suchart &middot; Operatoren</span>
               <span class="filter-badge" id="filterBadge" hidden></span>
               <svg class="f-pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
             </summary>
@@ -1493,7 +1624,12 @@
                 <button type="button" class="fchip" data-wert="alle" aria-pressed="true">Alle</button>
                 <button type="button" class="fchip" data-wert="ja" aria-pressed="false">Wertet AND/OR/NOT aus</button>
               </div>
-              <div class="filter-group" data-gruppe="rubrik" id="filterRubrik">
+              <!-- Verborgen seit Oktober 2026: Die Leiste ueber den Kacheln
+                   heisst jetzt „Art der Quelle" und fuehrt zu denselben zehn
+                   Bloecken - zweimal dasselbe verwirrte (Entwurf Mariann
+                   Stegmaier, S. 4). Die Gruppe bleibt im Markup, weil das
+                   Filterskript sie fuellt und auswertet. -->
+              <div class="filter-group" data-gruppe="rubrik" id="filterRubrik" hidden>
                 <span class="filter-label">Art der Quelle</span>
               </div>
               <!-- Erscheint nur, wenn etwas zurueckzusetzen ist - sonst waere es
@@ -1513,7 +1649,7 @@
             <p><b>Portal vs. Live-Suche.</b> Von den derzeit <b id="cntGesamt"></b> eingebundenen Datenbanken unterstützen <b id="cntLive"></b> die Live-Suche; sie sind entsprechend gekennzeichnet. Weitere <b id="cntPortal"></b> sind als „Portal" markiert: Angebote wie LIVIVO, das DRKS oder die WHO-Plattform ICTRP erlauben technisch keine verlinkbaren Ergebnisadressen. Der Klick führt dort auf die Startseite — der Suchbegriff ist anschließend von Hand einzugeben.</p>
             <p><b>Suchoperatoren.</b> <b>AND</b>, <b>OR</b> und <b>NOT</b> funktionieren nicht überall gleich — wir haben es einzeln nachgemessen. <span class="boolmark ja">AND/OR ✓</span> heißt: geprüft, die Operatoren wirken (<b id="cntBoolJa"></b> Datenbanken). <span class="boolmark nein">AND/OR ✗</span> heißt: geprüft, sie wirken nicht — die Wörter werden einfach mitgesucht (<b id="cntBoolNein"></b>). <b>Ohne Zeichen ist es ungeprüft</b> (<b id="cntBoolOffen"></b>): Diese Anbieter liefern eine Bot-Sperre oder eine reine JavaScript-Oberfläche, aus der sich kein belastbares Ergebnis ablesen ließ — das heißt ausdrücklich <i>nicht</i>, dass sie es nicht können. Der Filter „Operatoren" zeigt auf Wunsch nur die geprüft tauglichen.</p>
             <p><b>Deutsch suchen, international finden.</b> Internationale Datenbanken kennen keine deutschen Fachbegriffe — „Hitzeaktionsplan" liefert dort fast nichts. Der Hub übersetzt deshalb <b id="cntGlossar"></b> Fachbegriffe automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff, internationale bekommen den Ausdruck, unter dem sie tatsächlich indexieren („Hitzeaktionsplan" wird zu <i>heat health action plan</i>, „Wärmeinsel" zu <i>urban heat island</i>). Die Ergebnisleiste zeigt die verwendete Fassung; der Schalter unter dem Suchfeld stellt es ab.</p>
-            <p><b>Hinweis zu Lizenzen.</b> Mit <span style="color:var(--accent)">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
+            <p><b>Hinweis zu Lizenzen.</b> Mit <span class="badge lic">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
             <p id="sponsorText" hidden><b>Sponsoren.</b> Unsere Sponsoren ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Sie nehmen dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
             <p id="koopText" hidden><b>Medienpartnerschaft.</b> Dieser Hub wird in einer Medienkooperation präsentiert. Der Medienpartner ermöglicht mit seiner finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Er nimmt dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
           </div>
@@ -1618,55 +1754,22 @@
 </header>
 
 <nav class="jump">
-  <div class="wrap jump-inner" id="jumpNav"></div>
+  <div class="wrap jump-inner" id="jumpNav"><span class="jump-label">Art der Quelle:</span></div>
 </nav>
 
-<!-- Trefferliste ueber mehrere Datenbanken. Steht bewusst zwischen Suchfeld
-     und Kachelraster: Sie ist die Antwort auf die Suche, die Kacheln sind der
-     Weg zu allem, was sich nicht abfragen laesst. Verborgen, bis jemand sie
-     ausdruecklich anfordert - vorher geht kein Datum an einen Dritten. -->
-<div class="wrap meta-wrap" id="metaWrap" hidden>
-  <section class="meta-card" aria-labelledby="metaTitel">
-    <div class="meta-head">
-      <div>
-        <h2 class="serif" id="metaTitel">Treffer aus mehreren Datenbanken</h2>
-        <p class="meta-sub" id="metaSub"></p>
-      </div>
-      <button class="meta-zu" id="metaZu" type="button">Schlie&szlig;en</button>
-    </div>
-    <div class="meta-quellen" id="metaQuellen"></div>
-    <!-- Die Schaltflaechen f&uuml;r &bdquo;Art&ldquo; entstehen aus den Quellen selbst,
-         damit beides nie auseinanderl&auml;uft. -->
-    <div class="meta-leiste">
-      <div class="meta-sort" id="metaArt">
-        <span class="dl-label">Art:</span>
-      </div>
-    </div>
-    <div class="meta-leiste">
-      <div class="meta-sort" id="metaSort">
-        <span class="dl-label">Sortierung:</span>
-        <button type="button" class="fchip" data-sort="rang" aria-pressed="true">Relevanz</button>
-        <button type="button" class="fchip" data-sort="jahr" aria-pressed="false">Jahr</button>
-      </div>
-      <div class="dl-row">
-        <span class="dl-label">Download:</span>
-        <button class="dl-btn" id="mtWord" type="button" disabled title="Als Word-Dokument herunterladen">&#10515; Word</button>
-        <button class="dl-btn" id="mtCsv" type="button" disabled title="Als Tabelle f&uuml;r Excel herunterladen">&#10515; Excel</button>
-        <button class="dl-btn" id="mtRis" type="button" disabled title="Literaturverwaltung: Zotero, EndNote, Citavi">&#10515; RIS</button>
-        <button class="dl-btn" id="mtBib" type="button" disabled title="Literaturverwaltung: BibTeX, LaTeX">&#10515; BibTeX</button>
-      </div>
-    </div>
-    <div class="meta-liste" id="metaListe"></div>
-    <div class="meta-blaetter" id="metaBlaetter"></div>
-    <div class="meta-fuss">
-      <button class="btn-clear" id="metaMehr" type="button" hidden>Weitere Treffer laden</button>
-      <p class="meta-hinweis" id="metaFuss"></p>
-    </div>
-  </section>
-</div>
-
 <div class="wrap layout">
-  <main class="col-main" id="main"></main>
+  <main class="col-main" id="main">
+    <!-- Ueber den Kacheln: was die Kennzeichen heissen (immer) und, nach
+         „In allen Datenbanken suchen", dass der Begriff eingetragen ist.
+         Vorher sahen die Kacheln nach der Suche aus wie davor (Entwurf
+         Mariann Stegmaier, S. 4 und 6). Die Bloecke haengt das Skript
+         dahinter an. -->
+    <div class="db-status" id="dbStatus" hidden></div>
+    <p class="kennz-legende"><span class="badge live">Live-Suche</span> öffnet die Trefferliste der Datenbank
+      &middot; <span class="badge portal">Portal</span> kopiert den Begriff, dort einfügen
+      &middot; <span class="badge lic">Lizenz</span> Zugang über Ihre Bibliothek oder Institution
+      &middot; <span class="boolmark ja">AND/OR ✓</span> <span class="boolmark nein">AND/OR ✗</span> Operatoren geprüft</p>
+  </main>
 
   <aside class="studies" id="studien">
     <div class="studies-head">
@@ -2073,6 +2176,15 @@ function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch
 
 const main = document.getElementById('main');
 const jumpNav = document.getElementById('jumpNav');
+
+// Fusszeile einer Kachel: ohne Begriff, was sie oeffnet; mit Begriff, was
+// der Klick damit macht. Als Funktionsdeklaration, damit sie schon beim
+// Aufbau der Kacheln weiter unten bereitsteht.
+function kachelText(typ, begriff, name){
+  if(!begriff) return typ==='live' ? 'Suche öffnen' : 'Öffnen';
+  const b = '„' + htmlEsc(begriff) + '“';
+  return typ==='live' ? b + ' in ' + name + ' suchen' : 'Begriff kopieren &amp; öffnen';
+}
 const cardIndex = []; // {el, tpl, type}
 
 // Kein Sprung-Link in der Navigation - die id bleibt aber bestehen,
@@ -2106,14 +2218,16 @@ CATS.forEach(cat=>{
     const badge = x.t==='live' ? '<span class="badge live">Live-Suche</span>'
                 : x.t==='lic' ? '<span class="badge lic">Lizenz</span>'
                 : '<span class="badge portal">Portal</span>';
-    const foot = x.t==='live'
-      ? '<span class="bereit">Trefferliste · </span><span class="arrow">↗</span> Suche öffnen <span class="host mono">· '+hostOf(x.u)+'</span>'
-      : '<span class="arrow">↗</span> Öffnen <span class="host mono">· '+hostOf(x.u)+'</span>';
+    // Der Text vor dem Host wechselt mit der Suche (kachelText), damit die
+    // Kachel sagt, was der Klick jetzt tut.
+    const foot = '<span class="arrow">↗</span> <span class="fuss-text">'+kachelText(x.t, '', x.n)+'</span> <span class="host mono">· '+hostOf(x.u)+'</span>';
+    // Kennzeichen in einer eigenen Spalte rechts: Bei langen Namen rutschten
+    // sie sonst unter den Namen und standen bei jeder Kachel woanders.
     a.innerHTML =
-      '<div class="card-top"><span class="card-name">'+x.n+'</span>'+
+      '<div class="card-top"><span class="card-name">'+x.n+'</span><span class="card-kennz">'+badge+
     (x.b===1 ? '<span class="boolmark ja" title="Geprüft: wertet AND, OR und NOT aus">AND/OR ✓</span>'
      : x.b===0 ? '<span class="boolmark nein" title="Geprüft: wertet die Operatoren nicht aus – sie werden als Wörter mitgesucht">AND/OR ✗</span>'
-     : '')+badge+'</div>'+
+     : '')+'</span></div>'+
       '<div class="card-desc">'+x.d+'</div>'+
       '<div class="card-foot">'+foot+'</div>';
     grid.appendChild(a);
@@ -2902,7 +3016,50 @@ function verdrahte(term){
     c.el.href = (c.type === 'live' && term) ? c.tpl.replace('%s', enc)
               : (c.type === 'live')         ? basisUrl(c.tpl)
               :                               c.tpl;
+    const ft = c.el.querySelector('.fuss-text');
+    if(ft) ft.innerHTML = kachelText(c.type, term ? (istDeutsch(c.eintrag) ? term : intText) : '', c.eintrag.n);
   });
+}
+
+// Nach „In allen Datenbanken suchen": Statuszeile ueber den Kacheln und ein
+// kurz pulsierender Rahmen, damit sichtbar wird, dass sich etwas getan hat.
+// Der Rahmen verschwindet nach vier Sekunden wieder und lenkt danach nicht ab.
+const dbStatus = document.getElementById('dbStatus');
+let pulsTakt = null;
+function zeigeDbStatus(term){
+  if(!term){ dbStatus.hidden = true; return; }
+  const live = cardIndex.filter(c=>c.type==='live').length;
+  dbStatus.innerHTML = '<b>&bdquo;' + htmlEsc(term) + '&ldquo; ist in allen ' + cardIndex.length
+    + ' Kacheln eingetragen.</b> <span>Die ' + live + ' Kacheln mit Live-Suche öffnen die Trefferliste '
+    + 'der Datenbank in einem neuen Tab. Bei Portalen und Lizenz-Datenbanken wird der Begriff beim Klick '
+    + 'kopiert &ndash; dort einfach einfügen (Strg+V).</span>';
+  dbStatus.hidden = false;
+}
+function pulsiere(){
+  document.body.classList.remove('puls');
+  void document.body.offsetWidth;      // Animation neu anstossen
+  document.body.classList.add('puls');
+  clearTimeout(pulsTakt);
+  pulsTakt = setTimeout(()=>document.body.classList.remove('puls'), 4000);
+}
+
+// Portale haben keine Trefferadresse - der Begriff muss dort eingetippt
+// werden. Damit es wenigstens Einfuegen ist, kopiert der Klick ihn.
+// Rueckmeldung als kurzer Hinweis unten, der nach drei Sekunden verschwindet.
+function kopiereBegriff(begriff){
+  if(!begriff || !navigator.clipboard) return;
+  navigator.clipboard.writeText(begriff).then(()=>{
+    let t = document.getElementById('kopiertHinweis');
+    if(!t){
+      t = document.createElement('div');
+      t.id = 'kopiertHinweis'; t.className = 'kopiert-hinweis'; t.setAttribute('role','status');
+      document.body.appendChild(t);
+    }
+    t.innerHTML = '&bdquo;' + htmlEsc(begriff) + '&ldquo; kopiert &ndash; im Portal einfügen (Strg+V)';
+    t.classList.add('an');
+    clearTimeout(t._takt);
+    t._takt = setTimeout(()=>t.classList.remove('an'), 3000);
+  }).catch(()=>{});
 }
 
 // Die Ergebniszeile getrennt vom Springen: Beim Filtern sollen sich die
@@ -2917,7 +3074,8 @@ function zeigeErgebnis(){
 
   resultBar.innerHTML =
     '<b>&bdquo;' + htmlEsc(gesucht) + '&ldquo;</b> ist in <b>' + live + '</b> Datenbanken vorbereitet &mdash; '
-    + 'ein Klick &ouml;ffnet die Trefferliste in einem neuen Tab.'
+    + 'ein Klick &ouml;ffnet die Trefferliste in einem neuen Tab. '
+    + '<a href="#dbStatus" class="rb-sprung">Zu den Datenbanken &darr;</a>'
     + '<span class="rb-zusatz">Dazu ' + portale + ' Portale, in denen der Begriff nach dem &Ouml;ffnen '
     + 'einzugeben ist, und ' + lizenz + ' Datenbanken mit Lizenzpflicht.</span>'
     + ((uebersetzung && uebersetzung.geaendert)
@@ -2943,12 +3101,14 @@ document.addEventListener('click', (e)=>{
   const link = e.target.closest('.card');
   if(!link) return;
   const term = input.value.trim();
+  if(term && !link.dataset.live) kopiereBegriff(term);
   if(!term || term === gesucht) return;      // nichts Neues einzustellen
   gesucht = term;
   uebersetzung = document.getElementById('uebersetzenAn').checked ? uebersetze(term) : null;
   verdrahte(term);
   document.body.classList.add('gesucht');
   zeigeErgebnis();
+  zeigeDbStatus(term);
   aktualisiereChips(term);
 }, true);
 
@@ -2970,14 +3130,17 @@ function suchen(springen){
   verdrahte(term);
   document.body.classList.add('gesucht');
   zeigeErgebnis();
+  zeigeDbStatus(term);
+  feldX();                     // Schnellwahl setzt den Begriff ohne input-Ereignis
   aktualisiereChips(term);
 
   // Nur beim Absenden hinunterspringen - nicht bei jeder Filteraenderung.
   // Die Meta-Trefferliste ruft mit springen=false auf: Sie stellt die
   // Kacheln mit ein, die Seite soll dabei aber stehen bleiben.
+  // Ziel ist die Statuszeile, nicht der erste Block: Sie sagt, was passiert ist.
   if(springen === false) return;
-  const ziel = document.querySelector('.cat:not(.aus)');
-  if(ziel) ziel.scrollIntoView({behavior:'smooth', block:'start'});
+  dbStatus.scrollIntoView({behavior:'smooth', block:'start'});
+  pulsiere();
 }
 
 // Vorbereitete E-Mail an die Redaktion: Wer eine Uebersetzung vermisst,
@@ -3004,9 +3167,17 @@ function zuruecksetzen(){
   document.body.classList.remove('gesucht');
   resultBar.hidden = true;
   boolHint.hidden = true;
+  zeigeDbStatus('');
+  feldX();
   aktualisiereChips('');
   input.focus();
 }
+
+// Das x im Suchfeld nur zeigen, wenn dort etwas steht.
+const feldXKnopf = document.getElementById('clear');
+function feldX(){ feldXKnopf.hidden = !input.value; }
+input.addEventListener('input', feldX);
+feldX();
 
 function aktualisiereChips(term){
   document.querySelectorAll('.chip').forEach(ch=>{
@@ -3830,6 +4001,8 @@ async function mtSuchen(neu){
   metaMehrBtn.disabled = true;
   metaMehrBtn.textContent = 'Wird geladen …';
   if(neu){
+    document.getElementById('metaTitel').innerHTML =
+      'Schnellüberblick <span class="meta-fuer">&middot; Ergebnisse für &bdquo;' + htmlEsc(mtRoh) + '&ldquo;</span>';
     mtZeichneQuellen();
     mtZeichnen();
     metaWrap.scrollIntoView({behavior: 'smooth', block: 'start'});
