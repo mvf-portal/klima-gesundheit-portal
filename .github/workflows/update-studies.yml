@@ -74,8 +74,18 @@ jobs:
         with:
           python-version: "3.12"
 
+      # openpyxl und pypdf kamen am 22.10.2026 mit dem Zulassungsradar dazu:
+      # openpyxl liest die beiden Excel-Tabellen der EMA (Medicines und die
+      # monatliche Antragsliste), pypdf die DiGA-Bekanntmachungen des BfArM.
+      #
+      # **Sie haben einen Tag lang gefehlt, und niemand hat es gemerkt.** Die
+      # beiden Radar-Schritte laufen mit `continue-on-error: true`, damit ein
+      # Aussetzer der EMA nicht das Studien-Update mitreisst - der Lauf meldet
+      # dann Erfolg, obwohl der Radar mit ModuleNotFoundError abgebrochen ist.
+      # Eine fehlende Bibliothek sieht im Ergebnis genauso aus wie ein ruhiger
+      # Tag: Die Seite zeigt weiter die Daten von gestern.
       - name: Abhängigkeiten installieren
-        run: pip install --quiet "anthropic>=0.40" requests tzdata python-docx
+        run: pip install --quiet "anthropic>=0.40" requests tzdata python-docx openpyxl pypdf
 
       # Zwei Versuche, zehn Minuten auseinander. Die meisten Ausfaelle sind
       # Aussetzer - PubMed mit 500, eine leere oder abgeschnittene
