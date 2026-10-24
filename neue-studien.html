@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Alle Studien, die der Knowledge-Hub Hitze, Klima &amp; Gesundheit aus PubMed ausgewählt hat, mit deutscher Zusammenfassung - nach Tag und Monat geordnet.">
+<title>Neue Studien — Hitze, Klima &amp; Gesundheit</title>
+<!-- Ohne Icon zeigt die Tableiste nur den Anfangsbuchstaben des Titels. Das
+     Zeichen ist in allen zwoelf Portalen dasselbe; gebaut wird es mit
+     icon_bauen.py in der Portal-Vorlage. -->
+<link rel="icon" href="/logo/hub-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/logo/hub-icon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/logo/hub-icon-180.png">
+<meta name="theme-color" content="#0051A1">
+<link rel="canonical" href="https://klima.m-vf.de/neue-studien.html">
+<style>
+  /* Schrift, Farben und Gerüst wie ueber.html - die Seite gehört sichtbar dazu. */
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:400;
+    src:url("fonts/lato-400.woff2") format("woff2"); font-display:swap; }
+  @font-face{ font-family:"Lato"; font-style:normal; font-weight:700;
+    src:url("fonts/lato-700.woff2") format("woff2"); font-display:swap; }
+
+  :root{
+    --paper:#EDF2FA; --card:#FFFFFF; --card-2:#F7FAFD;
+    --ink:#111111; --ink-soft:#444A50; --ink-faint:#545C63;
+    --line:#D0D8E4; --line-soft:#E3EAF3;
+    --brand:#0051A1; --brand-deep:#003B77; --brand-tint:#E1EAF6;
+    --action:#BE9E53; --action-deep:#8A6E28; --on-action:#2A2207;
+    --ok:#1C6B3C; --ok-tint:#E6F4EC; --warn:#8A2D2D; --warn-tint:#FAEAEA;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+      --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+      --line:#22314A; --line-soft:#1A2639;
+      --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+      --action:#D4B878; --action-deep:#D9BE82; --on-action:#221A08;
+      --ok:#7FD3A2; --ok-tint:#12271C; --warn:#F0A3A3; --warn-tint:#2A1414;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0A1120; --card:#111B2E; --card-2:#0E1728;
+    --ink:#E9EEF6; --ink-soft:#A9B7CA; --ink-faint:#8FA0B7;
+    --line:#22314A; --line-soft:#1A2639;
+    --brand:#6FA8E8; --brand-deep:#9CC6F4; --brand-tint:#152742;
+    --action:#D4B878; --action-deep:#D9BE82; --on-action:#221A08;
+    --ok:#7FD3A2; --ok-tint:#12271C; --warn:#F0A3A3; --warn-tint:#2A1414;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Lato", system-ui, "Segoe UI", Arial, sans-serif;
+    font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:820px; margin:0 auto; padding:0 22px; }
+
+  /* ---------- Menüleiste (wie ueber.html) ---------- */
+  nav.hauptmenu{ background:var(--card); border-bottom:1px solid var(--line); }
+  .menu-inner{
+    display:flex; align-items:center; gap:4px; flex-wrap:nowrap;
+    overflow-x:auto; scrollbar-width:none; padding:0;
+  }
+  .menu-inner::-webkit-scrollbar{ display:none; }
+  .menu-inner a{
+    flex:0 0 auto; padding:11px 13px; font-size:13px; font-weight:700;
+    color:var(--ink-soft); text-decoration:none; white-space:nowrap;
+    border-bottom:2px solid transparent; transition:color .14s, border-color .14s;
+  }
+  .menu-inner a:hover{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a.hier{ color:var(--brand); border-bottom-color:var(--brand); }
+  .menu-inner a:focus-visible{ outline:2px solid var(--brand); outline-offset:-2px; }
+  .menu-extern::after{ content:" \2197"; font-size:.85em; }
+  @media (max-width:860px){
+    nav.hauptmenu{ position:relative; }
+    nav.hauptmenu::after{
+      content:""; position:absolute; top:0; right:0; bottom:0; width:36px;
+      background:linear-gradient(to right, transparent, var(--card));
+      pointer-events:none;
+    }
+  }
+  @media (max-width:620px){
+    .menu-inner{ flex-wrap:wrap; padding:3px 0; gap:0; }
+    .menu-inner a{ padding:12px 9px; font-size:12px; }
+    .menu-inner a.nur-breit{ display:none; }
+    nav.hauptmenu::after{ display:none; }
+  }
+
+  /* ---------- Kopf ---------- */
+  header.top{ background:var(--card); border-bottom:1px solid var(--line); padding:38px 0 30px; }
+  .kopf-oben{ display:flex; align-items:flex-start; justify-content:space-between; gap:26px; }
+  .eyebrow{
+    font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--brand); margin:0 0 8px;
+  }
+  h1{
+    font-size:clamp(24px,3.6vw,38px); font-weight:700; line-height:1.15;
+    margin:0 0 14px; color:var(--brand); letter-spacing:-.015em; text-wrap:balance;
+  }
+  .standfirst{ margin:0; font-size:clamp(16px,2vw,18px); color:var(--ink-soft); max-width:62ch; text-wrap:pretty; }
+  .marke{ flex:0 0 auto; display:block; line-height:0; border-radius:5px; }
+  .marke img{ width:190px; max-width:34vw; height:auto; display:block; }
+  @media (prefers-color-scheme:dark){ .marke{ background:#fff; padding:9px 12px; } }
+  :root[data-theme="dark"] .marke{ background:#fff; padding:9px 12px; }
+  :root[data-theme="light"] .marke{ background:none; padding:0; }
+  @media (max-width:720px){
+    .kopf-oben{ flex-direction:column-reverse; align-items:flex-start; gap:16px; }
+    .marke img{ width:160px; max-width:56vw; }
+  }
+
+  main{ padding:34px 0 70px; }
+  h2{
+    font-size:clamp(19px,2.6vw,24px); font-weight:700; line-height:1.25;
+    margin:0 0 14px; padding-bottom:9px; border-bottom:2px solid var(--brand);
+  }
+  p{ margin:0 0 14px; max-width:68ch; text-wrap:pretty; }
+  a{ color:var(--brand); text-underline-offset:2px; }
+  a:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; border-radius:3px; }
+
+  /* ---------- Formular ---------- */
+  form{ margin:0 0 30px; }
+  fieldset{ border:0; margin:0 0 22px; padding:0; }
+  legend{
+    font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-faint); padding:0; margin-bottom:10px;
+  }
+
+  /* Die beiden Newsletter als anklickbare Karten - die ganze Fläche schaltet
+     das Kästchen, nicht nur das Kästchen selbst. */
+  .wahl{ display:grid; gap:12px; }
+  @media (min-width:700px){ .wahl{ grid-template-columns:1fr 1fr; } }
+  .karte{
+    display:block; position:relative; cursor:pointer;
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:16px 18px 16px 46px; transition:border-color .14s, background .14s;
+  }
+  .karte:hover{ border-color:var(--brand); }
+  .karte input{
+    position:absolute; left:17px; top:19px; width:18px; height:18px;
+    accent-color:var(--brand); cursor:pointer; margin:0;
+  }
+  .karte:has(input:checked){ border-color:var(--brand); background:var(--brand-tint); }
+  .karte:has(input:focus-visible){ outline:2px solid var(--brand); outline-offset:2px; }
+  .karte b{ display:block; font-size:16px; line-height:1.3; margin-bottom:3px; }
+  .karte .takt{
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--brand-deep); background:var(--card-2);
+    border:1px solid var(--line); border-radius:4px; padding:1px 7px; margin-bottom:6px;
+  }
+  .karte .was{ display:block; font-size:13.5px; line-height:1.5; color:var(--ink-soft); }
+
+  .reihe-vor{ margin:-4px 0 12px; }
+  /* Die Karten der Schwesterportale tragen zusaetzlich die Domain. */
+  .karte .wo{ display:block; font-size:12.5px; color:var(--ink-faint); margin-top:7px; }
+  .karte .wo a{ color:var(--ink-faint); }
+
+  label.feld{ display:block; font-size:13px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  input[type="email"]{
+    width:100%; max-width:420px; min-height:46px; padding:0 13px;
+    font-family:inherit; font-size:16px; color:var(--ink);
+    background:var(--card); border:1px solid var(--line); border-radius:6px;
+  }
+  input[type="email"]:focus{ outline:2px solid var(--brand); outline-offset:1px; border-color:var(--brand); }
+
+  .einwilligung{
+    display:flex; gap:11px; align-items:flex-start;
+    font-size:13.5px; line-height:1.55; color:var(--ink-soft); max-width:68ch; margin:18px 0 6px;
+  }
+  .einwilligung input{ flex:0 0 auto; width:18px; height:18px; margin-top:3px; accent-color:var(--brand); }
+
+  .btn-gold{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    min-height:48px; margin-top:18px;
+    background:var(--action); color:var(--on-action); font-family:inherit;
+    font-weight:700; font-size:15px; text-decoration:none;
+    padding:0 26px; border:0; border-radius:6px; cursor:pointer; transition:filter .14s;
+  }
+  .btn-gold:hover{ filter:brightness(1.08); }
+  .btn-gold:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+  .btn-gold[disabled]{ opacity:.6; cursor:default; }
+
+  /* Rückmeldung. Wird per aria-live vorgelesen, deshalb immer im Dokument. */
+  .meldung{ margin:16px 0 0; padding:13px 16px; border-radius:6px; font-size:14.5px; max-width:68ch; }
+  .meldung:empty{ display:none; }
+  .meldung.ok{ background:var(--ok-tint); color:var(--ok); border:1px solid currentColor; }
+  .meldung.fehler{ background:var(--warn-tint); color:var(--warn); border:1px solid currentColor; }
+
+  /* Falle für Formularroboter: sichtbar nur für Maschinen. */
+  .falle{ position:absolute; left:-5000px; }
+
+  .fein{ font-size:13px; color:var(--ink-faint); max-width:68ch; }
+
+  footer{
+    border-top:1px solid var(--line); background:var(--card);
+    padding:26px 0 40px; font-size:13.5px; color:var(--ink-faint);
+  }
+  footer p{ margin:0 0 8px; max-width:70ch; }
+  footer a{ color:var(--ink-soft); }
+</style>
+
+<!-- NETZLEISTE-START (wird von netzleiste_einsetzen.py gefuellt) -->
+<style>
+  .netz{ --nz-grund:#14202E; --nz-text:#D3DCE8; --nz-leise:#9FB0C4; --nz-gold:#BE9E53;
+         --nz-petrol:#0E6E71; --nz-blau:var(--brand,#0051A1);
+         --nz-karte:var(--card,#FFFFFF); --nz-ink:var(--ink,#111); --nz-soft:var(--ink-soft,#444A50);
+         --nz-linie:var(--line,#D0D8E4); --nz-tint:var(--brand-tint,#E1EAF6);
+         position:sticky; top:0; z-index:60; background:var(--nz-grund); color:var(--nz-text);
+         font-size:13px; line-height:1.3; transition:transform .22s ease; }
+  /* Schwarze und weisse Leiste verschwinden beim Herunterscrollen gemeinsam
+     und kommen beim Hochscrollen gemeinsam wieder (Rueckmeldung Mariann
+     Stegmaier, 09.10.2026: vorher kam nur die weisse zurueck). */
+  .netz.weg{ transform:translateY(-100%); }
+  @media (prefers-reduced-motion:reduce){ .netz{ transition:none; } }
+  /* Breite: einheitlich, auch auf Seiten, deren eigenes .wrap schmaler ist
+     (Newsletter, Ausschreibungsradar, Ueber den Hub: 820 px). */
+  .netz .wrap, .ortsleiste .wrap{ max-width:1180px; margin-left:auto; margin-right:auto;
+         padding-left:22px; padding-right:22px; box-sizing:border-box; }
+  @media (max-width:560px){ .netz .wrap, .ortsleiste .wrap{ padding-left:16px; padding-right:16px; } }
+  :root[data-theme="dark"] .netz{ --nz-petrol:#4FC2C4; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz{ --nz-petrol:#4FC2C4; } }
+  .netz *{ box-sizing:border-box; }
+  /* Breite und Seitenrand kommen von .wrap der jeweiligen Seite - Hubs und
+     Uebersicht setzen den Rand verschieden, die Leiste soll buendig mit dem
+     Inhalt darunter stehen. */
+  .netz-innen{ display:flex; align-items:center; gap:4px; min-height:44px; }
+  .netz a, .netz button{ font:inherit; color:inherit; }
+  .netz a:focus-visible, .netz button:focus-visible{ outline:2px solid var(--nz-gold); outline-offset:2px; border-radius:4px; }
+  .netz-marke{ display:flex; align-items:center; gap:9px; text-decoration:none; padding:8px 14px 8px 0;
+               margin-right:6px; border-right:1px solid #2E3D52; font-weight:700; letter-spacing:.09em; font-size:12.5px; color:#FFF; white-space:nowrap; }
+  .netz-marke img{ width:20px; height:20px; display:block; }
+  .netz-marke b{ color:var(--nz-gold); font-weight:700; }
+  .netz-knopf, .netz-link{ background:none; border:0; cursor:pointer; padding:13px 11px; text-decoration:none;
+               white-space:nowrap; font-weight:700; color:var(--nz-text); }
+  .netz-knopf:hover, .netz-link:hover{ color:#FFF; }
+  .netz-knopf[aria-expanded="true"]{ background:var(--nz-karte); color:var(--nz-ink); border-radius:6px 6px 0 0; }
+  .netz-knopf .pfeil{ display:inline-block; margin-left:5px; font-size:10px; transition:transform .15s; }
+  .netz-knopf[aria-expanded="true"] .pfeil{ transform:rotate(180deg); }
+  .netz-rechts{ margin-left:auto; display:flex; align-items:center; gap:14px; }
+  .netz-sprache{ display:flex; border:1px solid #3A4A60; border-radius:5px; overflow:hidden; font-size:11.5px; font-weight:700; }
+  .netz-sprache a, .netz-sprache span{ padding:3px 8px; text-decoration:none; }
+  .netz-sprache [aria-current]{ background:var(--nz-blau); color:#FFF; }
+  :root[data-theme="dark"] .netz-sprache [aria-current]{ background:#2C5C93; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-sprache [aria-current]{ background:#2C5C93; } }
+  .netz-mvf{ color:var(--nz-leise); text-decoration:none; white-space:nowrap; font-size:12px; }
+  .netz-mvf b{ color:var(--nz-text); }
+  .netz-mvf:hover b{ color:#FFF; text-decoration:underline; }
+
+  /* Mega-Menue: eine Ebene, drei Gruppen. Oeffnet per Klick, nie per Hover. */
+  .netz-mega{ position:absolute; left:0; right:0; top:100%; }
+  .netz-mega[hidden]{ display:none; }
+  .netz-mega-karte{ background:var(--nz-karte); color:var(--nz-ink);
+               border:1px solid var(--nz-linie); border-radius:0 0 12px 12px;
+               box-shadow:0 22px 50px -18px rgba(10,20,40,.45); padding:22px 26px 0; }
+  .netz-spalten{ display:grid; grid-template-columns:1.25fr 1fr 1.15fr; gap:30px; }
+  .netz-gruppe h3{ margin:0 0 9px; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--nz-soft); font-weight:700; }
+  .netz-gruppe ul{ list-style:none; margin:0; padding:0; }
+  .netz-gruppe li a{ display:flex; align-items:center; gap:9px; padding:5px 8px; margin:0 -8px; border-radius:6px;
+               text-decoration:none; color:var(--nz-ink); font-size:14px; line-height:1.3; }
+  .netz-gruppe li a::before{ content:""; flex:0 0 7px; height:7px; border-radius:50%; background:var(--nz-blau); opacity:.55; }
+  .netz-gruppe.krank li a::before{ background:var(--nz-petrol); }
+  .netz-gruppe li a:hover{ background:var(--nz-tint); }
+  .netz-gruppe li a[aria-current]{ background:var(--nz-tint); color:var(--nz-blau); font-weight:700; }
+  .netz-gruppe li a[aria-current]::before{ opacity:1; }
+  .netz-gruppe.krank li a[aria-current]{ color:var(--nz-petrol); }
+  .netz-angebote li a{ align-items:flex-start; padding:7px 8px; }
+  .netz-angebote li a::before{ display:none; }
+  .netz-angebote svg{ flex:0 0 22px; width:22px; height:22px; color:#8A6E28; margin-top:1px; }
+  :root[data-theme="dark"] .netz-angebote svg{ color:var(--nz-gold); }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-angebote svg{ color:var(--nz-gold); } }
+  .netz-angebote b{ display:block; font-size:14px; }
+  .netz-angebote small{ display:block; font-size:12.5px; color:var(--nz-soft); margin-top:2px; }
+  .netz-fuss{ display:flex; justify-content:space-between; gap:16px; margin-top:16px; padding:13px 0 15px;
+               border-top:1px solid var(--nz-linie); font-size:13.5px; font-weight:700; }
+  .netz-fuss a{ color:var(--nz-blau); text-decoration:none; }
+  .netz-fuss a:hover{ text-decoration:underline; }
+
+  /* Die weisse Leiste des Hubs (bzw. die Sprunglinks der Uebersicht).
+     Klebt oben, verschwindet beim Herunterscrollen und kommt beim
+     Hochscrollen wieder. */
+  .ortsleiste{ position:sticky; top:var(--netz-h,44px); z-index:50; background:var(--card,#fff);
+               border-bottom:1px solid var(--line,#D0D8E4); transition:transform .22s ease; }
+  .ortsleiste.weg{ transform:translateY(calc(-102% - var(--netz-h,44px))); }
+  @media (prefers-reduced-motion:reduce){ .ortsleiste{ transition:none; } }
+  .ortsleiste-innen{ display:flex; align-items:center; gap:6px; min-height:58px; }
+  .ort-name{ display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--ink,#111); margin-right:18px; min-width:0; }
+  .ort-name img{ width:34px; height:34px; flex:0 0 34px; display:block; }
+  .ort-name small{ display:block; font-size:10.5px; letter-spacing:.12em; font-weight:700; color:var(--ink-soft,#444A50); }
+  .ort-name b{ display:block; font-size:14.5px; color:var(--brand,#0051A1); line-height:1.2; }
+  .ort-links{ display:flex; gap:2px; }
+  .ort-links a{ padding:18px 11px 17px; font-size:13.5px; font-weight:700; color:var(--ink-soft,#444A50);
+               text-decoration:none; border-bottom:2px solid transparent; white-space:nowrap; }
+  .ort-links a:hover, .ort-links a[aria-current]{ color:var(--brand,#0051A1); border-bottom-color:var(--brand,#0051A1); }
+  .ort-nl{ margin-left:auto; background:var(--action,#BE9E53); color:var(--on-action,#2A2207); font-weight:700;
+               font-size:13.5px; padding:9px 16px; border-radius:7px; text-decoration:none; white-space:nowrap; }
+  .ort-nl:hover{ background:var(--action-deep,#A5873F); }
+  .ort-menue{ display:none; margin-left:8px; align-items:center; gap:7px; background:none; cursor:pointer;
+               border:1px solid var(--line,#D0D8E4); border-radius:7px; padding:8px 12px;
+               font:inherit; font-size:13.5px; font-weight:700; color:var(--ink,#111); }
+  .ort-menue svg{ width:18px; height:18px; }
+  .netz a:focus-visible, .ortsleiste a:focus-visible, .ort-menue:focus-visible{ outline:2px solid var(--brand,#0051A1); outline-offset:2px; }
+
+  /* Smartphone-Menue: alles untereinander, nichts weiter aufzuklappen. */
+  .netz-handy{ --nz-petrol:#0E6E71; --nz-blau:var(--brand,#0051A1); --nz-ink:var(--ink,#111); --nz-soft:var(--ink-soft,#444A50);
+               --nz-tint:var(--brand-tint,#E1EAF6); --nz-gold:#BE9E53; }
+  :root[data-theme="dark"] .netz-handy{ --nz-petrol:#4FC2C4; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-handy{ --nz-petrol:#4FC2C4; } }
+  /* Grund aus der Seitenfarbe: Mit festem Weiss stand im Dunkelmodus helle
+     Schrift auf weissem Grund (Rueckmeldung 09.10.2026). */
+  .netz-handy{ position:fixed; inset:0; z-index:90; background:var(--card,#fff); color:var(--ink,#111);
+               overflow-y:auto; padding:0 0 30px; }
+  .netz-handy[hidden]{ display:none; }
+  .netz-handy-kopf{ position:sticky; top:0; display:flex; justify-content:space-between; align-items:center;
+               padding:12px 18px; background:var(--card,#fff); border-bottom:1px solid var(--line,#D0D8E4); font-weight:700; }
+  .netz-handy-kopf button{ font:inherit; font-size:14px; font-weight:700; background:none; border:1px solid var(--line,#D0D8E4);
+               border-radius:7px; padding:7px 12px; cursor:pointer; color:inherit; }
+  .netz-handy section{ padding:14px 18px 6px; border-bottom:1px solid var(--line-soft,#E3EAF3); }
+  .netz-handy h3{ margin:0 0 6px; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-soft,#444A50); }
+  .netz-handy .netz-gruppe h3{ margin-top:10px; font-size:10.5px; }
+  .netz-handy ul{ list-style:none; margin:0; padding:0; }
+  .netz-handy li a, .netz-handy .handy-zeile{ display:flex; justify-content:space-between; align-items:center;
+               padding:10px 0; min-height:44px; text-decoration:none; color:var(--ink,#111); font-size:15px; }
+  /* Die Hubliste ist aus dem Mega-Menue geklont; dort stehen Punkt und Name
+     linksbuendig nebeneinander, nicht auf Abstand wie die Zeilen oben. */
+  .netz-handy .netz-gruppe li a{ margin:0; padding:9px 6px; justify-content:flex-start; gap:10px; min-height:42px; }
+  .netz-handy .netz-angebote li a{ align-items:flex-start; }
+  .netz-handy .netz-gruppe li a[aria-current]::after{ content:"✓"; margin-left:auto; color:var(--brand,#0051A1); }
+  .netz-handy .netz-sprache span[aria-current]{ background:var(--brand,#0051A1); color:#FFF; }
+  .netz-handy .netz-sprache a{ color:var(--ink,#111); }
+  .netz-handy .handy-nl{ display:block; text-align:center; margin:16px 18px; background:var(--action,#BE9E53);
+               color:var(--on-action,#2A2207); font-weight:700; padding:13px; border-radius:8px; text-decoration:none; }
+  .netz-handy .handy-unten{ display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center; padding:16px 18px; font-size:13.5px; }
+  .netz-handy .handy-unten a{ color:var(--ink-soft,#444A50); }
+  .netz-handy .netz-sprache{ border-color:var(--line,#D0D8E4); }
+
+  @media (max-width:980px){ .netz-mvf .lang{ display:none; } }
+  @media (max-width:860px){
+    .netz-rechts, .netz-link{ display:none; }
+    .netz-spalten{ grid-template-columns:1fr 1fr; }
+    .netz-angebote{ grid-column:1 / -1; }
+    .ort-links, .ort-nl{ display:none; }
+    .ort-menue{ display:inline-flex; margin-left:auto; }
+    .ortsleiste-innen{ min-height:56px; }
+  }
+  @media (max-width:560px){
+    .netz-mega-karte{ border-radius:0 0 10px 10px; padding:16px 16px 0; max-height:calc(100vh - 60px); overflow-y:auto; }
+    .netz-spalten{ grid-template-columns:1fr; gap:14px; }
+    .netz-marke{ border-right:0; padding-right:4px; letter-spacing:.06em; }
+    .ort-name b{ font-size:13.5px; }
+  }
+  /* Aktionsleiste: befristet, auf allen Seiten der Reihe (seit 09.10.2026,
+     vorher nur auf der Uebersicht). Schliessen gilt fuer diesen Aufruf -
+     bewusst nichts im Speicher des Browsers (keine Cookies versprochen). */
+  .netz-aktion{ background:#F6EEDB; color:#111; border-bottom:1px solid #E3D3A8; font-size:13.5px; line-height:1.35; }
+  :root[data-theme="dark"] .netz-aktion{ background:#2A2414; color:#E9EEF6; border-bottom-color:#4A3E1E; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-aktion{ background:#2A2414; color:#E9EEF6; border-bottom-color:#4A3E1E; } }
+  .netz-aktion .wrap{ display:flex; align-items:center; gap:14px; min-height:38px; max-width:1180px; margin:0 auto; padding:0 22px; box-sizing:border-box; }
+  .netz-aktion p{ margin:0; flex:1; max-width:none; }
+  .netz-aktion a{ color:inherit; font-weight:700; text-decoration:none; white-space:nowrap; }
+  .netz-aktion a:hover{ text-decoration:underline; }
+  .netz-aktion button{ background:none; border:0; font:inherit; font-size:18px; line-height:1; padding:6px 8px; cursor:pointer; color:inherit; border-radius:5px; }
+  @media (max-width:560px){ .netz-aktion .wrap{ padding:0 16px; font-size:13px; } }
+  @media print{ .netz, .ortsleiste, .netz-handy, .netz-aktion{ display:none !important; } }
+</style>
+
+<!-- AKTION-START (befristet bis 11.11.2026; netzleiste_einsetzen.py laesst
+     sie nach Ablauf weg, das Skript unten raeumt sie im Browser weg) -->
+<div class="netz-aktion" id="netzAktion" data-ende="2026-11-11T23:59:59+01:00">
+  <div class="wrap">
+    <p><b>Bis 11.11.:</b> 1 von 10 Tickets für den 15. MVF-Fachkongress am 27. November in Berlin gewinnen</p>
+    <a href="https://knowledge-hubs.m-vf.de/gewinnspiel/">Teilnehmen →</a>
+    <button type="button" aria-label="Hinweis schließen">×</button>
+  </div>
+</div>
+<!-- AKTION-ENDE -->
+<nav class="netz" aria-label="Alle Knowledge-Hubs" data-hier="klima.m-vf.de">
+  <div class="netz-innen wrap">
+    <a class="netz-marke" href="https://knowledge-hubs.m-vf.de/" title="Zur Übersicht aller Knowledge-Hubs">
+      <img src="logo/hub-icon.svg" alt="" width="20" height="20">
+      <span>KNOWLEDGE<b>-HUBS</b></span>
+    </a>
+    <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Hubs<span class="pfeil" aria-hidden="true">▼</span></button>
+    <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs</a>
+    <div class="netz-rechts">
+      <div class="netz-sprache" role="group" aria-label="Sprache">
+        <span aria-current="true" lang="de" title="Deutsch" aria-label="Deutsch">DE</span>
+        <a href="https://knowledge-hubs.m-vf.de/en/" lang="en" hreflang="en" aria-label="English" title="English overview of all hubs">EN</a>
+      </div>
+      <a class="netz-mvf" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=netzleiste" target="_blank" rel="noopener"><span class="lang">ein Angebot von </span><b>Monitor Versorgungsforschung</b> ↗</a>
+    </div>
+  </div>
+
+  <div class="netz-mega" id="netzMega" hidden>
+    <div class="wrap"><div class="netz-mega-karte">
+      <div class="netz-spalten">
+        <div class="netz-gruppe">
+          <h3>Versorgungsthemen · 11</h3>
+          <ul>
+            <li><a data-domain="wissen.m-vf.de" href="https://wissen.m-vf.de/">Versorgungsforschung</a></li>
+            <li><a data-domain="ki.m-vf.de" href="https://ki.m-vf.de/">Digitalisierung, KI &amp; Gesundheit</a></li>
+            <li><a data-domain="gender.m-vf.de" href="https://gender.m-vf.de/">Geschlechtersensible Medizin</a></li>
+            <li><a data-domain="longevity.m-vf.de" href="https://longevity.m-vf.de/">Gesundes Altern &amp; Longevity</a></li>
+            <li><a data-domain="healthliteracy.m-vf.de" href="https://healthliteracy.m-vf.de/">Gesundheitskompetenz</a></li>
+            <li><a data-domain="klima.m-vf.de" href="https://klima.m-vf.de/">Hitze, Klima &amp; Gesundheit</a></li>
+            <li><a data-domain="impfen.m-vf.de" href="https://impfen.m-vf.de/">Impfen &amp; Prävention</a></li>
+            <li><a data-domain="ncd.m-vf.de" href="https://ncd.m-vf.de/">NCD/Chronische Krankheiten</a></li>
+            <li><a data-domain="safety.m-vf.de" href="https://safety.m-vf.de/">Patientensicherheit</a></li>
+            <li><a data-domain="pflege.m-vf.de" href="https://pflege.m-vf.de/">Pflege &amp; Langzeitversorgung</a></li>
+            <li><a data-domain="mental.m-vf.de" href="https://mental.m-vf.de/">Psychische Gesundheit</a></li>
+          </ul>
+        </div>
+        <div class="netz-gruppe krank">
+          <h3>Krankheitsgebiete · 4</h3>
+          <ul>
+            <li><a data-domain="adipositas.m-vf.de" href="https://adipositas.m-vf.de/">Adipositas</a></li>
+            <li><a data-domain="diabetes.m-vf.de" href="https://diabetes.m-vf.de/">Diabetes</a></li>
+            <li><a data-domain="kardio.m-vf.de" href="https://kardio.m-vf.de/">Kardiologie</a></li>
+            <li><a data-domain="onkologie.m-vf.de" href="https://onkologie.m-vf.de/">Onkologie</a></li>
+          </ul>
+        </div>
+        <div class="netz-gruppe netz-angebote">
+          <h3>Weitere Angebote</h3>
+          <ul>
+            <li><a href="https://innofonds.m-vf.de/">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 4l9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg>
+              <span><b>Innovationsfonds-Wissen</b><small>Projekte und Beschlüsse des GBA-Innovationsfonds</small></span></a></li>
+            <li><a href="https://wissen.m-vf.de/ausschreibungen.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><path d="M12 12l6-6"/></svg>
+              <span><b>Ausschreibungsradar</b><small>Offene Förderausschreibungen, zweimal pro Woche aktualisiert</small></span></a></li>
+            <li><a href="https://knowledge-hubs.m-vf.de/curatiohub.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7.5" width="18" height="12.5" rx="2"/><path d="M9 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5.5v2"/><path d="M3 13h18"/></svg>
+              <span><b>CuratioHub</b><small>Jobs in Versorgungsforschung, Public Health und Medizin</small></span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="netz-fuss">
+        <a href="newsletter.html" data-netz-nl>Newsletter dieses Hubs ›</a>
+        <a href="https://knowledge-hubs.m-vf.de/#themen">Zur Übersicht aller Hubs →</a>
+      </div>
+    </div></div>
+  </div>
+</nav>
+<script>
+// Laeuft erst, wenn das Dokument steht: Die weisse Leiste und das
+// Smartphone-Menue folgen erst NACH diesem Baustein.
+(function (los) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', los);
+  else los();
+})(function () {
+  var netz = document.querySelector('.netz');
+  if (!netz) return;
+  var hier = netz.getAttribute('data-hier');
+  var knopf = document.getElementById('netzKnopf');
+  var mega = document.getElementById('netzMega');
+
+  // „Hier bin ich": der eigene Hub im Menue.
+  Array.prototype.forEach.call(netz.querySelectorAll('a[data-domain]'), function (a) {
+    if (a.getAttribute('data-domain') === hier) a.setAttribute('aria-current', 'page');
+  });
+
+  var aktion = document.getElementById('netzAktion');
+  if (aktion) {
+    if (new Date() > new Date(aktion.getAttribute('data-ende'))) aktion.remove();
+    else aktion.querySelector('button').addEventListener('click', function () { aktion.remove(); });
+  }
+
+  // Die eigene Seite in der weissen Leiste markieren (Newsletter, Themen &
+  // Quellen ...). Sprunglinks innerhalb der Seite bleiben unmarkiert.
+  Array.prototype.forEach.call(document.querySelectorAll('.ort-links a, .ort-nl'), function (a) {
+    if (!a.hash && a.pathname === location.pathname && a.host === location.host
+        && !/\/$/.test(a.pathname)) a.setAttribute('aria-current', 'page');
+  });
+
+  function zu(fokus) {
+    mega.hidden = true; knopf.setAttribute('aria-expanded', 'false');
+    if (fokus) knopf.focus();
+  }
+  knopf.addEventListener('click', function () {
+    var auf = knopf.getAttribute('aria-expanded') === 'true';
+    if (auf) { zu(false); return; }
+    mega.hidden = false; knopf.setAttribute('aria-expanded', 'true');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !mega.hidden) zu(true);
+  });
+  document.addEventListener('click', function (e) {
+    if (!mega.hidden && !netz.contains(e.target)) zu(false);
+  });
+  // Ein Link im Menue schliesst es - sonst bliebe es bei einem Sprung
+  // innerhalb derselben Seite (Zur Uebersicht -> #themen) offen stehen.
+  mega.addEventListener('click', function (e) { if (e.target.closest('a')) zu(false); });
+
+  // Beide Leisten: weg beim Herunterscrollen, zurueck beim Hochscrollen.
+  // --netz-h haelt die weisse Leiste unter der schwarzen; --ort-h sagt der
+  // Sprungleiste der Hubs, wie viel Kopf gerade oben klebt.
+  var ort = document.querySelector('.ortsleiste');
+  var wurzel = document.documentElement;
+  var zuletzt = window.scrollY;
+  var setze = function (weg) {
+    var nh = netz.offsetHeight, oh = ort ? ort.offsetHeight : 0;
+    wurzel.style.setProperty('--netz-h', nh + 'px');
+    wurzel.style.setProperty('--ort-h', weg ? '0px' : (nh + oh) + 'px');
+    netz.classList.toggle('weg', weg);
+    if (ort) ort.classList.toggle('weg', weg);
+    if (weg && !mega.hidden) zu(false);
+  };
+  setze(false);
+  window.addEventListener('resize', function () { setze(netz.classList.contains('weg')); });
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    if (Math.abs(y - zuletzt) < 6) return;
+    setze(y > zuletzt && y > 240);
+    zuletzt = y;
+  }, { passive: true });
+
+  // Smartphone: „Menue" oeffnet eine Seite mit allem. Die Hubliste wird aus
+  // dem Mega-Menue uebernommen, damit sie nur an einer Stelle steht.
+  var menueKnopf = document.getElementById('ortMenue');
+  var handy = document.getElementById('netzHandy');
+  if (menueKnopf && handy) {
+    var platz = handy.querySelector('[data-netz-hubs]');
+    if (platz) Array.prototype.forEach.call(mega.querySelectorAll('.netz-gruppe'), function (g) {
+      platz.appendChild(g.cloneNode(true));
+    });
+    var schliessen = handy.querySelector('[data-netz-zu]');
+    var oeffne = function () { handy.hidden = false; menueKnopf.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; schliessen.focus(); };
+    var schliesse = function () { handy.hidden = true; menueKnopf.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; menueKnopf.focus(); };
+    menueKnopf.addEventListener('click', oeffne);
+    schliessen.addEventListener('click', schliesse);
+    handy.addEventListener('click', function (e) { if (e.target.closest('a')) schliesse(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !handy.hidden) schliesse(); });
+  }
+});
+</script>
+<!-- NETZLEISTE-ENDE -->
+<!-- HUBLEISTE-START (wird von netzleiste_einsetzen.py gefuellt) -->
+<!-- Die weisse Leiste dieses Hubs. Hub-Zeichen und Name fuehren zum Anfang
+     des Hubs; die Wortmarke der Reihe steht nur einmal, in der schwarzen
+     Leiste darueber. Impressum und Datenschutz stehen im Fussbereich - im
+     Menue stehen nur Wege zu Inhalten. -->
+<nav class="ortsleiste" aria-label="Dieser Hub">
+  <div class="ortsleiste-innen wrap">
+    <a class="ort-name" href="./">
+      <img src="logo/hub-icon.svg" alt="" width="34" height="34">
+      <span><small>KNOWLEDGE-HUB</small><b>Hitze, Klima &amp; Gesundheit</b></span>
+    </a>
+    <div class="ort-links">
+      <a href="./#suche">Suche</a>
+      <a href="./#main">Datenbanken</a>
+      <a href="neue-studien.html">Neue Studien</a>
+      <a href="ueber.html">Themen &amp; Quellen</a>
+    </div>
+    <a class="ort-nl" href="newsletter.html">Newsletter</a>
+    <button class="ort-menue" id="ortMenue" type="button" aria-expanded="false" aria-controls="netzHandy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menü</button>
+  </div>
+</nav>
+
+<div class="netz-handy" id="netzHandy" role="dialog" aria-modal="true" aria-label="Menü" hidden>
+  <div class="netz-handy-kopf"><span>Menü</span><button type="button" data-netz-zu>Schließen ✕</button></div>
+  <section>
+    <h3>Dieser Hub</h3>
+    <ul>
+      <li><a href="./#suche">Suche <span aria-hidden="true">›</span></a></li>
+      <li><a href="./#main">Datenbanken <span aria-hidden="true">›</span></a></li>
+      <li><a href="neue-studien.html">Neue Studien <span aria-hidden="true">›</span></a></li>
+      <li><a href="ueber.html">Themen &amp; Quellen <span aria-hidden="true">›</span></a></li>
+    </ul>
+  </section>
+  <section data-netz-hubs><h3>Alle Hubs</h3></section>
+  <section>
+    <h3>Knowledge-Hubs</h3>
+    <ul>
+      <li><a href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs <span aria-hidden="true">›</span></a></li>
+      <li><a href="https://knowledge-hubs.m-vf.de/">Zur Übersicht <span aria-hidden="true">›</span></a></li>
+    </ul>
+  </section>
+  <a class="handy-nl" href="newsletter.html">Newsletter dieses Hubs</a>
+  <div class="handy-unten">
+    <div class="netz-sprache" role="group" aria-label="Sprache"><span aria-current="true" lang="de" aria-label="Deutsch">DE</span><a href="https://knowledge-hubs.m-vf.de/en/" lang="en" hreflang="en" aria-label="English">EN</a></div>
+    <a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=netzleiste" target="_blank" rel="noopener">ein Angebot von Monitor Versorgungsforschung ↗</a>
+    <a href="./#impressum">Impressum</a>
+    <a href="./#datenschutz">Datenschutz</a>
+  </div>
+</div>
+<!-- HUBLEISTE-ENDE -->
+
+<header class="top">
+  <div class="wrap kopf-oben">
+    <div>
+      <p class="eyebrow">Knowledge-Hub Hitze, Klima &amp; Gesundheit</p>
+      <h1>Neue Studien</h1>
+      <p class="standfirst">Alle Studien, die dieser Hub aus PubMed ausgewählt hat, mit deutscher
+      Zusammenfassung, Ergebnis und Übertragbarkeit auf Deutschland. Jeden Morgen kommen neue dazu.</p>
+      <p class="ns-ki"><span class="ki-pille">Von KI ausgewählt und zusammengefasst</span>
+      Auswahl und Zusammenfassungen erstellt eine KI, ohne redaktionelle Prüfung.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap ns">
+  <!-- Zweite Ansicht der Studien (seit 24.10.2026, Entwurf Mariann Stegmaier,
+       Hub-Seiten S. 7-8). Sie liest dasselbe studien-archiv.json wie die
+       Startseite; dort bleibt alles stehen. Deshalb funktionieren alle alten
+       Links (#studie-<PMID>) weiter - die Startseite leitet sie hierher - und
+       der naechtliche Lauf muss nichts davon wissen. -->
+  <div class="ns-leiste">
+    <span id="nsStand">Wird geladen …</span>
+    <span class="ns-dl">Download: <a href="download/studien-archiv.docx">Word</a> · <a href="download/studien-archiv.csv">Excel</a></span>
+    <a class="ns-nl" href="newsletter.html">Neue Studien jeden Morgen per E-Mail</a>
+  </div>
+
+  <details class="ns-wie">
+    <summary>So wählen wir aus</summary>
+    <p>Gesucht wird nach Hitze, Extremwetter und Klimawandel in Verbindung mit gesundheitlichen Folgen. Ausgewählt wird nach Übertragbarkeit auf Deutschland: Vorrang haben Arbeiten aus vergleichbaren Klimazonen und Gesundheitssystemen — Mitteleuropa und gemäßigte Breiten vor tropischen und ariden Regionen, deren Befunde sich selten übertragen lassen.</p>
+    <ul>
+      <li><b>Übertragbar auf Deutschland:</b> hoch bei ähnlichen Gesundheitssystemen (DACH, Benelux, Frankreich), mittel (Skandinavien, Vereinigtes Königreich, Kanada, Australien), gering (USA)</li>
+      <li><b>Erkennbarer Bezug zur Versorgung</b></li>
+      <li><b>Belastbares Ergebnis</b> statt reiner Beschreibung; qualitative Studien sind eingeschlossen</li>
+    </ul>
+    <p>Maßgeblich ist der Tag, an dem PubMed eine Studie aufnimmt, nicht ihr Erscheinungsdatum; deshalb tauchen manchmal ältere Studien auf. Am Wochenende kommt meist nichts hinzu. Mehr auf <a href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html#studien">Über die Knowledge-Hubs</a> und unter <a href="themen-quellen.html#auswahl">Themen &amp; Quellen</a>.</p>
+  </details>
+
+  <div class="ns-suche">
+    <label for="nsFeld">Studien durchsuchen</label>
+    <input type="search" id="nsFeld" autocomplete="off" placeholder="Begriff, Journal, Autor oder PMID …">
+    <span id="nsTreffer" class="ns-treffer"></span>
+  </div>
+
+  <div id="nsListe" class="ns-liste"></div>
+</main>
+
+<!-- FUSSLEISTE-START (wird von netzleiste_einsetzen.py gefuellt) -->
+<style>
+  /* Volle Breite auch dann, wenn der Fuss in einem schmalen Container steht
+     (Innofonds): die Flaeche reicht per Schatten bis an den Rand. */
+  footer.nf{ background:#14202E; color:#C3CFDD; box-shadow:0 0 0 100vmax #14202E; clip-path:inset(0 -100vmax);
+             border-top:0; margin-top:44px; font-size:14px; }
+  footer.nf > .wrap, footer.nf{ padding-top:26px; padding-bottom:30px; }
+  /* Breite wie die Leiste oben, auch wo die Seite selbst schmaler ist (820 px). */
+  footer.nf > .wrap{ max-width:1180px; margin-left:auto; margin-right:auto; padding-left:22px; padding-right:22px; box-sizing:border-box; }
+  footer.nf p, footer.nf .attrib, footer.nf .stand{ color:#C3CFDD; }
+  footer.nf a{ color:#9CC6F4; }
+  footer.nf strong, footer.nf b{ color:#FFFFFF; }
+  footer.nf details{ background:#1B2A3C; border:1px solid #2E3D52; border-radius:6px; margin-top:8px; }
+  footer.nf summary{ color:#E3EAF3; cursor:pointer; padding:10px 13px; font-weight:700; }
+  footer.nf .legal-body{ color:#C3CFDD; padding:6px 14px 12px; font-size:12.5px; line-height:1.55; }
+  footer.nf .legal-body h4{ color:#FFFFFF; }
+  .nf-kopf{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 24px; margin-bottom:6px; }
+  .nf-absender{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; text-decoration:none !important; }
+  .nf-absender span{ font-size:12px; letter-spacing:.06em; color:#9FB0C4; }
+  .nf-absender img{ width:150px; height:auto; display:block; }
+  .nf-absender small{ color:#9FB0C4; font-size:13px; }
+  /* margin/padding/max-width zuruecksetzen: Innofonds stylt jedes <nav> pauschal. */
+  .nf-links{ display:flex; flex-wrap:wrap; gap:8px 20px; font-weight:700; margin:0; padding:0; max-width:none; }
+  footer.nf .nf-links a{ color:#E3EAF3; text-decoration:none; }
+  footer.nf .nf-links a:hover{ text-decoration:underline; }
+  footer.nf .nf-links .nf-mail{ font-weight:400; color:#C3CFDD; }
+  footer.nf .nf-links .nf-mail a{ color:#9CC6F4; font-weight:700; }
+</style>
+<footer class="nf">
+  <div class="wrap">
+<div class="nf-kopf">
+  <a class="nf-absender" href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=fuss" target="_blank" rel="noopener">
+    <span>Ein Angebot von</span>
+    <img src="logo/mvf-logo-negativ.png" width="1236" height="327" alt="Monitor Versorgungsforschung">
+    <small>· eRelation AG – Content in Health</small>
+  </a>
+  <nav class="nf-links" aria-label="Rechtliches">
+    <a href="./#impressum">Impressum</a>
+    <a href="./#datenschutz">Datenschutz</a>
+    <span class="nf-mail">Kontakt: <a href="mailto:info@m-vf.de">info@m-vf.de</a></span>
+  </nav>
+</div>
+  </div>
+</footer>
+<!-- FUSSLEISTE-ENDE -->
+
+<script>
+// Studien aus dem Archiv, nach Monat und Tag der Aufnahme in PubMed.
+(function(){
+  const liste = document.getElementById('nsListe');
+  const stand = document.getElementById('nsStand');
+  const feld = document.getElementById('nsFeld');
+  const anzeige = document.getElementById('nsTreffer');
+  const MONAT = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const TAG = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const esc = v => String(v == null ? '' : v).replace(/&(?![a-zA-Z#0-9]+;)/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Tag der Aufnahme: "aufgenommen" (JJJJ-MM-TT), aeltere Eintraege nur "added" (TT.MM.JJJJ).
+  function tagVon(s){
+    if(s.aufgenommen && /^\d{4}-\d{2}-\d{2}/.test(s.aufgenommen)) return s.aufgenommen.slice(0,10);
+    const m = /^(\d{2})\.(\d{2})\.(\d{4})/.exec(s.added || '');
+    return m ? m[3] + '-' + m[2] + '-' + m[1] : '0000-00-00';
+  }
+  function karte(s){
+    const url = 'https://pubmed.ncbi.nlm.nih.gov/' + s.pmid + '/';
+    return '<article class="ns-studie" id="studie-' + esc(s.pmid) + '">'
+      + '<div class="ns-kopf"><span class="ns-journal">' + esc(s.journal) + '</span><span>' + esc(s.pubdate || s.year) + '</span></div>'
+      + '<a class="ns-titel" href="' + url + '" target="_blank" rel="noopener">' + s.title + '</a>'
+      + '<div class="ns-meta">' + (s.author ? esc(s.author) + ' · ' : '') + 'PMID ' + esc(s.pmid) + '</div>'
+      + (s.result ? '<div class="ns-ergebnis"><b>Ergebnis</b> ' + s.result + '</div>' : '')
+      + (s.transfer ? '<div class="ns-transfer"><b>Übertragbarkeit</b> ' + s.transfer + '</div>' : '')
+      + (s.sum ? '<details class="ns-zus"><summary>Zusammenfassung</summary><p>' + s.sum + '</p></details>' : '')
+      + '</article>';
+  }
+  let alle = [];
+  function zeichnen(filter){
+    const woerter = (filter || '').toLowerCase().split(/\s+/).filter(Boolean);
+    const passt = s => !woerter.length || woerter.every(w =>
+      [s.title, s.journal, s.author, s.pmid, s.sum, s.result].join(' ').toLowerCase().includes(w));
+    const auswahl = alle.filter(passt);
+    anzeige.textContent = woerter.length ? auswahl.length + ' von ' + alle.length + ' Studien' : '';
+    const monate = new Map();
+    auswahl.forEach(s => {
+      const tag = tagVon(s), mon = tag.slice(0,7);
+      if(!monate.has(mon)) monate.set(mon, new Map());
+      const tage = monate.get(mon);
+      if(!tage.has(tag)) tage.set(tag, []);
+      tage.get(tag).push(s);
+    });
+    let html = '', erster = true;
+    [...monate.keys()].sort().reverse().forEach(mon => {
+      const tage = monate.get(mon);
+      const n = [...tage.values()].reduce((a, l) => a + l.length, 0);
+      const [j, m] = mon.split('-');
+      html += '<details class="ns-monat"' + (erster || woerter.length ? ' open' : '') + '><summary>'
+        + (MONAT[+m - 1] || mon) + ' ' + j + ' <span>' + n + ' Studie' + (n === 1 ? '' : 'n') + '</span></summary>';
+      [...tage.keys()].sort().reverse().forEach(tag => {
+        const d = new Date(tag + 'T12:00:00');
+        const l = tage.get(tag);
+        html += '<h3 class="ns-tag">' + (isNaN(d) ? tag : TAG[d.getDay()] + ', ' + d.getDate() + '. ' + MONAT[d.getMonth()])
+          + ' <span>' + l.length + ' Studie' + (l.length === 1 ? '' : 'n') + '</span></h3>' + l.map(karte).join('');
+      });
+      html += '</details>';
+      erster = false;
+    });
+    liste.innerHTML = html || '<p class="ns-leer">Keine Studie passt zu dieser Suche.</p>';
+  }
+  function springen(){
+    const m = /^#studie-(\d+)$/.exec(location.hash);
+    if(!m) return;
+    const el = document.getElementById('studie-' + m[1]);
+    if(!el) return;
+    const monat = el.closest('details.ns-monat'); if(monat) monat.open = true;
+    el.classList.add('ns-ziel');
+    // Ohne „smooth": Ueber zigtausend Pixel bricht sanftes Scrollen ab und
+    // die Studie bliebe ausser Sicht (am 24.10.2026 beim Test gesehen).
+    requestAnimationFrame(() => el.scrollIntoView({block:'center'}));
+  }
+  fetch('studien-archiv.json', {cache:'no-cache'}).then(r => r.json()).then(d => {
+    alle = (Array.isArray(d) ? d : []).slice().sort((a, b) => tagVon(b).localeCompare(tagVon(a)));
+    const neu = alle.length ? tagVon(alle[0]) : '';
+    stand.innerHTML = '<b>' + alle.length + '</b> Studien' + (neu ? ' · zuletzt aktualisiert am <b>' + neu.split('-').reverse().join('.') + '</b>' : '');
+    zeichnen('');
+    springen();
+  }).catch(() => { stand.textContent = 'Die Studien ließen sich gerade nicht laden. Bitte laden Sie die Seite neu.'; });
+  let takt = null;
+  feld.addEventListener('input', () => { clearTimeout(takt); takt = setTimeout(() => zeichnen(feld.value), 200); });
+  window.addEventListener('hashchange', springen);
+})();
+</script>
+<style>
+  .ns{ padding-top:22px; padding-bottom:56px; }
+  .ns-ki{ margin-top:10px; font-size:14px; color:var(--ink-soft); }
+  .ki-pille{ display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:20px;
+    background:#EEE8F7; color:#4B2E83; border:1px solid #D5C8EC; white-space:nowrap; margin-right:6px; }
+  :root[data-theme="dark"] .ki-pille{ background:#2A2140; color:#D9CBF5; border-color:#43356A; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .ki-pille{ background:#2A2140; color:#D9CBF5; border-color:#43356A; } }
+  .ns-leiste{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 22px; font-size:14px; color:var(--ink-soft); }
+  .ns-nl{ margin-left:auto; background:var(--action); color:var(--on-action); font-weight:700; text-decoration:none;
+    padding:8px 14px; border-radius:6px; font-size:14px; }
+  .ns-wie{ margin:18px 0; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 16px; }
+  .ns-wie summary{ cursor:pointer; font-weight:700; color:var(--brand); }
+  .ns-wie p, .ns-wie li{ font-size:14.5px; line-height:1.55; color:var(--ink-soft); }
+  .ns-suche{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:0 0 18px; }
+  .ns-suche label{ font-weight:700; font-size:14px; }
+  .ns-suche input{ flex:1 1 260px; font:inherit; font-size:15px; padding:10px 12px; border:1.5px solid var(--line);
+    border-radius:6px; background:var(--card); color:var(--ink); }
+  .ns-treffer{ font-size:13px; color:var(--ink-faint); }
+  .ns-monat{ margin:0 0 12px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:4px 18px 10px; }
+  .ns-monat > summary{ cursor:pointer; font-size:19px; font-weight:700; padding:10px 0; }
+  .ns-monat > summary span, .ns-tag span{ font-size:13px; font-weight:400; color:var(--ink-faint); margin-left:6px; }
+  .ns-tag{ font-size:15px; margin:16px 0 6px; padding-top:10px; border-top:1px solid var(--line-soft); }
+  .ns-studie{ padding:12px 0; border-bottom:1px solid var(--line-soft); scroll-margin-top:140px; }
+  .ns-studie:last-child{ border-bottom:0; }
+  .ns-ziel{ background:var(--brand-tint); border-radius:8px; padding:12px; }
+  .ns-kopf{ display:flex; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--ink-faint); }
+  .ns-journal{ font-weight:700; color:var(--ink-soft); }
+  .ns-titel{ display:block; margin:4px 0; font-size:16px; font-weight:700; color:var(--brand); text-decoration:underline;
+    text-underline-offset:2px; text-decoration-thickness:1px; line-height:1.35; }
+  .ns-titel::after{ content:" ↗"; font-weight:400; }
+  .ns-meta{ font-size:12.5px; color:var(--ink-faint); }
+  .ns-ergebnis, .ns-transfer{ margin-top:7px; font-size:14px; line-height:1.5; color:var(--ink-soft); }
+  .ns-ergebnis b, .ns-transfer b{ display:inline-block; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--brand-deep); margin-right:6px; }
+  .ns-zus summary{ cursor:pointer; font-size:13px; color:var(--brand); margin-top:6px; }
+  .ns-zus p{ font-size:14px; line-height:1.55; color:var(--ink-soft); }
+  .ns-leer{ color:var(--ink-faint); }
+</style>
+</html>
+
+<!-- ADRESSZEILE-START -----------------------------------------------
+     Wer aus einem Newsletter kommt, sieht sonst eine Adresse voller
+     Anhaengsel und fragt sich, was da mitgesendet wird. Ausgewertet
+     wird davon nichts, der Zaehler misst ueber den Referrer. Also
+     raeumt die Seite ihre eigene Adresszeile auf, sobald sie geladen
+     ist. Der Anker bleibt stehen, er zeigt auf einen Abschnitt. -->
+<script>
+(function () {
+  if (!location.search || !history.replaceState) return;
+  try {
+    var p = new URLSearchParams(location.search);
+    var weg = false;
+    Array.from(p.keys()).forEach(function (k) {
+      if (/^utm_/i.test(k) || k === 'fbclid' || k === 'gclid'
+          || k === 'mc_cid' || k === 'mc_eid') { p.delete(k); weg = true; }
+    });
+    if (!weg) return;
+    var rest = p.toString();
+    history.replaceState(null, '',
+      location.pathname + (rest ? '?' + rest : '') + location.hash);
+  } catch (e) { /* eine unleserliche Adresse bleibt, wie sie ist */ }
+})();
+</script>
+<!-- ADRESSZEILE-ENDE ------------------------------------------------- -->
+
+<!-- ZAEHLER-START --------------------------------------------------------
+     Zaehlt den Aufruf auf dem eigenen Server von Monitor Versorgungsforschung.
+     Kein Cookie, keine Kennung auf dem Geraet, keine fremde Firma. Wer Do Not
+     Track gesetzt hat, wird gar nicht erst gezaehlt. Schlaegt der Abruf fehl,
+     merkt die Seite es nicht - ein Bild, das nicht laedt, ist folgenlos.
+     Gegenstueck: /zaehler/z.php auf monitor-versorgungsforschung.de -->
+<script>
+(function () {
+  // Die Seite meldet Suchen ueber window.mvfZ. Die Funktion steht ab sofort
+  // immer bereit und tut im Zweifel nichts - sonst muesste jede Aufrufstelle
+  // pruefen, ob es sie ueberhaupt gibt, und eine vergessene Pruefung waere
+  // ein Skriptfehler mitten in der Suche.
+  window.mvfZ = function () {};
+  try {
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1'
+        || navigator.globalPrivacyControl === true) return;
+    // Automatische Umgebungen melden sich selbst: navigator.webdriver setzen
+    // Headless Chrome und Selenium von sich aus. Zuverlaessiger als jede
+    // Liste von Browserkennungen, weil es nicht geraten, sondern gemeldet wird.
+    if (navigator.webdriver) return;
+    if (!screen.width || !screen.height) return;   // kein echter Bildschirm
+    if (!/\.m-vf\.de$/.test(location.hostname)) return;   // lokal nicht zaehlen
+    var r = '';
+    try { r = document.referrer ? new URL(document.referrer).hostname : ''; }
+    catch (e) { r = ''; }
+    if (r === location.hostname) r = '';
+    // Bildschirmbreite nur in Stufen. Die genaue Aufloesung waere eines der
+    // staerksten Merkmale zum Wiedererkennen eines Browsers; fuer die Frage,
+    // fuer welche Breite zu gestalten ist, genuegt die Schublade.
+    var w = screen.width;
+    var stufe = w < 480 ? 'bis480' : w < 768 ? 'bis768' : w < 1024 ? 'bis1024'
+              : w < 1440 ? 'bis1440' : w < 1920 ? 'bis1920' : 'ueber1920';
+    var q = 'h=' + encodeURIComponent(location.hostname)
+          + '&p=' + encodeURIComponent(location.pathname)
+          + '&r=' + encodeURIComponent(r ? 'https://' + r + '/' : '')
+          + '&g=' + (Math.min(screen.width, screen.height) < 768 ? 'm' : 'd')
+          + '&b=' + stufe
+          + '&c=' + Date.now();
+    var ziel = 'https://www.monitor-versorgungsforschung.de/zaehler/z.php?';
+    new Image(1, 1).src = ziel + q;
+
+    // Ein Begriff wird nur mitgeschickt, wenn er wie ein Fachbegriff aussieht.
+    // Ziffern, Klammern, Anfuehrungszeichen, @ und mehr als drei Woerter
+    // deuten auf Freitext oder eine Kennung - so etwas verlaesst den Browser
+    // gar nicht erst. Was uebrig bleibt, prueft der Server noch einmal und
+    // wirft dort zusaetzlich alle Krankheitsbegriffe weg.
+    function sauber(v) {
+      if (typeof v !== 'string') return '';
+      var t = v.toLowerCase().replace(/\s+/g, ' ').trim();
+      if (t.length < 3 || t.length > 40) return '';
+      if (t.split(' ').length > 3) return '';
+      if (/[^a-zßà-öø-ÿ \-]/.test(t)) return '';
+      if (t.charAt(0) === '-') return '';
+      if (/(^| )(and|or|not)( |$)/.test(t)) return '';   // Formel, kein Begriff
+      return t;
+    }
+
+    // Eine abgesendete Suche zaehlen. Kein Seitenaufruf: z.php fuehrt beides
+    // getrennt. sendBeacon ueberlebt einen Seitenwechsel, ein Bild nicht -
+    // wer sucht und sofort auf eine Kachel klickt, wird sonst nicht gezaehlt.
+    window.mvfZ = function (art, begriff) {
+      try {
+        var f = 'h=' + encodeURIComponent(location.hostname)
+              + '&e=' + encodeURIComponent(art)
+              + '&c=' + Date.now();
+        var t = sauber(begriff);
+        if (t) f += '&t=' + encodeURIComponent(t);
+        if (navigator.sendBeacon) navigator.sendBeacon(ziel + f);
+        else new Image(1, 1).src = ziel + f;
+      } catch (e) { /* eine ungezaehlte Suche ist kein Grund, etwas kaputtzumachen */ }
+    };
+  } catch (e) { /* Zaehlung ist nie wichtiger als die Seite */ }
+})();
+</script>
+<!-- ZAEHLER-ENDE -->

@@ -503,6 +503,10 @@
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .ki-pille{ background:#2A2140; color:#D9CBF5; border-color:#43356A; } }
   .ki-pille.ki-klein{ font-size:10px; padding:1px 7px; margin:4px 0 2px; }
   .studies-ki{ margin:6px 0 2px; }
+  .alle-studien{ display:block; margin:10px 14px 14px; padding:10px 14px; text-align:center; border-radius:6px;
+    background:var(--action); color:var(--on-action); font-weight:700; text-decoration:none; }
+  .alle-studien:hover{ filter:brightness(1.08); }
+  .shub-suche[hidden], .archive[hidden]{ display:none !important; }
 
   /* ---------- Stufe 1 des Entwurfs „Hub-Seiten" (Mariann Stegmaier, Okt. 2026) ---------- */
   /* Titel in der Trefferliste blau, unterstrichen, mit Pfeil: klar als Link. */
@@ -1497,7 +1501,7 @@
     <div class="ort-links">
       <a href="#suche">Suche</a>
       <a href="#main">Datenbanken</a>
-      <a href="#studien">Neue Studien</a>
+      <a href="neue-studien.html">Neue Studien</a>
       <a href="ueber.html">Themen &amp; Quellen</a>
     </div>
     <a class="ort-nl" href="newsletter.html">Newsletter</a>
@@ -1513,7 +1517,7 @@
     <ul>
       <li><a href="#suche">Suche <span aria-hidden="true">›</span></a></li>
       <li><a href="#main">Datenbanken <span aria-hidden="true">›</span></a></li>
-      <li><a href="#studien">Neue Studien <span aria-hidden="true">›</span></a></li>
+      <li><a href="neue-studien.html">Neue Studien <span aria-hidden="true">›</span></a></li>
       <li><a href="ueber.html">Themen &amp; Quellen <span aria-hidden="true">›</span></a></li>
     </ul>
   </section>
@@ -1741,7 +1745,7 @@
           <div class="magazin-title band-studien-titel">Neue Studien aus PubMed</div>
           <span class="ki-pille ki-klein">Von KI ausgewählt und zusammengefasst</span>
           <ul class="magazin-list" id="bandStudienListe"></ul>
-          <a class="magazin-mehr" href="#studien">Alle neuen Studien ↓</a>
+          <a class="magazin-mehr" href="neue-studien.html">Alle Studien →</a>
         </section>
         <section class="band-karte band-radar">
           <div class="magazin-title band-radar-titel">Ausschreibungen &amp; Zulassungen</div>
@@ -1857,7 +1861,7 @@
     <!-- Suche in den Studien dieses Hubs. Kostet keinen zusaetzlichen Abruf:
          Die aktuelle Auswahl steht ohnehin in STUDIES, das Vollarchiv laedt der
          Ordner darunter bereits beim Seitenaufruf. Gesucht wird in beidem. -->
-    <div class="shub-suche">
+    <div class="shub-suche" hidden>
       <label class="shub-label" for="shubFeld">Studien aus diesem Hub durchsuchen</label>
       <div class="shub-zeile">
         <input type="search" id="shubFeld" class="shub-feld" autocomplete="off"
@@ -1883,8 +1887,12 @@
     <div class="shub-treffer" id="shubTreffer" hidden></div>
 
     <div class="studies-list" id="studiesList"></div>
+    <!-- Alle Studien, das Archiv und die Suche darin stehen seit 24.10.2026 auf
+         neue-studien.html (Entwurf Mariann Stegmaier). Ordner und Suche bleiben
+         im Markup, weil das Skript sie anspricht, sind aber ausgeblendet. -->
+    <a class="alle-studien" href="neue-studien.html">Alle Studien →</a>
 
-    <details class="archive" id="archive" open>
+    <details class="archive" id="archive" hidden>
       <summary id="archiveSummary">Ältere Suchergebnisse</summary>
       <div class="dl-row">
         <span class="dl-label">Download:</span>
@@ -2368,7 +2376,7 @@ document.getElementById('snapDate').textContent = SNAP_DATE;
   const liste = document.getElementById('bandStudienListe');
   if(!liste || !STUDIES.length) return;
   liste.innerHTML = STUDIES.slice(0, 3).map(s =>
-    '<li><a href="#studie-' + s.pmid + '">' + s.title + '</a>'
+    '<li><a href="neue-studien.html#studie-' + s.pmid + '">' + s.title + '</a>'
     + '<span class="magazin-datum">' + s.journal + ' · ' + (s.pubdate || s.year) + '</span></li>').join('');
   document.getElementById('bandStudien').hidden = false;
 })();
@@ -2384,7 +2392,8 @@ document.getElementById('snapDate').textContent = SNAP_DATE;
   if(erst) erst.querySelector('.erstmal-zu').addEventListener('click', function(){ erst.hidden = true; });
 })();
 const studiesList = document.getElementById('studiesList');
-STUDIES.forEach(s=>{
+// Seit 24.10.2026 nur die drei neuesten - alle stehen auf neue-studien.html.
+STUDIES.slice(0, 3).forEach(s=>{
   const art = document.createElement('article');
   art.className = 'study';
   art.id = 'studie-' + s.pmid;   // Sprungziel fuer die Uebersicht (#studie-<PMID>)
@@ -4458,6 +4467,10 @@ window.addEventListener('load', ()=>{
   }
   const m = /^#studie-(\d+)$/.exec(location.hash);
   if(!m) return;
+  // Seit 24.10.2026 stehen alle Studien auf neue-studien.html. Links aus
+  // verschickten Newslettern und von der Uebersicht fuehren dorthin weiter.
+  location.replace('neue-studien.html' + location.hash);
+  return;
   const zeige = el=>{
     el.classList.add('sprungziel');
     el.scrollIntoView({behavior:'smooth', block:'center'});
