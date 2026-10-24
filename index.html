@@ -111,6 +111,10 @@
   .kopfband .lede{ color:#DCE6F3; max-width:78ch; font-size:16.5px; margin:16px 0 0; }
   /* Auf dem Telefon schob der Einleitungstext die Suche bis zu 600 px nach
      unten. Dort drei Zeilen und „Weiterlesen" - der Text selbst bleibt. */
+  .hub-hinweis{ margin:14px 0 0; padding:11px 15px; border-radius:8px; background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.35); color:#FFFFFF; font-size:15px; line-height:1.5; max-width:46em; }
+  .hub-hinweis:empty{ display:none; }
+  .hub-hinweis a{ color:#FFFFFF; font-weight:700; white-space:nowrap; }
   .lede-mehr{ display:none; margin-top:6px; background:none; border:0; padding:4px 0; cursor:pointer;
     font:inherit; font-size:14px; font-weight:700; color:#FFFFFF; text-decoration:underline; }
   @media (max-width:560px){
@@ -461,6 +465,13 @@
     line-height:1.35; letter-spacing:-.005em; display:inline-block;
   }
   .mt-titel:hover{ color:var(--brand); text-decoration:underline; }
+  /* KI-Kennzeichen, lila wie auf „Über die Knowledge-Hubs" (Entwurf Mariann Stegmaier). */
+  .ki-pille{ display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px;
+    background:#EEE8F7; color:#4B2E83; border:1px solid #D5C8EC; white-space:nowrap; }
+  :root[data-theme="dark"] .ki-pille{ background:#2A2140; color:#D9CBF5; border-color:#43356A; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .ki-pille{ background:#2A2140; color:#D9CBF5; border-color:#43356A; } }
+  .ki-pille.ki-klein{ font-size:10px; padding:1px 7px; margin:4px 0 2px; }
+  .studies-ki{ margin:6px 0 2px; }
 
   /* ---------- Stufe 1 des Entwurfs „Hub-Seiten" (Mariann Stegmaier, Okt. 2026) ---------- */
   /* Titel in der Trefferliste blau, unterstrichen, mit Pfeil: klar als Link. */
@@ -1506,6 +1517,10 @@
       </h1>
       <p class="lede" id="kopfLede">Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.</p>
       <button class="lede-mehr" id="ledeMehr" type="button" aria-controls="kopfLede" aria-expanded="false" hidden>Weiterlesen</button>
+      <!-- Hinweis eines einzelnen Hubs, der nicht weggeklappt werden darf - im Hub
+           Psychische Gesundheit die Hilfe in Krisen (Entscheidung des Herausgebers,
+           24.10.2026). Feld HUB_HINWEIS_HTML in portal.json, sonst leer und unsichtbar. -->
+      <div class="hub-hinweis"></div>
     </div>
   </div>
   <div class="wrap masthead-inner">
@@ -1681,7 +1696,7 @@
       <aside class="lede-nl">
         <a class="btn-nl" href="newsletter.html">Newsletter abonnieren</a>
         <span class="nl-mini">Die Studienauswahl jeden Morgen per E-Mail — kostenfrei und jederzeit kündbar.</span>
-        <a class="btn-ueber" href="ueber.html" target="_blank" rel="noopener">Über den Hub <span aria-hidden="true">↗</span></a>
+        <a class="btn-ueber" href="ueber.html">Themen &amp; Quellen</a>
         <a class="btn-ueber" href="https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit" target="_blank" rel="noopener">Ausschreibungsradar <span aria-hidden="true">↗</span></a>
         <!-- Hinweis auf den Ausschreibungsradar. Angeregt von einem Nutzer
              der Hubs: Wer zu einem Thema forscht, sucht nicht nur Studien,
@@ -1774,6 +1789,11 @@
   <aside class="studies" id="studien">
     <div class="studies-head">
       <div class="studies-title"><span class="dot"></span>Neu in PubMed</div>
+      <!-- Kennzeichen nach Art. 50 Abs. 4 KI-Verordnung: Auswahl und deutsche
+           Zusammenfassung stammen von einer KI, ohne redaktionelle Pruefung.
+           Wortlaut vom Herausgeber festgelegt (24.10.2026); er muss gleich
+           lauten wie auf „Über die Knowledge-Hubs" und „Themen & Quellen". -->
+      <div class="studies-ki"><span class="ki-pille">Von KI ausgewählt und zusammengefasst</span></div>
       <div class="studies-claim">Hitze, Klima &amp; Gesundheit — mit Bezug zu Deutschland ausgewählt</div>
       <div class="studies-status" id="studiesStatus" hidden></div>
       <div class="studies-hint">Bei den Suchergebnissen handelt es sich um eine Momentaufnahme, um keinen Live-Feed. Die Liste wird jeden Morgen um 6 Uhr automatisch aus PubMed geholt, auf Deutsch zusammengefasst und neu veröffentlicht. Bringt PubMed an einem Tag nichts Neues — an Wochenenden häufig —, bleiben die zuletzt gefundenen Studien aktuell, bis neue hinzukommen. Gesucht wird nach Hitze, Extremwetter und Klimawandel in Verbindung mit gesundheitlichen Folgen. Ausgewählt wird nach Übertragbarkeit auf Deutschland: Vorrang haben Arbeiten aus vergleichbaren Klimazonen und Gesundheitssystemen — Mitteleuropa und gemäßigte Breiten vor tropischen und ariden Regionen, deren Befunde sich selten übertragen lassen.</div>
@@ -2297,6 +2317,7 @@ STUDIES.forEach(s=>{
     '<div class="study-top"><span class="study-journal">'+s.journal+'</span>'+
     // Publikationsdatum, sofern PubMed eines kennt - sonst das Jahr.
     '<span class="study-year">'+(s.pubdate || s.year)+'</span></div>'+
+    '<span class="ki-pille ki-klein">Von KI ausgewählt und zusammengefasst</span>'+
     '<a class="study-title" href="'+url+'" target="_blank" rel="noopener">'+s.title+'</a>'+
     (s.author ? '<div class="study-author">'+s.author+'</div>' : '')+
     // Das Aufnahmedatum erklaert, warum aeltere Publikationsdaten in einer
@@ -2511,7 +2532,9 @@ if(typeof SELBST !== 'undefined')
     text = '<b>' + offen + '</b> laufende Ausschreibung' + (offen === 1 ? '' : 'en')
          + ' zu Ihrem Themengebiet.';
   }
-  karte.innerHTML = '\ud83d\udce2 ' + text;
+  // Die Ausschreibungen waehlt eine KI aus; die Texte stammen aus der Quelle.
+  karte.innerHTML = '\ud83d\udce2 ' + text
+    + (offen ? ' <span class="ki-pille ki-klein">von KI ausgew\u00e4hlt</span>' : '');
   karte.hidden = false;
 })();
 
