@@ -465,6 +465,37 @@
     line-height:1.35; letter-spacing:-.005em; display:inline-block;
   }
   .mt-titel:hover{ color:var(--brand); text-decoration:underline; }
+  /* ---------- Stufe 3a (Entwurf Mariann Stegmaier): eine Spalte, Band ---------- */
+  .lede-zeile{ flex-direction:column; gap:18px; align-items:stretch; }
+  .erstmal{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin-top:16px; padding:11px 14px;
+    background:var(--brand-tint); border-radius:8px; font-size:14px; }
+  .erstmal[hidden]{ display:none; }
+  .erstmal.oben{ margin:0 0 16px; }
+  .erstmal-frage{ font-weight:700; color:var(--ink); }
+  .erstmal a{ color:var(--brand); font-weight:700; text-decoration:none; }
+  .erstmal a:hover{ text-decoration:underline; }
+  .erstmal-zu{ margin-left:auto; background:none; border:0; font-size:20px; line-height:1; cursor:pointer;
+    color:var(--ink-faint); padding:2px 6px; border-radius:4px; }
+  .erstmal-zu:hover{ color:var(--brand); background:var(--card); }
+  .hints-sponsor p{ margin:10px 0 0; font-size:12px; line-height:1.5; color:var(--ink-faint); }
+  .band{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 18px 16px; }
+  .band-kopf{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .band-kopf h2{ margin:0; font-size:17px; display:flex; align-items:center; gap:8px; }
+  .band-nl{ margin-left:auto; background:var(--action); color:var(--on-action); font-weight:700; font-size:13.5px;
+    text-decoration:none; padding:7px 14px; border-radius:6px; }
+  .band-nl:hover{ filter:brightness(1.08); }
+  .band-zu{ background:none; border:1px solid var(--line); border-radius:6px; font:inherit; font-size:12.5px;
+    color:var(--ink-soft); padding:6px 10px; cursor:pointer; }
+  .band-zu:hover{ border-color:var(--brand); color:var(--brand); }
+  .band[data-zu] .band-inhalt{ display:none; }
+  .band-inhalt{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin-top:12px; }
+  .band .band-karte{ margin:0; padding:12px 14px; border:1px solid var(--line-soft); border-radius:8px; background:var(--card-2); }
+  .band .band-karte[hidden]{ display:none; }
+  .band .magazin-list li:nth-child(n+4){ display:none; }
+  .band-studien-titel::before{ content:"\1F4C4" !important; }
+  .band-radar-titel::before{ content:"\1F4E2" !important; }
+  .band-radar .radar-hinweis, .band-radar .zulassung-hinweis{ margin:6px 0 0; }
+  .band .ki-pille.ki-klein{ margin:2px 0 4px; }
   /* KI-Kennzeichen, lila wie auf „Über die Knowledge-Hubs" (Entwurf Mariann Stegmaier). */
   .ki-pille{ display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px;
     background:#EEE8F7; color:#4B2E83; border:1px solid #D5C8EC; white-space:nowrap; }
@@ -1515,7 +1546,7 @@
       <h1 class="serif">Hitze, Klima &amp; Gesundheit
         <span class="sub">Ein Zugang zu Studien, Daten und Praxiswissen</span>
       </h1>
-      <p class="lede" id="kopfLede">Ein Suchbegriff, alle Datenbanken. Geben Sie bitte unten einen Begriff ein — jede Datenbankkarte öffnet damit direkt die passende Live-Suche in einem neuen Tab. Deutschsprachige und internationale Fachdatenbanken, Evidenzsynthesen, Klima- und Umweltdaten, Institutionen des öffentlichen Gesundheitsdienstes, Studienregister, Hitzeschutz in der Praxis und Wege zum Volltext an einem Ort. Jeden Tag werden die Suchergebnisse automatisch aktualisiert. Kuratiert von einer KI für die tägliche Recherchearbeit. Ein Service von Monitor Versorgungsforschung.</p>
+      <p class="lede" id="kopfLede">Forschung und Messdaten zu Hitze, Klimawandel und Gesundheit. Ein Suchbegriff öffnet die Suche in allen Datenbanken, jeden Morgen kommen neue Studien mit deutscher Zusammenfassung dazu.</p>
       <button class="lede-mehr" id="ledeMehr" type="button" aria-controls="kopfLede" aria-expanded="false" hidden>Weiterlesen</button>
       <!-- Hinweis eines einzelnen Hubs, der nicht weggeklappt werden darf - im Hub
            Psychische Gesundheit die Hilfe in Krisen (Entscheidung des Herausgebers,
@@ -1528,6 +1559,17 @@
       <div class="lede-links">
 
         <div class="panel" id="suche">
+          <!-- Bis Oktober 2026 standen hier acht Erklaerbloecke mit rund 700 Woertern
+               (Suche, Operatoren, Portale, Lizenzen, Glossar). Seit Stufe 2 steht
+               all das auf „Über die Knowledge-Hubs" und „Themen & Quellen"; hier
+               bleibt nur der Weg dorthin (Entwurf Mariann Stegmaier, Hub-Seiten S. 2).
+               Wegklicken speichert nichts - beim naechsten Besuch ist er wieder da. -->
+          <div class="erstmal oben" id="erstmal">
+            <span class="erstmal-frage">Zum ersten Mal hier?</span>
+            <a href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html#suche">So funktioniert die Suche →</a>
+            <a href="themen-quellen.html">Themen &amp; Quellen dieses Hubs →</a>
+            <button type="button" class="erstmal-zu" aria-label="Hinweis schließen" title="Hinweis schließen">&times;</button>
+          </div>
           <label class="panel-label" for="q">Suchbegriff</label>
           <div class="search-row">
             <div class="search-field">
@@ -1654,17 +1696,7 @@
               </div>
             </div>
           </details>
-          <div class="hints">
-            <p><b>So funktioniert die Suche.</b> Begriff eingeben, <b>Eingabetaste</b> drücken oder auf <b>„In allen Datenbanken suchen"</b> klicken — damit werden alle Kacheln auf Ihren Begriff eingestellt. Ein Klick auf eine Kachel öffnet dann <b>direkt die Trefferliste</b> dieser Datenbank in einem neuen Tab; ein zweites Mal suchen müssen Sie dort nicht. Die Kacheln bleiben eingestellt, Sie können also nacheinander mehrere Datenbanken öffnen, ohne den Begriff erneut einzugeben. Ausnahme sind die als <b>„Portal"</b> gekennzeichneten Anbieter — die erlauben technisch keine verlinkbare Trefferadresse.</p>
-            <p><b>Treffer direkt auf dieser Seite.</b> Der Knopf <b>&bdquo;Treffer direkt anzeigen&ldquo;</b> fragt die Datenbanken unmittelbar ab, die einen direkten Zugriff auf ihre Inhalte erlauben (derzeit <b id="cntMeta"></b>), und zeigt die Fundstellen zusammengef&uuml;hrt hier auf der Seite &mdash; jede mit Angabe der Datenbank, aus der sie stammt. Dubletten werden &uuml;ber die DOI zusammengelegt; erscheint eine Arbeit in mehreren Datenbanken, steht sie einmal in der Liste und tr&auml;gt mehrere Herkunftszeichen. Die Trefferliste zeigt <b>25 Treffer je Blatt</b>. Neben Zeitschriftenaufs&auml;tzen sind angemeldete Studien, Preprints und Repositorien darunter; der Filter <b>Art</b> trennt sie. Wo es eine legale frei zug&auml;ngliche Fassung gibt, steht ein Verweis <b>Volltext</b>. Die Liste l&auml;sst sich als Word, Excel, RIS oder BibTeX herunterladen und damit in Zotero, EndNote oder Citavi weiterverarbeiten. Die &uuml;brigen halten ihre Inhalte f&uuml;r eine solche Abfrage verschlossen; sie bleiben &uuml;ber die Kacheln zu &ouml;ffnen. Dabei erf&auml;hrt der jeweilige Anbieter Ihren Suchbegriff &mdash; N&auml;heres in den <a href="#datenschutz">Datenschutzhinweisen</a>.</p>
-            <p><b>Vollständigkeit.</b> Auch dieses Portal kann nicht sämtliche Artikel „aller Datenbanken" enthalten — das verhindern Lizenz- und Technikgrenzen. Es bündelt stattdessen die maßgeblichen Suchen, sodass eine Recherche systematisch über alle relevanten Datenbanken laufen kann.</p>
-            <!-- === THEMA-HINWEIS-START (themenspezifisch; aus dem Themenprofil) === -->
-            <p><b>Literatur und Daten getrennt.</b> Dieses Themenfeld lebt von zwei Sorten Quellen. Die Blöcke 01 bis 03 und 07 bis 09 führen zu <b>Publikationen</b>. Block 04 „Klima- &amp; Umweltdaten" führt zu <b>Messreihen, Modellen und Indikatoren</b> — dort landen Sie bei Datensätzen, nicht bei Studien. Und ein großer Teil des Wissens steht in diesem Feld nicht in Zeitschriften, sondern in Berichten von Behörden und Institutionen; dafür gibt es die Blöcke 05 und 06.</p>
-            <!-- === THEMA-HINWEIS-ENDE === -->
-            <p><b>Portal vs. Live-Suche.</b> Von den derzeit <b id="cntGesamt"></b> eingebundenen Datenbanken unterstützen <b id="cntLive"></b> die Live-Suche; sie sind entsprechend gekennzeichnet. Weitere <b id="cntPortal"></b> sind als „Portal" markiert: Angebote wie LIVIVO, das DRKS oder die WHO-Plattform ICTRP erlauben technisch keine verlinkbaren Ergebnisadressen. Der Klick führt dort auf die Startseite — der Suchbegriff ist anschließend von Hand einzugeben.</p>
-            <p><b>Suchoperatoren.</b> <b>AND</b>, <b>OR</b> und <b>NOT</b> funktionieren nicht überall gleich — wir haben es einzeln nachgemessen. <span class="boolmark ja">AND/OR ✓</span> heißt: geprüft, die Operatoren wirken (<b id="cntBoolJa"></b> Datenbanken). <span class="boolmark nein">AND/OR ✗</span> heißt: geprüft, sie wirken nicht — die Wörter werden einfach mitgesucht (<b id="cntBoolNein"></b>). <b>Ohne Zeichen ist es ungeprüft</b> (<b id="cntBoolOffen"></b>): Diese Anbieter liefern eine Bot-Sperre oder eine reine JavaScript-Oberfläche, aus der sich kein belastbares Ergebnis ablesen ließ — das heißt ausdrücklich <i>nicht</i>, dass sie es nicht können. Der Filter „Operatoren" zeigt auf Wunsch nur die geprüft tauglichen.</p>
-            <p><b>Deutsch suchen, international finden.</b> Internationale Datenbanken kennen keine deutschen Fachbegriffe — „Hitzeaktionsplan" liefert dort fast nichts. Der Hub übersetzt deshalb <b id="cntGlossar"></b> Fachbegriffe automatisch: Deutschsprachige Datenbanken behalten Ihren Begriff, internationale bekommen den Ausdruck, unter dem sie tatsächlich indexieren („Hitzeaktionsplan" wird zu <i>heat health action plan</i>, „Wärmeinsel" zu <i>urban heat island</i>). Die Ergebnisleiste zeigt die verwendete Fassung; der Schalter unter dem Suchfeld stellt es ab.</p>
-            <p><b>Hinweis zu Lizenzen.</b> Mit <span class="badge lic">Lizenz</span> markierte Datenbanken (z. B. Web of Science, Scopus, Embase, CINAHL) sind kostenpflichtig — der Zugang läuft meist über Ihre Bibliothek/Institution. Der Link führt zur Startseite bzw. zum institutionellen Login.</p>
+          <div class="hints-sponsor">
             <p id="sponsorText" hidden><b>Sponsoren.</b> Unsere Sponsoren ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Sie nehmen dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
             <p id="koopText" hidden><b>Medienpartnerschaft.</b> Dieser Hub wird in einer Medienkooperation präsentiert. Der Medienpartner ermöglicht mit seiner finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Er nimmt dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
           </div>
@@ -1693,11 +1725,26 @@
           Der Medienpartner nimmt darauf keinen Einfluss.</p>
         </div>
       </div>
-      <aside class="lede-nl">
-        <a class="btn-nl" href="newsletter.html">Newsletter abonnieren</a>
-        <span class="nl-mini">Die Studienauswahl jeden Morgen per E-Mail — kostenfrei und jederzeit kündbar.</span>
-        <a class="btn-ueber" href="ueber.html">Themen &amp; Quellen</a>
-        <a class="btn-ueber" href="https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit" target="_blank" rel="noopener">Ausschreibungsradar <span aria-hidden="true">↗</span></a>
+      <!-- Band „Aktuell im Hub" (Entwurf Mariann Stegmaier, Hub-Seiten S. 3).
+           Bis Oktober 2026 eine schmale Spalte rechts neben der Suche - auf dem
+           Handy rutschte sie hinter die Suche, und Seitenspalten werden als
+           Werbung ueberlesen. Jetzt ein Band unter der Suche, jede Rubrik eine
+           Karte mit hoechstens drei Eintraegen. „Ausblenden" speichert nichts. -->
+      <aside class="band" id="band" aria-labelledby="bandTitel">
+        <div class="band-kopf">
+          <h2 id="bandTitel"><span class="dot"></span>Aktuell im Hub</h2>
+          <a class="band-nl" href="newsletter.html">Newsletter abonnieren</a>
+          <button class="band-zu" id="bandZu" type="button" aria-expanded="true" aria-controls="bandInhalt">Ausblenden</button>
+        </div>
+        <div class="band-inhalt" id="bandInhalt">
+        <section class="band-karte" id="bandStudien" hidden>
+          <div class="magazin-title band-studien-titel">Neue Studien aus PubMed</div>
+          <span class="ki-pille ki-klein">Von KI ausgewählt und zusammengefasst</span>
+          <ul class="magazin-list" id="bandStudienListe"></ul>
+          <a class="magazin-mehr" href="#studien">Alle neuen Studien ↓</a>
+        </section>
+        <section class="band-karte band-radar">
+          <div class="magazin-title band-radar-titel">Ausschreibungen &amp; Zulassungen</div>
         <!-- Hinweis auf den Ausschreibungsradar. Angeregt von einem Nutzer
              der Hubs: Wer zu einem Thema forscht, sucht nicht nur Studien,
              sondern auch Geld. Gesucht wird zentral im Versorgungsforschungs-
@@ -1715,6 +1762,8 @@
              dauerhaft leer. Das ist kein Ausfall, sondern der Zuschnitt:
              Auf diese Themen zeigt keine Arzneimittelzulassung. -->
         <div class="zulassung-hinweis" id="zulassungHinweis" hidden></div>
+          <a class="magazin-mehr" href="https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit" target="_blank" rel="noopener">Zum Ausschreibungsradar ↗</a>
+        </section>
 
         <!-- Ausgesuchte News. Angeregt vom selben Nutzer wie der
              Ausschreibungsradar: Wer sich fuer ein Thema interessiert, will
@@ -1727,7 +1776,7 @@
              Scrollbereich (826 px hoch, 4.239 px Inhalt), und hinter
              Studienliste und Archivordner faende den Kasten niemand.
              Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
-        <section class="magazin" id="magazin" hidden>
+        <section class="magazin band-karte" id="magazin" hidden>
           <div class="magazin-title">Ausgesuchte News zu diesem Themenfeld</div>
           <p class="magazin-sub">Beiträge aus dem Portal von „Monitor
             Versorgungsforschung“ (<a href="https://www.monitor-versorgungsforschung.de/?utm_source=klima-hub&amp;utm_medium=referral&amp;utm_campaign=magazin" target="_blank" rel="noopener">www.m-vf.de</a>)</p>
@@ -1741,7 +1790,7 @@
              Hochschulen und Instituten) und presseportal.de, letzteres nur
              als Auffuellung und nur bei Treffer im Titel.
              Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
-        <section class="magazin presse" id="presse" hidden>
+        <section class="magazin presse band-karte" id="presse" hidden>
           <div class="magazin-title">Weitere Pressemeldungen zum Thema</div>
           <p class="magazin-sub">Pressemitteilungen Dritter, aus
             <a href="https://idw-online.de/" target="_blank" rel="noopener">idw</a>
@@ -1756,12 +1805,13 @@
              Leserschaft betrifft. Im Versorgungsforschungs-Hub ungefiltert,
              sonst nach dem Thema des Hubs ausgewaehlt.
              Gefuellt von scripts/newsfeed.py, verborgen bis dahin. -->
-        <section class="magazin presse" id="selbst" hidden>
+        <section class="magazin presse band-karte" id="selbst" hidden>
           <div class="magazin-title">Aus der Selbstverwaltung</div>
           <p class="magazin-sub">Beschlüsse und Meldungen des
             <a href="https://www.g-ba.de/" target="_blank" rel="noopener">Gemeinsamen Bundesausschusses</a></p>
           <ul class="magazin-list" id="selbstList"></ul>
         </section>
+        </div>
       </aside>
     </div>
 
@@ -2260,14 +2310,18 @@ CATS.forEach(cat=>{
 document.getElementById('dbCount').textContent = DB.length;
 // Die Zahlen im Hinweis 'Portal vs. Live-Suche' aus DB zaehlen, nicht fest
 // eintragen - sonst veralten sie beim naechsten neuen Eintrag unbemerkt.
-document.getElementById('cntGesamt').textContent = DB.length;
-document.getElementById('cntLive').textContent   = DB.filter(x=>x.t==='live').length;
-document.getElementById('cntPortal').textContent = DB.filter(x=>x.t==='portal').length;
+// Seit Oktober 2026 stehen die Erklaertexte nicht mehr auf der Seite. setzeZahl
+// greift deshalb nur zu, wo es die Stelle gibt - ein harter Zugriff auf ein
+// fehlendes Element haelt das ganze Skript an, und die Seite bliebe leer.
+function setzeZahl(id, wert){ const el = document.getElementById(id); if(el) el.textContent = wert; }
+setzeZahl('cntGesamt', DB.length);
+setzeZahl('cntLive', DB.filter(x=>x.t==='live').length);
+setzeZahl('cntPortal', DB.filter(x=>x.t==='portal').length);
 // Boolesch-Zahlen aus denselben Daten wie die Kennzeichen - nie getrennt pflegen.
 const _live = DB.filter(x=>x.t==='live');
-document.getElementById('cntBoolJa').textContent    = _live.filter(x=>x.b===1).length;
-document.getElementById('cntBoolNein').textContent  = _live.filter(x=>x.b===0).length;
-document.getElementById('cntBoolOffen').textContent = _live.filter(x=>x.b===undefined).length;
+setzeZahl('cntBoolJa', _live.filter(x=>x.b===1).length);
+setzeZahl('cntBoolNein', _live.filter(x=>x.b===0).length);
+setzeZahl('cntBoolOffen', _live.filter(x=>x.b===undefined).length);
 
 // ---- Studien-Frame rendern ----
 document.getElementById('snapDate').textContent = SNAP_DATE;
@@ -2306,6 +2360,28 @@ document.getElementById('snapDate').textContent = SNAP_DATE;
       + 'neuen passenden Studien geliefert. Die Liste ist deshalb unverändert.';
     el.hidden = false;
   }
+})();
+// ---- Band „Aktuell im Hub": die drei neuesten Studien ----
+// Der Titel fuehrt zur Studie in der Spalte weiter unten (#studie-<PMID>), nicht
+// zu PubMed - dort steht die deutsche Zusammenfassung.
+(function(){
+  const liste = document.getElementById('bandStudienListe');
+  if(!liste || !STUDIES.length) return;
+  liste.innerHTML = STUDIES.slice(0, 3).map(s =>
+    '<li><a href="#studie-' + s.pmid + '">' + s.title + '</a>'
+    + '<span class="magazin-datum">' + s.journal + ' · ' + (s.pubdate || s.year) + '</span></li>').join('');
+  document.getElementById('bandStudien').hidden = false;
+})();
+(function(){
+  const band = document.getElementById('band'), knopf = document.getElementById('bandZu');
+  if(band && knopf) knopf.addEventListener('click', function(){
+    const zu = !band.hasAttribute('data-zu');
+    band.toggleAttribute('data-zu', zu);
+    knopf.setAttribute('aria-expanded', zu ? 'false' : 'true');
+    knopf.textContent = zu ? 'Einblenden' : 'Ausblenden';
+  });
+  const erst = document.getElementById('erstmal');
+  if(erst) erst.querySelector('.erstmal-zu').addEventListener('click', function(){ erst.hidden = true; });
 })();
 const studiesList = document.getElementById('studiesList');
 STUDIES.forEach(s=>{
@@ -2958,7 +3034,7 @@ shubLeeren.addEventListener('click', ()=>{ shubFeld.value = ''; shubSuchen(); sh
 const GLOSSAR = [{"de":"Hitze","en":"heat"},{"de":"Hitzewelle","en":"heat wave"},{"de":"Hitzeperiode","en":"heat wave"},{"de":"Hitzetag","en":"hot day"},{"de":"Tropennacht","en":"tropical night"},{"de":"Extremhitze","en":"extreme heat"},{"de":"Hitzestress","en":"heat stress"},{"de":"Hitzebelastung","en":"heat exposure"},{"de":"Hitzeerschöpfung","en":"heat exhaustion"},{"de":"Hitzschlag","en":"heat stroke"},{"de":"Sonnenstich","en":"sunstroke"},{"de":"Dehydratation","en":"dehydration"},{"de":"Austrocknung","en":"dehydration"},{"de":"Elektrolytstörung","en":"electrolyte imbalance"},{"de":"Hitzekrampf","en":"heat cramps"},{"de":"gefühlte Temperatur","en":"perceived temperature"},{"de":"Wärmebelastung","en":"thermal stress"},{"de":"thermischer Komfort","en":"thermal comfort"},{"de":"Kältewelle","en":"cold spell"},{"de":"Kältebelastung","en":"cold exposure"},{"de":"Temperaturextreme","en":"temperature extremes"},{"de":"Übersterblichkeit","en":"excess mortality"},{"de":"hitzebedingte Sterblichkeit","en":"heat-related mortality"},{"de":"hitzebedingte Erkrankung","en":"heat-related illness"},{"de":"Hitzemortalität","en":"heat mortality"},{"de":"Sterblichkeit","en":"mortality"},{"de":"Krankenhauseinweisung","en":"hospital admission"},{"de":"Notaufnahme","en":"emergency department"},{"de":"Rettungsdiensteinsatz","en":"emergency medical services"},{"de":"Krankheitslast","en":"burden of disease"},{"de":"Expositions-Wirkungs-Beziehung","en":"exposure-response relationship"},{"de":"Schwellenwert","en":"threshold temperature"},{"de":"zurechenbare Todesfälle","en":"attributable deaths"},{"de":"Klimawandel","en":"climate change"},{"de":"Erderwärmung","en":"global warming"},{"de":"Klimakrise","en":"climate crisis"},{"de":"Klimaschutz","en":"climate change mitigation"},{"de":"Klimaanpassung","en":"climate change adaptation"},{"de":"Anpassungsstrategie","en":"adaptation strategy"},{"de":"Klimaresilienz","en":"climate resilience"},{"de":"Vulnerabilität","en":"vulnerability"},{"de":"Risikogruppe","en":"vulnerable population"},{"de":"Klimaszenario","en":"climate scenario"},{"de":"Klimaprojektion","en":"climate projection"},{"de":"Klimamodell","en":"climate model"},{"de":"Attributionsforschung","en":"extreme event attribution"},{"de":"Treibhausgas","en":"greenhouse gas"},{"de":"Kohlendioxid","en":"carbon dioxide"},{"de":"CO2-Fußabdruck","en":"carbon footprint"},{"de":"Emissionen","en":"emissions"},{"de":"Dekarbonisierung","en":"decarbonization"},{"de":"Klimaneutralität","en":"carbon neutrality"},{"de":"planetare Gesundheit","en":"planetary health"},{"de":"Eine Gesundheit","en":"One Health"},{"de":"Umweltgerechtigkeit","en":"environmental justice"},{"de":"Klimagerechtigkeit","en":"climate justice"},{"de":"Hitzeaktionsplan","en":"heat health action plan"},{"de":"Hitzewarnsystem","en":"heat health warning system"},{"de":"Hitzewarnung","en":"heat warning"},{"de":"Frühwarnsystem","en":"early warning system"},{"de":"Hitzeschutz","en":"heat protection"},{"de":"Hitzeschutzplan","en":"heat protection plan"},{"de":"Katastrophenvorsorge","en":"disaster risk reduction"},{"de":"Notfallplanung","en":"emergency preparedness"},{"de":"Kühlraum","en":"cooling centre"},{"de":"Trinkbrunnen","en":"drinking water fountain"},{"de":"Verschattung","en":"shading"},{"de":"Klimatisierung","en":"air conditioning"},{"de":"Gebäudekühlung","en":"building cooling"},{"de":"Wärmeinsel","en":"urban heat island"},{"de":"städtische Wärmeinsel","en":"urban heat island"},{"de":"Stadtklima","en":"urban climate"},{"de":"Stadtbegrünung","en":"urban greening"},{"de":"Grünfläche","en":"green space"},{"de":"Baumbestand","en":"urban tree canopy"},{"de":"Entsiegelung","en":"desealing"},{"de":"Schwammstadt","en":"sponge city"},{"de":"blaue Infrastruktur","en":"blue infrastructure"},{"de":"grüne Infrastruktur","en":"green infrastructure"},{"de":"Flächennutzung","en":"land use"},{"de":"Stadtplanung","en":"urban planning"},{"de":"Quartier","en":"neighbourhood"},{"de":"Luftqualität","en":"air quality"},{"de":"Luftverschmutzung","en":"air pollution"},{"de":"Feinstaub","en":"particulate matter"},{"de":"Stickstoffdioxid","en":"nitrogen dioxide"},{"de":"bodennahes Ozon","en":"ground-level ozone"},{"de":"Ozon","en":"ozone"},{"de":"Waldbrandrauch","en":"wildfire smoke"},{"de":"Schadstoffbelastung","en":"pollutant exposure"},{"de":"Innenraumluft","en":"indoor air quality"},{"de":"Lärm","en":"noise pollution"},{"de":"UV-Strahlung","en":"ultraviolet radiation"},{"de":"Sonnenschutz","en":"sun protection"},{"de":"Hautkrebs","en":"skin cancer"},{"de":"Pollenflug","en":"pollen exposure"},{"de":"Pollensaison","en":"pollen season"},{"de":"Allergie","en":"allergy"},{"de":"Heuschnupfen","en":"allergic rhinitis"},{"de":"Asthma","en":"asthma"},{"de":"Ambrosia","en":"ragweed"},{"de":"Neophyten","en":"invasive plant species"},{"de":"Extremwetter","en":"extreme weather"},{"de":"Dürre","en":"drought"},{"de":"Starkregen","en":"heavy precipitation"},{"de":"Überschwemmung","en":"flood"},{"de":"Hochwasser","en":"flooding"},{"de":"Sturm","en":"storm"},{"de":"Waldbrand","en":"wildfire"},{"de":"Naturkatastrophe","en":"natural disaster"},{"de":"Meeresspiegelanstieg","en":"sea level rise"},{"de":"vektorübertragene Krankheit","en":"vector-borne disease"},{"de":"Überträger","en":"disease vector"},{"de":"Stechmücke","en":"mosquito"},{"de":"Tigermücke","en":"Aedes albopictus"},{"de":"Zecke","en":"tick"},{"de":"Borreliose","en":"Lyme disease"},{"de":"FSME","en":"tick-borne encephalitis"},{"de":"Denguefieber","en":"dengue"},{"de":"West-Nil-Virus","en":"West Nile virus"},{"de":"Malaria","en":"malaria"},{"de":"Leishmaniose","en":"leishmaniasis"},{"de":"Hantavirus","en":"hantavirus"},{"de":"Zoonose","en":"zoonosis"},{"de":"Infektionskrankheit","en":"communicable disease"},{"de":"Ausbruch","en":"disease outbreak"},{"de":"Surveillance","en":"public health surveillance"},{"de":"Vibrionen","en":"Vibrio"},{"de":"Badegewässer","en":"bathing water"},{"de":"Trinkwasserqualität","en":"drinking water quality"},{"de":"Lebensmittelsicherheit","en":"food safety"},{"de":"Ernährungssicherheit","en":"food security"},{"de":"Mangelernährung","en":"malnutrition"},{"de":"Landwirtschaft","en":"agriculture"},{"de":"Ernteausfall","en":"crop failure"},{"de":"Herz-Kreislauf-Erkrankung","en":"cardiovascular disease"},{"de":"Herzinsuffizienz","en":"heart failure"},{"de":"Herzinfarkt","en":"myocardial infarction"},{"de":"Schlaganfall","en":"stroke"},{"de":"Bluthochdruck","en":"hypertension"},{"de":"Atemwegserkrankung","en":"respiratory disease"},{"de":"COPD","en":"chronic obstructive pulmonary disease"},{"de":"Nierenerkrankung","en":"kidney disease"},{"de":"akutes Nierenversagen","en":"acute kidney injury"},{"de":"Diabetes","en":"diabetes mellitus"},{"de":"Demenz","en":"dementia"},{"de":"Frühgeburt","en":"preterm birth"},{"de":"Schwangerschaft","en":"pregnancy"},{"de":"Geburtsgewicht","en":"birth weight"},{"de":"Schlafqualität","en":"sleep quality"},{"de":"psychische Gesundheit","en":"mental health"},{"de":"Klimaangst","en":"climate anxiety"},{"de":"Depression","en":"depression"},{"de":"Suizid","en":"suicide"},{"de":"Aggression","en":"aggression"},{"de":"Medikamentenwirkung","en":"drug effects"},{"de":"Arzneimittelsicherheit","en":"medication safety"},{"de":"Diuretika","en":"diuretics"},{"de":"Polypharmazie","en":"polypharmacy"},{"de":"Arzneimittellagerung","en":"drug storage"},{"de":"ältere Menschen","en":"aged"},{"de":"Hochbetagte","en":"oldest old"},{"de":"Pflegeheim","en":"nursing home"},{"de":"Pflegebedürftigkeit","en":"need for long-term care"},{"de":"Säuglinge","en":"infants"},{"de":"Kinder","en":"child"},{"de":"Schwangere","en":"pregnant women"},{"de":"Obdachlosigkeit","en":"homelessness"},{"de":"Wohnungslose","en":"homeless persons"},{"de":"Armut","en":"poverty"},{"de":"soziale Ungleichheit","en":"health inequalities"},{"de":"sozioökonomischer Status","en":"socioeconomic status"},{"de":"Einsamkeit","en":"loneliness"},{"de":"chronische Erkrankung","en":"chronic disease"},{"de":"Multimorbidität","en":"multimorbidity"},{"de":"Beschäftigte im Freien","en":"outdoor workers"},{"de":"Arbeitsschutz","en":"occupational safety"},{"de":"Arbeitsmedizin","en":"occupational health"},{"de":"Arbeitsproduktivität","en":"work productivity"},{"de":"Bauarbeiter","en":"construction workers"},{"de":"Landarbeiter","en":"agricultural workers"},{"de":"Arbeitsunfall","en":"occupational injury"},{"de":"Sportler","en":"athletes"},{"de":"Migration","en":"migration"},{"de":"Klimaflucht","en":"climate migration"},{"de":"Vertreibung","en":"displacement"},{"de":"öffentlicher Gesundheitsdienst","en":"public health services"},{"de":"Gesundheitsamt","en":"local health authority"},{"de":"Kommune","en":"municipality"},{"de":"Krankenhaus","en":"hospital"},{"de":"Arztpraxis","en":"medical practice"},{"de":"Hausarzt","en":"general practitioner"},{"de":"Apotheke","en":"pharmacy"},{"de":"Pflegekraft","en":"nurse"},{"de":"Pflege","en":"nursing"},{"de":"Pflegequalität","en":"quality of nursing care"},{"de":"Pflegefachkraft","en":"nurse"},{"de":"Gesundheitspersonal","en":"health personnel"},{"de":"Gesundheitssystem","en":"health system"},{"de":"Gesundheitswesen","en":"health care sector"},{"de":"Klimafolgen des Gesundheitswesens","en":"health care carbon footprint"},{"de":"nachhaltiges Krankenhaus","en":"sustainable hospital"},{"de":"Versorgungsforschung","en":"health services research"},{"de":"Gesundheitspolitik","en":"health policy"},{"de":"Prävention","en":"prevention"},{"de":"Gesundheitsförderung","en":"health promotion"},{"de":"Gesundheitskompetenz","en":"health literacy"},{"de":"Risikokommunikation","en":"risk communication"},{"de":"Aufklärungskampagne","en":"public awareness campaign"},{"de":"Verhaltensänderung","en":"behaviour change"},{"de":"Kosteneffektivität","en":"cost-effectiveness"},{"de":"Gesundheitsausgaben","en":"health expenditure"},{"de":"Zusatznutzen","en":"co-benefits"},{"de":"aktive Mobilität","en":"active travel"},{"de":"Radverkehr","en":"cycling"},{"de":"Fußverkehr","en":"walking"},{"de":"Ernährungswende","en":"dietary transition"},{"de":"pflanzliche Ernährung","en":"plant-based diet"},{"de":"Epidemiologie","en":"epidemiology"},{"de":"Zeitreihenanalyse","en":"time series analysis"},{"de":"Fall-Crossover-Studie","en":"case-crossover study"},{"de":"Kohortenstudie","en":"cohort study"},{"de":"Querschnittstudie","en":"cross-sectional study"},{"de":"Beobachtungsstudie","en":"observational study"},{"de":"Modellierung","en":"modelling"},{"de":"Risikoabschätzung","en":"risk assessment"},{"de":"Gesundheitsfolgenabschätzung","en":"health impact assessment"},{"de":"systematische Übersichtsarbeit","en":"systematic review"},{"de":"Metaanalyse","en":"meta-analysis"},{"de":"Scoping Review","en":"scoping review"},{"de":"Fernerkundung","en":"remote sensing"},{"de":"Satellitendaten","en":"satellite data"},{"de":"Geoinformationssystem","en":"geographic information system"},{"de":"Routinedaten","en":"claims data"},{"de":"Sekundärdaten","en":"secondary data analysis"},{"de":"Register","en":"registry"},{"de":"Monitoring","en":"monitoring"},{"de":"Indikator","en":"indicator"},{"de":"Messstation","en":"monitoring station"},{"de":"Reanalyse","en":"reanalysis"}];
 // === GLOSSAR-BLOCK-ENDE ===
 
-document.getElementById('cntGlossar').textContent = GLOSSAR.length;
+setzeZahl('cntGlossar', GLOSSAR.length);
 
 // Sprungziele Impressum/Datenschutz: Die Texte stecken in <details>. Wird eines
 // direkt angesprungen, muss es aufklappen - sonst landet man auf einer
@@ -3705,7 +3781,7 @@ const goMetaBtn   = document.getElementById('goMeta');
 const metaArtBox  = document.getElementById('metaArt');
 const metaBlaetterEl = document.getElementById('metaBlaetter');
 
-document.getElementById('cntMeta').textContent = MT_QUELLEN.length;
+setzeZahl('cntMeta', MT_QUELLEN.length);
 
 // Ein Treffer kann in allen vier Quellen stehen. Zusammengelegt wird ueber
 // die DOI, ersatzweise ueber die PubMed-Nummer, zuletzt ueber den auf
