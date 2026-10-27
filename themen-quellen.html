@@ -372,6 +372,9 @@
   .netz-handy .handy-unten a{ color:var(--ink-soft,#444A50); }
   .netz-handy .netz-sprache{ border-color:var(--line,#D0D8E4); }
 
+  /* Rechtsseiten: keine Sprunglinks, die Leiste traegt nur den Menueknopf
+     fuer schmale Bildschirme (startseite_neu.sprungleiste, links=False). */
+  .ortsleiste.nur-handy{ display:none; }
   @media (max-width:980px){ .netz-mvf .lang{ display:none; } }
   @media (max-width:860px){
     .netz-rechts, .netz-link{ display:none; }
@@ -379,6 +382,7 @@
     .netz-angebote{ grid-column:1 / -1; }
     .ort-links, .ort-nl{ display:none; }
     .ort-menue{ display:inline-flex; margin-left:auto; }
+    .ortsleiste.nur-handy{ display:block; }
     .ortsleiste-innen{ min-height:56px; }
   }
   @media (max-width:560px){
@@ -469,6 +473,9 @@
             <li><a href="https://knowledge-hubs.m-vf.de/curatiohub.html">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7.5" width="18" height="12.5" rx="2"/><path d="M9 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5.5v2"/><path d="M3 13h18"/></svg>
               <span><b>CuratioHub</b><small>Jobs in Versorgungsforschung, Public Health und Medizin</small></span></a></li>
+            <li><a href="https://wissen.m-vf.de/zulassungen.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.6" y="8.6" width="18.8" height="6.8" rx="3.4"/><path d="M12 8.6v6.8"/></svg>
+              <span><b>Zulassungs-/DiGA-Radar</b><small>Zugelassen, empfohlen, beantragt: EMA, FDA und die DiGA des BfArM</small></span></a></li>
           </ul>
         </div>
       </div>
