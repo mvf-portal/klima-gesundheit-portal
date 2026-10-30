@@ -424,6 +424,107 @@
     </a>
     <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Hubs<span class="pfeil" aria-hidden="true">▼</span></button>
     <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs</a>
+    <!-- DARSTELLUNG-START ====================================================
+         Schalter „Darstellung" (hell / dunkel / wie mein Geraet), links neben
+         DE/EN. Entwurf Mariann Stegmaier, Canvas 2 (28.10.2026); gebaut von der
+         Innofonds-Sitzung (innovationsfonds/darstellung.html), seit 30.10.2026
+         hier in der gemeinsamen Leiste und damit auf allen Seiten der Reihe.
+
+         Vertrag: Cookie „mvf-theme" = light | dark, bei „Wie mein Geraet"
+         geloescht (Max-Age=0); Domain=.m-vf.de, Path=/, ein Jahr, SameSite=Lax,
+         Secure nur unter https. Kein localStorage - der gaelte nur je Subdomain.
+         Wirkung ueber <html data-theme>. Der Datenschutztext dazu steht in
+         recht_neu.py, Abschnitt 2, #darstellung - wer hier etwas am Cookie
+         aendert, aendert ihn dort mit.
+
+         Englisch: startseite_neu.NETZ_EN uebersetzt die Texte fuer /en/. -->
+    <style>
+      .dsw{ position:relative; margin-left:auto; display:flex; align-items:center; }
+      .dsw ~ .netz-rechts{ margin-left:14px; }  /* ~ statt +: dazwischen steht das <script> */
+      .dsw-knopf{ width:34px; height:27px; border:1px solid #3A4A60; border-radius:6px; background:transparent;
+                  display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+      .dsw-knopf:hover, .dsw-knopf[aria-expanded="true"]{ background:#22324A; }
+      .dsw-knopf svg{ width:16px; height:16px; display:block; }
+      .dsw .mond{ display:none; }
+      :root[data-theme="dark"] .dsw .sonne{ display:none; }
+      :root[data-theme="dark"] .dsw .mond{ display:block; }
+      @media (prefers-color-scheme:dark){
+        :root:not([data-theme="light"]) .dsw .sonne{ display:none; }
+        :root:not([data-theme="light"]) .dsw .mond{ display:block; }
+      }
+      .dsw-menue{ position:absolute; top:36px; right:0; z-index:95; width:230px; background:#FFF; color:#14202E;
+                  border:1px solid #D8DFE9; border-radius:10px; box-shadow:0 14px 32px rgba(20,32,46,.28);
+                  padding:6px; display:flex; flex-direction:column; font-size:14px; font-weight:500; letter-spacing:0; }
+      .dsw-menue[hidden]{ display:none; }
+      .dsw-titel{ font-size:11px; font-weight:700; letter-spacing:.12em; color:#5A6577; padding:6px 10px 4px; }
+      .dsw-menue button{ display:flex; align-items:center; gap:10px; padding:8px 10px; border:0; border-radius:6px;
+                  background:transparent; color:#14202E; font:inherit; text-align:left; cursor:pointer; }
+      .dsw-menue button:hover{ background:#EEF1F5; }
+      .dsw-menue button[aria-checked="true"]{ background:#E3ECF7; }
+      .dsw-menue button span{ flex:1 1 auto; }
+      .dsw-menue button i{ font-style:normal; color:#00529F; font-weight:700; visibility:hidden; }
+      .dsw-menue button[aria-checked="true"] i{ visibility:visible; }
+      .dsw-menue svg{ width:16px; height:16px; flex:none; }
+      .dsw-fuss{ font-size:12px; line-height:1.4; color:#5A6577; padding:6px 10px 4px; border-top:1px solid #EEF1F5; margin-top:4px; }
+      @media print{ .dsw{ display:none !important; } }
+    </style>
+    <div class="dsw">
+      <button class="dsw-knopf" type="button" id="dswKnopf" aria-haspopup="menu" aria-expanded="false" aria-controls="dswMenue"
+              title="Darstellung" aria-label="Darstellung: hell, dunkel oder wie Ihr Gerät">
+        <svg class="sonne" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="#F2B84B" stroke-width="2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="#F2B84B" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="mond" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="#C9D6F2" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="dsw-menue" id="dswMenue" role="menu" aria-label="Darstellung" hidden>
+        <span class="dsw-titel">DARSTELLUNG</span>
+        <button type="button" role="menuitemradio" data-wahl="hell" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="#B7791F" stroke-width="2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="#B7791F" stroke-width="2" stroke-linecap="round"/></svg><span>Hell</span><i>✓</i></button>
+        <button type="button" role="menuitemradio" data-wahl="dunkel" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="#3A4658" stroke-width="2" stroke-linejoin="round"/></svg><span>Dunkel</span><i>✓</i></button>
+        <button type="button" role="menuitemradio" data-wahl="geraet" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="#3A4658" stroke-width="1.8"/><path d="M8 20h8M12 16v4" stroke="#3A4658" stroke-width="1.8" stroke-linecap="round"/></svg><span>Wie mein Gerät</span><i>✓</i></button>
+        <span class="dsw-fuss">Voreinstellung: wie Ihr Gerät. Die Wahl gilt für alle Angebote.</span>
+      </div>
+    </div>
+    <script>
+    (function () {
+      var knopf = document.getElementById("dswKnopf"), menue = document.getElementById("dswMenue");
+      if (!knopf || !menue) return;
+      function lesen() {
+        var m = document.cookie.match(/(?:^|;\s*)mvf-theme=(light|dark)/);
+        return m ? (m[1] === "light" ? "hell" : "dunkel") : "geraet";
+      }
+      function schreiben(w) {
+        var d = /(^|\.)m-vf\.de$/.test(location.hostname) ? "; Domain=.m-vf.de" : "";
+        var sicher = location.protocol === "https:" ? "; Secure" : "";
+        document.cookie = "mvf-theme=" + (w === "geraet" ? "; Max-Age=0" : (w === "hell" ? "light" : "dark") + "; Max-Age=31536000")
+          + "; Path=/; SameSite=Lax" + d + sicher;
+      }
+      function anwenden(w) {
+        var h = document.documentElement;
+        if (w === "hell") h.setAttribute("data-theme", "light");
+        else if (w === "dunkel") h.setAttribute("data-theme", "dark");
+        else h.removeAttribute("data-theme");
+        menue.querySelectorAll("[data-wahl]").forEach(function (b) {
+          b.setAttribute("aria-checked", b.getAttribute("data-wahl") === w ? "true" : "false");
+        });
+      }
+      function zu() { menue.hidden = true; knopf.setAttribute("aria-expanded", "false"); }
+      anwenden(lesen());
+      knopf.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var auf = menue.hidden;
+        menue.hidden = !auf;
+        knopf.setAttribute("aria-expanded", auf ? "true" : "false");
+        if (auf) { var b = menue.querySelector('[aria-checked="true"]'); if (b) b.focus(); }
+      });
+      menue.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-wahl]");
+        if (!b) return;
+        var w = b.getAttribute("data-wahl");
+        schreiben(w); anwenden(w); zu(); knopf.focus();
+      });
+      document.addEventListener("click", function (e) { if (!menue.hidden && !e.target.closest(".dsw")) zu(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menue.hidden) { zu(); knopf.focus(); } });
+    })();
+    </script>
+    <!-- DARSTELLUNG-ENDE -->
     <div class="netz-rechts">
       <div class="netz-sprache" role="group" aria-label="Sprache">
         <span aria-current="true" lang="de" title="Deutsch" aria-label="Deutsch">DE</span>
