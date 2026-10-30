@@ -1314,7 +1314,7 @@
   }
   /* Aktionsleiste: befristet, auf allen Seiten der Reihe (seit 09.10.2026,
      vorher nur auf der Uebersicht). Schliessen gilt fuer diesen Aufruf -
-     bewusst nichts im Speicher des Browsers (keine Cookies versprochen). */
+     bewusst nichts im Speicher des Browsers (keine Tracking-Cookies versprochen). */
   .netz-aktion{ background:#F6EEDB; color:#111; border-bottom:1px solid #E3D3A8; font-size:13.5px; line-height:1.35; }
   :root[data-theme="dark"] .netz-aktion{ background:#2A2414; color:#E9EEF6; border-bottom-color:#4A3E1E; }
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz-aktion{ background:#2A2414; color:#E9EEF6; border-bottom-color:#4A3E1E; } }
@@ -1343,7 +1343,7 @@
       <img src="logo/hub-icon.svg" alt="" width="20" height="20">
       <span>KNOWLEDGE<b>-HUBS</b></span>
     </a>
-    <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Hubs<span class="pfeil" aria-hidden="true">▼</span></button>
+    <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Angebote<span class="pfeil" aria-hidden="true">▼</span></button>
     <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs</a>
     <!-- DARSTELLUNG-START ====================================================
          Schalter „Darstellung" (hell / dunkel / wie mein Geraet), links neben
@@ -1488,7 +1488,7 @@
           <ul>
             <li><a href="https://innofonds.m-vf.de/">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 4l9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg>
-              <span><b>Innovationsfonds-Wissen</b><small>Projekte und Beschlüsse des GBA-Innovationsfonds</small></span></a></li>
+              <span><b>Innovationsfonds-Radar</b><small>Projekte und Beschlüsse des GBA-Innovationsfonds</small></span></a></li>
             <li><a href="https://wissen.m-vf.de/ausschreibungen.html">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><path d="M12 12l6-6"/></svg>
               <span><b>Ausschreibungsradar</b><small>Offene Förderausschreibungen, zweimal pro Woche aktualisiert</small></span></a></li>
@@ -1498,6 +1498,12 @@
             <li><a href="https://wissen.m-vf.de/zulassungen.html">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.6" y="8.6" width="18.8" height="6.8" rx="3.4"/><path d="M12 8.6v6.8"/></svg>
               <span><b>Zulassungs-/DiGA-Radar</b><small>Zugelassen, empfohlen, beantragt: EMA, FDA und die DiGA des BfArM</small></span></a></li>
+            <li><a href="https://einreichung.m-vf.de/">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 17v-6M9.5 13.5 12 11l2.5 2.5"/></svg>
+              <span><b>Manuskript einreichen</b><small>Für Monitor Versorgungsforschung, mit doppelt verdecktem Peer Review</small></span></a></li>
+            <li><a href="https://www.monitor-versorgungsforschung.de/education/mvf-jahreskongresse/">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="6" r="2.5"/><path d="M8 13a4 4 0 0 1 8 0"/><path d="M4 15h16l-1.5 6h-13z"/></svg>
+              <span><b>MVF-Fachkongress</b><small>Einmal im Jahr in Berlin</small></span></a></li>
           </ul>
         </div>
       </div>
