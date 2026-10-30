@@ -539,6 +539,10 @@
   .schritt > button{ min-height:46px; }
   .schritt-erkl{ font-size:11.5px; line-height:1.35; color:var(--ink-faint); max-width:230px; }
   .schritt-erkl b{ color:var(--ink-soft); }
+  .such-datenschutz{ margin:10px 0 0; font-size:13px; line-height:1.4;
+    color:var(--ink-faint); text-align:right; }
+  .such-datenschutz a{ color:inherit; text-decoration:underline; }
+  @media (max-width:640px){ .such-datenschutz{ text-align:left; } }
   .search-row{ align-items:flex-start; }
   /* Leeren als x im Suchfeld. */
   #q{ padding-right:42px; }
@@ -1607,6 +1611,10 @@
               <span class="schritt-erkl"><b>Schnellüberblick:</b> Treffer aus sieben Datenbanken hier auf der Seite, mit Download</span>
             </span>
           </div>
+          <!-- Datenschutzhinweis direkt am Knopf (Canvas 2 von Mariann, Post-it
+               n-Main-5; Peters Ja am 30.10.2026). Der Abschnitt
+               „Trefferliste ueber mehrere Datenbanken" steht unter #hubs. -->
+          <p class="such-datenschutz">Beim Klick auf „Treffer direkt anzeigen“ wird Ihr Suchbegriff an PubMed, Europe PMC und weitere Datenbanken übermittelt. <a href="https://knowledge-hubs.m-vf.de/datenschutz.html#hubs">Datenschutz</a></p>
 
           <!-- Rueckmeldung nach dem Absenden. Vorher unsichtbar: Ohne Suche gibt
                es nichts zu melden. -->
