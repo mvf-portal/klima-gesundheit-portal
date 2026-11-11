@@ -1,0 +1,6 @@
+# erzeugt von hub-scripts/studienseiten.py
+# Alles frei: Suchmaschinen und KI-Dienste sollen die Studienseiten finden.
+User-agent: *
+Allow: /
+
+Sitemap: https://klima.m-vf.de/sitemap.xml

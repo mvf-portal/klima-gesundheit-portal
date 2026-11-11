@@ -120,6 +120,16 @@ jobs:
       - name: Newsletter-Feed & Downloads erzeugen
         run: python scripts/gemeinsam/build_newsletter.py
 
+      # Feste Seiten je Studie (studie/<pmid>/), Uebersicht, sitemap.xml und
+      # robots.txt - damit Suchmaschinen und KI-Dienste die Zusammenfassungen
+      # finden. Ohne JavaScript sahen sie bis 11.11.2026 nur die leere Huelle,
+      # und /#studie-<PMID> ist fuer sie keine eigene Adresse. Liest nur das
+      # Archiv, deterministisch wie der Feed. Ein Fehler hier darf das
+      # Studien-Update nicht aufhalten.
+      - name: Studienseiten und Sitemap erzeugen
+        continue-on-error: true
+        run: python scripts/gemeinsam/studienseiten.py
+
       # ---- Ausschreibungsradar -------------------------------------------
       # Der Radar laeuft EINMAL ZENTRAL im Versorgungsforschungs-Portal und
       # teilt sein Ergebnis nach zwoelf Themengebieten auf; die elf
@@ -225,7 +235,7 @@ jobs:
       - name: Committen & pushen (nur bei Änderung)
         id: commit
         env:
-          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json zulassungen.html zulassungen.json
+          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json zulassungen.html zulassungen.json studie sitemap.xml robots.txt
         run: |
           # Nicht jedes Portal hat jede Datei: ausschreibungen.html/.json
           # entstehen nur im Versorgungsforschungs-Portal, weil der Radar dort
