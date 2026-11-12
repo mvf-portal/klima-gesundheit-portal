@@ -215,17 +215,29 @@
   .netz .wrap, .ortsleiste .wrap{ max-width:1180px; margin-left:auto; margin-right:auto;
          padding-left:22px; padding-right:22px; box-sizing:border-box; }
   @media (max-width:560px){ .netz .wrap, .ortsleiste .wrap{ padding-left:16px; padding-right:16px; } }
+  /* Unter 400 px zaehlt jeder Pixel - das sind die schmalsten Telefone, die
+     noch im Umlauf sind (iPhone SE der ersten Reihe: 320 px). */
+  @media (max-width:400px){ .netz .wrap, .ortsleiste .wrap{ padding-left:10px; padding-right:10px; } }
   :root[data-theme="dark"] .netz{ --nz-petrol:#4FC2C4; }
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .netz{ --nz-petrol:#4FC2C4; } }
   .netz *{ box-sizing:border-box; }
   /* Breite und Seitenrand kommen von .wrap der jeweiligen Seite - Hubs und
      Uebersicht setzen den Rand verschieden, die Leiste soll buendig mit dem
      Inhalt darunter stehen. */
-  .netz-innen{ display:flex; align-items:center; gap:4px; min-height:44px; }
+  /* flex-wrap ist die Notbremse gegen seitliches Verschieben der ganzen Seite.
+     Gemessen am 12.11.2026 auf diabetes.m-vf.de bei 323 px Fensterbreite: Die
+     Leiste war 357 px breit (Wortmarke 167 + Knopf 116 + Darstellungsschalter
+     34 + Rand 32 + Abstaende 8), die Seite liess sich um 24 px zur Seite
+     schieben. Solange alles nebeneinander passt, aendert wrap nichts; passt es
+     nicht, rutscht der Darstellungsschalter in eine zweite Zeile, statt dass
+     die ganze Seite wandert. Bewusst kein display:none unter 400 px: Der
+     Schalter ist der einzige Weg zu Hell und Dunkel, im Handy-Menue steht er
+     nicht. */
+  .netz-innen{ display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-height:44px; }
   .netz a, .netz button{ font:inherit; color:inherit; }
   .netz a:focus-visible, .netz button:focus-visible{ outline:2px solid var(--nz-gold); outline-offset:2px; border-radius:4px; }
   .netz-marke{ display:flex; align-items:center; gap:9px; text-decoration:none; padding:8px 14px 8px 0;
-               margin-right:6px; border-right:1px solid #2E3D52; font-weight:700; letter-spacing:.09em; font-size:12.5px; color:#FFF; white-space:nowrap; }
+               margin-right:6px; border-right:1px solid #2E3D52; font-weight:700; letter-spacing:.02em; font-size:12.5px; color:#FFF; white-space:nowrap; }
   .netz-marke img{ width:20px; height:20px; display:block; }
   .netz-marke b{ color:var(--nz-gold); font-weight:700; }
   .netz-knopf, .netz-link{ background:none; border:0; cursor:pointer; padding:13px 11px; text-decoration:none;
@@ -283,7 +295,10 @@
   .ortsleiste-innen{ display:flex; align-items:center; gap:6px; min-height:58px; }
   .ort-name{ display:flex; align-items:center; gap:11px; text-decoration:none; color:var(--ink,#111); margin-right:18px; min-width:0; }
   .ort-name img{ width:34px; height:34px; flex:0 0 34px; display:block; }
-  .ort-name small{ display:block; font-size:10.5px; letter-spacing:.12em; font-weight:700; color:var(--ink-soft,#444A50); }
+  /* Sperrung von .12em auf .03em, weil „Knowledge-Hub" seit dem 12.11.2026
+     gemischt gesetzt ist - eine fuer Versalien gemachte Sperrung zerreisst
+     gemischten Satz. */
+  .ort-name small{ display:block; font-size:10.5px; letter-spacing:.03em; font-weight:700; color:var(--ink-soft,#444A50); }
   .ort-name b{ display:block; font-size:14.5px; color:var(--brand,#0051A1); line-height:1.2; }
   .ort-links{ display:flex; gap:2px; }
   .ort-links a{ padding:18px 11px 17px; font-size:13.5px; font-weight:700; color:var(--ink-soft,#444A50);
@@ -365,24 +380,31 @@
   @media print{ .netz, .ortsleiste, .netz-handy, .netz-aktion{ display:none !important; } }
 </style>
 
-<!-- AKTION-START (befristet bis 11.11.2026; netzleiste_einsetzen.py laesst
-     sie nach Ablauf weg, das Skript unten raeumt sie im Browser weg) -->
-<div class="netz-aktion" id="netzAktion" data-ende="2026-11-11T23:59:59+01:00">
-  <div class="wrap">
-    <p><b>Bis 11.11.:</b> 1 von 10 Tickets für den 15. MVF-Fachkongress am 27. November in Berlin gewinnen</p>
-    <a href="https://knowledge-hubs.m-vf.de/gewinnspiel/">Teilnehmen →</a>
-    <button type="button" aria-label="Hinweis schließen">×</button>
-  </div>
-</div>
-<!-- AKTION-ENDE -->
 <nav class="netz" aria-label="Alle Knowledge-Hubs" data-hier="klima.m-vf.de">
   <div class="netz-innen wrap">
     <a class="netz-marke" href="https://knowledge-hubs.m-vf.de/" title="Zur Übersicht aller Knowledge-Hubs">
       <img src="logo/hub-icon.svg" alt="" width="20" height="20">
-      <span>KNOWLEDGE<b>-HUBS</b></span>
+      <!-- Gemischte Schreibweise seit 12.11.2026 auf Anweisung des
+           Herausgebers: Beim Innovationsfonds-Radar sind alle Versalien
+           abgeschafft worden, die Leiste zieht mit. Die Sperrung faellt dabei
+           von .09em auf .02em - sie war fuer Grossbuchstaben gesetzt und
+           zerreisst gemischten Satz. Nebenwirkung, gemessen: Die Wortmarke
+           wird auf dem Telefon von 167 auf 139 Pixel schmaler. -->
+      <span>Knowledge<b>-Hubs</b></span>
     </a>
     <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Angebote<span class="pfeil" aria-hidden="true">▼</span></button>
     <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs</a>
+    <!-- Eigener Eintrag fuer das Innovationsfonds-Radar, auf Anweisung des
+         Herausgebers vom 12.11.2026. Es steht zwar schon unter „Alle
+         Angebote" an erster Stelle der Gruppe „Weitere Angebote" - sichtbar
+         genug war es dort nicht. Auf innofonds.m-vf.de entsteht die Leiste
+         aus einer eigenen Quelle (innovationsfonds/), die an dieser Stelle
+         die Navigation jener Seite traegt; dort ist also nichts abzufangen,
+         diese Datei erreicht sie gar nicht.
+         Unter 860 px verschwindet er mit .netz-link in das Handy-Menue, wo er
+         unter „Weitere Angebote" ohnehin steht - deshalb kostet er auf dem
+         Telefon keine Breite. -->
+    <a class="netz-link netz-radar" href="https://innofonds.m-vf.de/">Innovationsfonds-Radar</a>
     <!-- DARSTELLUNG-START ====================================================
          Schalter „Darstellung" (hell / dunkel / wie mein Geraet), links neben
          DE/EN. Entwurf Mariann Stegmaier, Canvas 2 (28.10.2026); gebaut von der
@@ -654,7 +676,8 @@
   <div class="ortsleiste-innen wrap">
     <a class="ort-name" href="./">
       <img src="logo/hub-icon.svg" alt="" width="34" height="34">
-      <span><small>KNOWLEDGE-HUB</small><b>Hitze, Klima &amp; Gesundheit</b></span>
+      <!-- Gemischte Schreibweise seit 12.11.2026, siehe netzleiste.html. -->
+      <span><small>Knowledge-Hub</small><b>Hitze, Klima &amp; Gesundheit</b></span>
     </a>
     <div class="ort-links">
       <a href="./#suche">Suche</a>
@@ -781,7 +804,16 @@
   <nav class="nf-links" aria-label="Rechtliches">
     <a href="https://knowledge-hubs.m-vf.de/impressum.html">Impressum</a>
     <a href="https://knowledge-hubs.m-vf.de/datenschutz.html">Datenschutz</a>
-    <span class="nf-mail">Kontakt: <a href="mailto:info@m-vf.de">info@m-vf.de</a></span>
+    <!-- Zwei Wege statt einem, auf Anweisung des Herausgebers vom 12.11.2026:
+         „Kontakt und email bitte trennen in Kontaktformular / eMail-senden".
+         Das Formular liegt bei der Innofonds-Sitzung unter
+         innofonds.m-vf.de/kontakt/ und ist fuer ALLE Angebote der Reihe
+         gedacht, nicht nur fuer das Radar; es erkennt den Hub an der
+         Herkunftsadresse, ein schlichter Link genuegt also.
+         Die Adresse bleibt daneben SICHTBAR stehen - siehe oben: Ein blosser
+         mailto-Link tut nichts, wenn kein Mailprogramm eingerichtet ist. -->
+    <a href="https://innofonds.m-vf.de/kontakt/">Kontaktformular</a>
+    <span class="nf-mail">E-Mail senden: <a href="mailto:info@m-vf.de">info@m-vf.de</a></span>
   </nav>
 </div>
   </div>
