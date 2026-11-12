@@ -1,0 +1,22 @@
+# Knowledge-Hub Hitze, Klima & Gesundheit
+
+> Rechercheportal zu Hitze, Klima und Gesundheit: gebündelte Live-Suchen über Fachdatenbanken, Klimadaten-Portale und Institutionen plus tagesaktuelle Studien mit deutscher Zusammenfassung. Ein Angebot von Monitor Versorgungsforschung.
+
+<!-- erzeugt von hub-scripts/studienseiten.py -->
+
+Hinweise zur Nutzung:
+- Der Hub zeigt täglich neue Studien aus PubMed zum Thema Hitze, Klima & Gesundheit, mit deutscher Zusammenfassung und einer Einschätzung, ob sich die Ergebnisse auf Deutschland übertragen lassen. Bisher 489 Studien, zuletzt aufgenommen am 12.11.2026.
+- Auswahl und deutsche Zusammenfassung stammen von einer KI, ohne redaktionelle Prüfung (Kennzeichnung „Von KI ausgewählt und zusammengefasst“). Maßgeblich ist immer die Originalpublikation.
+- Bitte bei Zitaten die Originalstudie über https://pubmed.ncbi.nlm.nih.gov/<pmid>/ angeben und die deutsche Zusammenfassung als Quelle „MVF-Knowledge-Hub Hitze, Klima & Gesundheit“ nennen.
+
+## Studien
+
+- [Alle Studien](https://klima.m-vf.de/studie/): Übersicht nach Aufnahmemonat, je Studie eine eigene Seite unter https://klima.m-vf.de/studie/<pmid>/
+- [Studienarchiv (JSON)](https://klima.m-vf.de/studien-archiv.json): alle Studien; Felder pmid, title, sum (Zusammenfassung), result (Ergebnis), transfer (Übertragbarkeit), journal, author, year, pubdate, aufgenommen
+- [Studien-Feed (RSS)](https://klima.m-vf.de/studien-feed.xml): die neuesten Studien
+
+## Mehr
+
+- [Startseite des Hubs](https://klima.m-vf.de/): Live-Suche über die wichtigen Fachdatenbanken des Themas
+- [Alle Knowledge-Hubs](https://knowledge-hubs.m-vf.de/): Übersicht und llms.txt für alle Hubs
+- [Monitor Versorgungsforschung](https://www.monitor-versorgungsforschung.de/): Herausgeber, Fachzeitschrift für Versorgungsforschung

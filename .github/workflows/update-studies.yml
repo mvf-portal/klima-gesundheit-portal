@@ -235,7 +235,7 @@ jobs:
       - name: Committen & pushen (nur bei Änderung)
         id: commit
         env:
-          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json zulassungen.html zulassungen.json studie sitemap.xml robots.txt
+          DATEIEN: index.html studien-archiv.json studien-feed.xml download versand-status.json ausschreibungen.html ausschreibungen.json zulassungen.html zulassungen.json studie sitemap.xml robots.txt llms.txt
         run: |
           # Nicht jedes Portal hat jede Datei: ausschreibungen.html/.json
           # entstehen nur im Versorgungsforschungs-Portal, weil der Radar dort
