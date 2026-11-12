@@ -350,6 +350,14 @@
      fuer schmale Bildschirme (startseite_neu.sprungleiste, links=False). */
   .ortsleiste.nur-handy{ display:none; }
   @media (max-width:980px){ .netz-mvf .lang{ display:none; } }
+  /* Seit dem 12.11.2026 traegt die Leiste zwei Eintraege mehr („Ueber uns",
+     „Kontakt") und den Radar. Gemessen auf einem 1024er Bildschirm: Die Teile
+     ergaben zusammen 1.032 px bei 1.009 px Platz, die Leiste wurde zweizeilig.
+     Als Erstes weicht deshalb der Absender rechts - er steht auf jeder Seite
+     noch einmal im Fuss, geht also nirgends verloren. DE/EN bleibt stehen:
+     Zwischen 860 und 1.120 px gaebe es sonst gar keinen Sprachwechsel, denn
+     im Handy-Menue erscheint er erst unter 860. */
+  @media (max-width:1120px){ .netz-mvf{ display:none; } }
   @media (max-width:860px){
     .netz-rechts, .netz-link{ display:none; }
     .netz-spalten{ grid-template-columns:1fr 1fr; }
@@ -393,7 +401,14 @@
       <span>Knowledge<b>-Hubs</b></span>
     </a>
     <button class="netz-knopf" type="button" id="netzKnopf" aria-expanded="false" aria-controls="netzMega">Alle Angebote<span class="pfeil" aria-hidden="true">▼</span></button>
-    <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">Über die Hubs</a>
+    <!-- „Ueber die Hubs" stand bis zum 12.11.2026 hier und ist in das Menue
+         „Alle Angebote" gewandert, Gruppe „Weitere Angebote" - Platz fuer
+         „Ueber uns" und „Kontakt", die laut Marianns Liste „Was noch fehlt"
+         (Teil 2, Punkt 9) in die Leiste jedes Angebots gehoeren.
+         ⚠ Der Bau des Innovationsfonds-Radars suchte seine Einfuegestelle
+         mit einem assert auf „Ueber die Hubs". Die Innofonds-Sitzung ist am
+         12.11.2026 vorgewarnt worden, bevor dieser Eintrag ging. Wer hier
+         wieder etwas herausnimmt, sagt dort vorher Bescheid. -->
     <!-- Eigener Eintrag fuer das Innovationsfonds-Radar, auf Anweisung des
          Herausgebers vom 12.11.2026. Es steht zwar schon unter „Alle
          Angebote" an erster Stelle der Gruppe „Weitere Angebote" - sichtbar
@@ -405,6 +420,11 @@
          unter „Weitere Angebote" ohnehin steht - deshalb kostet er auf dem
          Telefon keine Breite. -->
     <a class="netz-link netz-radar" href="https://innofonds.m-vf.de/">Innovationsfonds-Radar</a>
+    <a class="netz-link" href="https://knowledge-hubs.m-vf.de/ueber-uns.html">Über uns</a>
+    <!-- Die Kontaktseite liegt bei der Innofonds-Sitzung und gilt ALLEN
+         Angeboten der Reihe, nicht nur dem Radar. Ohne Parameter erkennt sie
+         den Hub an der Herkunftsadresse, ein schlichter Link genuegt. -->
+    <a class="netz-link" href="https://innofonds.m-vf.de/kontakt/">Kontakt</a>
     <!-- DARSTELLUNG-START ====================================================
          Schalter „Darstellung" (hell / dunkel / wie mein Geraet), links neben
          DE/EN. Entwurf Mariann Stegmaier, Canvas 2 (28.10.2026); gebaut von der
@@ -564,6 +584,11 @@
             <li><a href="https://www.monitor-versorgungsforschung.de/education/mvf-jahreskongresse/">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="6" r="2.5"/><path d="M8 13a4 4 0 0 1 8 0"/><path d="M4 15h16l-1.5 6h-13z"/></svg>
               <span><b>MVF-Fachkongress</b><small>Einmal im Jahr in Berlin</small></span></a></li>
+            <!-- Am 12.11.2026 aus der Leiste hierher gewandert, damit dort
+                 „Ueber uns" und „Kontakt" Platz haben. -->
+            <li><a href="https://knowledge-hubs.m-vf.de/ueber-die-hubs.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8.5v.01"/></svg>
+              <span><b>Über die Hubs</b><small>Wie die Hubs entstehen, woher die Studien kommen</small></span></a></li>
           </ul>
         </div>
       </div>
