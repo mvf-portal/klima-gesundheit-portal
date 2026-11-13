@@ -814,6 +814,43 @@
       <div class="wahl" id="wahlReihe"></div>
     </fieldset>
 
+
+    <!-- FREQUENZWAHL (seit 13.11.2026) ===================================
+         Zwanzig Hubs heissen fuer jemanden mit drei Interessen drei E-Mails
+         am Tag - die Menge, bei der Leute abbestellen. Die Wahl gilt fuer
+         ALLE Studien-Newsletter zusammen und nicht je Hub: Mailchimp laesst
+         hoechstens 60 Gruppen je Liste zu, drei Spuren mal zwanzig Hubs
+         waeren sechzig allein dafuer gewesen.
+
+         Verborgen, solange kein Studien-Newsletter gewaehlt ist. Fuer den
+         MVF-Newsletter und die Sonderaussendungen gilt die Wahl nicht. -->
+    <fieldset id="feldTakt" hidden>
+      <legend>Wie oft sollen die Studien kommen?</legend>
+      <p class="fein reihe-vor">Die Auswahl gilt für alle oben gewählten
+      Studien-Newsletter zusammen. Ändern können Sie sie jederzeit über den
+      Link am Fuß jeder Ausgabe.</p>
+      <div class="wahl" id="wahlTakt">
+        <label class="karte">
+          <input type="radio" name="takt" value="tag" checked>
+          <span class="takt">täglich</span>
+          <b>Jeden Werktag</b>
+          <span class="was">Jede Studie am Tag nach ihrer Aufnahme in PubMed. Montags mit dem Wochenende.</span>
+        </label>
+        <label class="karte">
+          <input type="radio" name="takt" value="woche">
+          <span class="takt">wöchentlich</span>
+          <b>Einmal die Woche, freitags</b>
+          <span class="was">Eine Ausgabe freitags mit allem, was die Woche gebracht hat.</span>
+        </label>
+        <label class="karte">
+          <input type="radio" name="takt" value="monat">
+          <span class="takt">monatlich</span>
+          <b>Einmal im Monat</b>
+          <span class="was">Eine Ausgabe am ersten Werktag des Monats. Der Überblick, ohne tägliche Post.</span>
+        </label>
+      </div>
+    </fieldset>
+
     <div>
       <label class="feld" for="email">E-Mail-Adresse</label>
       <input type="email" id="email" name="EMAIL" autocomplete="email" required
@@ -1090,7 +1127,64 @@ if(andere.length){
     + '</label>'
   )).join('');
   feldReihe.hidden = false;
+  // Wer nur einen Schwester-Newsletter waehlt, braucht die
+  // Frequenzwahl genauso wie beim eigenen.
+  wahlReihe.querySelectorAll('input').forEach(
+    el => el.addEventListener('change', taktZeigen));
+  taktZeigen();
 }
+
+// --- Frequenzwahl (seit 13.11.2026) ---------------------------------------
+// Sichtbar nur, wenn ein Studien-Newsletter gewaehlt ist: der eigene oder
+// einer der Schwesterportale. Der MVF-Newsletter und die Sonderaussendungen
+// haben ihren eigenen Takt, fuer sie gilt die Wahl nicht.
+
+function taktWert(){
+  const g = document.querySelector('input[name="takt"]:checked');
+  return g ? g.value : 'tag';
+}
+
+// Die Marke auf den Karten muss mitgehen. Steht dort "taeglich", waehrend
+// jemand "einmal im Monat" angekreuzt hat, ist die Seite in sich falsch -
+// und zwar an der Stelle, die man zuerst liest.
+//
+// Die Marke wird aus der gewaehlten Karte GELESEN, nicht aus einer Tabelle
+// oben. Zwei Gruende: Es gibt sie dann nur einmal, und eine Konstante oben
+// im Block waere beim ersten Aufruf noch nicht angelegt - reiheBauen() ruft
+// hier herein, bevor das Skript unten angekommen ist, und `const` wirft
+// dann einen ReferenceError, der die ganze Seite leer laesst.
+function taktMarkenNachfuehren(){
+  const gewaehlt = document.querySelector('input[name="takt"]:checked');
+  const marke = gewaehlt
+    ? gewaehlt.closest('.karte').querySelector('.takt').textContent
+    : 'täglich';
+  const eigene = wahlStudien.closest('.karte').querySelector('.takt');
+  if (eigene) eigene.textContent = marke;
+  document.querySelectorAll('#wahlReihe .karte .takt')
+          .forEach(el => { el.textContent = marke; });
+}
+
+function taktZeigen(){
+  // Das Element wird hier geholt und nicht in einer Konstante oben gehalten:
+  // reiheBauen() ruft taktZeigen() auf, und wenn dieser Aufruf vor der
+  // Konstanten steht, wirft `const` einen ReferenceError - und weil das
+  // gesamte JS in EINEM Block liegt, bliebe die ganze Seite leer.
+  const feld = document.getElementById('feldTakt');
+  if (!feld) return;
+  const studien = wahlStudien.checked
+    || !!document.querySelector('#wahlReihe input:checked');
+  feld.hidden = !studien;
+  taktMarkenNachfuehren();
+}
+
+wahlStudien.addEventListener('change', taktZeigen);
+document.querySelectorAll('input[name="takt"]')
+        .forEach(el => el.addEventListener('change', taktMarkenNachfuehren));
+
+// Einmal beim Laden. Der zweite Aufruf steht am Ende des Reihen-Aufbaus,
+// aber der laeuft NICHT, wenn die Reihe leer bleibt - und dann staende die
+// Frequenzwahl verborgen da, obwohl der eigene Newsletter vorangekreuzt ist.
+taktZeigen();
 
 function sage(text, art){
   meldung.className = 'meldung ' + (art || '');
@@ -1143,6 +1237,10 @@ form.addEventListener('submit', async (e)=>{
       body: JSON.stringify({
         email: feldMail.value.trim(),
         hubs:  hubs,
+        // Seit 13.11.2026. Der Endpunkt uebergeht das Feld,
+        // solange er es nicht kennt - die Bestellung geht dann
+        // durch, nur die Frequenz kommt nicht an.
+        takt:  taktWert(),
         falle: feldFalle.value
       })
     });
