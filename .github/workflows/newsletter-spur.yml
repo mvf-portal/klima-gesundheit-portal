@@ -1,0 +1,130 @@
+name: Newsletter-Spur (Woche oder Monat)
+
+# Die Wochen- und die Monatsausgabe. Seit dem 14.11.2026, auf Peters Freigabe
+# vom selben Tag.
+#
+# WARUM EIN EIGENER WERKLAUF und nicht zwei weitere Zeitplaene in
+# update-studies.yml, wie zuerst vorgeschlagen:
+#
+# 1. GitHubs Cron ist "best effort". In den Kommentaren von update-studies.yml
+#    steht die eigene Geschichte: am 24.08.2026 fast zwei Stunden zu spaet, am
+#    26.08. zwei Stunden, am 27. und 28.08. zwei Naechte hintereinander GAR
+#    NICHT, am 14.09. genau an dem einen Montag ausgelassen, an dem der
+#    Newsletter-Lauf zaehlte. Bei einer taeglichen Ausgabe ist das zu
+#    verschmerzen, morgen kommt die naechste. Ein ausgefallener Freitag ist
+#    eine ganze Woche, ein ausgefallener Monatserster ein ganzer Monat.
+#    Deshalb kommt der Anstoss vom Dirigenten, den der MVF-Server weckt -
+#    derselbe Weg, auf dem die Tagesausgabe seit dem 30.08.2026 zuverlaessig
+#    laeuft.
+#
+# 2. Ein eigener Werklauf kann die Tagesausgabe nicht mitreissen. Waere die
+#    Spur ein Zweig in update-studies.yml, truege jeder Fehler darin das
+#    Risiko, den taeglichen Lauf von zwanzig Portalen zu stoeren. So bleibt
+#    update-studies.yml Byte fuer Byte, wie es war.
+#
+# 3. Studien, Radar, Zulassungen und Seitenbau sind am Morgen schon gelaufen.
+#    Dieser Lauf holt nur, was im Repo steht, und legt die Ausgabe an.
+#
+# KEIN ZEITPLAN. Dieser Werklauf hat mit Absicht nur workflow_dispatch: Er
+# kann nicht von selbst anlaufen. Wer ihn startet, ist der Dirigent (oder ein
+# Mensch). Zusaetzlich prueft mailchimp_entwurf.py mit `spur_faellig()`
+# selbst, ob die Spur heute dran ist, und bricht sonst ohne Kosten ab. Zwei
+# Schranken, nicht eine: Der Dirigent entscheidet den Kalender, das Skript
+# prueft ihn nach.
+#
+# ROT IST HIER RICHTIG. In update-studies.yml laeuft der Newsletter-Schritt
+# mit `continue-on-error`, weil dort Seite, Archiv und Feed wichtiger sind als
+# die Kampagne. Hier ist die Kampagne der ganze Zweck: Scheitert sie, soll der
+# Lauf scheitern, damit die Laufwache ihn sieht und meldet.
+
+on:
+  workflow_dispatch:
+    inputs:
+      spur:
+        description: "Welche Ausgabe"
+        type: choice
+        options:
+          - woche
+          - monat
+        required: true
+
+permissions:
+  contents: write           # nur fuer die Statusdatei dieser Spur
+
+concurrency:
+  # Eigene Gruppe, damit ein laufendes Studien-Update nicht abgebrochen wird
+  # und umgekehrt.
+  group: newsletter-spur
+  cancel-in-progress: false
+
+jobs:
+  ausgabe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: scripts:scripts/gemeinsam
+
+    steps:
+      # Holt den Stand von heute frueh: Das Studien-Update hat
+      # studien-archiv.json laengst committet, und daraus waehlt die Ausgabe.
+      - name: Repo auschecken
+        uses: actions/checkout@v4
+
+      - name: Gemeinsame Skripte auschecken
+        uses: actions/checkout@v4
+        with:
+          repository: mvf-portal/hub-scripts
+          ref: stabil
+          path: scripts/gemeinsam
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Dieselbe Liste wie im Studien-Update. anthropic steht mit drin, weil
+      # mailchimp_entwurf.py ueber torwaechter.py und sponsoren.py Module
+      # laedt, die es importieren.
+      - name: Abhängigkeiten installieren
+        run: pip install --quiet "anthropic>=0.40" requests tzdata python-docx openpyxl pypdf
+
+      - name: Ausgabe anlegen, prüfen und terminieren
+        env:
+          MAILCHIMP_API_KEY: ${{ secrets.KLIMAHUBMC }}
+          SPUR: ${{ inputs.spur }}
+        run: |
+          set -eu
+          case "$SPUR" in
+            woche|monat) ;;
+            *) echo "::error::Unbekannte Spur '$SPUR' - erlaubt sind woche und monat."; exit 1 ;;
+          esac
+          python scripts/gemeinsam/mailchimp_entwurf.py --spur "$SPUR"
+
+      # Jede Spur fuehrt ihre EIGENE Statusdatei (versand-status-woche.json,
+      # versand-status-monat.json). Ohne sie ueberschriebe die Freitagsausgabe
+      # den Tagesbericht, und der Sammelbericht meldete die Wochenausgabe als
+      # Tagesversand. Committet wird allein diese eine Datei - nie `git add -A`,
+      # die Portal-Repos sind oeffentlich und ihr Arbeitsbaum ist voller
+      # ungetrackter Dateien.
+      - name: Statusdatei dieser Spur committen
+        if: always()
+        env:
+          SPUR: ${{ inputs.spur }}
+        run: |
+          set -u
+          DATEI="versand-status-$SPUR.json"
+          if [ ! -e "$DATEI" ]; then
+            echo "$DATEI gibt es nicht - nichts zu committen."
+            exit 0
+          fi
+          if [ -z "$(git status --porcelain "$DATEI")" ]; then
+            echo "$DATEI unverändert."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$DATEI"
+          git commit -m "Versandbericht der $SPUR-Ausgabe"
+          # Der Morgenlauf kann zwischendurch gepusht haben.
+          git pull --rebase --quiet origin "$(git rev-parse --abbrev-ref HEAD)" || true
+          git push
