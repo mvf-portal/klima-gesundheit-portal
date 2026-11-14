@@ -5,7 +5,7 @@
 <!-- erzeugt von hub-scripts/studienseiten.py -->
 
 Hinweise zur Nutzung:
-- Der Hub zeigt täglich neue Studien aus PubMed zum Thema Hitze, Klima & Gesundheit, mit deutscher Zusammenfassung und einer Einschätzung, ob sich die Ergebnisse auf Deutschland übertragen lassen. Bisher 495 Studien, zuletzt aufgenommen am 13.11.2026.
+- Der Hub zeigt täglich neue Studien aus PubMed zum Thema Hitze, Klima & Gesundheit, mit deutscher Zusammenfassung und einer Einschätzung, ob sich die Ergebnisse auf Deutschland übertragen lassen. Bisher 501 Studien, zuletzt aufgenommen am 14.11.2026.
 - Auswahl und deutsche Zusammenfassung stammen von einer KI, ohne redaktionelle Prüfung (Kennzeichnung „Von KI ausgewählt und zusammengefasst“). Maßgeblich ist immer die Originalpublikation.
 - Bitte bei Zitaten die Originalstudie über https://pubmed.ncbi.nlm.nih.gov/<pmid>/ angeben und die deutsche Zusammenfassung als Quelle „MVF-Knowledge-Hub Hitze, Klima & Gesundheit“ nennen.
 
