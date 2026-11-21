@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- erzeugt von hub-scripts/studienseiten.py -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://klima.m-vf.de/</loc><lastmod>2026-11-20</lastmod></url>
-<url><loc>https://klima.m-vf.de/studie/</loc><lastmod>2026-11-20</lastmod></url>
+<url><loc>https://klima.m-vf.de/</loc><lastmod>2026-11-21</lastmod></url>
+<url><loc>https://klima.m-vf.de/studie/</loc><lastmod>2026-11-21</lastmod></url>
 <url><loc>https://klima.m-vf.de/neue-studien.html</loc></url>
 <url><loc>https://klima.m-vf.de/newsletter.html</loc></url>
 <url><loc>https://klima.m-vf.de/themen-quellen.html</loc></url>
+<url><loc>https://klima.m-vf.de/studie/43025282/</loc><lastmod>2026-11-21</lastmod></url>
+<url><loc>https://klima.m-vf.de/studie/43025281/</loc><lastmod>2026-11-21</lastmod></url>
+<url><loc>https://klima.m-vf.de/studie/43014222/</loc><lastmod>2026-11-21</lastmod></url>
+<url><loc>https://klima.m-vf.de/studie/43003740/</loc><lastmod>2026-11-21</lastmod></url>
+<url><loc>https://klima.m-vf.de/studie/42906351/</loc><lastmod>2026-11-21</lastmod></url>
+<url><loc>https://klima.m-vf.de/studie/42906349/</loc><lastmod>2026-11-21</lastmod></url>
 <url><loc>https://klima.m-vf.de/studie/43054216/</loc><lastmod>2026-11-20</lastmod></url>
 <url><loc>https://klima.m-vf.de/studie/43053641/</loc><lastmod>2026-11-20</lastmod></url>
 <url><loc>https://klima.m-vf.de/studie/43052767/</loc><lastmod>2026-11-20</lastmod></url>
