@@ -2285,7 +2285,7 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "22. Nov. 2026, 05:00 Uhr";
+const SNAP_DATE = "22. Nov. 2026, 05:21 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
@@ -2296,6 +2296,15 @@ const STUDIES = [
     sum:"Längsschnittstudie untersuchte die Auswirkungen von Wetterkatastrophen auf privat finanzierte Arzneimittelausgaben bei 20.000+ australischen Haushalten (2009–2021).",
     result:"Exposition gegenüber Wetterkatastrophen war mit signifikant höheren privaten Arzneimittelausgaben assoziiert, konzentriert bei Personen ohne private Krankenversicherung. Dies zeigt, dass Klimakatastrophen Gesundheitsausgaben erhöhen, v. a. vulnerable Gruppen belasten.",
     transfer:"Australien/gemäßigte Zone – Methodik übertragbar; absolute Klimarisiken und Versicherungssysteme unterscheiden sich von Deutschland"
+  },
+  {
+    journal:"BMC Psychiatry", year:"2026", pmid:"43065015",
+    author:"Gordon ER et al.", pubdate:"28.08.2026",
+    added:"20.11.2026",
+    title:"Klimaangst und psychische Gesundheit bei jungen Australiern",
+    sum:"Querschnitt- und Längsschnittstudie untersuchte Klimaangst und deren Auswirkungen auf Depression, Stress und Substanzkonsum bei 323 jungen Australiern (2020–2021).",
+    result:"Frauen und Gender-diverse Personen berichteten höhere Klimaangst. Klimaangst war mit gestiegener Depression und Stress verbunden (lineare Mischmodelle signifikant). Es zeigte sich eine U-förmige Beziehung: höhere Klimaangst bei Personen mit bestehenden psychischen Belastungen.",
+    transfer:"Australische Stichprobe; Methodik und Risikogruppen-Konzept übertragbar, aber kulturelle Kontexte unterschiedlich"
   },
   {
     journal:"Front Public Health", year:"2026", pmid:"43060507",
@@ -2325,13 +2334,13 @@ const STUDIES = [
     transfer:"Nordeuropa, vergleichbare Klimazone und Datenqualität; niedrige Schadstoffwerte, daher übertragbar auf Deutschland"
   },
   {
-    journal:"BMC Psychiatry", year:"2026", pmid:"43065015",
-    author:"Gordon ER et al.", pubdate:"28.08.2026",
+    journal:"Environ Monit Assess", year:"2026", pmid:"43062604",
+    author:"Khan J et al.", pubdate:"20.11.2026",
     added:"20.11.2026",
-    title:"Klimaangst und psychische Gesundheit bei jungen Australiern",
-    sum:"Querschnitt- und Längsschnittstudie untersuchte Klimaangst und deren Auswirkungen auf Depression, Stress und Substanzkonsum bei 323 jungen Australiern (2020–2021).",
-    result:"Frauen und Gender-diverse Personen berichteten höhere Klimaangst. Klimaangst war mit gestiegener Depression und Stress verbunden (lineare Mischmodelle signifikant). Es zeigte sich eine U-förmige Beziehung: höhere Klimaangst bei Personen mit bestehenden psychischen Belastungen.",
-    transfer:"Australische Stichprobe; Methodik und Risikogruppen-Konzept übertragbar, aber kulturelle Kontexte unterschiedlich"
+    title:"Polyzyklische aromatische Kohlenwasserstoffe und Krebsrisiko in Pakistan",
+    sum:"Studie quantifiziert PAH-Emissionen in Punjab (Pakistan) von 2015-2024 und bewertet inhalative Krebsrisiken für verschiedene Altersgruppen.",
+    result:"PAH-Emissionen stiegen um 32,8 % (von 3981,5 auf 5287,3 Tonnen). Geschätztes Incremental Lifetime Cancer Risk (ILCR) für Kinder: 5,7 × 10⁻⁵, Jugendliche: 3,9 × 10⁻⁵, Erwachsene: 3,2 × 10⁻⁵ – alle überschreiten den WHO-Schwellenwert von 10⁻⁶ um das 30- bis 570-fache. Kohleverbrennung ist dominante Quelle (53,1 %).",
+    transfer:"Tropen – nur Methodik übertragbar; Temperaturen und Emissionsquellen nicht vergleichbar mit Deutschland."
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
@@ -2346,7 +2355,7 @@ const RADAR_FRISTEN = [["2026-12-31"], [], ["2027-01-07", "2027-02-11"], [], [],
 // === RADAR-BLOCK-ENDE ===
 
 // === ZULASSUNG-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
-const ZUL_STAND = "21.11.2026";
+const ZUL_STAND = "22.11.2026";
 const ZUL_EIGENE = 0;
 const ZUL_GUTACHTEN = 0;
 const ZUL_ZULASSUNG = 0;
