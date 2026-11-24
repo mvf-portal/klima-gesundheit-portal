@@ -6,21 +6,17 @@ name: Studien-Update (täglich)
 # Stunde vorgezogen: Der Sammelbericht (03:45 UTC, Repo knowledge-hubs) muss
 # nach diesem Lauf kommen, und beide deutlich vor dem Versand um 10:00 Ortszeit.
 on:
-  schedule:
-    # Jedes Portal hat eine EIGENE Minute (7 aus portal.json).
-    # GitHubs Cron ist "best effort": Zur vollen Stunde stehen weltweit die
-    # meisten Zeitplaene an, und unter Last werden Laeufe verspaetet gestartet
-    # oder verworfen. Zwoelf Repos auf derselben Minute sind der unguenstigste
-    # Fall - am 26.08.2026 kam der Lauf zwei Stunden zu spaet, am 27. und
-    # 28.08. gar nicht.
-    - cron: "7 3 * * *"
-    # Netz fuer einen ausgefallenen ersten Lauf: Am 27.08.2026 hat GitHub die
-    # geplanten Laeufe aller dreizehn Repos verschluckt (zeitgleich mit einer
-    # Stoerung der Billing-Dienste), und es kam kein einziger Newsletter.
-    # 05:30 UTC liegt gut vier Stunden vor dem Versand um 10:00 Ortszeit. An
-    # normalen Tagen kostet dieser Lauf nichts: update_studies.py bricht sofort
-    # ab, wenn das Archiv fuer heute schon Studien hat.
-    - cron: "7 5 * * *"
+  # KEIN GitHub-Zeitplan mehr (24.11.2026). Die beiden cron-Eintraege um
+  # 3:xx und 5:xx UTC waren das Netz fuer einen ausgefallenen Weckruf. Ueber
+  # 180 gemessene Zeitplan-Laeufe startete KEIN EINZIGER vor 09:00 UTC, also
+  # vor dem Versand um 10:00 Ortszeit - frueheste Startzeit 09:58, spaeteste
+  # 16:09. GitHubs Cron ist "best effort", unter Last werden Laeufe um
+  # Stunden verschoben oder verworfen (am 24.11.2026 feuerten 7 von 40).
+  #
+  # Ein Lauf nach dem Versand rettet keine Ausgabe, er wiederholt nur die
+  # ganze Arbeit des Morgens. Das echte Netz ist der Weckruf vom MVF-Server
+  # (04:20 UTC) und die Laufwache (06:00 UTC), die fehlende Laeufe nachstoesst.
+  # Beide liegen vor dem Versand.
   workflow_dispatch:        # erlaubt manuelles Starten über die Actions-Oberfläche
     inputs:
       nur_studien:
