@@ -817,7 +817,13 @@
      Knopf ist die Hauptaktion der Seite, das Logo darf nicht mit ihm
      konkurrieren. */
   .sponsor{ display:flex; align-items:center; gap:11px; }
-  .sponsor-vor{ font-size:12px; line-height:1.3; color:var(--ink-faint); }
+  .sponsor-vor{ font-size:14px; line-height:1.3; color:var(--ink-faint); }
+  /* Der Asterisk sitzt in Lato schon auf Hoehe der Oberlaenge. Was <sup>
+     von sich aus an Hochstellung mitbringt, hob ihn darueber hinaus und
+     liess ihn ueber dem Wort schweben. Diese Stufe hat Peter am
+     24.11.2026 aus drei vorgelegten gewaehlt. */
+  .sponsor sup{ font-size:0.8em; vertical-align:baseline;
+                position:relative; top:-0.12em; }
   .sponsor-logos{ display:flex; align-items:center; gap:16px; }
   .sponsor-logos img{ height:42px; width:auto; max-width:240px; display:block; }
   /* Der Hinweis steht neben dem Logo, nicht darunter: Sonst drueckt er das Logo
@@ -835,8 +841,8 @@
      nicht von Hand - sonst stuende irgendwann der falsche Wortlaut neben dem
      Logo. */
   .koop .sponsor{ align-items:center; }
-  .koop .sponsor-vor{ font-size:12.5px; }
-  .sponsor-vor-stark{ font-weight:700; color:var(--ink-soft); font-size:13.5px; }
+  .koop .sponsor-vor{ font-size:14.5px; }
+  .sponsor-vor-stark{ font-weight:700; color:var(--ink-soft); font-size:15.5px; }
   .koop-fuss{ margin:11px 0 0; max-width:62ch; }
   /* 60 statt 42 Pixel: Eine Kooperation wird gezeigt, nicht beilaeufig
      erwaehnt. */
@@ -846,17 +852,51 @@
      Tastaturnutzung eine Sackgasse. */
   .koop .sponsor-logos a{ display:inline-block; border-radius:4px; }
   .koop .sponsor-logos a:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
-  .sponsor-fuss{ margin:0; font-size:11px; line-height:1.35; color:var(--ink-faint); }
-  /* Wie beim MVF-Logo: im Dark Mode nicht umfaerben, sondern auf eine weisse
+
+  /* ---------- Ideelle Foerderung ----------
+     Die dritte Art (seit 24.11.2026). Ein ideeller Foerderer traegt Betrieb
+     und Hosting NICHT mit. Deshalb ein eigener Wortlaut und eine eigene
+     Linkkennzeichnung, nicht bloss eine andere Ueberschrift: Wer ihn in eine
+     der beiden bezahlten Arten setzte, liesse das Portal eine Geldleistung
+     behaupten, die es nicht gibt.
+     64 statt 42 Pixel, dafuer schmaler begrenzt. Die beiden aelteren Groessen
+     gehen von einem querformatigen Schriftzug aus. Ein quadratisches Logo
+     (Bildmarke ueber Schriftzug) wird bei 42 Pixeln Hoehe nur 39 Pixel breit,
+     und der Schriftzug darin ist dann nicht mehr zu lesen. */
+  .ideell .sponsor-logos img{ height:64px; max-width:170px; }
+
+  /* Mehrere Arten untereinander: Jede bekommt ihre eigene Zeile mit ihrer
+     eigenen Anrede. Seit dem 24.11.2026 ist das der Regelfall und nicht die
+     Ausnahme - ein Hub kann einen ideellen Foerderer UND einen zahlenden
+     Partner haben. Beide unter eine Anrede zu zwingen hiesse, eine der
+     beiden Zusagen falsch wiederzugeben. */
+  .sponsor-gruppe + .sponsor-gruppe{ margin-top:15px; }
+  .sponsor-fuss{ margin:0; font-size:13px; line-height:1.35; color:var(--ink-faint); }
+  /* Nur die Zeile NEBEN dem Logo, nicht der Absatz der Medienkooperation
+     darunter - der braucht seine 62 Zeichen. Ohne diese Grenze zieht die
+     laengste Zeile die ganze Textspalte auf und schiebt das Logo nach
+     rechts weg: gemessen 349 statt 183 Pixel. Umbrochen steht der Text
+     vollstaendig da und das Logo dicht an der Anrede.
+     15 em sind nachgemessen: Bei 14 em werden es drei Zeilen, ab 14,5 em
+     zwei. Die Kippkante selbst zu nehmen hiesse, sie bei einem anderen
+     Schriftschnitt wieder zu reissen. */
+  .sponsor-text .sponsor-fuss{ max-width:15em; }
+  /* Wie beim MVF-Logo: im Dark Mode nicht umfaerben, sondern auf eine helle
      Flaeche stellen. Ein filter:invert wuerde jede Hausfarbe zerstoeren -
-     und ein Sponsor hat ein Anrecht auf sein Logo, nicht auf ein Negativ. */
+     und ein Sponsor hat ein Anrecht auf sein Logo, nicht auf ein Negativ.
+     Nicht REIN weiss: Wer den Dunkelmodus braucht, weil ihn Helligkeit
+     blendet, bekaeme sonst einen hellen Fleck mitten auf der Seite. Genau
+     dieser Fall steht hier an - der ideelle Foerderer des Augen-Hubs ist ein
+     Verein von Menschen mit Sehverlust, dessen Vorsitzender nur im
+     Dunkelmodus liest (Peter, 24.11.2026). Abgetoent bleibt das Logo lesbar
+     und blendet nicht. */
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]) .sponsor-logos img{
-      background:#fff; padding:3px 6px; border-radius:4px;
+      background:#DDE4EC; padding:4px 7px; border-radius:4px;
     }
   }
   :root[data-theme="dark"] .sponsor-logos img{
-    background:#fff; padding:3px 6px; border-radius:4px;
+    background:#DDE4EC; padding:4px 7px; border-radius:4px;
   }
 
   /* ---------- Rueckmeldung nach dem Absenden ---------- */
@@ -1437,6 +1477,15 @@
          Englisch: startseite_neu.NETZ_EN uebersetzt die Texte fuer /en/. -->
     <style>
       .dsw{ position:relative; margin-left:auto; display:flex; align-items:center; }
+      /* Die Lupe sitzt im selben Behaelter wie der Darstellungsschalter und
+         erbt dessen Knopfgestaltung. Ein eigener relativer Behaelter, damit
+         ihr Menue an ihr haengt und nicht am Nachbarn. */
+      .lupe{ position:relative; display:flex; align-items:center; margin-right:8px; }
+      .lupe .dsw-menue{ width:208px; }
+      .lupe-wert{ position:absolute; right:-2px; bottom:-3px; font-size:9px; font-weight:700;
+                  line-height:1; color:#C9D6F2; background:#14202E; border-radius:3px;
+                  padding:1px 2px; pointer-events:none; }
+      .lupe-knopf[data-stufe="100"] .lupe-wert{ display:none; }
       .dsw ~ .netz-rechts{ margin-left:14px; }  /* ~ statt +: dazwischen steht das <script> */
       .dsw-knopf{ width:34px; height:27px; border:1px solid #3A4A60; border-radius:6px; background:transparent;
                   display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
@@ -1466,6 +1515,21 @@
       @media print{ .dsw{ display:none !important; } }
     </style>
     <div class="dsw">
+      <div class="lupe">
+        <button class="dsw-knopf lupe-knopf" type="button" id="lupeKnopf" data-stufe="100"
+                aria-haspopup="menu" aria-expanded="false" aria-controls="lupeMenue"
+                title="Ansicht vergrößern" aria-label="Ansicht vergrößern, derzeit 100 Prozent">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#C9D6F2" stroke-width="2"/><path d="M15.5 15.5 21 21M7.5 10.5h6M10.5 7.5v6" stroke="#C9D6F2" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="lupe-wert" aria-hidden="true">100</span>
+        </button>
+        <div class="dsw-menue" id="lupeMenue" role="menu" aria-label="Ansicht vergrößern" hidden>
+          <span class="dsw-titel">ANSICHT VERGRÖSSERN</span>
+          <button type="button" role="menuitemradio" data-zoom="100" aria-checked="true"><span>Normal (100 %)</span><i>✓</i></button>
+          <button type="button" role="menuitemradio" data-zoom="200" aria-checked="false"><span>Groß (200 %)</span><i>✓</i></button>
+          <button type="button" role="menuitemradio" data-zoom="400" aria-checked="false"><span>Sehr groß (400 %)</span><i>✓</i></button>
+          <span class="dsw-fuss">Vergrößert die ganze Seite, nicht nur die Schrift. Die Wahl gilt für alle Angebote. Bei 400 % muss auf schmalen Fenstern seitlich gescrollt werden.</span>
+        </div>
+      </div>
       <button class="dsw-knopf" type="button" id="dswKnopf" aria-haspopup="menu" aria-expanded="false" aria-controls="dswMenue"
               title="Darstellung" aria-label="Darstellung: hell, dunkel oder wie Ihr Gerät">
         <svg class="sonne" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="#F2B84B" stroke-width="2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="#F2B84B" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1518,6 +1582,68 @@
         schreiben(w); anwenden(w); zu(); knopf.focus();
       });
       document.addEventListener("click", function (e) { if (!menue.hidden && !e.target.closest(".dsw")) zu(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menue.hidden) { zu(); knopf.focus(); } });
+    })();
+
+    // ---- Lupe -------------------------------------------------------------
+    // Vertrag wie beim Darstellungsschalter: Cookie "mvf-zoom" = 125|150|200|300,
+    // bei 100 geloescht (Max-Age=0); Domain=.m-vf.de, Path=/, ein Jahr,
+    // SameSite=Lax, Secure nur unter https. Kein localStorage - der gaelte nur
+    // je Subdomain, und die Wahl soll fuer alle Angebote der Reihe gelten.
+    // Der Datenschutztext dazu steht in recht_neu.py, Abschnitt 2, #darstellung.
+    (function () {
+      var knopf = document.getElementById("lupeKnopf"), menue = document.getElementById("lupeMenue");
+      if (!knopf || !menue) return;
+      // Zwei Stufen genuegen (Peter, 24.11.2026). Wer die Lupe braucht, soll nicht
+      // erst waehlen muessen, und sechs Eintraege sind fuer eine Hilfe gegen
+      // schlechtes Sehen selbst eine Huerde.
+      var STUFEN = ["100", "200", "400"];
+      function lesen() {
+        var m = document.cookie.match(/(?:^|;\s*)mvf-zoom=(\d+)/);
+        return (m && STUFEN.indexOf(m[1]) > -1) ? m[1] : "100";
+      }
+      function schreiben(w) {
+        var d = /(^|\.)m-vf\.de$/.test(location.hostname) ? "; Domain=.m-vf.de" : "";
+        var sicher = location.protocol === "https:" ? "; Secure" : "";
+        document.cookie = "mvf-zoom=" + (w === "100" ? "; Max-Age=0" : w + "; Max-Age=31536000")
+          + "; Path=/; SameSite=Lax" + d + sicher;
+      }
+      function anwenden(w) {
+        // zoom statt transform: Es wirkt auf die Pixelwerte dieser Seite UND
+        // verkleinert die Ansichtsbreite, die Seite bricht also um, statt den
+        // Leser quer scrollen zu lassen.
+        document.documentElement.style.zoom = (w === "100") ? "" : (parseInt(w, 10) / 100);
+        knopf.setAttribute("data-stufe", w);
+        knopf.setAttribute("aria-label", "Ansicht vergrößern, derzeit " + w + " Prozent");
+        var anzeige = knopf.querySelector(".lupe-wert");
+        if (anzeige) anzeige.textContent = w;
+        menue.querySelectorAll("[data-zoom]").forEach(function (b) {
+          b.setAttribute("aria-checked", b.getAttribute("data-zoom") === w ? "true" : "false");
+        });
+      }
+      function zu() { menue.hidden = true; knopf.setAttribute("aria-expanded", "false"); }
+      anwenden(lesen());
+      knopf.addEventListener("click", function (e) {
+        e.stopPropagation();
+        // Das Nachbarmenue zuklappen: Es liegt im selben Behaelter, der
+        // Aussenklick-Waechter dort greift also nicht.
+        var nachbar = document.getElementById("dswMenue");
+        if (nachbar && !nachbar.hidden) {
+          nachbar.hidden = true;
+          document.getElementById("dswKnopf").setAttribute("aria-expanded", "false");
+        }
+        var auf = menue.hidden;
+        menue.hidden = !auf;
+        knopf.setAttribute("aria-expanded", auf ? "true" : "false");
+        if (auf) { var b = menue.querySelector('[aria-checked="true"]'); if (b) b.focus(); }
+      });
+      menue.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-zoom]");
+        if (!b) return;
+        var w = b.getAttribute("data-zoom");
+        schreiben(w); anwenden(w); zu(); knopf.focus();
+      });
+      document.addEventListener("click", function (e) { if (!menue.hidden && !e.target.closest(".lupe")) zu(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menue.hidden) { zu(); knopf.focus(); } });
     })();
     </script>
@@ -1915,6 +2041,7 @@
           <div class="hints-sponsor">
             <p id="sponsorText" hidden><b>Sponsoren.</b> Unsere Sponsoren ermöglichen mit ihrer finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Sie nehmen dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
             <p id="koopText" hidden><b>Medienpartnerschaft.</b> Dieser Hub wird in einer Medienkooperation präsentiert. Der Medienpartner ermöglicht mit seiner finanziellen Unterstützung den Betrieb und das Hosting dieses Services. Er nimmt dabei keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
+            <p id="ideellText" hidden><b>Ideelle Förderung.</b> Dieser Hub wird ideell gefördert, also ohne finanzielle Beteiligung an Betrieb und Hosting. Der Förderer nimmt keinerlei Einfluss auf Auswahl der Datenbanken, der Ergebnisse oder den dargestellten Inhalt.</p>
           </div>
           <div class="meta-row">
             <span class="dot"></span>
@@ -1922,23 +2049,48 @@
           </div>
         </div>
 
-        <!-- Zwei Anreden, eine Flaeche: Welche erscheint, entscheidet die
-             Sponsorenliste weiter unten (art:"koop"). Beide stehen fertig hier,
-             damit der Wortlaut im Markup nachlesbar ist und nicht in einer
-             Zeichenkette im Skript steckt. -->
+        <!-- Drei Arten, drei Zeilen: Welche erscheint, entscheidet die
+             Sponsorenliste weiter unten (Feld art). Alle drei stehen fertig
+             hier, damit der Wortlaut im Markup nachlesbar ist und nicht in
+             einer Zeichenkette im Skript steckt.
+             Bis zum 24.11.2026 war es EINE Flaeche, die zwischen zwei Anreden
+             umschaltete. Das trug nur, solange ein Hub genau eine Art hatte.
+             Jetzt kann er zwei haben, und dann braucht jede ihre eigene. -->
         <div class="sponsor-block" id="sponsorFeld" hidden>
-          <div class="sponsor">
-            <span class="sponsor-text">
-              <span class="sponsor-vor" id="sponsorAnrede">Gesponsert<sup>*</sup> von:</span>
-              <span class="sponsor-fuss" id="sponsorStern"><sup>*</sup> ohne Einfluss auf die Inhalte zu nehmen</span>
-              <span class="sponsor-vor" id="koopAnrede" hidden>In einer Medienkooperation</span>
-              <span class="sponsor-vor sponsor-vor-stark" id="koopAnredeStark" hidden>präsentiert von</span>
-            </span>
-            <span class="sponsor-logos" id="sponsorLogos"></span>
+
+          <div class="sponsor-gruppe koop" id="gruppeKoop" hidden>
+            <div class="sponsor">
+              <span class="sponsor-text">
+                <span class="sponsor-vor">In einer Medienkooperation</span>
+                <span class="sponsor-vor sponsor-vor-stark">präsentiert von</span>
+              </span>
+              <span class="sponsor-logos" id="logosKoop"></span>
+            </div>
+            <p class="sponsor-fuss koop-fuss">Auswahl und Darstellung der Studien, der
+            Datenbanken und aller weiteren Inhalte erfolgen redaktionell unabhängig.
+            Der Medienpartner nimmt darauf keinen Einfluss.</p>
           </div>
-          <p class="sponsor-fuss koop-fuss" id="koopFuss" hidden>Auswahl und Darstellung der Studien, der
-          Datenbanken und aller weiteren Inhalte erfolgen redaktionell unabhängig.
-          Der Medienpartner nimmt darauf keinen Einfluss.</p>
+
+          <div class="sponsor-gruppe" id="gruppeSponsor" hidden>
+            <div class="sponsor">
+              <span class="sponsor-text">
+                <span class="sponsor-vor">Gesponsert<sup>*</sup> von:</span>
+                <span class="sponsor-fuss"><sup>*</sup> ohne Einfluss auf die Inhalte zu nehmen</span>
+              </span>
+              <span class="sponsor-logos" id="logosSponsor"></span>
+            </div>
+          </div>
+
+          <div class="sponsor-gruppe ideell" id="gruppeIdeell" hidden>
+            <div class="sponsor">
+              <span class="sponsor-text">
+                <span class="sponsor-vor">Ideeller Förderer<sup>*</sup> des Portals:</span>
+                <span class="sponsor-fuss"><sup>*</sup> ohne finanzielle Beteiligung und ohne Einfluss auf die Inhalte</span>
+              </span>
+              <span class="sponsor-logos" id="logosIdeell"></span>
+            </div>
+          </div>
+
         </div>
       </div>
       <!-- Band „Aktuell im Hub" (Entwurf Mariann Stegmaier, Hub-Seiten S. 3).
@@ -2407,31 +2559,53 @@ const SPONSOREN = [
 // === SPONSOR-BLOCK-ENDE ===
 
 // Sponsorenfeld einblenden, sobald es etwas einzublenden gibt. Ohne Eintrag
-// bleibt beides verborgen; ein zusaetzlicher Schalter waere eine Stelle mehr,
+// bleibt alles verborgen; ein zusaetzlicher Schalter waere eine Stelle mehr,
 // an der jemand etwas vergessen kann.
 // Wie ueberall in dieser Datei wird ohne Maskierung eingesetzt (siehe CLAUDE.md):
 // Namen und Adressen werden von Hand gepflegt, spitze Klammern gehoeren nicht hinein.
+//
+// Je Art eine Zeile, in dieser Reihenfolge. rel="sponsored" ist die von
+// Suchmaschinen erwartete Kennzeichnung eines BEZAHLTEN Verweises; ohne sie
+// kann er als Linkkauf gewertet werden. Eine Medienkooperation ist ebenso
+// eine bezahlte Platzierung. Bei einer ideellen Foerderung fliesst dagegen
+// kein Geld - dort waere "sponsored" eine Falschangabe gegenueber der
+// Suchmaschine, und es gilt "nofollow".
+const SPONSOR_ARTEN = [
+  { art:'koop',    gruppe:'gruppeKoop',    logos:'logosKoop',    text:'koopText',    rel:'sponsored noopener' },
+  { art:'sponsor', gruppe:'gruppeSponsor', logos:'logosSponsor', text:'sponsorText', rel:'sponsored noopener' },
+  { art:'ideell',  gruppe:'gruppeIdeell',  logos:'logosIdeell',  text:'ideellText',  rel:'nofollow noopener'  }
+];
+
+// Ein Eintrag mit seit:"JJJJ-MM-TT" erscheint erst ab diesem Tag. Verglichen
+// wird als Zeichenkette, was bei diesem Format der Datumsvergleich ist - und
+// anders als Date.parse ohne Zeitzonenfalle.
+function sponsorLaeuft(s) {
+  if (!s.seit) return true;
+  var d = new Date();
+  var heute = d.getFullYear() + '-'
+    + String(d.getMonth() + 1).padStart(2, '0') + '-'
+    + String(d.getDate()).padStart(2, '0');
+  return heute >= s.seit;
+}
+
 if (Array.isArray(SPONSOREN) && SPONSOREN.length) {
-  document.getElementById('sponsorLogos').innerHTML = SPONSOREN.map(function (s) {
-    // rel="sponsored" ist die von Suchmaschinen erwartete Kennzeichnung eines
-    // bezahlten Verweises; ohne sie kann er als Linkkauf gewertet werden. Eine
-    // Medienkooperation ist ebenso eine bezahlte Platzierung - dieselbe
-    // Kennzeichnung, dieselbe Ehrlichkeit gegenueber der Suchmaschine.
-    return '<a href="' + s.u + '" target="_blank" rel="sponsored noopener" title="'
-      + s.n + '"><img src="' + s.logo + '" alt="' + s.n + '" loading="lazy"></a>';
-  }).join('');
-  document.getElementById('sponsorFeld').hidden = false;
-  // Die Anrede richtet sich nach der Liste: Sobald ein Eintrag als
-  // Medienkooperation gefuehrt wird, gilt deren Wortlaut fuer das ganze Feld -
-  // zwei Anreden nebeneinander waeren im selben Kasten nicht zu lesen.
-  var koop = SPONSOREN.some(function (s) { return s.art === 'koop'; });
-  ['koopAnrede', 'koopAnredeStark', 'koopFuss'].forEach(function (id) {
-    document.getElementById(id).hidden = !koop;
+  var etwasZuZeigen = false;
+  SPONSOR_ARTEN.forEach(function (a) {
+    // Ohne art ist ein Eintrag ein Sponsor - so stand es vor dem 24.11.2026
+    // in allen Portalen, und so soll es bleiben.
+    var liste = SPONSOREN.filter(function (s) {
+      return (s.art || 'sponsor') === a.art && sponsorLaeuft(s);
+    });
+    if (!liste.length) return;
+    etwasZuZeigen = true;
+    document.getElementById(a.logos).innerHTML = liste.map(function (s) {
+      return '<a href="' + s.u + '" target="_blank" rel="' + a.rel + '" title="'
+        + s.n + '"><img src="' + s.logo + '" alt="' + s.n + '" loading="lazy"></a>';
+    }).join('');
+    document.getElementById(a.gruppe).hidden = false;
+    document.getElementById(a.text).hidden = false;
   });
-  document.getElementById('sponsorAnrede').hidden = koop;
-  document.getElementById('sponsorStern').hidden = koop;
-  document.getElementById('sponsorFeld').classList.toggle('koop', koop);
-  document.getElementById(koop ? 'koopText' : 'sponsorText').hidden = false;
+  document.getElementById('sponsorFeld').hidden = !etwasZuZeigen;
 }
 
 function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ""; } }
