@@ -2285,62 +2285,62 @@ const DB = [
 
 // Momentaufnahme neuester Studien (PubMed, nach Datum sortiert) — deutsche Zusammenfassungen
 // === STUDIES-BLOCK-START (taeglich 06:00 Uhr von GitHub Actions ersetzt) ===
-const SNAP_DATE = "23. Nov. 2026, 05:01 Uhr";
+const SNAP_DATE = "24. Nov. 2026, 05:00 Uhr";
 const SNAP_STATUS = "neu";
 const STUDIES = [
   {
-    journal:"Medicine (Baltimore)", year:"2026", pmid:"43063086",
-    author:"Liu S et al.", pubdate:"20.11.2026",
+    journal:"JMIR Aging", year:"2026", pmid:"43071448",
+    author:"Bian J et al.", pubdate:"23.11.2026",
+    added:"23.11.2026",
+    title:"Schimmel und Feuchtigkeit beeinträchtigen Schlaf älterer Menschen",
+    sum:"Längsschnittstudie mit 5.712 älteren Erwachsenen (≥65 Jahre) zur Assoziation zwischen Feuchtigkeits-/Schimmelgerüchen in Innenräumen und Schlafqualität/Schlafdauer aus der Chinese Longitudinal Healthy Longevity Survey (2011–2018).",
+    result:"Feuchtige Innenräume assoziiert mit erhöhten Odds für schlechte Schlafqualität (OR 1,63; 95%-KI 1,37–1,95; p&lt;0,001) und kurze Schlafdauer (OR 1,36; 95%-KI 1,19–1,55; p&lt;0,001). Effekt bei Personen ohne chronische Lungenerkrankung stärker (p&lt;0,001) als mit Lungenerkrankung (p=0,12).",
+    transfer:"China, gemäßigte Klimazone; Baufeuchte ein universelles Thema für Deutschland."
+  },
+  {
+    journal:"PLoS One", year:"2026", pmid:"43063215",
+    author:"Muthukumar R et al.", pubdate:"20.11.2026",
     added:"20.11.2026",
-    title:"Temperaturextreme und Luftverschmutzung erhöhen Hirnblutungsrisiko",
-    sum:"Analyse der Global Burden of Disease Study 2021 zu Mortalität und Morbidität von Subarachnoidalblutungen zurechenbar auf Temperaturextreme und Luftverschmutzung bei Erwachsenen über 40 Jahren; Projektionen bis 2050.",
-    result:"2021 verursachte Feinstaub 50.936 Todesfälle und 1.357.090 DALYs; Hausbrandverschmutzung 32.224 Todesfälle. Von 1990–2021 stiegen die der Hitze zurechenbaren Todesfälle von 1.896 auf 3.457, Feinstaubeffekte von 35.329 auf 50.936. Projektionen zeigen Anstieg bis 2050.",
-    transfer:"Global: Datenbasis sind nationale Statistiken, Methodik übertragbar; regionale Unterschiede beachten."
+    title:"Feinstaubkomposition und Dengue-Ausbreitung in Thailand",
+    sum:"Bayessche räumliche Modellierung zur Assoziation zwischen Aerosolkomponenten (Staub-PM2,5, organischer Kohlenstoff, Rusß, Sulfat) und Dengue-Inzidenz in 77 Thai-Provinzen 2012–2021 (n=837.616 Fälle).",
+    result:"Höhere Staub-PM2,5-Konzentrationen positiv mit Dengue-Fällen assoziiert; organischer Kohlenstoff, Ruß und Sulfat invers assoziiert. Feinstaubzusammensetzung trägt zu räumlicher Variation bei; Mechanismen unklar. Partikularkomposition könnte Früherkennung in Südostasien verbessern.",
+    transfer:"Thailand-Tropen; nur Methodik übertragbar, nicht Absolutwerte."
   },
   {
-    journal:"J Glob Health", year:"2026", pmid:"43062065",
-    author:"Wang J et al.", pubdate:"20.11.2026",
-    added:"20.11.2026",
-    title:"Außen- und Innenraumluftschadstoffe beeinträchtigen Kognition älterer Erwachsener",
-    sum:"Längsschnittstudie mit 8.806 Chinesen ≥60 Jahren zur Assoziation zwischen PM-Exposition (outdoor), Festbrennstoffnutzung (indoor) und kognitiver Funktion 2013–2020.",
-    result:"PM2,5-Exposition 2013 assoziiert mit schlechterer globaler Kognition 2015 und 2018. Festbrennstoff zum Kochen 2013 assoziiert mit Kognition β = -0,57 (95% KI -0,93–-0,22) und Gedächtnis β = -0,53 (95% KI -0,77–-0,31) in 2018; rural stärker ausgeprägt.",
-    transfer:"China: Altersgruppe und Luftverschmutzungsniveaus nicht direkt vergleichbar, aber Methodik zur Luftschadstoff-Kognitions-Assoziation relevant."
+    journal:"BMC Public Health", year:"2026", pmid:"43069097",
+    author:"Naimhwaka F et al.", pubdate:"04.11.2026",
+    added:"22.11.2026",
+    title:"Hitzeadaptation älterer Erwachsener in Australien",
+    sum:"Qualitative und quantitative Erhebung von Kühlungsverhalten und kontextuellen Barrieren bei über 65-Jährigen in Queensland während Hitzeexposition.",
+    result:"Fan-Nutzung 93 %, Klimaanlage 79 %, erhöhte Flüssigkeitszufuhr 52 %. Alleinlebende Personen hatten höhere Odds für häufige Klimaanlage-Nutzung (OR 3,92; 95%-KI 1,78–8,62). Hitzesensible Personen zeigten 5,46-fach höhere Odds für häufige Flüssigkeitszufuhr (95%-KI 1,34–22,29). Focus Groups hoben Kühlungskosten und soziale Isolierung als Barrieren hervor.",
+    transfer:"Subtropisch-tropisches Klima; Methodik zu Risikogruppen prinzipiell übertragbar."
   },
   {
-    journal:"Environ Int", year:"2026", pmid:"43033684",
-    author:"Shao Z et al.", pubdate:"07.11.2026",
-    added:"14.11.2026",
-    title:"Stadtbegrünung reduziert Luftverschmutzung und verhindert Todesfälle",
-    sum:"Analyse von 827 chinesischen Stadtzentren 2000–2024 zur Assoziation zwischen urbaner Grünfläche und Exposition gegenüber PM2,5, PM10, NO2 und O3 sowie daraus resultierende Mortalitätseffekte.",
-    result:"Jede Erhöhung der bevölkerungsgewichteten Grünfläche um 1 Prozentpunkt senkte PM2,5 um 0,20 µg/m³, PM10 um 0,34 µg/m³ und NO2 um 0,09 µg/m³. Erreichen der 75. Perzentile könnte jährlich 105.000 PM10-, 81.000 PM2,5- und 22.000 NO2-zurechenbare Todesfälle verhindern.",
-    transfer:"China: Großstadtdaten, aber Methodik der Expositions-Mortalitäts-Schätzung ist übertragbar."
-  },
-  {
-    journal:"Allergol Immunopathol (Madr)", year:"2026", pmid:"43062438",
-    author:"Taketomi EA et al.", pubdate:"01.11.2026",
-    added:"20.11.2026",
-    title:"Pollenallergie in Brasilien: Regionaler Überblick und Klimaeffekte",
-    sum:"Narrative Übersichtsarbeit der brasilianischen Allergie-Gesellschaft zu Epidemiologie, klinischer Relevanz und Diagnostik allergischer Sensibilisierung auf Pollen; 38 Studien analysiert.",
-    result:"Sensibilisierungsraten 12–45% je nach Region. Lolium multiflorum als wichtigster Allergen-Träger, besonders Südamerika, mit saisonalen Mustern; Klimawandel und landwirtschaftliche Praktiken könnten Effekt beeinflussen. Component-resolved diagnosis verbessert Diagnostik.",
-    transfer:"Tropen: Pollenspektrum und Saisonalität grundlegend anders als Deutschland; Methodik zur Strukturierung regionaler Pollenallergie-Programme übertragbar."
-  },
-  {
-    journal:"Spat Spatiotemporal Epidemiol", year:"2026", pmid:"43051860",
-    author:"da Cunha E Silva DC et al.", pubdate:"26.09.2026",
+    journal:"Front Cell Infect Microbiol", year:"2026", pmid:"43048157",
+    author:"Archaga O et al.", pubdate:"03.11.2026",
     added:"18.11.2026",
-    title:"Zirkulationssterblichkeit in Brasilien: Raumzeitliche Muster und Ungleichheit",
-    sum:"Räumlich-zeitliche Analyse der Zirkulationssterblichkeit in brasilianischen Gemeinden 1999–2022 mittels Global und Local Moran Index, assoziiert mit Klimafaktoren und sozioökonomischen Variablen.",
-    result:"Räumliche Autokorrelation nahm über Zeit ab. Stärkeres Clustering in Nord- und Nordosten mit höherer sozioökonomischer Anfälligkeit. Korrelationen mit BIP pro Kopf und Bildung variierten deutlich; Treibhausgasemissionen trugen zu räumlichen Mortalitätsmustern bei.",
-    transfer:"Brasilien: Klimazone und Sozialstruktur grundlegend verschieden; räumlich-zeitliche Methodik und Prinzip der Ungleichheitsverstärkung durch Klima relevant."
+    title:"Klimaänderungen und Mücken-Mikrobiom beeinflussen Malaria-Übertragung",
+    sum:"Qualitatives Review zur Interaktion zwischen Klimavariabilität, Anopheles-Mikrobiom und Malaria-Übertragung sowie Implikationen für Biocontrol-Strategien (Paratransgenese, Wolbachia, Larvizide).",
+    result:"Laboruntersuchungen bei festen Bedingungen (27 °C, 75–80 % rel. Luftfeuchte) unterschätzen natürliche Effekte. Klimatische Fluktuationen (Tag/Jahreszeiten) verändern Mücken-Physiologie, Immunantwort und Mikrobiom. Biocontrol-Werkzeuge müssen in dynamischen Klimaszenarien evaluiert werden, um Resilienz zu gewährleisten.",
+    transfer:"Tropen; nur Prinzipien zu Klima-Vektorinteraktionen übertragbar."
   },
   {
-    journal:"BMC Public Health", year:"2026", pmid:"43058600",
-    author:"Kanchanasuta S et al.", pubdate:"19.08.2026",
-    added:"19.11.2026",
-    title:"Luftqualitätsindex und Atemwegserkrankungen in Bangkok",
-    sum:"Retrospektive Zeit-Reihen-Analyse zu Assoziationen zwischen Air Quality Health Index und Atemwegs-Morbidität in 23 Krankenhäusern Bangkoks 2021–2024.",
-    result:"AQHI zeigte begrenzte Diskriminanz für Atemwegs-Morbidität (AUC 0,353–0,539). Distributed Lag Nonlinear Models identifizierten kleine gleich-Tages-Assoziationen bei AQHI 7 für respiratorische Morbidität (RR 1,023; 95% KI 1,004–1,042), die auch nach Bonferroni-Korrektur signifikant blieb.",
-    transfer:"Tropen: begrenzte direkte Übertragbarkeit, aber Methodik der AQHI-Validierung informativ."
+    journal:"Acta Obstet Gynecol Scand", year:"2026", pmid:"42720092",
+    author:"Jaafar S et al.", pubdate:"10.09.2026",
+    added:"10.09.2026",
+    title:"Vaginale Geburt versus Kaiserschnitt: Umweltbilanz in Frankreich",
+    sum:"Life-Cycle-Assessment (LCA) zum Vergleich der Umweltauswirkungen von versuchter Vaginalgeburt versus geplanter Kaiserschnitt anhand von 16 Indikatoren an der Universitätsklinik Lille 2024.",
+    result:"Vaginalgeburt hatte deutlich niedrigere Umweltwirkung: CO2-Bilanz 23,2 kg CO2e versus 42,9 kg CO2e bei Kaiserschnitt. Vaginalgeburt reduzierte Treibhausgase um 46 %, Wasserverbrauch um 26 %, Ressourcennutzung Fossilien um 44 %, Mineral-/Metallverbrauch um 30 %.",
+    transfer:"Frankreich, vergleichbare Versorgungsstruktur; methodisches Vorbild für deutsches Gesundheitswesen."
+  },
+  {
+    journal:"BMC Public Health", year:"2026", pmid:"43052889",
+    author:"Jung E et al.", pubdate:"07.08.2026",
+    added:"18.11.2026",
+    title:"Verhalten und Sozialstruktur als Bestimmungsfaktoren der Luftschadstoff-Exposition",
+    sum:"Umbrella Review (18 systematische Reviews) zu verhaltensbezogenen und sozialen Faktoren, die Exposition gegenüber Außenluftschadstoffen beeinflussen, mit Fokus auf Kanada und internationale Kontexte.",
+    result:"Zeit im Freien erhöht individuelle Schadstoff-Exposition. Soziale Faktoren (Grünflächen, Public-Health-Warnungen) sowie Rasse und sozioökonomischer Status beeinflussen gemeindeebene Exposition. Drei verhaltensbezogene Themen (körperliche Aktivität, Mobilität, Schutz) und vier gesellschaftliche Themen (Public Health, Stadtplanung, Nachbarschaft, Identität) identifiziert.",
+    transfer:"Kanada und diverse Länder; Integrationsprinzipien für Deutschland relevant."
   },
 ];
 // === STUDIES-BLOCK-ENDE ===
@@ -2351,7 +2351,7 @@ const RADAR_STAND = "23.11.2026";
 const RADAR_URL = "https://wissen.m-vf.de/ausschreibungen.html#klima-gesundheit";
 const RADAR_EIGENES = 1;
 const RADAR_ZUHAUSE = false;
-const RADAR_FRISTEN = [["2026-12-31", "2026-12-14", "2027-01-08", "2027-02-14"], ["2027-01-20"], ["2027-01-07", "2027-02-11"], [], [], [], [], [], [], [], [], ["2027-01-07", "2027-01-26", "2027-01-26"], ["2027-01-07", "2027-01-07", "2027-01-07", "2027-01-25", "2027-01-11", "2027-02-11", "2027-01-07", "2027-01-07"], ["2027-03-10", "2027-02-03", "2027-02-03"], ["2027-01-27", "2027-03-10"], [], [], ["2026-12-14", "2027-01-11", "2027-01-08", "2027-01-08", "2027-01-08", "2026-12-02", "2027-01-07"], [], ["2027-01-11", "2027-01-08", "2027-01-08", "2027-01-08"]];
+const RADAR_FRISTEN = [["2026-12-31", "2027-01-08"], ["2027-01-20"], ["2027-01-07", "2027-02-11"], [], [], [], [], [], ["2027-01-08"], [], [], ["2026-12-31", "2027-01-07", "2027-01-26", "2027-01-26", "2027-01-27"], ["2027-01-07", "2027-01-07", "2027-01-07", "2027-01-25", "2027-01-11", "2027-01-11", "2027-01-07", "2027-02-11"], ["2027-03-10"], ["2027-01-27", "2027-03-10"], [], [], ["2026-12-14", "2027-01-11", "2027-01-08", "2027-01-08", "2027-01-08", "2026-12-02"], [], ["2027-01-11", "2027-01-08", "2027-01-08", "2027-01-08"]];
 // === RADAR-BLOCK-ENDE ===
 
 // === ZULASSUNG-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
@@ -2365,7 +2365,7 @@ const ZUL_DIGA = 0;
 
 // Beitraege aus dem MVF-Archiv zum Thema — taeglich von scripts/newsfeed.py
 // === NEWS-BLOCK-START (taeglich von GitHub Actions ersetzt) ===
-const NEWS_STAND = "23.11.2026";
+const NEWS_STAND = "24.11.2026";
 const NEWS = [
   {titel:"Menschen zweifeln an der Handlungsfähigkeit des Staates im Klimaschutz", datum:"2026-11-10", url:"https://www.monitor-versorgungsforschung.de/news/menschen-zweifeln-an-der-handlungsfaehigkeit-des-staates-im-klimaschutz/"},
   {titel:"Hitzeschutz-Erklärung für Europa: IKK classic unterzeichnet", datum:"2026-08-31", url:"https://www.monitor-versorgungsforschung.de/news/hitzeschutz-erklaerung-fuer-europa-ikk-classic-unterzeichnet/"},
